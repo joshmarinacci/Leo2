@@ -1,9 +1,12 @@
 package com.joshondesign.treegui.model;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -87,7 +90,7 @@ public class TestTreeNode {
         final int[] addCounter1 = {0};
         final int[] removeCounter1 = {0};
         final int[] modifyCounter1 = {0};
-        n7.setListener(new TreeNode.TreeListener() {
+        n7.addListener(new TreeNode.TreeListener() {
             public void added(TreeNode node) {
                 addCounter1[0]++;
             }
@@ -112,10 +115,9 @@ public class TestTreeNode {
         n7.add(new TreeNode());
         n7.remove(child2);
 
-        assertEquals(addCounter1[0], 6);
-        assertEquals(removeCounter1[0],2);
-        assertEquals(modifyCounter1[0],1);
-
+        assertEquals(6,addCounter1[0]);
+        assertEquals(2,removeCounter1[0]);
+        assertEquals(1,modifyCounter1[0]);
 
     }
 
@@ -152,6 +154,10 @@ public class TestTreeNode {
         assertEquals(filter.getSize(),2);
     }
 
+
+    public static void main(String ... args) {
+        new TestTreeNode().ListView();
+    }
     @Test
     public void ListView() {
         try {
@@ -168,28 +174,62 @@ public class TestTreeNode {
     public void ListViewImpl() throws Exception {
         Core.getShared().defer(new Runnable() {
             public void run() {
+                EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<Event>() {
+                    public void call(Event event) throws Exception {
+                        System.exit(0);
+                    }
+                });
 
-                TreeNode root = new TreeNode();
+                final TreeNode root = new TreeNode();
                 root.add(new TreeNode());
                 root.add(new TreeNode());
                 TreeNodeListView view = new TreeNodeListView();
+                view.setPrefWidth(200);
                 view.setTreeNodeModel(root);
-                Button add = new Button("add");
-                Button remove = new Button("remove");
-                Button addSublist = new Button("sublist add");
-                Button removeSublist = new Button("sublist remove");
-                Button modifyItem = new Button("modify item");
-                Button modifySublist = new Button("modify sublist");
+                Button add = new Button("add").onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        root.add(new TreeNode());
+                        u.p("total tree count = " + Trees.getTotalTreeCount(root));
+                    }
+                });
+                Button remove = new Button("remove").onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        root.remove(0);
+                        u.p("total tree count = " + Trees.getTotalTreeCount(root));
+                    }
+                });
+                Button addSublist = new Button("sublist add").onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        root.get(0).add(new TreeNode());
+                        u.p("total tree count = " + Trees.getTotalTreeCount(root));
+                    }
+                });
+                Button removeSublist = new Button("sublist remove").onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        root.get(0).remove(0);
+                        u.p("total tree count = " + Trees.getTotalTreeCount(root));
+                    }
+                });
+                Button modifyItem = new Button("modify item").onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        u.p("total tree count = " + Trees.getTotalTreeCount(root));
+                    }
+                });
+                Button modifySublist = new Button("modify sublist").onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        u.p("total tree count = " + Trees.getTotalTreeCount(root));
+                    }
+                });
 
                 Stage stage = Stage.createStage();
-                stage.setContent(new VFlexBox()
-                        .add(view,1)
+                stage.setContent(new VFlexBox().setBoxAlign(FlexBox.Align.Stretch)
+                        .add(view, 1)
                         .add(add, 0)
                         .add(modifyItem, 0)
                         .add(remove, 0)
                         .add(addSublist, 0)
                         .add(modifySublist, 0)
-                        .add(removeSublist,0)
+                        .add(removeSublist, 0)
                 );
             }
         });

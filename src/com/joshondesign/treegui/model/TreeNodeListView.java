@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.model;
 
+import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
 
 /**
@@ -15,5 +16,14 @@ public class TreeNodeListView extends ListView {
 
     public void setTreeNodeModel(TreeNode root) {
         this.treeNodeModel = root;
+        this.setModel(new ListModel() {
+            public Object get(int i) {
+                return treeNodeModel.get(i);
+            }
+
+            public int size() {
+                return treeNodeModel.getSize();
+            }
+        });
     }
 }

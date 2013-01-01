@@ -13,6 +13,7 @@ import java.util.List;
 public class TreeNode {
 
     private List<TreeNode> _list = new ArrayList<TreeNode>();
+    private List<TreeListener> listeners = new ArrayList<TreeListener>();
 
     public static interface TreeListener {
         public void added(TreeNode node);
@@ -20,13 +21,15 @@ public class TreeNode {
         public void modified(TreeNode node);
     }
 
-    public TreeNode setListener(TreeListener treeListener) {
+    public TreeNode addListener(TreeListener treeListener) {
+        this.listeners.add(treeListener);
         return this;
     }
 
 
 
-    public TreeNode markModified(TreeNode child2) {
+    public TreeNode markModified(TreeNode child) {
+        fireModifyEvent(child);
         return this;
     }
 
@@ -37,8 +40,27 @@ public class TreeNode {
     public TreeNode add(TreeNode ... nodes) {
         for(TreeNode n : nodes) {
             _list.add(n);
+            fireAddEvent(n);
         }
         return this;
+    }
+
+    private void fireAddEvent(TreeNode n) {
+        for(TreeListener l : listeners) {
+            l.added(n);
+        }
+    }
+
+    private void fireRemoveEvent(TreeNode child) {
+        for(TreeListener l : listeners) {
+            l.removed(child);
+        }
+    }
+
+    private void fireModifyEvent(TreeNode child) {
+        for(TreeListener l : listeners) {
+            l.modified(child);
+        }
     }
 
     public int getSize() {
@@ -51,12 +73,13 @@ public class TreeNode {
 
     public void remove(TreeNode child1) {
         _list.remove(child1);
+        fireRemoveEvent(child1);
     }
 
     public void remove(int i) {
-        _list.remove(i);
+        TreeNode child = _list.remove(i);
+        fireRemoveEvent(child);
     }
-
 
 
     //various iterators
