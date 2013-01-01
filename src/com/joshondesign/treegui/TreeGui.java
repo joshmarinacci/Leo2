@@ -1,5 +1,6 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -7,6 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
@@ -35,6 +37,7 @@ public class TreeGui implements Runnable {
     }
 
     public void run() {
+        SketchDocument doc = initDoc();
         Stage stage = Stage.createStage();
         stage.setWidth(800);
         stage.setHeight(600);
@@ -58,34 +61,54 @@ public class TreeGui implements Runnable {
 
             PropsView propsView = (PropsView) find("propsview", rootControl);
 
-            Button obj = new Button("foo");
-            obj.setTranslateX(100);
+            //Button obj = new Button("foo");
+            //obj.setTranslateX(100);
             final Canvas canvas = (Canvas) find("canvas",rootControl);
-            canvas.setTarget(obj);
+            canvas.setTarget(doc.get(0).get(0));
 
 
             propsView.setPropFilter(new PropsView.PropFilter() {
                 public boolean include(Object obj, String name) {
-                    if("skinDirty".equals(name)) return false;
-                    if("hovered".equals(name)) return false;
-                    if("pressed".equals(name)) return false;
-                    if("baseline".equals(name)) return false;
-                    if("width".equals(name)) return false;
-                    if("height".equals(name)) return false;
                     return true;
                 }
             });
-            propsView.setSelection(obj);
+            propsView.setSelection(doc.get(0).get(0).get(0));
             propsView.onUpdate(new Callback<Void>() {
                 public void call(Void aVoid) throws Exception {
                     canvas.setLayoutDirty();
                 }
             });
 
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private SketchDocument initDoc() {
+        class Rect extends ResizableRectNode {
+            private FlatColor fill = FlatColor.GRAY;
+            @Override
+            public void draw(GFX g) {
+                g.setPaint(this.fill);
+                g.fillRect(0,0,getWidth(),getHeight());
+            }
+
+            public Rect setFill(FlatColor fill) {
+                this.fill = fill;
+                return this;
+            }
+        }
+
+        SketchDocument doc = new SketchDocument();
+        Layer layer = new Layer();
+        layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
+        layer.add(new Rect().setFill(FlatColor.BLUE).setWidth(50).setHeight(50).setTranslateX(100).setTranslateY(100));
+        Page page = new Page();
+        page.add(layer);
+        doc.add(page);
+        return doc;
     }
 
     private Node find(String propsview, Control rootControl) {

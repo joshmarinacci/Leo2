@@ -119,7 +119,8 @@ public class PropsView extends VFlexBox {
             if(name.startsWith("is")) {
                 this.name = name.substring(2,3).toLowerCase() + name.substring(3);
             }
-            if(name.startsWith("get")) {
+            if(name.startsWith("get") && name.length() > 3) {
+                u.p("name = " + name);
                 this.name = name.substring(3,4).toLowerCase() + name.substring(4);
             }
 

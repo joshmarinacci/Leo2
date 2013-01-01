@@ -3,16 +3,9 @@ package com.joshondesign.treegui.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 12/31/12
- * Time: 10:06 AM
- * To change this template use File | Settings | File Templates.
- */
-public class TreeNode {
+public class TreeNode<C extends TreeNode> {
 
-    private List<TreeNode> _list = new ArrayList<TreeNode>();
+    private List<C> _list = new ArrayList<C>();
     private List<TreeListener> listeners = new ArrayList<TreeListener>();
 
     public static interface TreeListener {
@@ -28,36 +21,32 @@ public class TreeNode {
 
 
 
-    public TreeNode markModified(TreeNode child) {
+    public TreeNode<C> markModified(C child) {
         fireModifyEvent(child);
         return this;
     }
 
-
-
-
-
-    public TreeNode add(TreeNode ... nodes) {
-        for(TreeNode n : nodes) {
+    public TreeNode<C> add(C... nodes) {
+        for(C n : nodes) {
             _list.add(n);
             fireAddEvent(n);
         }
         return this;
     }
 
-    private void fireAddEvent(TreeNode n) {
+    private void fireAddEvent(C n) {
         for(TreeListener l : listeners) {
             l.added(n);
         }
     }
 
-    private void fireRemoveEvent(TreeNode child) {
+    private void fireRemoveEvent(C child) {
         for(TreeListener l : listeners) {
             l.removed(child);
         }
     }
 
-    private void fireModifyEvent(TreeNode child) {
+    private void fireModifyEvent(C child) {
         for(TreeListener l : listeners) {
             l.modified(child);
         }
@@ -67,32 +56,32 @@ public class TreeNode {
         return _list.size();
     }
 
-    public TreeNode get(int i) {
+    public C get(int i) {
         return _list.get(i);
     }
 
-    public void remove(TreeNode child1) {
+    public void remove(C child1) {
         _list.remove(child1);
         fireRemoveEvent(child1);
     }
 
     public void remove(int i) {
-        TreeNode child = _list.remove(i);
+        C child = _list.remove(i);
         fireRemoveEvent(child);
     }
 
 
     //various iterators
 
-    public Iterable<? extends TreeNode> children() {
+    public Iterable<C> children() {
         return _list;
     }
 
-    public Iterable<? extends TreeNode> reverseInOrderTraversal() {
+    public Iterable<C> reverseInOrderTraversal() {
         return _list;
     }
 
-    public Iterable<? extends TreeNode> inOrderTraversal() {
+    public Iterable<C> inOrderTraversal() {
         return _list;
     }
 

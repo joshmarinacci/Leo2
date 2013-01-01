@@ -8,9 +8,9 @@ package com.joshondesign.treegui.model;
  * To change this template use File | Settings | File Templates.
  */
 public class Trees {
-    public static int getTotalTreeCount(TreeNode node) {
+    public static int getTotalTreeCount(TreeNode<TreeNode> node) {
         int accum = 0;
-        for(TreeNode n : node.children()) {
+        for(TreeNode<TreeNode> n : node.children()) {
             accum += getTotalTreeCount(n);
         }
         accum += 1; //count ourselves

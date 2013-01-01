@@ -1,8 +1,9 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.model.TreeNode;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 
 /**
@@ -13,7 +14,7 @@ import org.joshy.gfx.node.control.Control;
  * To change this template use File | Settings | File Templates.
  */
 public class Canvas extends Control {
-    private Button target;
+    private TreeNode<SketchNode> target;
 
     @Override
     public void doLayout() {
@@ -24,11 +25,6 @@ public class Canvas extends Control {
     public void doPrefLayout() {
         this.setWidth(getPrefWidth());
         this.setHeight(getPrefHeight());
-        if(this.target != null) {
-            this.target.doSkins();
-            this.target.doPrefLayout();
-            this.target.doLayout();
-        }
     }
 
     @Override
@@ -37,19 +33,32 @@ public class Canvas extends Control {
 
     @Override
     public void setLayoutDirty() {
-        super.setLayoutDirty();    //To change body of overridden methods use File | Settings | File Templates.
+        super.setLayoutDirty();
     }
 
     @Override
     public void draw(GFX gfx) {
         gfx.setPaint(FlatColor.PURPLE);
         gfx.fillRect(0,0,getWidth(),getHeight());
-        if(this.target != null) {
-            this.target.draw(gfx);
+        drawTarget(gfx,target);
+    }
+
+    private void drawTarget(GFX gfx, TreeNode<SketchNode> target) {
+        for(SketchNode n : this.target.children()) {
+            drawNode(gfx, n);
         }
     }
 
-    public void setTarget(Button obj) {
-        this.target = obj;
+    private void drawNode(GFX gfx, SketchNode n) {
+        gfx.translate(n.getTranslateX(),n.getTranslateY());
+        n.draw(gfx);
+        for(SketchNode c : n.children()) {
+            drawNode(gfx,c);
+        }
+        gfx.translate(-n.getTranslateX(),-n.getTranslateY());
+    }
+
+    public void setTarget(TreeNode<SketchNode> level) {
+        this.target = level;
     }
 }

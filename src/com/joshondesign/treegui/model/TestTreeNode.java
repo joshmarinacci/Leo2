@@ -1,6 +1,11 @@
 package com.joshondesign.treegui.model;
 
+import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.docmodel.Layer;
+import com.joshondesign.treegui.docmodel.Page;
+import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import org.joshy.gfx.Core;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.layout.FlexBox;
@@ -52,9 +57,23 @@ public class TestTreeNode {
     }
 
     @Test
+    public void DocModel() {
+        SketchDocument doc = new SketchDocument();
+        doc.add(new Page(),new Page(),new Page());
+        doc.get(0).add(new Layer());
+        Layer layer = doc.get(0).get(0);
+        layer.add(new ResizableRectNode(){
+            @Override
+            public void draw(GFX g) {
+
+            }
+        }.setWidth(100).setHeight(100).setTranslateX(100));
+    }
+
+    @Test
     public void iteration() {
         //iterate over list
-        TreeNode n5 = new TreeNode();
+        TreeNode<TreeNode> n5 = new TreeNode<TreeNode>();
         n5.add(new TreeNode(),new TreeNode(),new TreeNode());
         n5.add(new TreeNode().add(new TreeNode()).add(new TreeNode()));
 
