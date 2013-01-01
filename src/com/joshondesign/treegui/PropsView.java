@@ -11,7 +11,6 @@ import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
-import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,9 +27,7 @@ public class PropsView extends VFlexBox {
     }
 
     public void setSelection(final Object object) {
-        u.p("setting the selection to: " + object);
         List<Prop> props = findGetters(object);
-        u.p(props);
 
         this.children.clear();
         for(final Prop prop : props) {
@@ -120,7 +117,6 @@ public class PropsView extends VFlexBox {
                 this.name = name.substring(2,3).toLowerCase() + name.substring(3);
             }
             if(name.startsWith("get") && name.length() > 3) {
-                u.p("name = " + name);
                 this.name = name.substring(3,4).toLowerCase() + name.substring(4);
             }
 

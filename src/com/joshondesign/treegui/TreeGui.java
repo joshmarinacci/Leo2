@@ -4,6 +4,7 @@ import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.HashMap;
 import org.joshy.gfx.Core;
@@ -13,6 +14,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SystemMenuEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Button;
@@ -65,6 +67,7 @@ public class TreeGui implements Runnable {
             //obj.setTranslateX(100);
             final Canvas canvas = (Canvas) find("canvas",rootControl);
             canvas.setTarget(doc.get(0).get(0));
+            canvas.setPropsView(propsView);
 
 
             propsView.setPropFilter(new PropsView.PropFilter() {
@@ -93,6 +96,20 @@ public class TreeGui implements Runnable {
             public void draw(GFX g) {
                 g.setPaint(this.fill);
                 g.fillRect(0,0,getWidth(),getHeight());
+            }
+
+            @Override
+            public boolean contains(Point2D pt) {
+                if(pt.getX() < this.getTranslateX()) return false;
+                if(pt.getX() > this.getTranslateX()+this.getWidth()) return false;
+                if(pt.getY() < this.getTranslateY()) return false;
+                if(pt.getY() > this.getTranslateY()+this.getHeight()) return false;
+                return true;
+            }
+
+            @Override
+            public Bounds getInputBounds() {
+                return new Bounds(0,0,getWidth(),getHeight());
             }
 
             public Rect setFill(FlatColor fill) {

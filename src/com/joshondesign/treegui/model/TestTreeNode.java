@@ -4,9 +4,11 @@ import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import java.awt.geom.Point2D;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
@@ -66,6 +68,16 @@ public class TestTreeNode {
             @Override
             public void draw(GFX g) {
 
+            }
+
+            @Override
+            public boolean contains(Point2D pt) {
+                return false;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public Bounds getInputBounds() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
         }.setWidth(100).setHeight(100).setTranslateX(100));
     }
