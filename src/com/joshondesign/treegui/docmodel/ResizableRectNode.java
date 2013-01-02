@@ -1,5 +1,8 @@
 package com.joshondesign.treegui.docmodel;
 
+import java.awt.geom.Point2D;
+import org.joshy.gfx.node.Bounds;
+
 /**
  * Created with IntelliJ IDEA.
  * User: josh
@@ -48,4 +51,19 @@ public abstract class ResizableRectNode extends SketchNode {
     }
 
     private ResizeConstraint constraint;
+
+    @Override
+    public boolean contains(Point2D pt) {
+        if(pt.getX() < this.getTranslateX()) return false;
+        if(pt.getX() > this.getTranslateX()+this.getWidth()) return false;
+        if(pt.getY() < this.getTranslateY()) return false;
+        if(pt.getY() > this.getTranslateY()+this.getHeight()) return false;
+        return true;
+    }
+
+    @Override
+    public Bounds getInputBounds() {
+        return new Bounds(0,0,getWidth(),getHeight());
+    }
+
 }

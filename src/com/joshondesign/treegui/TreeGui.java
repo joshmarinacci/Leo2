@@ -1,10 +1,12 @@
 package com.joshondesign.treegui;
 
-import com.joshondesign.treegui.docmodel.*;
+import com.joshondesign.treegui.docmodel.Layer;
+import com.joshondesign.treegui.docmodel.Page;
+import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
-import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.HashMap;
 import org.joshy.gfx.Core;
@@ -14,7 +16,6 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SystemMenuEvent;
-import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Button;
@@ -97,31 +98,26 @@ public class TreeGui implements Runnable {
                 g.setPaint(this.fill);
                 g.fillRect(0,0,getWidth(),getHeight());
             }
-
-            @Override
-            public boolean contains(Point2D pt) {
-                if(pt.getX() < this.getTranslateX()) return false;
-                if(pt.getX() > this.getTranslateX()+this.getWidth()) return false;
-                if(pt.getY() < this.getTranslateY()) return false;
-                if(pt.getY() > this.getTranslateY()+this.getHeight()) return false;
-                return true;
-            }
-
-            @Override
-            public Bounds getInputBounds() {
-                return new Bounds(0,0,getWidth(),getHeight());
-            }
-
             public Rect setFill(FlatColor fill) {
                 this.fill = fill;
                 return this;
             }
         }
 
+        class Slider extends ResizableRectNode {
+            @Override
+            public void draw(GFX g) {
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0,0,getWidth(),getHeight());
+                g.setPaint(FlatColor.BLACK);
+                g.fillRect(0,0,getHeight(),getHeight());
+            }
+        }
+
         SketchDocument doc = new SketchDocument();
         Layer layer = new Layer();
         layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
-        layer.add(new Rect().setFill(FlatColor.BLUE).setWidth(50).setHeight(50).setTranslateX(100).setTranslateY(100));
+        layer.add(new Slider().setWidth(100).setHeight(30).setTranslateX(100).setTranslateY(100));
         Page page = new Page();
         page.add(layer);
         doc.add(page);
