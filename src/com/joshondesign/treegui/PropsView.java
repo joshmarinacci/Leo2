@@ -27,9 +27,10 @@ public class PropsView extends VFlexBox {
     }
 
     public void setSelection(final Object object) {
+        this.children.clear();
+        if(object == null) return;
         List<Prop> props = findGetters(object);
 
-        this.children.clear();
         for(final Prop prop : props) {
             if(filter != null) {
                 if(!filter.include(object, prop.name)) continue;

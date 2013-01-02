@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
@@ -15,7 +16,6 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.VFlexBox;
-import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,8 +36,14 @@ public class Canvas extends Control {
     private Binding currentBinding;
     private List<Binding> bindings = new ArrayList<Binding>();
 
+
+
     public Canvas() {
         EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
+            private Point2D startPoint;
+            public double startTX;
+            public double startTY;
+
             public void call(MouseEvent mouseEvent) throws Exception {
                 if (mouseEvent.getType() == MouseEvent.OpenContextMenu && getSelection() != null) {
                     showBindingMenu(mouseEvent.getPointInNodeCoords(Canvas.this));
@@ -45,8 +51,18 @@ public class Canvas extends Control {
                 if (mouseEvent.getType() == MouseEvent.MousePressed) {
 
                     SketchNode node = findNode(mouseEvent.getPointInNodeCoords(Canvas.this));
-                    if (node == null) return;
                     setSelection(node);
+                    if(node == null) return;
+                    Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
+                    startPoint = pt;
+                    startTX = getSelection().getTranslateX();
+                    startTY = getSelection().getTranslateY();
+                }
+                if(mouseEvent.getType() == MouseEvent.MouseDragged && getSelection() != null) {
+                    Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
+                    getSelection().setTranslateX(startTX + (pt.getX()-startPoint.getX()));
+                    getSelection().setTranslateY(startTY + (pt.getY()-startPoint.getY()));
+                    setDrawingDirty();
                 }
             }
         });
@@ -75,7 +91,22 @@ public class Canvas extends Control {
         String[] props = {"translateX","translateY"};
 
         for(final String prop : props) {
-            Button tx = new Button(prop);
+            final Binding binding = findBinding(selection,prop);
+            Button tx = new Button(prop) {
+                @Override
+                public void draw(GFX g) {
+                    g.setPaint(FlatColor.fromRGBInts(200,200,200));
+                    g.fillRoundRect(0, 0, getWidth(), getHeight(), 5, 5);
+                    g.setPaint(FlatColor.BLACK);
+                    Font.drawCenteredVertically(g, prop, Font.DEFAULT, 2, 0, getWidth(), getHeight(), false);
+                    if(binding == null) {
+                        g.drawOval(100-20,0,20,20);
+                    } else {
+                        g.fillOval(100 - 20, 0, 20, 20);
+                    }
+                }
+            };
+            tx.setPrefWidth(100);
             Callback<MouseEvent> callback = new Callback<MouseEvent>() {
                 public void call(MouseEvent mouseEvent) throws Exception {
                     if(mouseEvent.getType() == MouseEvent.MousePressed) {
@@ -101,6 +132,17 @@ public class Canvas extends Control {
             EventBus.getSystem().addListener(tx,MouseEvent.MouseAll, callback);
             popup.add(tx);
         }
+    }
+
+    private Binding findBinding(SketchNode selection, String prop) {
+        for(Binding binding : bindings) {
+            if(binding.getSource() == selection) {
+                if(binding.getSourceProperty().equals(prop)) {
+                    return binding;
+                }
+            }
+        }
+        return null;
     }
 
     private void showTargetPopup(final SketchNode node, MouseEvent mouseEvent) {
