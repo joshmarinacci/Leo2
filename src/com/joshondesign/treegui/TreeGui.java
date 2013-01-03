@@ -12,10 +12,7 @@ import java.util.HashMap;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.Event;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.SystemMenuEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Button;
@@ -40,7 +37,7 @@ public class TreeGui implements Runnable {
     }
 
     public void run() {
-        SketchDocument doc = initDoc();
+        final SketchDocument doc = initDoc();
         Stage stage = Stage.createStage();
         stage.setWidth(800);
         stage.setHeight(600);
@@ -64,8 +61,6 @@ public class TreeGui implements Runnable {
 
             PropsView propsView = (PropsView) find("propsview", rootControl);
 
-            //Button obj = new Button("foo");
-            //obj.setTranslateX(100);
             final Canvas canvas = (Canvas) find("canvas",rootControl);
             canvas.setTarget(doc.get(0).get(0));
             canvas.setPropsView(propsView);
@@ -80,6 +75,20 @@ public class TreeGui implements Runnable {
             propsView.onUpdate(new Callback<Void>() {
                 public void call(Void aVoid) throws Exception {
                     canvas.setLayoutDirty();
+                }
+            });
+
+
+            Button runButton = (Button) find("run",rootControl);
+            u.p("found node = " + runButton);
+            u.p("navtree = " + find("navtree",rootControl));
+            u.p("propsview = " + find("sidebars",rootControl));
+            runButton.onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    u.p("running the code");
+                    HTMLBindingExport action = new HTMLBindingExport();
+                    action.canvas = canvas;
+                    action.execute(doc.get(0));
                 }
             });
 
@@ -102,6 +111,16 @@ public class TreeGui implements Runnable {
                 this.fill = fill;
                 return this;
             }
+
+            public boolean isDraggable() {
+                return draggable;
+            }
+
+            public void setDraggable(boolean draggable) {
+                this.draggable = draggable;
+            }
+
+            private boolean draggable = false;
         }
 
         class Slider extends ResizableRectNode {
@@ -229,7 +248,8 @@ public class TreeGui implements Runnable {
 
     private Control processButton(Elem root) {
         Button button = new Button();
-        button.setText("foo");
+        button.setText(root.attr("title"));
+        stdAtts(root,button);
         return button;
     }
 

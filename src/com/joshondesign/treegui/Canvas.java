@@ -284,4 +284,8 @@ public class Canvas extends Control {
     public PropsView getPropsView() {
         return propsView;
     }
+
+    public List<Binding> getBindings() {
+        return bindings;
+    }
 }

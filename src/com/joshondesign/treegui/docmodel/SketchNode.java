@@ -6,6 +6,18 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
 public abstract class SketchNode extends TreeNode<SketchNode> {
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    String id = "id"+(int)Math.floor(Math.random()*1000000);
+
+
     public double getTranslateX() {
         return translateX;
     }
