@@ -4,8 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Checkbox;
 import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Textbox;
@@ -37,6 +36,16 @@ public class PropsView extends VFlexBox {
             }
             if(prop.getter.getReturnType() == boolean.class) {
                 final Checkbox cb = new Checkbox(prop.name);
+                EventBus.getSystem().addListener(cb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        if(prop.setter != null) {
+                            prop.setter.invoke(object,cb.isSelected());
+                        }
+                        if(updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
                 cb.onClicked(new Callback<ActionEvent>() {
                     public void call(ActionEvent actionEvent) throws Exception {
                         if(prop.setter != null) {
@@ -61,6 +70,14 @@ public class PropsView extends VFlexBox {
                 final Textbox tb = new Textbox();
                 tb.setText(""+prop.getDoubleValue());
                 tb.setPrefWidth(100);
+                EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        prop.setValue(tb.getText());
+                        if(updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
                 tb.onAction(new Callback<ActionEvent>() {
                     public void call(ActionEvent actionEvent) throws Exception {
                         prop.setValue(tb.getText());
@@ -79,6 +96,14 @@ public class PropsView extends VFlexBox {
                 final Textbox tb = new Textbox();
                 tb.setText(""+prop.getStringValue());
                 tb.setPrefWidth(100);
+                EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        prop.setValue(tb.getText());
+                        if(updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
                 tb.onAction(new Callback<ActionEvent>() {
                     public void call(ActionEvent actionEvent) throws Exception {
                         prop.setValue(tb.getText());
