@@ -1,10 +1,7 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.actions.JAction;
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
-import com.joshondesign.treegui.docmodel.ResizableRectNode;
-import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
 import com.joshondesign.xml.Doc;
@@ -144,6 +141,13 @@ public class TreeGui implements Runnable {
         Layer layer = new Layer();
         layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
         layer.add(new Slider().setWidth(100).setHeight(30).setTranslateX(100).setTranslateY(100));
+
+        Group group = new Group();
+        group.add(new Rect().setFill(FlatColor.PURPLE).setWidth(20).setHeight(20).setTranslateX(50));
+        group.add(new Rect().setFill(FlatColor.YELLOW).setWidth(20).setHeight(20));
+        group.setTranslateX(300).setTranslateY(200);
+        layer.add(group);
+
         Page page = new Page();
         page.add(layer);
         doc.add(page);
