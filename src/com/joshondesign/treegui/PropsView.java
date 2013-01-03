@@ -72,6 +72,24 @@ public class PropsView extends VFlexBox {
                 box.add(tb);
                 this.add(box);
             }
+
+            if(prop.getter.getReturnType() == String.class) {
+                HFlexBox box = new HFlexBox();
+                box.add(new Label(prop.name));
+                final Textbox tb = new Textbox();
+                tb.setText(""+prop.getStringValue());
+                tb.setPrefWidth(100);
+                tb.onAction(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        prop.setValue(tb.getText());
+                        if(updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                box.add(tb);
+                this.add(box);
+            }
         }
     }
 
@@ -143,6 +161,18 @@ public class PropsView extends VFlexBox {
             return (Double)value;
         }
 
+        public String getStringValue() {
+            Object value = null;
+            try {
+                value = this.getter.invoke(this.obj);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            return (String)value;
+        }
+
         public void setValue(String text) {
             if(this.getter.getReturnType() == double.class) {
                 try {
@@ -150,6 +180,15 @@ public class PropsView extends VFlexBox {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (InvocationTargetException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+            if(this.getter.getReturnType() == String.class) {
+                try {
+                    this.setter.invoke(this.obj, text);
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
             }
