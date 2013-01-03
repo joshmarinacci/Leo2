@@ -11,12 +11,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import org.joshy.gfx.util.OSUtil;
 
-public class HTMLBindingExport extends JAction<Page> {
+public class HTMLBindingExport extends JAction {
 
     public Canvas canvas;
+    public Page page;
 
     @Override
-    public void execute(Page data) {
+    public void execute() {
         try {
             //File file = File.createTempFile("foo",".html");
             File file = new File("/Users/josh/projects/Leo/t2/foo.html");
@@ -33,7 +34,7 @@ public class HTMLBindingExport extends JAction<Page> {
 
             out.println("var engine = new Amino();");
             out.println("var root = engine.addCanvas('canvas');");
-            for(Layer layer : data.children()) {
+            for(Layer layer : page.children()) {
                 for(SketchNode node : layer.children()) {
                     out.println("var "+node.getId()+" = ");
                     out.println("  new Transform(");
@@ -80,5 +81,10 @@ public class HTMLBindingExport extends JAction<Page> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getShortName() {
+        return "Export HTML";
     }
 }

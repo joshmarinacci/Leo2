@@ -14,6 +14,18 @@ public class TreeNode<C extends TreeNode> {
         public void modified(TreeNode node);
     }
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    String id;
+
+
     public TreeNode addListener(TreeListener treeListener) {
         this.listeners.add(treeListener);
         return this;

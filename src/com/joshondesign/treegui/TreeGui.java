@@ -1,9 +1,12 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.model.TreeNode;
+import com.joshondesign.treegui.model.TreeNodeListView;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -15,9 +18,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.ScrollPane;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.stage.Stage;
@@ -88,11 +89,17 @@ public class TreeGui implements Runnable {
                     u.p("running the code");
                     HTMLBindingExport action = new HTMLBindingExport();
                     action.canvas = canvas;
-                    action.execute(doc.get(0));
+                    action.page = doc.get(0);
                 }
             });
 
-
+            TreeNode toolbarList = new TreeNode<JAction>();
+            HTMLBindingExport exp = new HTMLBindingExport();
+            exp.canvas = canvas;
+            exp.page = doc.get(0);
+            toolbarList.add(exp);
+            ToolbarListView toolbar = (ToolbarListView) find("toolbar", rootControl);
+            toolbar.setModel(toolbarList);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,7 +172,7 @@ public class TreeGui implements Runnable {
             return processPanel(root);
         }
         if(root.name().equals("list")) {
-            return processPanel(root);
+            return processList(root);
         }
         if(root.name().equals("tabs")) {
             return processTabbedPanel(root);
@@ -181,6 +188,12 @@ public class TreeGui implements Runnable {
         }
 
         return null;
+    }
+
+    private Control processList(Elem root) {
+        TreeNodeListView view = new TreeNodeListView();
+        stdAtts(root, view);
+        return view;
     }
 
     private Control processAnchorPanel(Elem root) throws Exception {
