@@ -66,4 +66,14 @@ public abstract class ResizableRectNode extends SketchNode {
         return new Bounds(0,0,getWidth(),getHeight());
     }
 
+    @Override
+    public SketchNode duplicate(SketchNode node) {
+        if(node instanceof ResizableRectNode) {
+            ResizableRectNode rect = (ResizableRectNode) node;
+            rect.setWidth(getWidth());
+            rect.setHeight(getHeight());
+            rect.setConstraint(getConstraint());
+        }
+        return super.duplicate(node);
+    }
 }

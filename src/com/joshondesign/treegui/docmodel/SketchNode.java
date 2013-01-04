@@ -39,4 +39,13 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
     public abstract boolean contains(Point2D pt);
 
     public abstract Bounds getInputBounds();
+
+
+    public SketchNode duplicate(SketchNode node) {
+        if(node != null) {
+            node.setTranslateX(getTranslateX());
+            node.setTranslateY(getTranslateY());
+        }
+        return node;
+    }
 }

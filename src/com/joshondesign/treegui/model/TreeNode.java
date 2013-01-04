@@ -19,8 +19,9 @@ public class TreeNode<C extends TreeNode> {
         return id;
     }
 
-    public void setId(String id) {
+    public TreeNode<C> setId(String id) {
         this.id = id;
+        return this;
     }
 
     String id;

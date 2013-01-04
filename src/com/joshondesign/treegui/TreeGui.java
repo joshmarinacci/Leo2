@@ -4,18 +4,25 @@ import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
+import com.joshondesign.treegui.modes.amino.Rect;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.HashMap;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
-import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.stage.Stage;
@@ -61,11 +68,13 @@ public class TreeGui implements Runnable {
 
             PropsView propsView = (PropsView) find("propsview", rootControl);
 
+            //hook up the canvas
             final Canvas canvas = (Canvas) find("canvas",rootControl);
             canvas.setTarget(doc.get(0).get(0));
             canvas.setPropsView(propsView);
 
 
+            //hoook up the props view
             propsView.setPropFilter(new PropsView.PropFilter() {
                 public boolean include(Object obj, String name) {
                     return true;
@@ -79,14 +88,87 @@ public class TreeGui implements Runnable {
             });
 
 
+            //hook up the actions toolbar
             TreeNode<JAction> actions = (TreeNode<JAction>)mode.get(0);
             HTMLBindingExport exp = new HTMLBindingExport();
             exp.canvas = canvas;
             exp.page = doc.get(0);
             actions.add(exp);
-
             ToolbarListView toolbar = (ToolbarListView) find("toolbar", rootControl);
             toolbar.setModel(actions);
+
+            //hook up the symbols view
+
+            final TreeNodeListView symbolsView = (TreeNodeListView) find("symbolsview", rootControl);
+            TreeNode<SketchNode> symbols = mode.get(1);
+            symbolsView.setTreeNodeModel(symbols);
+            symbolsView.setRenderer(new ListView.ItemRenderer<TreeNode>() {
+                public void draw(GFX gfx, ListView listView, TreeNode treeNode, int index, double x, double y, double w, double h) {
+                    if(treeNode == null) return;
+                    SketchNode node = (SketchNode) treeNode;
+                    gfx.translate(x, y);
+                    node.draw(gfx);
+                    gfx.setPaint(FlatColor.WHITE);
+                    gfx.fillRect(0, 0, w, 20);
+                    gfx.setPaint(FlatColor.BLACK);
+                    gfx.drawText(node.getId(), Font.DEFAULT,5,16);
+                    gfx.translate(-x,-y);
+                    if(listView.getSelectedIndex() == index) {
+                        gfx.setPaint(new FlatColor(1.0,0,0,0.3));
+                        gfx.fillRect(x,y,w,h);
+                    }
+                    gfx.setPaint(FlatColor.BLACK);
+                    gfx.drawRect(x,y,w,h);
+                }
+            });
+            EventBus.getSystem().addListener(symbolsView, MouseEvent.MouseAll, new Callback<MouseEvent>() {
+                public boolean created;
+                public SketchNode dupe;
+                public double prevx;
+
+                public void call(MouseEvent event) throws Exception {
+                    if(event.getType() == MouseEvent.MouseDragged) {
+                        Point2D pt = event.getPointInNodeCoords(canvas);
+                        if(created && dupe != null) {
+                            //pt = canvas.transformToCanvas(pt);
+                            Bounds b = dupe.getInputBounds();
+                            dupe.setTranslateX(pt.getX()-b.getWidth()/2);
+                            dupe.setTranslateY(pt.getY()-b.getHeight()/2);
+                            //context.redraw();
+                            canvas.setLayoutDirty();
+                        }
+                        if(event.getX() < 0 && prevx >= 0 && !created) {
+                            created = true;
+                            if(symbolsView.getSelectedIndex() < 0) return;
+                            SketchNode node = (SketchNode) symbolsView.getModel().get(symbolsView.getSelectedIndex());
+                            SketchDocument sd = doc;//context.getDocument();
+                            dupe = node.duplicate(null);
+                            Bounds b = dupe.getInputBounds();
+                            //sd.getCurrentPage().add(dupe);
+                            sd.get(0).get(0).add(dupe);
+                            //Point2D pt = event.getPointInNodeCoords(context.getCanvas());
+                            //pt = context.getSketchCanvas().transformToCanvas(pt);
+                            dupe.setTranslateX(pt.getX()-b.getWidth()/2);
+                            dupe.setTranslateY(pt.getY() - b.getHeight() / 2);
+                            canvas.setLayoutDirty();
+                            //context.redraw();
+                        }
+                        prevx = event.getX();
+                    }
+                    if(event.getType() == MouseEvent.MouseReleased) {
+                        if(created) {
+                            canvas.setSelection(dupe);
+                            //context.getSelection().setSelectedNode(dupe);
+                            dupe = null;
+                            created = false;
+                            prevx = 0;
+                        }
+                        canvas.setLayoutDirty();
+                        //context.redraw();
+                    }
+
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,26 +196,13 @@ public class TreeGui implements Runnable {
 
 
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
-        symbols.add(new ResizableRectNode() {
-            @Override
-            public String getId() {
-                return "Rect";
-            }
-
-            @Override
-            public void draw(GFX g) {
-            }
-        });
-        symbols.add(new ResizableRectNode() {
-            @Override
-            public String getId() {
-                return "Label";
-            }
-
-            @Override
-            public void draw(GFX g) {
-            }
-        });
+        Rect rect = new Rect();
+        rect.setId("Rect");
+        symbols.add(rect);
+        com.joshondesign.treegui.modes.amino.Button button = new com.joshondesign.treegui.modes.amino.Button();
+        button.setId("Button");
+        symbols.add(button);
+        /*
         symbols.add(new ResizableRectNode() {
             @Override
             public String getId() {
@@ -142,6 +211,8 @@ public class TreeGui implements Runnable {
 
             @Override
             public void draw(GFX g) {
+                g.setPaint(FlatColor.GREEN);
+                g.fillRect(0,0,getWidth(),getHeight());
             }
         });
         symbols.add(new ResizableRectNode() {
@@ -152,6 +223,8 @@ public class TreeGui implements Runnable {
 
             @Override
             public void draw(GFX g) {
+                g.setPaint(FlatColor.YELLOW);
+                g.fillRect(0,0,getWidth(),getHeight());
             }
         });
         symbols.add(new ResizableRectNode() {
@@ -162,37 +235,17 @@ public class TreeGui implements Runnable {
 
             @Override
             public void draw(GFX g) {
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0,0,getWidth(),getHeight());
             }
         });
-
+        */
         amino.add(symbols);
 
         return modes;
     }
 
     private SketchDocument initDoc() {
-        class Rect extends ResizableRectNode {
-            private FlatColor fill = FlatColor.GRAY;
-            @Override
-            public void draw(GFX g) {
-                g.setPaint(this.fill);
-                g.fillRect(0,0,getWidth(),getHeight());
-            }
-            public Rect setFill(FlatColor fill) {
-                this.fill = fill;
-                return this;
-            }
-
-            public boolean isDraggable() {
-                return draggable;
-            }
-
-            public void setDraggable(boolean draggable) {
-                this.draggable = draggable;
-            }
-
-            private boolean draggable = false;
-        }
 
         class Slider extends ResizableRectNode {
             @Override
@@ -263,6 +316,17 @@ public class TreeGui implements Runnable {
 
     private Control processList(Elem root) {
         TreeNodeListView view = new TreeNodeListView();
+        if(root.hasAttr("layout")) {
+            if(root.attrEquals("layout","horizontal-wrap")) {
+                view.setOrientation(ListView.Orientation.HorizontalWrap);
+            }
+        }
+        if(root.hasAttr("cellwidth")) {
+            view.setColumnWidth(Double.parseDouble(root.attr("cellwidth")));
+        }
+        if(root.hasAttr("cellheight")) {
+            view.setRowHeight(Double.parseDouble(root.attr("cellheight")));
+        }
         stdAtts(root, view);
         return view;
     }

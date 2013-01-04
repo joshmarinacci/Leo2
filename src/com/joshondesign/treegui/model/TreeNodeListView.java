@@ -10,14 +10,14 @@ import org.joshy.gfx.node.control.ListView;
  * Time: 11:07 AM
  * To change this template use File | Settings | File Templates.
  */
-public class TreeNodeListView extends ListView {
+public class TreeNodeListView extends ListView<TreeNode> {
 
     private TreeNode treeNodeModel;
 
     public void setTreeNodeModel(TreeNode root) {
         this.treeNodeModel = root;
-        this.setModel(new ListModel() {
-            public Object get(int i) {
+        this.setModel(new ListModel<TreeNode>() {
+            public TreeNode get(int i) {
                 return treeNodeModel.get(i);
             }
 
