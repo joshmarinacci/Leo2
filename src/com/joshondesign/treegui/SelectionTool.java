@@ -12,7 +12,6 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
