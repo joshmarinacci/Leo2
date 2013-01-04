@@ -5,6 +5,7 @@ import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
 import com.joshondesign.treegui.modes.amino.Rect;
+import com.joshondesign.treegui.modes.amino.Slider;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -137,7 +138,7 @@ public class TreeGui implements Runnable {
                             sd.get(0).get(0).add(dupe);
                             //Point2D pt = event.getPointInNodeCoords(context.getCanvas());
                             //pt = context.getSketchCanvas().transformToCanvas(pt);
-                            dupe.setTranslateX(pt.getX()-b.getWidth()/2);
+                            dupe.setTranslateX(pt.getX() - b.getWidth() / 2);
                             dupe.setTranslateY(pt.getY() - b.getHeight() / 2);
                             canvas.redraw();
                         }
@@ -189,6 +190,10 @@ public class TreeGui implements Runnable {
         com.joshondesign.treegui.modes.amino.Button button = new com.joshondesign.treegui.modes.amino.Button();
         button.setId("Button");
         symbols.add(button);
+        com.joshondesign.treegui.modes.amino.Slider slider = new Slider();
+        slider.setId("Slider");
+        symbols.add(slider);
+
         /*
         symbols.add(new ResizableRectNode() {
             @Override
@@ -234,20 +239,11 @@ public class TreeGui implements Runnable {
 
     private SketchDocument initDoc() {
 
-        class Slider extends ResizableRectNode {
-            @Override
-            public void draw(GFX g) {
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0,0,getWidth(),getHeight());
-                g.setPaint(FlatColor.BLACK);
-                g.fillRect(0,0,getHeight(),getHeight());
-            }
-        }
 
         SketchDocument doc = new SketchDocument();
         Layer layer = new Layer();
         layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
-        layer.add(new Slider().setWidth(100).setHeight(30).setTranslateX(100).setTranslateY(100));
+        //layer.add(new Slider().setWidth(100).setHeight(30).setTranslateX(100).setTranslateY(100));
 
         Group group = new Group();
         group.add(new Rect().setFill(FlatColor.PURPLE).setWidth(20).setHeight(20).setTranslateX(50));
