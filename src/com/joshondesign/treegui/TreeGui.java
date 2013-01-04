@@ -35,6 +35,8 @@ public class TreeGui implements Runnable {
     }
 
     public void run() {
+        final TreeNode<Mode> modes = initModes();
+        Mode mode = modes.get(0);
         final SketchDocument doc = initDoc();
         Stage stage = Stage.createStage();
         stage.setWidth(800);
@@ -77,30 +79,95 @@ public class TreeGui implements Runnable {
             });
 
 
-            Button runButton = (Button) find("run",rootControl);
-            u.p("found node = " + runButton);
-            u.p("navtree = " + find("navtree",rootControl));
-            u.p("propsview = " + find("sidebars",rootControl));
-            runButton.onClicked(new Callback<ActionEvent>() {
-                public void call(ActionEvent actionEvent) throws Exception {
-                    u.p("running the code");
-                    HTMLBindingExport action = new HTMLBindingExport();
-                    action.canvas = canvas;
-                    action.page = doc.get(0);
-                }
-            });
-
-            TreeNode toolbarList = new TreeNode<JAction>();
+            TreeNode<JAction> actions = (TreeNode<JAction>)mode.get(0);
             HTMLBindingExport exp = new HTMLBindingExport();
             exp.canvas = canvas;
             exp.page = doc.get(0);
-            toolbarList.add(exp);
+            actions.add(exp);
+
             ToolbarListView toolbar = (ToolbarListView) find("toolbar", rootControl);
-            toolbar.setModel(toolbarList);
+            toolbar.setModel(actions);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private TreeNode<Mode> initModes() {
+        TreeNode<Mode> modes = new TreeNode<Mode>();
+        Mode amino = new Mode();
+        amino.setId("com.joshondesign.modes.aminojs");
+        modes.add(amino);
+
+        TreeNode<JAction> actions = new TreeNode<JAction>();
+        actions.add(new JAction() {
+            @Override
+            public void execute() {
+            }
+            @Override
+            public String getShortName() {
+                return "Save XML";
+            }
+        });
+        amino.add(actions);
+
+
+
+        TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
+        symbols.add(new ResizableRectNode() {
+            @Override
+            public String getId() {
+                return "Rect";
+            }
+
+            @Override
+            public void draw(GFX g) {
+            }
+        });
+        symbols.add(new ResizableRectNode() {
+            @Override
+            public String getId() {
+                return "Label";
+            }
+
+            @Override
+            public void draw(GFX g) {
+            }
+        });
+        symbols.add(new ResizableRectNode() {
+            @Override
+            public String getId() {
+                return "Button";
+            }
+
+            @Override
+            public void draw(GFX g) {
+            }
+        });
+        symbols.add(new ResizableRectNode() {
+            @Override
+            public String getId() {
+                return "ListView";
+            }
+
+            @Override
+            public void draw(GFX g) {
+            }
+        });
+        symbols.add(new ResizableRectNode() {
+            @Override
+            public String getId() {
+                return "TwitterSearch";
+            }
+
+            @Override
+            public void draw(GFX g) {
+            }
+        });
+
+        amino.add(symbols);
+
+        return modes;
     }
 
     private SketchDocument initDoc() {
@@ -154,13 +221,13 @@ public class TreeGui implements Runnable {
         return doc;
     }
 
-    private Node find(String propsview, Control rootControl) {
-        if(propsview.equals(rootControl.getId())) return rootControl;
+    private Node find(String name, Control rootControl) {
+        if(name.equals(rootControl.getId())) return rootControl;
         if(rootControl instanceof Parent) {
             Parent parent = (Parent) rootControl;
             for(Node node : parent.children()) {
                 if(node instanceof Control) {
-                    Node nd = find(propsview, (Control) node);
+                    Node nd = find(name, (Control) node);
                     if(nd != null) return nd;
                 }
             }
