@@ -1,12 +1,10 @@
 package com.joshondesign.treegui;
 
-import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -17,6 +15,7 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.Focusable;
 import org.joshy.gfx.node.layout.VFlexBox;
 
 /**
@@ -26,9 +25,9 @@ import org.joshy.gfx.node.layout.VFlexBox;
  * Time: 9:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Canvas extends Control {
+public class Canvas extends Control implements Focusable{
     private TreeNode<SketchNode> target;
-    private SketchNode selection;
+    private TreeNode<SketchNode> selection = new TreeNode<SketchNode>();
     private PropsView propsView;
     private VFlexBox popup;
     private Point2D startDragPoint;
@@ -37,79 +36,19 @@ public class Canvas extends Control {
     private VFlexBox popup2;
     private Binding currentBinding;
     private List<Binding> bindings = new ArrayList<Binding>();
-
+    private final SelectionTool selectionTool;
 
 
     public Canvas() {
-        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
-            private Point2D startPoint;
-            public double startTX;
-            public double startTY;
-            public long lastClick;
-            private Stack<TreeNode<SketchNode>> editStack = new Stack<TreeNode<SketchNode>>();
-
-            public void call(MouseEvent mouseEvent) throws Exception {
-                if (mouseEvent.getType() == MouseEvent.OpenContextMenu && getSelection() != null) {
-                    showBindingMenu(mouseEvent.getPointInNodeCoords(Canvas.this));
-                }
-                if (mouseEvent.getType() == MouseEvent.MousePressed) {
-                    long oldClick = lastClick;
-                    lastClick = System.currentTimeMillis();
-                    if(lastClick-oldClick < 250) {
-                        SketchNode node = findNode(mouseEvent.getPointInNodeCoords(Canvas.this));
-                        if(node == null) {
-                            navigateUp();
-                        }
-                        if(node instanceof Group) {
-                            navigateDown(node);
-                        }
-                    } else {
-                        SketchNode node = findNode(mouseEvent.getPointInNodeCoords(Canvas.this));
-                        setSelection(node);
-                        if(node == null) return;
-                        startDragGesture(mouseEvent);
-                    }
-                }
-                if(mouseEvent.getType() == MouseEvent.MouseDragged && getSelection() != null) {
-                    continueDragGesture(mouseEvent);
-                }
-            }
-
-            private void continueDragGesture(MouseEvent mouseEvent) {
-                Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
-                getSelection().setTranslateX(startTX + (pt.getX()-startPoint.getX()));
-                getSelection().setTranslateY(startTY + (pt.getY()-startPoint.getY()));
-                setDrawingDirty();
-            }
-
-            private void startDragGesture(MouseEvent mouseEvent) {
-                Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
-                startPoint = pt;
-                startTX = getSelection().getTranslateX();
-                startTY = getSelection().getTranslateY();
-            }
-            private void navigateDown(SketchNode node) {
-                setSelection(null);
-                editStack.push(target);
-                setTarget(node);
-                setDrawingDirty();
-            }
-            private void navigateUp() {
-                if(target instanceof  Group) {
-                    setTarget(editStack.pop());
-                    setSelection(null);
-                    setDrawingDirty();
-                }
-            }
-        });
+        selectionTool = new SelectionTool(this);
     }
 
 
 
-    private void showBindingMenu(Point2D pt) {
+    void showBindingMenu(Point2D pt) {
 
         currentBinding = new Binding();
-        currentBinding.setSource(getSelection());
+        currentBinding.setSource(getSelection().get(0));
 
         if(popup == null) {
             popup = new VFlexBox();
@@ -120,7 +59,7 @@ public class Canvas extends Control {
             popup.removeAll();
             popup.setVisible(true);
         }
-        populateWithBindableProperties(popup, getSelection());
+        populateWithBindableProperties(popup, getSelection().get(0));
         popup.setTranslateX(pt.getX() + this.getTranslateX());
         popup.setTranslateY(pt.getY() + this.getTranslateY());
     }
@@ -262,18 +201,19 @@ public class Canvas extends Control {
     }
 
     private void drawSelectionOverlay(GFX gfx) {
-        if(getSelection() == null) return;
+        if(getSelection().getSize() < 1) return;
 
-        SketchNode s = getSelection();
-        Bounds b = s.getInputBounds();
-        gfx.translate(s.getTranslateX(),s.getTranslateY());
+        Bounds b = MathUtils.unionBounds(getSelection());
+        //SketchNode s = getSelection();
+        //Bounds b = s.getInputBounds();
+        //gfx.translate(s.getTranslateX(),s.getTranslateY());
 
         gfx.setPaint(FlatColor.fromRGBInts(100,100,100));
         gfx.drawRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
         gfx.setPaint(FlatColor.fromRGBInts(200,200,200));
         gfx.drawRect(b.getX()-1,b.getY()-1,b.getWidth()+2,b.getHeight()+2);
 
-        gfx.translate(-s.getTranslateX(), -s.getTranslateY());
+        //gfx.translate(-s.getTranslateX(), -s.getTranslateY());
     }
 
     private void drawTarget(GFX gfx, TreeNode<SketchNode> target) {
@@ -292,7 +232,7 @@ public class Canvas extends Control {
     }
 
 
-    private SketchNode findNode(Point2D pt) {
+    SketchNode findNode(Point2D pt) {
         for(SketchNode n : this.target.children()) {
             if(n.contains(pt)) return n;
         }
@@ -305,13 +245,17 @@ public class Canvas extends Control {
         this.target = level;
     }
 
-    public void setSelection(SketchNode selection) {
-        this.selection = selection;
-        this.getPropsView().setSelection(selection);
+    public void addToSelection(SketchNode node) {
+        this.selection.add(node);
+        this.getPropsView().setSelection(node);
+        setDrawingDirty();
+    }
+    public void clearSelection() {
+        this.selection.clear();
         setDrawingDirty();
     }
 
-    public SketchNode getSelection() {
+    public TreeNode<SketchNode> getSelection() {
         return selection;
     }
 
@@ -325,5 +269,17 @@ public class Canvas extends Control {
 
     public List<Binding> getBindings() {
         return bindings;
+    }
+
+    public void redraw() {
+        setDrawingDirty();
+    }
+
+    public TreeNode<SketchNode> getTarget() {
+        return target;
+    }
+
+    public boolean isFocused() {
+        return true;
     }
 }

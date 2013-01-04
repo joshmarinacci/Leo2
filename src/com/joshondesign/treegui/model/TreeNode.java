@@ -8,6 +8,15 @@ public class TreeNode<C extends TreeNode> {
     private List<C> _list = new ArrayList<C>();
     private List<TreeListener> listeners = new ArrayList<TreeListener>();
 
+    public void clear() {
+        List<C> toDelete = new ArrayList<C>();
+        toDelete.addAll(_list);
+        _list.clear();
+        for(C c : toDelete) {
+            fireRemoveEvent(c);
+        }
+    }
+
     public static interface TreeListener {
         public void added(TreeNode node);
         public void removed(TreeNode node);
