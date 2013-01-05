@@ -12,6 +12,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
@@ -97,6 +98,10 @@ public class SelectionTool extends CanvasTool {
 
         EventBus.getSystem().addListener(canvas, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
             public void call(KeyEvent keyEvent) throws Exception {
+                if(keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_DELETE || keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE) {
+                    u.p("deleting");
+                    deleteSelection();
+                }
                 if(keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_G) {
                     if(keyEvent.isSystemShortcut()) {
                         if(keyEvent.isShiftPressed()) {
@@ -108,6 +113,17 @@ public class SelectionTool extends CanvasTool {
                 }
             }
         });
+    }
+
+    private void deleteSelection() {
+        List<SketchNode> toMove = new ArrayList<SketchNode>();
+        for(SketchNode child: canvas.getSelection().children()) {
+            toMove.add(child);
+        }
+        for(SketchNode child : toMove){
+            canvas.getTarget().remove(child);
+        }
+        canvas.clearSelection();
     }
 
     private void ungroupSelection() {
