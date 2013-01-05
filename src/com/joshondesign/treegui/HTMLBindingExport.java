@@ -99,7 +99,25 @@ public class HTMLBindingExport extends JAction {
             if(key.equals("translateY")) key = "y";
             w.prop(key,props.getValue());
         }
+
+        for(SketchNode child : node.children()) {
+            w.p(".add(");
+            exportNodeX(w, child);
+            w.p(")");
+        }
         w.p(";");
+        w.outdent();
+    }
+
+    private void exportNodeX(PropWriter w, SketchNode node) {
+        w.newObj(AminoAdapter.getScriptClass(node));
+        w.indent();
+        for(Map.Entry<String,Object> props : AminoAdapter.getProps(node).entrySet()) {
+            String key = props.getKey();
+            if(key.equals("translateX")) key = "x";
+            if(key.equals("translateY")) key = "y";
+            w.prop(key,props.getValue());
+        }
         w.outdent();
     }
 

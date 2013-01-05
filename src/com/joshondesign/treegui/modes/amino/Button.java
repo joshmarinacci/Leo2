@@ -6,17 +6,13 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/4/13
- * Time: 10:11 AM
- * To change this template use File | Settings | File Templates.
- */
 public class Button extends ResizableRectNode {
+    private String text;
+
     public Button() {
         setWidth(70);
         setHeight(30);
+        setText("a button");
     }
 
     @Override
@@ -24,7 +20,7 @@ public class Button extends ResizableRectNode {
         g.setPaint(FlatColor.GRAY);
         g.fillRect(0,0,getWidth(),getHeight());
         g.setPaint(FlatColor.BLACK);
-        g.drawText("text", Font.DEFAULT,5,20);
+        g.drawText(getText(), Font.DEFAULT,5,20);
     }
 
     @Override
@@ -33,5 +29,13 @@ public class Button extends ResizableRectNode {
             node = new Button();
         }
         return super.duplicate(node);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
     }
 }

@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes.amino;
 
+import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -8,13 +9,6 @@ import java.util.List;
 import java.util.Map;
 import org.joshy.gfx.util.u;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/4/13
- * Time: 11:52 AM
- * To change this template use File | Settings | File Templates.
- */
 public class AminoAdapter {
     private static List<String> skipList;
 
@@ -26,6 +20,7 @@ public class AminoAdapter {
         if(node instanceof Button) return "Button";
         if(node instanceof Rect) return "Rect";
         if(node instanceof Slider) return "Slider";
+        if(node instanceof Group) return "Group";
         return "Rect";
     }
 
