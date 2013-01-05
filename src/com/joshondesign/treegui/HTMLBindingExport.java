@@ -5,6 +5,7 @@ import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.amino.AminoAdapter;
+import com.joshondesign.treegui.modes.amino.Slider;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -44,31 +45,11 @@ public class HTMLBindingExport extends JAction {
                 w.p("//layer");
                 w.indent();
                 for(SketchNode node : layer.children()) {
-                    w.newObjVarOpen(node.getId(), "Transform").indent();
-                    exportNode(w,node);
-                    /*
-                    if(node instanceof ResizableRectNode) {
-                        ResizableRectNode rect = (ResizableRectNode) node;
-                        w.newObj("Rect")
-                            .indent()
-                            .p(".set(0,0," + rect.getWidth() + "," + rect.getHeight() + ")")
-                            .prop("fill", "red")
-                            .outdent();
-                    } else {
-                        w.newObj("Rect")
-                            .indent()
-                            .p(".set(0,0,100,100)")
-                            .prop("fill", "red")
-                            .outdent();
-                    } */
-                    w.newObjVarClose();
-
-                    w.p("translateX", node.getTranslateX());
-                    w.p("translateY", node.getTranslateY());
-                    w.p(";").outdent();
-
+                    exportNode(w, node);
                     w.p("root.add(" + node.getId() + ");");
-
+                    if(node instanceof Slider) {
+                        w.p(node.getId()+".setup(root);");
+                    }
                     if(PropUtils.propertyEquals(node,"draggable",true)) {
                         w.p("root.onPress("
                                 +node.getId()
@@ -109,21 +90,17 @@ public class HTMLBindingExport extends JAction {
     }
 
     private void exportNode(PropWriter w, SketchNode node) {
-        w.newObj(AminoAdapter.getScriptClass(node));
+        w.newObj(node.getId(), AminoAdapter.getScriptClass(node));
         w.indent();
         for(Map.Entry<String,Object> props : AminoAdapter.getProps(node).entrySet()) {
             u.p("writing: " + props.getKey() + " " + props.getValue());
-            w.prop(props.getKey(),props.getValue());
+            String key = props.getKey();
+            if(key.equals("translateX")) key = "x";
+            if(key.equals("translateY")) key = "y";
+            w.prop(key,props.getValue());
         }
+        w.p(";");
         w.outdent();
-        /*
-        ResizableRectNode rect = (ResizableRectNode) node;
-        w.newObj("Rect")
-                .indent()
-                .p(".set(0,0," + rect.getWidth() + "," + rect.getHeight() + ")")
-                .prop("fill", "red")
-                .outdent();
-                */
     }
 
     private void applyTemplate(File in, File out, Map<String, String> subs) {
@@ -224,6 +201,11 @@ public class HTMLBindingExport extends JAction {
             return this;
         }
 
+        public PropWriter newObj(String id, String name) {
+            pindent();
+            out.println("var " + id + " = new " + name + "()");
+            return this;
+        }
         public PropWriter newObj(String name) {
             pindent();
             out.println(" new "+name+"()");

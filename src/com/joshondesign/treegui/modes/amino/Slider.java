@@ -6,10 +6,19 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
 public class Slider extends ResizableRectNode {
+    private double minValue;
+    private double maxValue;
+    private double value;
+
     public Slider() {
         setWidth(70);
         setHeight(30);
+        this.setMinValue(0);
+        this.setMaxValue(100);
+        this.setValue(50);
     }
+
+
 
     @Override
     public void draw(GFX g) {
@@ -24,5 +33,29 @@ public class Slider extends ResizableRectNode {
             node = new Slider();
         }
         return super.duplicate(node);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    public void setMinValue(double minValue) {
+        this.minValue = minValue;
+    }
+
+    public double getMinValue() {
+        return minValue;
+    }
+
+    public void setMaxValue(double maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public double getMaxValue() {
+        return maxValue;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public double getValue() {
+        return value;
     }
 }

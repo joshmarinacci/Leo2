@@ -2,6 +2,7 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
+import com.joshondesign.treegui.modes.amino.AminoAdapter;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Focusable;
 import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
@@ -65,9 +67,9 @@ public class Canvas extends Control implements Focusable{
     }
 
     private void populateWithBindableProperties(VFlexBox popup, SketchNode selection) {
-        String[] props = {"translateX","translateY"};
+        for(final String prop : AminoAdapter.getProps(selection).keySet()) {
+            if("id".equals(prop)) continue; //skip the ID property
 
-        for(final String prop : props) {
             final Binding binding = findBinding(selection,prop);
             Button tx = new Button(prop) {
                 @Override
@@ -132,18 +134,22 @@ public class Canvas extends Control implements Focusable{
             popup2.removeAll();
             popup2.setVisible(true);
         }
-        Button tx = new Button("translateX");
-        tx.onClicked(new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                currentBinding.setTarget(node);
-                currentBinding.setTargetProperty("translateX");
-                bindings.add(currentBinding);
-                currentBinding = null;
-                popup2.setVisible(false);
-                popup.setVisible(false);
-            }
-        });
-        popup2.add(tx);
+        for(final String prop : AminoAdapter.getProps(node).keySet()) {
+            if(prop.equals("id")) continue;
+            Button tx = new Button(prop);
+            tx.onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    currentBinding.setTarget(node);
+                    currentBinding.setTargetProperty(prop);
+                    u.p("added a binding: " + currentBinding);
+                    bindings.add(currentBinding);
+                    currentBinding = null;
+                    popup2.setVisible(false);
+                    popup.setVisible(false);
+                }
+            });
+            popup2.add(tx);
+        }
         Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
         popup2.setTranslateX(pt.getX() + this.getTranslateX());
         popup2.setTranslateY(pt.getY() + this.getTranslateY());

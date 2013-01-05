@@ -19,7 +19,7 @@ public class AminoAdapter {
     private static List<String> skipList;
 
     static {
-        String[] skipListArray = {"class","inputBounds","size","constraint","translateX","translateY"};
+        String[] skipListArray = {"class","inputBounds","size","constraint"};
         skipList = Arrays.asList(skipListArray);
     }
     public static String getScriptClass(SketchNode node) {
@@ -35,16 +35,19 @@ public class AminoAdapter {
         Method[] methods = clazz.getMethods();
         for(Method m : methods) {
             if(!m.getName().startsWith("get")) continue;
+            if(m.getName().equals("get")) continue;
 
             try {
                 String name = m.getName().substring(3,4).toLowerCase()+m.getName().substring(4);
-                u.p("prop name = " + name);
                 if(skipList.contains(name)) continue;
-                if(node instanceof Slider && name.equals("width")) continue;
+                //if(node instanceof Slider && name.equals("width")) continue;
                 if(node instanceof Slider && name.equals("height")) continue;
+                if(node instanceof Button && name.equals("width")) continue;
+                if(node instanceof Button && name.equals("height")) continue;
                 Object value = m.invoke(node);
                 props.put(name,value);
             } catch (Throwable e) {
+                u.p("failed at : " + m.getName());
                 e.printStackTrace();
             }
         }

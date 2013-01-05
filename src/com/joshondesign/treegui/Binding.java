@@ -46,4 +46,14 @@ public class Binding {
     public String getTargetProperty() {
         return targetProperty;
     }
+
+    @Override
+    public String toString() {
+        return "Binding{" +
+                "source=" + source +
+                ", sourceProperty='" + sourceProperty + '\'' +
+                ", target=" + target +
+                ", targetProperty='" + targetProperty + '\'' +
+                '}';
+    }
 }
