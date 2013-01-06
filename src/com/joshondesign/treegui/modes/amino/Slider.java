@@ -12,10 +12,11 @@ public class Slider extends ResizableRectNode {
 
     public Slider() {
         setWidth(70);
-        setHeight(30);
-        this.setMinValue(0);
-        this.setMaxValue(100);
-        this.setValue(50);
+        setHeight(20);
+        setMinValue(0);
+        setMaxValue(100);
+        setValue(50);
+        setConstraint(ResizeConstraint.HorizontalOnly);
     }
 
 

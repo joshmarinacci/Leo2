@@ -12,6 +12,9 @@ import org.joshy.gfx.node.Bounds;
  */
 public abstract class ResizableRectNode extends SketchNode {
 
+    protected ResizableRectNode() {
+        setConstraint(ResizeConstraint.Any);
+    }
 
     public double getWidth() {
         return width;

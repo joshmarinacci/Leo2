@@ -23,6 +23,7 @@ import org.joshy.gfx.util.u;
  */
 public class SelectionTool extends CanvasTool {
     private final Canvas canvas;
+    private Handle activeHandle;
 
     public SelectionTool(final Canvas canvas) {
         this.canvas = canvas;
@@ -51,17 +52,31 @@ public class SelectionTool extends CanvasTool {
                             navigateDown(node);
                         }
                     } else {
+                        Handle handle = canvas.findHandle(mouseEvent.getPointInNodeCoords(canvas));
+                        if(handle != null) {
+                            startDragHandle(handle,mouseEvent);
+                            return;
+                        }
                         SketchNode node = canvas.findNode(mouseEvent.getPointInNodeCoords(canvas));
                         if(!mouseEvent.isShiftPressed()) {
                             canvas.clearSelection();
                         }
                         if(node == null) return;
-                        canvas.addToSelection(node);
+                        addToSelection(node);
                         startDragGesture(mouseEvent);
                     }
                 }
                 if(mouseEvent.getType() == MouseEvent.MouseDragged && canvas.getSelection() != null) {
+                    if(activeHandle != null) {
+                        continueDragHandle(mouseEvent);
+                        return;
+                    }
                     continueDragGesture(mouseEvent);
+                }
+                if(mouseEvent.getType() == MouseEvent.MouseReleased) {
+                    if(activeHandle != null) {
+                        endDragHandle(mouseEvent);
+                    }
                 }
             }
 
@@ -113,6 +128,25 @@ public class SelectionTool extends CanvasTool {
                 }
             }
         });
+    }
+
+    private void startDragHandle(Handle handle, MouseEvent mouseEvent) {
+        activeHandle = handle;
+    }
+
+    private void continueDragHandle(MouseEvent mouseEvent) {
+        activeHandle.drag(mouseEvent, mouseEvent.getPointInNodeCoords(canvas));
+        canvas.redraw();
+    }
+
+    private void endDragHandle(MouseEvent mouseEvent) {
+        activeHandle = null;
+    }
+
+
+    private void addToSelection(SketchNode node) {
+        canvas.addToSelection(node);
+        canvas.rebuildHandles();
     }
 
     private void deleteSelection() {

@@ -1,5 +1,6 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.amino.AminoAdapter;
@@ -183,6 +184,13 @@ public class Canvas extends Control implements Focusable{
         drawBindings(gfx);
         drawSelectionOverlay(gfx);
         drawActiveBindingLineOverlay(gfx);
+        drawHandles(gfx);
+    }
+
+    private void drawHandles(GFX gfx) {
+        for(Handle handle : this.handles) {
+            handle.draw(gfx);
+        }
     }
 
     private void drawBindings(GFX gfx) {
@@ -287,5 +295,22 @@ public class Canvas extends Control implements Focusable{
 
     public boolean isFocused() {
         return true;
+    }
+
+    List<Handle> handles = new ArrayList<Handle>();
+    public void rebuildHandles() {
+        this.handles.clear();
+        for(SketchNode node : this.getSelection().children()) {
+            if(node instanceof ResizableRectNode) {
+                handles.add(new ResizeHandle((ResizableRectNode) node));
+            }
+        }
+    }
+
+    public Handle findHandle(Point2D pointInNodeCoords) {
+        for(Handle handle : this.handles) {
+            if(handle.contains(pointInNodeCoords)) return handle;
+        }
+        return null;
     }
 }

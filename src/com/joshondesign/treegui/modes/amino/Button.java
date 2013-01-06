@@ -13,6 +13,7 @@ public class Button extends ResizableRectNode {
         setWidth(70);
         setHeight(30);
         setText("a button");
+        setConstraint(ResizeConstraint.HorizontalOnly);
     }
 
     @Override
