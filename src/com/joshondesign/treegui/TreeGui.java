@@ -6,6 +6,7 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
 import com.joshondesign.treegui.modes.amino.Rect;
 import com.joshondesign.treegui.modes.amino.Slider;
+import com.joshondesign.treegui.modes.amino.StringListModel;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -182,7 +183,6 @@ public class TreeGui implements Runnable {
         amino.add(actions);
 
 
-
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
         Rect rect = new Rect();
         rect.setId("Rect");
@@ -193,45 +193,6 @@ public class TreeGui implements Runnable {
         com.joshondesign.treegui.modes.amino.Slider slider = new Slider();
         slider.setId("Slider");
         symbols.add(slider);
-
-        /*
-        symbols.add(new ResizableRectNode() {
-            @Override
-            public String getId() {
-                return "Button";
-            }
-
-            @Override
-            public void draw(GFX g) {
-                g.setPaint(FlatColor.GREEN);
-                g.fillRect(0,0,getWidth(),getHeight());
-            }
-        });
-        symbols.add(new ResizableRectNode() {
-            @Override
-            public String getId() {
-                return "ListView";
-            }
-
-            @Override
-            public void draw(GFX g) {
-                g.setPaint(FlatColor.YELLOW);
-                g.fillRect(0,0,getWidth(),getHeight());
-            }
-        });
-        symbols.add(new ResizableRectNode() {
-            @Override
-            public String getId() {
-                return "TwitterSearch";
-            }
-
-            @Override
-            public void draw(GFX g) {
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0,0,getWidth(),getHeight());
-            }
-        });
-        */
         amino.add(symbols);
 
         return modes;
@@ -246,6 +207,12 @@ public class TreeGui implements Runnable {
         Page page = new Page();
         page.add(layer);
         doc.add(page);
+
+        StringListModel stringList = new StringListModel();
+        layer.add(stringList.setTranslateX(300));
+
+        layer.add(new com.joshondesign.treegui.modes.amino.ListView().setTranslateX(200));
+
         return doc;
     }
 

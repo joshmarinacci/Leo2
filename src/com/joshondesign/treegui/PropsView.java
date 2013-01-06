@@ -3,10 +3,15 @@ package com.joshondesign.treegui;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import org.joshy.gfx.event.*;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.FocusEvent;
 import org.joshy.gfx.node.control.Checkbox;
 import org.joshy.gfx.node.control.Label;
+import org.joshy.gfx.node.control.Textarea;
 import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
@@ -115,6 +120,33 @@ public class PropsView extends VFlexBox {
                 box.add(tb);
                 this.add(box);
             }
+
+            if(prop.getter.getReturnType() == List.class) {
+                HFlexBox box = new HFlexBox();
+                box.add(new Label(prop.name));
+                final Textarea ta = new Textarea();
+                ta.setText("" + prop.getStringValue());
+                ta.setPrefWidth(100);
+                ta.setPrefHeight(100);
+                EventBus.getSystem().addListener(ta, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        prop.setValue(ta.getText());
+                        if(updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                /*ta.onAction(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        prop.setValue(ta.getText());
+                        if (updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });*/
+                box.add(ta);
+                this.add(box);
+            }
         }
     }
 
@@ -195,6 +227,16 @@ public class PropsView extends VFlexBox {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
+
+
+            if(value instanceof List) {
+                StringBuffer sb = new StringBuffer();
+                for(Object v : ((List)value)) {
+                    sb.append(v);
+                    sb.append("\n");
+                }
+                return sb.toString();
+            }
             return (String)value;
         }
 
@@ -214,6 +256,17 @@ public class PropsView extends VFlexBox {
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (IllegalAccessException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+            if(this.getter.getReturnType() == List.class) {
+                String[] strings = text.split("\n");
+                List<String> list = Arrays.asList(strings);
+                try {
+                    this.setter.invoke(this.obj, list);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (InvocationTargetException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
             }
