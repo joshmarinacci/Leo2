@@ -21,13 +21,6 @@ import org.joshy.gfx.node.control.Focusable;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.u;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 12/30/12
- * Time: 9:04 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Canvas extends Control implements Focusable{
     private TreeNode<SketchNode> target;
     private TreeNode<SketchNode> selection = new TreeNode<SketchNode>();
@@ -67,30 +60,55 @@ public class Canvas extends Control implements Focusable{
         popup.setTranslateY(pt.getY() + this.getTranslateY());
     }
 
+    private static class BindingButton extends Button {
+        private final String prop;
+        private Binding binding;
+
+        public BindingButton(String prop, Binding binding) {
+            super(prop);
+            this.prop = prop;
+            this.binding = binding;
+            this.setPrefWidth(100);
+        }
+
+        public void setBinding(Binding binding) {
+            this.binding = binding;
+            setDrawingDirty();
+        }
+
+
+
+        @Override
+        public void draw(GFX g) {
+            g.setPaint(FlatColor.fromRGBInts(200,200,200));
+            g.fillRoundRect(0, 0, getWidth(), getHeight(), 5, 5);
+            g.setPaint(FlatColor.BLACK);
+            Font.drawCenteredVertically(g, prop, Font.DEFAULT, 2, 0, getWidth(), getHeight(), false);
+            if(binding == null) {
+                g.drawOval(100-20,0,20,20);
+            } else {
+                g.fillOval(100 - 20, 0, 20, 20);
+            }
+        }
+    }
+
     private void populateWithBindableProperties(VFlexBox popup, SketchNode selection) {
         for(final String prop : AminoAdapter.getProps(selection).keySet()) {
             if("id".equals(prop)) continue; //skip the ID property
 
             final Binding binding = findBinding(selection,prop);
-            Button tx = new Button(prop) {
-                @Override
-                public void draw(GFX g) {
-                    g.setPaint(FlatColor.fromRGBInts(200,200,200));
-                    g.fillRoundRect(0, 0, getWidth(), getHeight(), 5, 5);
-                    g.setPaint(FlatColor.BLACK);
-                    Font.drawCenteredVertically(g, prop, Font.DEFAULT, 2, 0, getWidth(), getHeight(), false);
-                    if(binding == null) {
-                        g.drawOval(100-20,0,20,20);
-                    } else {
-                        g.fillOval(100 - 20, 0, 20, 20);
-                    }
-                }
-            };
-            tx.setPrefWidth(100);
+            final BindingButton tx = new BindingButton(prop,binding);
             Callback<MouseEvent> callback = new Callback<MouseEvent>() {
                 public void call(MouseEvent mouseEvent) throws Exception {
                     if(mouseEvent.getType() == MouseEvent.MousePressed) {
                         startDragPoint = mouseEvent.getPointInNodeCoords(Canvas.this);
+                        Point2D pt = mouseEvent.getPointInNodeCoords(tx);
+                        if(new Bounds(100-20,0,20,20).contains(pt)) {
+                            if(binding != null) {
+                                tx.setBinding(null);
+                                bindings.remove(binding);
+                            }
+                        }
                         currentBinding.setSourceProperty(prop);
                     }
                     if(mouseEvent.getType() == MouseEvent.MouseDragged) {
@@ -137,7 +155,8 @@ public class Canvas extends Control implements Focusable{
         }
         for(final String prop : AminoAdapter.getProps(node).keySet()) {
             if(prop.equals("id")) continue;
-            Button tx = new Button(prop);
+            BindingButton tx = new BindingButton(prop,null);
+            //Button tx = new Button(prop);
             tx.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     currentBinding.setTarget(node);
@@ -216,18 +235,11 @@ public class Canvas extends Control implements Focusable{
 
     private void drawSelectionOverlay(GFX gfx) {
         if(getSelection().getSize() < 1) return;
-
         Bounds b = MathUtils.unionBounds(getSelection());
-        //SketchNode s = getSelection();
-        //Bounds b = s.getInputBounds();
-        //gfx.translate(s.getTranslateX(),s.getTranslateY());
-
         gfx.setPaint(FlatColor.fromRGBInts(100,100,100));
         gfx.drawRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
         gfx.setPaint(FlatColor.fromRGBInts(200,200,200));
         gfx.drawRect(b.getX()-1,b.getY()-1,b.getWidth()+2,b.getHeight()+2);
-
-        //gfx.translate(-s.getTranslateX(), -s.getTranslateY());
     }
 
     private void drawTarget(GFX gfx, TreeNode<SketchNode> target) {
@@ -250,7 +262,7 @@ public class Canvas extends Control implements Focusable{
         for(SketchNode n : this.target.children()) {
             if(n.contains(pt)) return n;
         }
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        return null;
     }
 
 
