@@ -9,6 +9,7 @@ import com.joshondesign.treegui.modes.amino.Slider;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.util.OSUtil;
@@ -46,7 +47,9 @@ public class HTMLBindingExport extends JAction {
                 w.indent();
                 for(SketchNode node : layer.children()) {
                     exportNode(w, node);
-                    w.p("root.add(" + node.getId() + ");");
+                    if(node.isVisual()) {
+                        w.p("root.add(" + node.getId() + ");");
+                    }
                     if(node instanceof Slider) {
                         w.p(node.getId()+".setup(root);");
                     }
@@ -66,12 +69,23 @@ public class HTMLBindingExport extends JAction {
 
 
             for(Binding binding : canvas.getBindings()) {
-                out.println(
-                    "var binder = new Binder()"
-                            +".set("+binding.getSource().getId()+",'"+binding.getSourceProperty()+"',"
-                            +binding.getTarget().getId()+",'"+binding.getTargetProperty()+"');\n" +
-                    "engine.addAnim(binder);\n"+
-                    "binder.start();\n");
+                if(AminoAdapter.isDataModel(binding)) {
+                    String prop = binding.getTargetProperty();
+                    out.println(
+                            binding.getTarget().getId() +
+                                    ".set" + prop.substring(0,1).toUpperCase()
+                                    +prop.substring(1)+"("
+                                    +binding.getSource().getId()
+                            +");"
+                    );
+                } else {
+                    out.println(
+                        "var binder = new Binder()"
+                                +".set("+binding.getSource().getId()+",'"+binding.getSourceProperty()+"',"
+                                +binding.getTarget().getId()+",'"+binding.getTargetProperty()+"');\n" +
+                        "engine.addAnim(binder);\n"+
+                        "binder.start();\n");
+                }
             }
 
             out.close();
@@ -186,6 +200,18 @@ public class HTMLBindingExport extends JAction {
             if(value instanceof FlatColor) {
                 FlatColor fc = (FlatColor) value;
                 return '"'+"#"+Integer.toHexString(fc.getRGBA()).substring(2) + '"';
+            }
+            if(value instanceof List) {
+                StringBuffer sb = new StringBuffer();
+                sb.append("[");
+                boolean first = true;
+                for(Object o : ((List)value)) {
+                    if(!first) sb.append(",");
+                    sb.append('"'+o.toString()+'"');
+                    first = false;
+                }
+                sb.append("]");
+                return sb.toString();
             }
             if(value == null) return "null";
             return value.toString();

@@ -6,6 +6,9 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
 public abstract class SketchNode extends TreeNode<SketchNode> {
+    public boolean isVisual() {
+        return true;
+    }
     protected SketchNode() {
         setId("id"+(int)Math.floor(Math.random()*1000000));
     }

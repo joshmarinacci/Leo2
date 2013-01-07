@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes.amino;
 
+import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import java.lang.reflect.Method;
@@ -17,10 +18,12 @@ public class AminoAdapter {
         skipList = Arrays.asList(skipListArray);
     }
     public static String getScriptClass(SketchNode node) {
-        if(node instanceof Button) return "Button";
+        if(node instanceof Button) return "PushButton";
         if(node instanceof Rect) return "Rect";
         if(node instanceof Slider) return "Slider";
         if(node instanceof Group) return "Group";
+        if(node instanceof ListView) return "ListView";
+        if(node instanceof StringListModel) return "ListModel";
         return "Rect";
     }
 
@@ -39,6 +42,14 @@ public class AminoAdapter {
                 if(node instanceof Slider && name.equals("height")) continue;
                 if(node instanceof Button && name.equals("width")) continue;
                 if(node instanceof Button && name.equals("height")) continue;
+                if(node instanceof StringListModel) {
+                    if(name.equals("this")) continue;
+                    if(name.equals("x")) continue;
+                    if(name.equals("y")) continue;
+                    if(name.equals("translateX")) continue;
+                    if(name.equals("translateY")) continue;
+                }
+
                 Object value = m.invoke(node);
                 props.put(name,value);
             } catch (Throwable e) {
@@ -47,5 +58,12 @@ public class AminoAdapter {
             }
         }
         return props;
+    }
+
+    public static boolean isDataModel(Binding binding) {
+        if(binding.getSource() instanceof StringListModel) {
+            return true;
+        }
+        return false;
     }
 }
