@@ -13,9 +13,12 @@ import org.joshy.gfx.draw.GFX;
  * To change this template use File | Settings | File Templates.
  */
 public class Image extends ResizableRectNode {
+    private String src;
+
     public Image() {
         setWidth(60);
         setHeight(60);
+        setSrc("http://projects.joshy.org/demos/AnimatedStartup/earth.gif");
     }
 
     @Override
@@ -30,7 +33,17 @@ public class Image extends ResizableRectNode {
     public SketchNode duplicate(SketchNode node) {
         if(node == null) {
             node = new Image();
+            ((Image)node).setSrc(getSrc());
         }
         return super.duplicate(node);
+    }
+
+    public Image setSrc(String src) {
+        this.src = src;
+        return this;
+    }
+
+    public String getSrc() {
+        return src;
     }
 }
