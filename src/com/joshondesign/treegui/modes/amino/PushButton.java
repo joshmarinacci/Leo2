@@ -6,10 +6,10 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
-public class Button extends ResizableRectNode {
+public class PushButton extends ResizableRectNode {
     private String text;
 
-    public Button() {
+    public PushButton() {
         setWidth(70);
         setHeight(30);
         setText("a button");
@@ -27,7 +27,7 @@ public class Button extends ResizableRectNode {
     @Override
     public SketchNode duplicate(SketchNode node) {
         if(node == null) {
-            node = new Button();
+            node = new PushButton();
         }
         return super.duplicate(node);    //To change body of overridden methods use File | Settings | File Templates.
     }

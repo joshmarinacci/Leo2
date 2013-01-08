@@ -189,8 +189,8 @@ public class TreeGui implements Runnable {
         Rect rect = new Rect();
         rect.setId("Rect");
         symbols.add(rect);
-        com.joshondesign.treegui.modes.amino.Button button = new com.joshondesign.treegui.modes.amino.Button();
-        button.setId("Button");
+        PushButton button = new PushButton();
+        button.setId("PushButton");
         symbols.add(button);
         com.joshondesign.treegui.modes.amino.Slider slider = new Slider();
         slider.setId("Slider");
@@ -216,6 +216,26 @@ public class TreeGui implements Runnable {
         Textbox tb = new Textbox();
         tb.setId("textbox");
         symbols.add(tb);
+
+        ToggleButton togg = new ToggleButton();
+        togg.setId("toggle");
+        symbols.add(togg);
+
+        PlainPanel plainPanel = new PlainPanel();
+        plainPanel.setId("plain panel");
+        symbols.add(plainPanel);
+
+        TabPanel tabPanel = new TabPanel();
+        tabPanel.setId("tab panel");
+        symbols.add(tabPanel);
+
+        Label label = new Label();
+        label.setId("label");
+        symbols.add(label);
+
+        CheckButton checkButton = new CheckButton();
+        checkButton.setId("check button");
+        symbols.add(checkButton);
 
         amino.add(symbols);
 

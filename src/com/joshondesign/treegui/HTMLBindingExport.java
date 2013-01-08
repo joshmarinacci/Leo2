@@ -5,7 +5,6 @@ import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.amino.AminoAdapter;
-import com.joshondesign.treegui.modes.amino.Slider;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -50,7 +49,7 @@ public class HTMLBindingExport extends JAction {
                     if(node.isVisual()) {
                         w.p("root.add(" + node.getId() + ");");
                     }
-                    if(node instanceof Slider) {
+                    if(AminoAdapter.useSetup(node)) {
                         w.p(node.getId()+".setup(root);");
                     }
                     if(PropUtils.propertyEquals(node,"draggable",true)) {

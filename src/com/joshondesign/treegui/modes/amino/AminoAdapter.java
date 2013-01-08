@@ -18,7 +18,9 @@ public class AminoAdapter {
         skipList = Arrays.asList(skipListArray);
     }
     public static String getScriptClass(SketchNode node) {
-        if(node instanceof Button) return "PushButton";
+        if(node instanceof CheckButton) return "CheckButton";
+        if(node instanceof ToggleButton) return "ToggleButton";
+        if(node instanceof PushButton) return "PushButton";
         if(node instanceof Rect) return "Rect";
         if(node instanceof Slider) return "Slider";
         if(node instanceof Group) return "Group";
@@ -42,8 +44,8 @@ public class AminoAdapter {
                 if(skipList.contains(name)) continue;
                 //if(node instanceof Slider && name.equals("width")) continue;
                 if(node instanceof Slider && name.equals("height")) continue;
-                if(node instanceof Button && name.equals("width")) continue;
-                if(node instanceof Button && name.equals("height")) continue;
+                if(node instanceof PushButton && name.equals("width")) continue;
+                if(node instanceof PushButton && name.equals("height")) continue;
                 if(!node.isVisual()) {
                     if(name.equals("translateX")) continue;
                     if(name.equals("translateY")) continue;
@@ -72,6 +74,15 @@ public class AminoAdapter {
         if(binding.getSource() instanceof StringListModel) {
             return true;
         }
+        return false;
+    }
+
+    public static boolean useSetup(SketchNode node) {
+        if(node instanceof Slider) return true;
+        if(node instanceof PushButton) return true;
+        if(node instanceof CheckButton) return true;
+        if(node instanceof ToggleButton) return true;
+        if(node instanceof Textbox) return true;
         return false;
     }
 }
