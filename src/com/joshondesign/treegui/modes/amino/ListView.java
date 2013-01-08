@@ -1,13 +1,14 @@
 package com.joshondesign.treegui.modes.amino;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.SketchNode;
 import java.util.Arrays;
 import java.util.List;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
-public class ListView extends ResizableRectNode{
+public class ListView extends ResizableRectNode {
     private List<String> data;
 
     public ListView() {
@@ -34,5 +35,13 @@ public class ListView extends ResizableRectNode{
 
     public List<String> getData() {
         return data;
+    }
+
+    @Override
+    public SketchNode duplicate(SketchNode node) {
+        if(node == null) {
+            node = new ListView();
+        }
+        return super.duplicate(node);
     }
 }

@@ -1,12 +1,13 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.actions.JAction;
-import com.joshondesign.treegui.docmodel.*;
+import com.joshondesign.treegui.docmodel.Layer;
+import com.joshondesign.treegui.docmodel.Page;
+import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
-import com.joshondesign.treegui.modes.amino.Rect;
-import com.joshondesign.treegui.modes.amino.Slider;
-import com.joshondesign.treegui.modes.amino.StringListModel;
+import com.joshondesign.treegui.modes.amino.*;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -100,9 +101,10 @@ public class TreeGui implements Runnable {
                     gfx.translate(x, y);
                     node.draw(gfx);
                     gfx.setPaint(FlatColor.WHITE);
-                    gfx.fillRect(0, 0, w, 20);
+
+                    gfx.fillRect(0, h-20, w, 20);
                     gfx.setPaint(FlatColor.BLACK);
-                    gfx.drawText(node.getId(), Font.DEFAULT,5,16);
+                    gfx.drawText(node.getId(), Font.DEFAULT,5,h-4);
                     gfx.translate(-x,-y);
                     if(listView.getSelectedIndex() == index) {
                         gfx.setPaint(new FlatColor(1.0,0,0,0.3));
@@ -193,6 +195,28 @@ public class TreeGui implements Runnable {
         com.joshondesign.treegui.modes.amino.Slider slider = new Slider();
         slider.setId("Slider");
         symbols.add(slider);
+
+        StringListModel stringList = new StringListModel();
+        stringList.setId("StringList");
+        symbols.add(stringList);
+
+        com.joshondesign.treegui.modes.amino.ListView lv = new com.joshondesign.treegui.modes.amino.ListView();
+        lv.setId("ListView");
+        symbols.add(lv);
+
+
+        FlickrQuery fq = new FlickrQuery();
+        fq.setId("FlickrQuery");
+        symbols.add(fq);
+
+        Image image = new Image();
+        image.setId("image");
+        symbols.add(image);
+
+        Textbox tb = new Textbox();
+        tb.setId("textbox");
+        symbols.add(tb);
+
         amino.add(symbols);
 
         return modes;
@@ -215,6 +239,11 @@ public class TreeGui implements Runnable {
                 .setTranslateX(200));
         layer.add(new com.joshondesign.treegui.modes.amino.FlickrQuery()
                 .setTranslateX(200).setTranslateY(200));
+
+        layer.add(new Image().setTranslateX(10).setTranslateY(200));
+        layer.add(new Textbox().setTranslateX(10).setTranslateY(280));
+
+
         return doc;
     }
 

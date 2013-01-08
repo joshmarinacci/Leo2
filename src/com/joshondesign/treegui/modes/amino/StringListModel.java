@@ -61,4 +61,10 @@ public class StringListModel extends SketchNode {
     public StringListModel getThis() {
         return this;
     }
+
+    @Override
+    public SketchNode duplicate(SketchNode node) {
+        if(node == null)  node = new StringListModel();
+        return super.duplicate(node);
+    }
 }

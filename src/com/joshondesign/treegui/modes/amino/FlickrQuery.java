@@ -59,4 +59,11 @@ public class FlickrQuery extends SketchNode {
 
     List<Object> results;
 
+    @Override
+    public SketchNode duplicate(SketchNode node) {
+        if(node == null)  {
+            node = new FlickrQuery();
+        }
+        return super.duplicate(node);
+    }
 }
