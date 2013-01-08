@@ -16,9 +16,9 @@ public class FlickrQuery extends SketchNode {
     @Override
     public void draw(GFX g) {
         g.setPaint(FlatColor.YELLOW);
-        g.fillRoundRect(0, 0, 80, 160, 10, 10);
+        g.fillRoundRect(0, 0, 80, 80, 10, 10);
         g.setPaint(FlatColor.BLACK);
-        g.drawRoundRect(0, 0, 80, 160, 10, 10);
+        g.drawRoundRect(0, 0, 80, 80, 10, 10);
         g.drawText("Flickr Query", Font.DEFAULT, 10, 15);
     }
 
@@ -35,7 +35,7 @@ public class FlickrQuery extends SketchNode {
 
     @Override
     public Bounds getInputBounds() {
-        return new Bounds(0,0,80,160);
+        return new Bounds(0,0,80,80);
     }
 
 
@@ -58,6 +58,10 @@ public class FlickrQuery extends SketchNode {
     }
 
     List<Object> results;
+
+    public Object getExecute() {
+        return this;
+    }
 
     @Override
     public SketchNode duplicate(SketchNode node) {

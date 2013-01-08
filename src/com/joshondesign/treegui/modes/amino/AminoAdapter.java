@@ -28,6 +28,7 @@ public class AminoAdapter {
         if(node instanceof StringListModel) return "ListModel";
         if(node instanceof Textbox) return "Textbox";
         if(node instanceof Image) return "ImageView";
+        if(node instanceof FlickrQuery) return "FlickrQuery";
         return "Rect";
     }
 
@@ -59,6 +60,10 @@ public class AminoAdapter {
                     if(name.equals("width")) continue;
                     if(name.equals("height")) continue;
                 }
+                if(node instanceof FlickrQuery) {
+                    //if(name.equals("results")) continue;
+                    if(name.equals("query")) continue;
+                }
 
                 Object value = m.invoke(node);
                 props.put(name,value);
@@ -83,6 +88,37 @@ public class AminoAdapter {
         if(node instanceof CheckButton) return true;
         if(node instanceof ToggleButton) return true;
         if(node instanceof Textbox) return true;
+        return false;
+    }
+
+    public static boolean shouldExportProperty(SketchNode node, String name) {
+        if(node instanceof FlickrQuery) {
+            if("execute".equals(name)) return false;
+            if("results".equals(name)) return false;
+        }
+
+        if(node instanceof PushButton) {
+            if("trigger".equals(name)) return false;
+        }
+
+        return true;
+    }
+
+    public static boolean shouldExportAsSetter(Binding binding) {
+        if(binding.getSource() instanceof StringListModel) return true;
+        if(binding.getSource() instanceof FlickrQuery) {
+            if(binding.getSourceProperty().equals("results")) return true;
+        }
+        return false;
+    }
+
+    public static boolean shouldExportAsTrigger(Binding binding) {
+        if(binding.getSource() instanceof PushButton) {
+            if(binding.getSourceProperty().equals("trigger")) {
+                return true;
+            }
+        }
+
         return false;
     }
 }

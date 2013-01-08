@@ -39,4 +39,8 @@ public class PushButton extends ResizableRectNode {
     public String getText() {
         return text;
     }
+
+    public Object getTrigger() {
+        return this;
+    }
 }

@@ -68,23 +68,7 @@ public class HTMLBindingExport extends JAction {
 
 
             for(Binding binding : canvas.getBindings()) {
-                if(AminoAdapter.isDataModel(binding)) {
-                    String prop = binding.getTargetProperty();
-                    out.println(
-                            binding.getTarget().getId() +
-                                    ".set" + prop.substring(0,1).toUpperCase()
-                                    +prop.substring(1)+"("
-                                    +binding.getSource().getId()
-                            +");"
-                    );
-                } else {
-                    out.println(
-                        "var binder = new Binder()"
-                                +".set("+binding.getSource().getId()+",'"+binding.getSourceProperty()+"',"
-                                +binding.getTarget().getId()+",'"+binding.getTargetProperty()+"');\n" +
-                        "engine.addAnim(binder);\n"+
-                        "binder.start();\n");
-                }
+                exportBinding(out,binding);
             }
 
             out.close();
@@ -102,11 +86,42 @@ public class HTMLBindingExport extends JAction {
         }
     }
 
+    private void exportBinding(PrintWriter out, Binding binding) {
+        if(AminoAdapter.shouldExportAsSetter(binding)) {
+            String prop = binding.getTargetProperty();
+            out.println(
+                    binding.getTarget().getId() +
+                            ".set" + prop.substring(0,1).toUpperCase()
+                            +prop.substring(1)+"("
+                            +binding.getSource().getId()
+                            +");"
+            );
+            return;
+        }
+
+        if(AminoAdapter.shouldExportAsTrigger(binding)) {
+            out.println(
+                    binding.getSource().getId()+".setCallback("
+                    +"function(){\n");
+                out.println("    "+binding.getTarget().getId()+".execute();");
+            out.println("});");
+            return;
+        }
+
+        out.println(
+                "var binder = new Binder()"
+                        +".set("+binding.getSource().getId()+",'"+binding.getSourceProperty()+"',"
+                        +binding.getTarget().getId()+",'"+binding.getTargetProperty()+"');\n" +
+                        "engine.addAnim(binder);\n"+
+                        "binder.start();\n");
+    }
+
     private void exportNode(PropWriter w, SketchNode node) {
         w.newObj(node.getId(), AminoAdapter.getScriptClass(node));
         w.indent();
         for(Map.Entry<String,Object> props : AminoAdapter.getProps(node).entrySet()) {
             u.p("writing: " + props.getKey() + " " + props.getValue());
+            if(!AminoAdapter.shouldExportProperty(node,props.getKey())) continue;
             String key = props.getKey();
             if(key.equals("translateX")) key = "x";
             if(key.equals("translateY")) key = "y";

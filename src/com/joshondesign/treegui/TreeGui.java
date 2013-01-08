@@ -189,25 +189,22 @@ public class TreeGui implements Runnable {
         Rect rect = new Rect();
         rect.setId("Rect");
         symbols.add(rect);
+
         PushButton button = new PushButton();
         button.setId("PushButton");
         symbols.add(button);
+
+        ToggleButton togg = new ToggleButton();
+        togg.setId("toggle");
+        symbols.add(togg);
+
+        CheckButton checkButton = new CheckButton();
+        checkButton.setId("check button");
+        symbols.add(checkButton);
+
         com.joshondesign.treegui.modes.amino.Slider slider = new Slider();
         slider.setId("Slider");
         symbols.add(slider);
-
-        StringListModel stringList = new StringListModel();
-        stringList.setId("StringList");
-        symbols.add(stringList);
-
-        com.joshondesign.treegui.modes.amino.ListView lv = new com.joshondesign.treegui.modes.amino.ListView();
-        lv.setId("ListView");
-        symbols.add(lv);
-
-
-        FlickrQuery fq = new FlickrQuery();
-        fq.setId("FlickrQuery");
-        symbols.add(fq);
 
         Image image = new Image();
         image.setId("image");
@@ -217,9 +214,18 @@ public class TreeGui implements Runnable {
         tb.setId("textbox");
         symbols.add(tb);
 
-        ToggleButton togg = new ToggleButton();
-        togg.setId("toggle");
-        symbols.add(togg);
+        Label label = new Label();
+        label.setId("label");
+        symbols.add(label);
+
+
+        //complex controls
+
+        com.joshondesign.treegui.modes.amino.ListView lv = new com.joshondesign.treegui.modes.amino.ListView();
+        lv.setId("ListView");
+        symbols.add(lv);
+
+        // panels
 
         PlainPanel plainPanel = new PlainPanel();
         plainPanel.setId("plain panel");
@@ -229,13 +235,14 @@ public class TreeGui implements Runnable {
         tabPanel.setId("tab panel");
         symbols.add(tabPanel);
 
-        Label label = new Label();
-        label.setId("label");
-        symbols.add(label);
+        StringListModel stringList = new StringListModel();
+        stringList.setId("StringList");
+        symbols.add(stringList);
 
-        CheckButton checkButton = new CheckButton();
-        checkButton.setId("check button");
-        symbols.add(checkButton);
+        FlickrQuery fq = new FlickrQuery();
+        fq.setId("FlickrQuery");
+        symbols.add(fq);
+
 
         amino.add(symbols);
 

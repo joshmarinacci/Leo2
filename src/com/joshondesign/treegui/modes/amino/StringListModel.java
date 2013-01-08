@@ -22,9 +22,9 @@ public class StringListModel extends SketchNode {
     @Override
     public void draw(GFX g) {
         g.setPaint(FlatColor.YELLOW);
-        g.fillRoundRect(0, 0, 80, 160, 10, 10);
+        g.fillRoundRect(0, 0, 80, 80, 10, 10);
         g.setPaint(FlatColor.BLACK);
-        g.drawRoundRect(0, 0, 80, 160, 10, 10);
+        g.drawRoundRect(0, 0, 80, 80, 10, 10);
 
         g.drawText("List: String", Font.DEFAULT, 10, 15);
 
@@ -47,7 +47,7 @@ public class StringListModel extends SketchNode {
 
     @Override
     public Bounds getInputBounds() {
-        return new Bounds(0,0,80,160);
+        return new Bounds(0,0,80,80);
     }
 
     public List<String> getData() {
