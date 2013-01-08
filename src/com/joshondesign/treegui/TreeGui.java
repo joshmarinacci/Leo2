@@ -232,17 +232,6 @@ public class TreeGui implements Runnable {
         page.add(layer);
         doc.add(page);
 
-        StringListModel stringList = new StringListModel();
-        layer.add(stringList.setTranslateX(300));
-
-        layer.add(new com.joshondesign.treegui.modes.amino.ListView()
-                .setTranslateX(200));
-        layer.add(new com.joshondesign.treegui.modes.amino.FlickrQuery()
-                .setTranslateX(200).setTranslateY(200));
-
-        layer.add(new Image().setTranslateX(10).setTranslateY(200));
-        layer.add(new Textbox().setTranslateX(10).setTranslateY(280));
-
 
         return doc;
     }

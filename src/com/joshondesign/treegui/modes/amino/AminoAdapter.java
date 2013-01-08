@@ -24,6 +24,8 @@ public class AminoAdapter {
         if(node instanceof Group) return "Group";
         if(node instanceof ListView) return "ListView";
         if(node instanceof StringListModel) return "ListModel";
+        if(node instanceof Textbox) return "Textbox";
+        if(node instanceof Image) return "ImageView";
         return "Rect";
     }
 
@@ -50,6 +52,10 @@ public class AminoAdapter {
                     if(name.equals("this")) continue;
                     if(name.equals("x")) continue;
                     if(name.equals("y")) continue;
+                }
+                if(node instanceof Image) {
+                    if(name.equals("width")) continue;
+                    if(name.equals("height")) continue;
                 }
 
                 Object value = m.invoke(node);
