@@ -42,12 +42,14 @@ public class AminoAdapter {
                 if(node instanceof Slider && name.equals("height")) continue;
                 if(node instanceof Button && name.equals("width")) continue;
                 if(node instanceof Button && name.equals("height")) continue;
+                if(!node.isVisual()) {
+                    if(name.equals("translateX")) continue;
+                    if(name.equals("translateY")) continue;
+                }
                 if(node instanceof StringListModel) {
                     if(name.equals("this")) continue;
                     if(name.equals("x")) continue;
                     if(name.equals("y")) continue;
-                    if(name.equals("translateX")) continue;
-                    if(name.equals("translateY")) continue;
                 }
 
                 Object value = m.invoke(node);

@@ -40,7 +40,8 @@ public class StringListModel extends SketchNode {
 
     @Override
     public boolean contains(Point2D pt) {
-        Point2D.Double pt2 = new Point2D.Double(pt.getX() - getTranslateX(), pt.getY() - getTranslateY());
+        Point2D.Double pt2 = new Point2D.Double(pt.getX() - getTranslateX(),
+                pt.getY() - getTranslateY());
         return getInputBounds().contains(pt2);
     }
 
