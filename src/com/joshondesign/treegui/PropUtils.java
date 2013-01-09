@@ -18,6 +18,7 @@ public class PropUtils {
         Method[] methods = clazz.getMethods();
         for(Method meth : methods) {
             if(meth.getName().startsWith("get")) {
+                if(meth.getName().equals("get")) continue;
                 String name = meth.getName().substring(3);
                 name = name.substring(0,1).toLowerCase()+name.substring(1);
                 if(name.equals(propname)) {

@@ -8,7 +8,6 @@ import org.joshy.gfx.draw.GFX;
 public class Rect extends ResizableRectNode {
 
     private FlatColor fill = FlatColor.GRAY;
-    private boolean draggable;
 
     public Rect() {
     }
@@ -36,11 +35,4 @@ public class Rect extends ResizableRectNode {
         return fill;
     }
 
-    public void setDraggable(boolean draggable) {
-        this.draggable = draggable;
-    }
-
-    public boolean isDraggable() {
-        return draggable;
-    }
 }

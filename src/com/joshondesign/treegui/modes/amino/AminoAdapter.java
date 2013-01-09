@@ -14,12 +14,13 @@ public class AminoAdapter {
     private static List<String> skipList;
 
     static {
-        String[] skipListArray = {"class","inputBounds","size","constraint"};
+        String[] skipListArray = {"class","inputBounds","size","constraint","visual"};
         skipList = Arrays.asList(skipListArray);
     }
     public static String getScriptClass(SketchNode node) {
         if(node instanceof CheckButton) return "CheckButton";
         if(node instanceof ToggleButton) return "ToggleButton";
+        if(node instanceof Spinner) return "Spinner";
         if(node instanceof PushButton) return "PushButton";
         if(node instanceof Rect) return "Rect";
         if(node instanceof Slider) return "Slider";
@@ -37,11 +38,21 @@ public class AminoAdapter {
         Class<SketchNode> clazz = (Class<SketchNode>) node.getClass();
         Method[] methods = clazz.getMethods();
         for(Method m : methods) {
-            if(!m.getName().startsWith("get")) continue;
+            if(!m.getName().startsWith("get") && !m.getName().startsWith("is")) continue;
             if(m.getName().equals("get")) continue;
 
+            String name = m.getName();
+            if(name.startsWith("is")) {
+                name = name.substring(2,3).toLowerCase()+name.substring(3);
+            } else {
+                if(name.startsWith("get")) {
+                    name = name.substring(3,4).toLowerCase()+name.substring(4);
+                }
+            }
+
             try {
-                String name = m.getName().substring(3,4).toLowerCase()+m.getName().substring(4);
+                //String name = m.getName().substring(3,4).toLowerCase()+m.getName().substring(4);
+                u.p("name = " + name);
                 if(skipList.contains(name)) continue;
                 //if(node instanceof Slider && name.equals("width")) continue;
                 if(node instanceof Slider && name.equals("height")) continue;

@@ -12,6 +12,7 @@ import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Textarea;
 import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.GridBox;
+import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
@@ -79,7 +80,7 @@ public class PropsView extends GridBox {
         EventBus.getSystem().addListener(ta, FocusEvent.Lost, new Callback<FocusEvent>() {
             public void call(FocusEvent focusEvent) throws Exception {
                 prop.setValue(ta.getText());
-                if(updateCallback != null) {
+                if (updateCallback != null) {
                     updateCallback.call(null);
                 }
             }

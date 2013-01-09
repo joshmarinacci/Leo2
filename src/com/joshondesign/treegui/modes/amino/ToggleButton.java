@@ -10,9 +10,12 @@ import com.joshondesign.treegui.docmodel.SketchNode;
  * To change this template use File | Settings | File Templates.
  */
 public class ToggleButton extends PushButton {
+    private boolean selected;
+
     public ToggleButton() {
         setText("toggle button");
         setWidth(90);
+        setSelected(false);
     }
 
     @Override
@@ -21,5 +24,13 @@ public class ToggleButton extends PushButton {
             node = new ToggleButton();
         }
         return super.duplicate(node);
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean isSelected() {
+        return selected;
     }
 }

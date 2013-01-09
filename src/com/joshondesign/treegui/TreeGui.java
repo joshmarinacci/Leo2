@@ -239,6 +239,10 @@ public class TreeGui implements Runnable {
         stringList.setId("StringList");
         symbols.add(stringList);
 
+        Spinner spinner = new Spinner();
+        spinner.setId("Spinner");
+        symbols.add(spinner);
+
         FlickrQuery fq = new FlickrQuery();
         fq.setId("FlickrQuery");
         symbols.add(fq);
