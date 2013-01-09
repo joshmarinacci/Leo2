@@ -9,10 +9,15 @@ import org.joshy.gfx.draw.GFX;
 public class Label extends ResizableRectNode {
     private String text = "Label";
 
+    public Label() {
+        setWidth(70);
+        setHeight(20);
+    }
+
     @Override
     public void draw(GFX g) {
         g.setPaint(FlatColor.BLACK);
-        g.drawText(getText(), Font.DEFAULT, 5, 20);
+        g.drawText(getText(), Font.DEFAULT, 5, 15);
     }
 
     public String getText() {

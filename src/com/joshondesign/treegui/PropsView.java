@@ -2,9 +2,7 @@ package com.joshondesign.treegui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -13,8 +11,7 @@ import org.joshy.gfx.node.control.Checkbox;
 import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Textarea;
 import org.joshy.gfx.node.control.Textbox;
-import org.joshy.gfx.node.layout.HFlexBox;
-import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.node.layout.GridBox;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,131 +20,153 @@ import org.joshy.gfx.node.layout.VFlexBox;
  * Time: 9:07 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PropsView extends VFlexBox {
+public class PropsView extends GridBox {
     private PropFilter filter;
     private Callback<Void> updateCallback;
 
     public PropsView() {
     }
 
+    @Override
+    public void reset() {
+        removeAll();
+        super.reset();
+        setPadding(1);
+        setPrefWidth(270);
+        createColumn(50, Align.Right);
+        createColumn(200, Align.Fill);
+        debug(false);
+    }
+
     public void setSelection(final Object object) {
-        this.children.clear();
+        reset();
         if(object == null) return;
         List<Prop> props = findGetters(object);
+        Collections.sort(props, new Comparator<Prop>() {
+            public int compare(Prop a, Prop b) {
+                if(a.name.equals("id")) return -1;
+                return a.name.compareTo(b.name);
+            }
+        });
 
         for(final Prop prop : props) {
             if(filter != null) {
                 if(!filter.include(object, prop.name)) continue;
             }
             if(prop.getter.getReturnType() == boolean.class) {
-                final Checkbox cb = new Checkbox(prop.name);
-                EventBus.getSystem().addListener(cb, FocusEvent.Lost, new Callback<FocusEvent>() {
-                    public void call(FocusEvent focusEvent) throws Exception {
-                        if(prop.setter != null) {
-                            prop.setter.invoke(object,cb.isSelected());
-                        }
-                        if(updateCallback != null) {
-                            updateCallback.call(null);
-                        }
-                    }
-                });
-                cb.onClicked(new Callback<ActionEvent>() {
-                    public void call(ActionEvent actionEvent) throws Exception {
-                        if(prop.setter != null) {
-                            prop.setter.invoke(object,cb.isSelected());
-                        }
-                    }
-                });
-                try {
-                    Object value = prop.getter.invoke(object);
-                    Boolean bool = (Boolean) value;
-                    cb.setSelected(bool);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                this.add(cb);
+                addBooleanProperty(prop, object);
             }
             if(prop.getter.getReturnType() == double.class) {
-                HFlexBox box = new HFlexBox();
-                box.add(new Label(prop.name));
-                final Textbox tb = new Textbox();
-                tb.setText(""+prop.getDoubleValue());
-                tb.setPrefWidth(100);
-                EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
-                    public void call(FocusEvent focusEvent) throws Exception {
-                        prop.setValue(tb.getText());
-                        if(updateCallback != null) {
-                            updateCallback.call(null);
-                        }
-                    }
-                });
-                tb.onAction(new Callback<ActionEvent>() {
-                    public void call(ActionEvent actionEvent) throws Exception {
-                        prop.setValue(tb.getText());
-                        if(updateCallback != null) {
-                            updateCallback.call(null);
-                        }
-                    }
-                });
-                box.add(tb);
-                this.add(box);
+                addDoubleProperty(prop, object);
             }
 
             if(prop.getter.getReturnType() == String.class) {
-                HFlexBox box = new HFlexBox();
-                box.add(new Label(prop.name));
-                final Textbox tb = new Textbox();
-                tb.setText(""+prop.getStringValue());
-                tb.setPrefWidth(100);
-                EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
-                    public void call(FocusEvent focusEvent) throws Exception {
-                        prop.setValue(tb.getText());
-                        if(updateCallback != null) {
-                            updateCallback.call(null);
-                        }
-                    }
-                });
-                tb.onAction(new Callback<ActionEvent>() {
-                    public void call(ActionEvent actionEvent) throws Exception {
-                        prop.setValue(tb.getText());
-                        if(updateCallback != null) {
-                            updateCallback.call(null);
-                        }
-                    }
-                });
-                box.add(tb);
-                this.add(box);
+                addStringProperty(prop, object);
             }
 
             if(prop.getter.getReturnType() == List.class) {
-                HFlexBox box = new HFlexBox();
-                box.add(new Label(prop.name));
-                final Textarea ta = new Textarea();
-                ta.setText("" + prop.getStringValue());
-                ta.setPrefWidth(100);
-                ta.setPrefHeight(100);
-                EventBus.getSystem().addListener(ta, FocusEvent.Lost, new Callback<FocusEvent>() {
-                    public void call(FocusEvent focusEvent) throws Exception {
-                        prop.setValue(ta.getText());
-                        if(updateCallback != null) {
-                            updateCallback.call(null);
-                        }
-                    }
-                });
-                /*ta.onAction(new Callback<ActionEvent>() {
-                    public void call(ActionEvent actionEvent) throws Exception {
-                        prop.setValue(ta.getText());
-                        if (updateCallback != null) {
-                            updateCallback.call(null);
-                        }
-                    }
-                });*/
-                box.add(ta);
-                this.add(box);
+                addListProperty(prop, object);
             }
         }
+    }
+
+    private void addListProperty(final Prop prop, Object object) {
+        addControl(new Label(prop.name));
+        final Textarea ta = new Textarea();
+        ta.setText("" + prop.getStringValue());
+        ta.setPrefWidth(100);
+        ta.setPrefHeight(100);
+        EventBus.getSystem().addListener(ta, FocusEvent.Lost, new Callback<FocusEvent>() {
+            public void call(FocusEvent focusEvent) throws Exception {
+                prop.setValue(ta.getText());
+                if(updateCallback != null) {
+                    updateCallback.call(null);
+                }
+            }
+        });
+        addControl(ta);
+        nextRow();
+    }
+
+    private void addStringProperty(final Prop prop, Object object) {
+        addControl(new Label(prop.name));
+        final Textbox tb = new Textbox();
+        tb.setText("" + prop.getStringValue());
+        tb.setPrefWidth(100);
+        EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
+            public void call(FocusEvent focusEvent) throws Exception {
+                prop.setValue(tb.getText());
+                if (updateCallback != null) {
+                    updateCallback.call(null);
+                }
+            }
+        });
+        tb.onAction(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                prop.setValue(tb.getText());
+                if (updateCallback != null) {
+                    updateCallback.call(null);
+                }
+            }
+        });
+        addControl(tb);
+        this.nextRow();
+    }
+
+    private void addDoubleProperty(final Prop prop, Object object) {
+        addControl(new Label(prop.name));
+        final Textbox tb = new Textbox();
+        tb.setText(""+prop.getDoubleValue());
+        tb.setPrefWidth(100);
+        EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
+            public void call(FocusEvent focusEvent) throws Exception {
+                prop.setValue(tb.getText());
+                if (updateCallback != null) {
+                    updateCallback.call(null);
+                }
+            }
+        });
+        tb.onAction(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                prop.setValue(tb.getText());
+                if (updateCallback != null) {
+                    updateCallback.call(null);
+                }
+            }
+        });
+        addControl(tb);
+        this.nextRow();
+    }
+
+    private void addBooleanProperty(final Prop prop, final Object object) {
+        final Checkbox cb = new Checkbox(prop.name);
+        EventBus.getSystem().addListener(cb, FocusEvent.Lost, new Callback<FocusEvent>() {
+            public void call(FocusEvent focusEvent) throws Exception {
+                if(prop.setter != null) {
+                    prop.setter.invoke(object,cb.isSelected());
+                }
+                if(updateCallback != null) {
+                    updateCallback.call(null);
+                }
+            }
+        });
+        cb.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                if(prop.setter != null) {
+                    prop.setter.invoke(object,cb.isSelected());
+                }
+            }
+        });
+        try {
+            Object value = prop.getter.invoke(object);
+            Boolean bool = (Boolean) value;
+            cb.setSelected(bool);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        skip();
+        addControl(cb);
+        nextRow();
     }
 
     private List<Prop> findGetters(Object object) {

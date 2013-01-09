@@ -11,7 +11,7 @@ public class PushButton extends ResizableRectNode {
 
     public PushButton() {
         setWidth(70);
-        setHeight(30);
+        setHeight(20);
         setText("a button");
         setConstraint(ResizeConstraint.HorizontalOnly);
     }
@@ -21,7 +21,7 @@ public class PushButton extends ResizableRectNode {
         g.setPaint(FlatColor.GRAY);
         g.fillRect(0,0,getWidth(),getHeight());
         g.setPaint(FlatColor.BLACK);
-        g.drawText(getText(), Font.DEFAULT,5,20);
+        g.drawText(getText(), Font.DEFAULT,5,15);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 public class ToggleButton extends PushButton {
     public ToggleButton() {
         setText("toggle button");
+        setWidth(90);
     }
 
     @Override

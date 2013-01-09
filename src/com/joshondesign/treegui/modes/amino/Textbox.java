@@ -20,6 +20,7 @@ public class Textbox extends ResizableRectNode {
         setWidth(80);
         setHeight(20);
         setText("a text box");
+        setConstraint(ResizeConstraint.HorizontalOnly);
     }
 
     @Override
