@@ -29,19 +29,21 @@ public class BindingBox extends GridBox {
 
     public void addProperty(final Canvas canvas, final SketchNode node,
                             final String prop,
-                            final Binding sourceBinding, Binding targetBinding, boolean isSource) {
+                            final Binding sourceBinding, Binding targetBinding, boolean isSource, boolean canUse) {
         //HFlexBox row = new HFlexBox();
         BindingStateButton targetButton = new BindingStateButton();
         if(targetBinding != null) {
             targetButton.setSelected(true);
         }
         if(isSource) targetButton.setEnabled(false);
+        if(!canUse) targetButton.setEnabled(false);
 
         final BindingStateButton sourceButton = new BindingStateButton();
         if(sourceBinding != null) {
             sourceButton.setSelected(true);
         }
         if(!isSource) sourceButton.setEnabled(false);
+        if(!canUse) sourceButton.setEnabled(false);
 
         addControl(targetButton);
         Font fnt = Font.name(Font.DEFAULT.getName()).weight(Font.Weight.Bold).size(Font.DEFAULT.getSize()).resolve();
@@ -133,15 +135,24 @@ public class BindingBox extends GridBox {
             g.drawOval(0,0,s,s);
 
             //center
-            double d = 10;
             if(isSelected()) {
-                g.setPaint(FlatColor.RED);
-                if(!isEnabled()) {
-                    g.setPaint(FlatColor.hsb(0,0.5,0.8));
-                }
-                g.fillOval(3,3,d,d);
+                drawCenter(g);
+            }
+
+            if(isEnabled() && !isSelected() && isHovered()) {
+                drawCenter(g);
             }
             g.setStrokeWidth(1);
+
+        }
+
+        private void drawCenter(GFX g) {
+            double d = 10;
+            g.setPaint(FlatColor.RED);
+            if(!isEnabled()) {
+                g.setPaint(FlatColor.hsb(0,0.5,0.8));
+            }
+            g.fillOval(3,3,d,d);
         }
     }
 }

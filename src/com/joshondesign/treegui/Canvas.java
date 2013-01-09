@@ -3,16 +3,16 @@ package com.joshondesign.treegui;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
+import com.joshondesign.treegui.modes.amino.ActionProp;
 import com.joshondesign.treegui.modes.amino.AminoAdapter;
+import com.joshondesign.treegui.modes.amino.TriggerProp;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Focusable;
 
@@ -54,37 +54,6 @@ public class Canvas extends Control implements Focusable{
         popup.setTranslateY(pt.getY() + this.getTranslateY());
     }
 
-    private static class BindingButton extends Button {
-        private final String prop;
-        private Binding binding;
-
-        public BindingButton(String prop, Binding binding) {
-            super(prop);
-            this.prop = prop;
-            this.binding = binding;
-            this.setPrefWidth(100);
-        }
-
-        public void setBinding(Binding binding) {
-            this.binding = binding;
-            setDrawingDirty();
-        }
-
-
-
-        @Override
-        public void draw(GFX g) {
-            g.setPaint(FlatColor.fromRGBInts(200,200,200));
-            g.fillRoundRect(0, 0, getWidth(), getHeight(), 5, 5);
-            g.setPaint(FlatColor.BLACK);
-            Font.drawCenteredVertically(g, prop, Font.DEFAULT, 2, 0, getWidth(), getHeight(), false);
-            if(binding == null) {
-                g.drawOval(100-20,0,20,20);
-            } else {
-                g.fillOval(100 - 20, 0, 20, 20);
-            }
-        }
-    }
 
     private void populateWithBindableProperties(BindingBox popup, SketchNode selection) {
         for(final String prop : AminoAdapter.getProps(selection).keySet()) {
@@ -92,7 +61,7 @@ public class Canvas extends Control implements Focusable{
 
             final Binding sourceBinding = findSourceBinding(selection, prop);
             final Binding targetBinding = findTargetBinding(selection, prop);
-            popup.addProperty(this, selection, prop, sourceBinding, targetBinding, true);
+            popup.addProperty(this, selection, prop, sourceBinding, targetBinding, true, true);
         }
     }
 
@@ -132,7 +101,13 @@ public class Canvas extends Control implements Focusable{
             if(prop.equals("id")) continue;
             final Binding sourceBinding = findSourceBinding(node, prop);
             final Binding targetBinding = findTargetBinding(node, prop);
-            popup2.addProperty(this, node, prop, sourceBinding, targetBinding, false);
+            boolean canUse = true;
+            if(currentBinding.getSourceType() == TriggerProp.class) {
+                if(PropUtils.getPropertyType(node,prop) != ActionProp.class) {
+                    canUse = false;
+                }
+            }
+            popup2.addProperty(this, node, prop, sourceBinding, targetBinding, false, canUse);
         }
         Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
         popup2.setTranslateX(pt.getX() + this.getTranslateX());

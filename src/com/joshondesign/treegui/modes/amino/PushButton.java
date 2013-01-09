@@ -40,7 +40,7 @@ public class PushButton extends ResizableRectNode {
         return text;
     }
 
-    public Object getTrigger() {
-        return this;
+    public TriggerProp getTrigger() {
+        return new TriggerProp();
     }
 }

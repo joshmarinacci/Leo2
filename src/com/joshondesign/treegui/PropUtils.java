@@ -13,6 +13,22 @@ import org.joshy.gfx.util.u;
  * To change this template use File | Settings | File Templates.
  */
 public class PropUtils {
+    public static Class getPropertyType(Object object, String propname) {
+        Class clazz = object.getClass();
+        Method[] methods = clazz.getMethods();
+        for(Method meth : methods) {
+            if(meth.getName().startsWith("get")) {
+                String name = meth.getName().substring(3);
+                name = name.substring(0,1).toLowerCase()+name.substring(1);
+                if(name.equals(propname)) {
+                    return meth.getReturnType();
+                }
+            }
+        }
+        return null;
+    }
+
+
     public static boolean propertyEquals(SketchNode object, String prop, boolean value) {
         Class clazz = object.getClass();
         Method[] methods = clazz.getMethods();

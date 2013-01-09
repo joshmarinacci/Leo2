@@ -56,4 +56,13 @@ public class Binding {
                 ", targetProperty='" + targetProperty + '\'' +
                 '}';
     }
+
+    public Class getSourceType() {
+        return PropUtils.getPropertyType(source,sourceProperty);
+    }
+
+    public Class getTargetType() {
+        return PropUtils.getPropertyType(target, targetProperty);
+
+    }
 }

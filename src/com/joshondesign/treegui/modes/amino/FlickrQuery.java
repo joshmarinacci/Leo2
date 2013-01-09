@@ -59,8 +59,8 @@ public class FlickrQuery extends SketchNode {
 
     List<Object> results;
 
-    public Object getExecute() {
-        return this;
+    public ActionProp getExecute() {
+        return new ActionProp();
     }
 
     @Override
