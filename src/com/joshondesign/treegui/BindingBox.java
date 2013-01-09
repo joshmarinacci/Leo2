@@ -2,6 +2,7 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
@@ -9,8 +10,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Label;
-import org.joshy.gfx.node.layout.HFlexBox;
-import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.util.u;
 
 /**
@@ -20,31 +20,39 @@ import org.joshy.gfx.util.u;
  * Time: 6:59 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BindingBox extends VFlexBox {
+public class BindingBox extends GridBox {
     public BindingBox() {
-        setFill(FlatColor.GRAY);
-        this.setPrefWidth(120);
-        this.setPrefHeight(200);
-        add(new Button("Bindings"), 1);
+        setFill(FlatColor.BLACK);
+        reset();
     }
 
 
     public void addProperty(final Canvas canvas, final SketchNode node,
                             final String prop,
                             final Binding sourceBinding, Binding targetBinding, boolean isSource) {
-        HFlexBox row = new HFlexBox();
+        //HFlexBox row = new HFlexBox();
         BindingStateButton targetButton = new BindingStateButton();
         if(targetBinding != null) {
             targetButton.setSelected(true);
         }
+        if(isSource) targetButton.setEnabled(false);
+
         final BindingStateButton sourceButton = new BindingStateButton();
         if(sourceBinding != null) {
             sourceButton.setSelected(true);
         }
-        row.add(targetButton);
-        row.add(new Label(prop));
-        row.add(sourceButton);
-        add(row, 1);
+        if(!isSource) sourceButton.setEnabled(false);
+
+        addControl(targetButton);
+        Font fnt = Font.name(Font.DEFAULT.getName()).weight(Font.Weight.Bold).size(Font.DEFAULT.getSize()).resolve();
+        addControl(new Label(prop).setFont(fnt).setColor(FlatColor.hsb(0, 0, 0.9)));
+        addControl(sourceButton);
+        nextRow();
+        this.setPrefHeight(this.getPrefHeight()+20);
+        //row.add(targetButton);
+        //row.add(new Label(prop));
+        //row.add(sourceButton);
+        //add(row);
 
         if(isSource) {
             Callback<MouseEvent> callback = new Callback<MouseEvent>() {
@@ -91,22 +99,49 @@ public class BindingBox extends VFlexBox {
     }
 
     public void reset() {
-        removeAll();
+        super.removeAll();
+        super.reset();
+        this.setPrefWidth(140);
+        this.setPrefHeight(20);
+        setPadding(0);
+        this.createColumn(18, Align.Center);
+        this.createColumn(80, Align.Center);
+        this.createColumn(18, Align.Center);
+        debug(false);
     }
 
     private class BindingStateButton extends Button {
         public BindingStateButton() {
-            setPrefWidth(20);
-            setPrefHeight(20);
+            setPrefWidth(16);
+            setPrefHeight(16);
         }
 
         public void draw(GFX g) {
-            g.setPaint(FlatColor.BLACK);
-            if(isSelected()) {
-                g.fillOval(0,0,20,20);
-            } else {
-                g.drawOval(0,0,20,20);
+
+            //bound enabled
+            //bound disabled
+            //unbound enabled
+            //unbound disabled
+
+            //rim
+            double s = 14;
+            g.setStrokeWidth(2);
+            g.setPaint(FlatColor.hsb(0,0,0.8));
+            if(!isEnabled()) {
+                g.setPaint(FlatColor.hsb(0,0,0.4));
             }
+            g.drawOval(0,0,s,s);
+
+            //center
+            double d = 10;
+            if(isSelected()) {
+                g.setPaint(FlatColor.RED);
+                if(!isEnabled()) {
+                    g.setPaint(FlatColor.hsb(0,0.5,0.8));
+                }
+                g.fillOval(3,3,d,d);
+            }
+            g.setStrokeWidth(1);
         }
     }
 }

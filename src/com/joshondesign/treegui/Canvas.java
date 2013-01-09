@@ -125,7 +125,7 @@ public class Canvas extends Control implements Focusable{
             //popup2.setFill(FlatColor.GRAY);
         }
         if(popup2 != null) {
-            popup2.removeAll();
+            popup2.reset();
             popup2.setVisible(true);
         }
         for(final String prop : AminoAdapter.getProps(node).keySet()) {
