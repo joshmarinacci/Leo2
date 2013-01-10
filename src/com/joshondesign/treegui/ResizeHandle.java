@@ -36,6 +36,9 @@ public class ResizeHandle extends Handle {
     public void drag(MouseEvent mouseEvent, Point2D pt) {
         node.setWidth(pt.getX()-node.getTranslateX());
         switch(node.getConstraint()) {
+            case PreserveAspectOnly:
+                node.setHeight(node.getWidth());
+                break;
             case Any:
             case VerticalOnly:
                 node.setHeight(pt.getY()-node.getTranslateY());
