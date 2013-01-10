@@ -82,7 +82,6 @@ public class SelectionTool extends CanvasTool {
 
             private void startDragGesture(MouseEvent mouseEvent, Point2D pt) {
                 if(canvas.getSelection().getSize() < 1) return;
-                //Point2D pt = mouseEvent.getPointInNodeCoords(canvas);
                 startPoint = pt;
                 startTX = canvas.getSelection().get(0).getTranslateX();
                 startTY = canvas.getSelection().get(0).getTranslateY();
@@ -90,9 +89,12 @@ public class SelectionTool extends CanvasTool {
 
             private void continueDragGesture(MouseEvent mouseEvent, Point2D pt) {
                 if(canvas.getSelection().getSize() < 1) return;
-                //Point2D pt = mouseEvent.getPointInNodeCoords(canvas);
-                canvas.getSelection().get(0).setTranslateX(startTX + (pt.getX() - startPoint.getX()));
-                canvas.getSelection().get(0).setTranslateY(startTY + (pt.getY() - startPoint.getY()));
+                double tx = startTX + (pt.getX() - startPoint.getX());
+                double ty = startTY + (pt.getY() - startPoint.getY());
+                tx = Math.floor(tx/10)*10;
+                ty = Math.floor(ty/10)*10;
+                canvas.getSelection().get(0).setTranslateX(tx);
+                canvas.getSelection().get(0).setTranslateY(ty);
                 canvas.redraw();
             }
 

@@ -26,6 +26,8 @@ public class ListView extends ResizableRectNode {
         for(int i=0; i<data.size(); i++) {
             g.drawText(data.get(i), Font.DEFAULT, 5, i*20+20);
         }
+
+        g.drawRect(0,0,getWidth(),getHeight());
         //g.drawText(getText(), Font.DEFAULT,5,20);
     }
 
