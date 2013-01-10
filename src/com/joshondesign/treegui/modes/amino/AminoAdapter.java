@@ -1,7 +1,6 @@
 package com.joshondesign.treegui.modes.amino;
 
 import com.joshondesign.treegui.Binding;
-import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -18,22 +17,8 @@ public class AminoAdapter {
         skipList = Arrays.asList(skipListArray);
     }
     public static String getScriptClass(SketchNode node) {
-        if(node instanceof CheckButton) return "CheckButton";
-        if(node instanceof ToggleButton) return "ToggleButton";
-        if(node instanceof Spinner) return "Spinner";
-        if(node instanceof PushButton) return "PushButton";
-        if(node instanceof Rect) return "Rect";
-        if(node instanceof Slider) return "Slider";
-        if(node instanceof Group) return "Group";
-        if(node instanceof ListView) return "ListView";
         if(node instanceof StringListModel) return "ListModel";
-        if(node instanceof Textbox) return "Textbox";
         if(node instanceof Image) return "ImageView";
-        if(node instanceof FlickrQuery) return "FlickrQuery";
-
-        //if(node instanceof PlainPanel) return "PlainPanel";
-        //if(node instanceof TabPanel) return "TabPanel";
-
         return node.getClass().getSimpleName();
     }
 
