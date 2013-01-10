@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TreeNode<C extends TreeNode> {
@@ -97,6 +98,13 @@ public class TreeNode<C extends TreeNode> {
 
     public Iterable<C> children() {
         return _list;
+    }
+
+    public Iterable<C> reverseChildren() {
+        List<C> list = new ArrayList<C>();
+        list.addAll(_list);
+        Collections.reverse(list);
+        return list;
     }
 
     public Iterable<C> reverseInOrderTraversal() {

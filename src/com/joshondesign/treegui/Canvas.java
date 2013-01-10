@@ -254,7 +254,7 @@ public class Canvas extends Control implements Focusable{
 
 
     SketchNode findNode(Point2D pt) {
-        for(SketchNode n : this.editRoot.children()) {
+        for(SketchNode n : this.editRoot.reverseChildren()) {
             if(n.contains(pt)) return n;
         }
         return null;
