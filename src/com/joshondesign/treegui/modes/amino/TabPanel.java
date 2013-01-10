@@ -5,14 +5,12 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/8/13
- * Time: 11:00 AM
- * To change this template use File | Settings | File Templates.
- */
 public class TabPanel extends ResizableRectNode {
+    @Override
+    public boolean isContainer() {
+        return true;
+    }
+
     @Override
     public void draw(GFX g) {
         g.setPaint(FlatColor.GRAY);

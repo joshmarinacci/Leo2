@@ -23,49 +23,25 @@ public class HTMLBindingExport extends JAction {
     public void execute() {
         try {
             //File file = File.createTempFile("foo",".html");
-            //File file = new File("/Users/josh/projects/Leo/t2/foo.html");
             //file.deleteOnExit();
             StringWriter content = new StringWriter();
             PrintWriter out = new PrintWriter(content);
 
-            //PrintWriter out = new PrintWriter(new FileWriter(file));
-            //PrintWriter out = new PrintWriter(System.out);
-//            out.println("<html><head>");
-//            out.println("<script src='amino.js'></script>");
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<canvas id='canvas' width='500' height='400'></canvas>");
-//
-//            out.println("<script language='Javascript'>");
-//
-//            out.println("var engine = new Amino();");
-//            out.println("var root = engine.addCanvas('canvas');");
             PropWriter w = new PropWriter(out);
             for(Layer layer : page.children()) {
                 w.p("//layer");
                 w.indent();
                 for(SketchNode node : layer.children()) {
-                    exportNode(w, node);
+                    exportNode(w, node, true);
                     if(node.isVisual()) {
                         w.p("root.add(" + node.getId() + ");");
                     }
                     if(AminoAdapter.useSetup(node)) {
                         w.p(node.getId()+".setup(root);");
                     }
-                    if(PropUtils.propertyEquals(node,"draggable",true)) {
-                        w.p("root.onPress("
-                                +node.getId()
-                                +",function() {" +
-                                node.getId()
-                                +".setTranslateX("
-                                +node.getId()
-                                +".getTranslateX()+10);"+
-                                "});");
-                    }
                 }
                 w.outdent();
             }
-
 
             for(Binding binding : canvas.getBindings()) {
                 exportBinding(out,binding);
@@ -116,8 +92,14 @@ public class HTMLBindingExport extends JAction {
                         "binder.start();\n");
     }
 
-    private void exportNode(PropWriter w, SketchNode node) {
+    private void exportNode(PropWriter w, SketchNode node, boolean includeVar) {
+        u.p("doing node: " + node);
+
+        if(includeVar) {
         w.newObj(node.getId(), AminoAdapter.getScriptClass(node));
+        } else {
+            w.newObj(AminoAdapter.getScriptClass(node));
+        }
         w.indent();
         for(Map.Entry<String,Object> props : AminoAdapter.getProps(node).entrySet()) {
             u.p("writing: " + props.getKey() + " " + props.getValue());
@@ -130,13 +112,15 @@ public class HTMLBindingExport extends JAction {
 
         for(SketchNode child : node.children()) {
             w.p(".add(");
-            exportNodeX(w, child);
+            exportNode(w, child, false);
             w.p(")");
         }
-        w.p(";");
+        if(includeVar) {
+            w.p(";");
+        }
         w.outdent();
     }
-
+    /*
     private void exportNodeX(PropWriter w, SketchNode node) {
         w.newObj(AminoAdapter.getScriptClass(node));
         w.indent();
@@ -149,6 +133,7 @@ public class HTMLBindingExport extends JAction {
         w.outdent();
     }
 
+    */
     private void applyTemplate(File in, File out, Map<String, String> subs) {
         try {
             String str = u.fileToString(new FileInputStream(in));

@@ -30,7 +30,11 @@ public class AminoAdapter {
         if(node instanceof Textbox) return "Textbox";
         if(node instanceof Image) return "ImageView";
         if(node instanceof FlickrQuery) return "FlickrQuery";
-        return "Rect";
+
+        //if(node instanceof PlainPanel) return "PlainPanel";
+        //if(node instanceof TabPanel) return "TabPanel";
+
+        return node.getClass().getSimpleName();
     }
 
     public static Map<String,Object> getProps(SketchNode node) {
