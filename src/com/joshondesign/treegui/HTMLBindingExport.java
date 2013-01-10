@@ -33,7 +33,7 @@ public class HTMLBindingExport extends JAction {
                 w.indent();
                 for(SketchNode node : layer.children()) {
                     exportNode(w, node, true);
-                    if(node.isVisual()) {
+                    if(node.isVisual() && AminoAdapter.shouldAddToScene(node,canvas.getBindings())) {
                         w.p("root.add(" + node.getId() + ");");
                     }
                     if(AminoAdapter.useSetup(node)) {
@@ -72,6 +72,13 @@ public class HTMLBindingExport extends JAction {
                             +binding.getSource().getId()
                             +");"
             );
+            return;
+        }
+
+        if(AminoAdapter.shouldExportAsAdder(binding)) {
+            out.print(binding.getTarget().getId()+".add(");
+            out.print(binding.getSource().getId());
+            out.println(");");
             return;
         }
 
@@ -120,20 +127,7 @@ public class HTMLBindingExport extends JAction {
         }
         w.outdent();
     }
-    /*
-    private void exportNodeX(PropWriter w, SketchNode node) {
-        w.newObj(AminoAdapter.getScriptClass(node));
-        w.indent();
-        for(Map.Entry<String,Object> props : AminoAdapter.getProps(node).entrySet()) {
-            String key = props.getKey();
-            if(key.equals("translateX")) key = "x";
-            if(key.equals("translateY")) key = "y";
-            w.prop(key,props.getValue());
-        }
-        w.outdent();
-    }
 
-    */
     private void applyTemplate(File in, File out, Map<String, String> subs) {
         try {
             String str = u.fileToString(new FileInputStream(in));

@@ -18,6 +18,7 @@ public class AminoAdapter {
     }
     public static String getScriptClass(SketchNode node) {
         if(node instanceof StringListModel) return "ListModel";
+        if(node instanceof ControlListModel) return "ListModel";
         if(node instanceof Image) return "ImageView";
         return node.getClass().getSimpleName();
     }
@@ -79,11 +80,16 @@ public class AminoAdapter {
         if(binding.getSource() instanceof StringListModel) {
             return true;
         }
+        if(binding.getSource() instanceof ControlListModel) {
+            return true;
+        }
         return false;
     }
 
     public static boolean useSetup(SketchNode node) {
         if(node instanceof Slider) return true;
+        if(node instanceof TabPanel) return true;
+        if(node instanceof PlainPanel) return true;
         if(node instanceof ToggleButton) return true;
         if(node instanceof CheckButton) return true;
         if(node instanceof PushButton) return true;
@@ -93,10 +99,16 @@ public class AminoAdapter {
     }
 
     public static boolean shouldExportProperty(SketchNode node, String name) {
+        if("this".equals(name)) return false;
         if(node instanceof FlickrQuery) {
             if("execute".equals(name)) return false;
             if("results".equals(name)) return false;
             if("active".equals(name)) return false;
+        }
+
+        if(node instanceof ControlListModel) {
+            if("this".equals(name)) return false;
+            if(name.startsWith("item")) return false;
         }
 
         if(node instanceof PushButton) {
@@ -108,6 +120,7 @@ public class AminoAdapter {
 
     public static boolean shouldExportAsSetter(Binding binding) {
         if(binding.getSource() instanceof StringListModel) return true;
+        if(binding.getSource() instanceof ControlListModel) return true;
         if(binding.getSource() instanceof FlickrQuery) {
             if(binding.getSourceProperty().equals("results")) return true;
         }
@@ -122,5 +135,22 @@ public class AminoAdapter {
         }
 
         return false;
+    }
+
+    public static boolean shouldExportAsAdder(Binding binding) {
+        if(binding.getTarget() instanceof StringListModel) return true;
+        if(binding.getTarget() instanceof ControlListModel) return true;
+        return false;
+    }
+
+    public static boolean shouldAddToScene(SketchNode node, List<Binding> bindings) {
+        for(Binding binding : bindings) {
+            if(binding.getSource() == node) {
+                if(binding.getSourceProperty().equals("this")) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

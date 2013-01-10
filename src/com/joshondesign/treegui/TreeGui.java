@@ -241,6 +241,10 @@ public class TreeGui implements Runnable {
         stringList.setId("StringList");
         symbols.add(stringList);
 
+        ControlListModel controlList = new ControlListModel();
+        controlList.setId("ControList");
+        symbols.add(controlList);
+
         Spinner spinner = new Spinner();
         spinner.setId("Spinner");
         symbols.add(spinner);
