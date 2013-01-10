@@ -14,7 +14,7 @@ public class AminoAdapter {
     private static List<String> skipList;
 
     static {
-        String[] skipListArray = {"class","inputBounds","size","constraint","visual"};
+        String[] skipListArray = {"class","inputBounds","size","constraint","visual","container"};
         skipList = Arrays.asList(skipListArray);
     }
     public static String getScriptClass(SketchNode node) {
@@ -73,7 +73,7 @@ public class AminoAdapter {
                 }
                 if(node instanceof FlickrQuery) {
                     //if(name.equals("results")) continue;
-                    if(name.equals("query")) continue;
+                    //if(name.equals("query")) continue;
                 }
 
                 Object value = m.invoke(node);
@@ -95,10 +95,11 @@ public class AminoAdapter {
 
     public static boolean useSetup(SketchNode node) {
         if(node instanceof Slider) return true;
-        if(node instanceof PushButton) return true;
-        if(node instanceof CheckButton) return true;
         if(node instanceof ToggleButton) return true;
+        if(node instanceof CheckButton) return true;
+        if(node instanceof PushButton) return true;
         if(node instanceof Textbox) return true;
+        if(node instanceof Spinner) return true;
         return false;
     }
 
@@ -106,6 +107,7 @@ public class AminoAdapter {
         if(node instanceof FlickrQuery) {
             if("execute".equals(name)) return false;
             if("results".equals(name)) return false;
+            if("active".equals(name)) return false;
         }
 
         if(node instanceof PushButton) {

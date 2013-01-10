@@ -9,8 +9,10 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
 public class FlickrQuery extends SketchNode {
-    public FlickrQuery() {
+    private boolean active;
 
+    public FlickrQuery() {
+        setActive(false);
     }
 
     @Override
@@ -63,11 +65,20 @@ public class FlickrQuery extends SketchNode {
         return new ActionProp();
     }
 
+
     @Override
     public SketchNode duplicate(SketchNode node) {
         if(node == null)  {
             node = new FlickrQuery();
         }
         return super.duplicate(node);
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }
