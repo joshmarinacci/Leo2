@@ -3,14 +3,9 @@ package com.joshondesign.treegui;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.FocusEvent;
-import org.joshy.gfx.node.control.Checkbox;
-import org.joshy.gfx.node.control.Label;
-import org.joshy.gfx.node.control.Textarea;
-import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.event.*;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.util.u;
 
@@ -65,10 +60,27 @@ public class PropsView extends GridBox {
                 addStringProperty(prop, object);
             }
 
+            if(prop.getter.getReturnType() == FlatColor.class) {
+                addColorProperty(prop, object);
+            }
+
             if(prop.getter.getReturnType() == List.class) {
                 addListProperty(prop, object);
             }
         }
+    }
+
+    private void addColorProperty(final Prop prop, Object object) {
+        addControl(new Label(prop.name));
+        final SwatchColorPicker cp = new SwatchColorPicker();
+        cp.onColorSelected(new Callback<ChangedEvent>() {
+            public void call(ChangedEvent changedEvent) throws Exception {
+                prop.setValue((FlatColor)changedEvent.getValue());
+            }
+        });
+        cp.setSelectedColor(prop.getColorValue());
+        addControl(cp);
+        this.nextRow();
     }
 
     private void addListProperty(final Prop prop, Object object) {
@@ -238,6 +250,18 @@ public class PropsView extends GridBox {
             return (Double)value;
         }
 
+        public FlatColor getColorValue() {
+            Object value = null;
+            try {
+                value = this.getter.invoke(this.obj);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            return (FlatColor)value;
+        }
+
         public String getStringValue() {
             Object value = null;
             try {
@@ -287,6 +311,18 @@ public class PropsView extends GridBox {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (InvocationTargetException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+        }
+
+        public void setValue(FlatColor value) {
+            if(this.getter.getReturnType() == FlatColor.class) {
+                try {
+                    this.setter.invoke(this.obj, value);
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
             }
