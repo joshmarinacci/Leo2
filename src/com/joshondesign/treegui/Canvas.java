@@ -1,5 +1,6 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
@@ -17,9 +18,10 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Focusable;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.util.u;
 
-public class Canvas extends Control implements Focusable{
+public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAware {
     private TreeNode<SketchNode> selection = new TreeNode<SketchNode>();
     private PropsView propsView;
     BindingBox popup;
@@ -32,6 +34,7 @@ public class Canvas extends Control implements Focusable{
     private final SelectionTool selectionTool;
     private TreeNode<SketchNode> masterRoot;
     private TreeNode<SketchNode> editRoot;
+    private ScrollPane scrollPane;
 
 
     public void setMasterRoot(TreeNode<SketchNode> masterRoot) {
@@ -154,6 +157,7 @@ public class Canvas extends Control implements Focusable{
     public void draw(GFX gfx) {
         gfx.setPaint(FlatColor.fromRGBInts(230,230,230));
         gfx.fillRect(0,0,getWidth(),getHeight());
+        drawDocumentBounds(gfx, masterRoot);
         drawMasterRoot(gfx, masterRoot);
         drawBindings(gfx);
         drawSelectionOverlay(gfx);
@@ -161,6 +165,15 @@ public class Canvas extends Control implements Focusable{
         drawHandles(gfx);
         drawGroupEditOverlay(gfx);
         drawDebug(gfx);
+    }
+
+    private void drawDocumentBounds(GFX gfx, TreeNode<SketchNode> masterRoot) {
+        gfx.setPaint(FlatColor.WHITE);
+        gfx.fillRect(0,0,getWidth(),getHeight());
+        if(masterRoot instanceof Layer) {
+            gfx.setPaint(FlatColor.GRAY);
+            gfx.drawRect(0,0,600,400);
+        }
     }
 
 
@@ -332,20 +345,41 @@ public class Canvas extends Control implements Focusable{
     }
 
     public void navigateOutof() {
-        //if(getEditRoot() instanceof SketchNode) {
-            setEditRoot(editStack.pop());
-            clearSelection();
-            redraw();
-        //}
+        setEditRoot(editStack.pop());
+        clearSelection();
+        redraw();
     }
 
     public Point2D toEditRootCoords(Point2D pointInNodeCoords) {
         if(this.editRoot == this.masterRoot) return pointInNodeCoords;
         if(this.editRoot instanceof SketchNode) {
             SketchNode node = (SketchNode) editRoot;
-            return MathUtils.transform(pointInNodeCoords,-node.getTranslateX(),-node.getTranslateY());
+            return MathUtils.transform(pointInNodeCoords,
+                    -node.getTranslateX(),-node.getTranslateY());
         }
         u.p("possible error in toEditRootCoords. shouldn't get here");
         return  pointInNodeCoords;
+    }
+
+
+
+    /* ======== scrolling aware implementation ========== */
+
+    public double getFullWidth(double w, double h) {
+        return 600;
+    }
+
+    public double getFullHeight(double v, double v2) {
+        return 400;
+    }
+
+    public void setScrollX(double v) {
+    }
+
+    public void setScrollY(double v) {
+    }
+
+    public void setScrollParent(ScrollPane scrollPane) {
+        this.scrollPane = scrollPane;
     }
 }
