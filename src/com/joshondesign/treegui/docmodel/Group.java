@@ -33,4 +33,9 @@ public class Group extends SketchNode {
     public Bounds getInputBounds() {
         return MathUtils.unionBounds(this);
     }
+
+    @Override
+    public boolean isContainer() {
+        return true;
+    }
 }

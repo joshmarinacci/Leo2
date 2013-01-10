@@ -14,6 +14,11 @@ import org.joshy.gfx.draw.GFX;
  */
 public class PlainPanel extends ResizableRectNode {
     @Override
+    public boolean isContainer() {
+        return true;
+    }
+
+    @Override
     public void draw(GFX g) {
         g.setPaint(FlatColor.GRAY);
         g.fillRect(0,0,getWidth(),getHeight());

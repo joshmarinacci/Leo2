@@ -22,6 +22,7 @@ public class PushButton extends ResizableRectNode {
         g.fillRect(0,0,getWidth(),getHeight());
         g.setPaint(FlatColor.BLACK);
         g.drawText(getText(), Font.DEFAULT,5,15);
+        g.drawRect(0,0,getWidth(),getHeight());
     }
 
     @Override

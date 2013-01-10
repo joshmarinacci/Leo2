@@ -9,6 +9,11 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
     public boolean isVisual() {
         return true;
     }
+
+    public boolean isContainer() {
+        return false;
+    }
+
     protected SketchNode() {
         setId("id"+(int)Math.floor(Math.random()*1000000));
     }

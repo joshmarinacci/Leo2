@@ -9,15 +9,17 @@ import com.joshondesign.treegui.modes.amino.TriggerProp;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Focusable;
+import org.joshy.gfx.util.u;
 
 public class Canvas extends Control implements Focusable{
-    private TreeNode<SketchNode> target;
     private TreeNode<SketchNode> selection = new TreeNode<SketchNode>();
     private PropsView propsView;
     BindingBox popup;
@@ -28,7 +30,21 @@ public class Canvas extends Control implements Focusable{
     Binding currentBinding;
     List<Binding> bindings = new ArrayList<Binding>();
     private final SelectionTool selectionTool;
+    private TreeNode<SketchNode> masterRoot;
+    private TreeNode<SketchNode> editRoot;
 
+
+    public void setMasterRoot(TreeNode<SketchNode> masterRoot) {
+        this.masterRoot = masterRoot;
+    }
+
+    public void setEditRoot(TreeNode<SketchNode> editRoot) {
+        this.editRoot = editRoot;
+    }
+
+    public TreeNode<SketchNode> getEditRoot() {
+        return editRoot;
+    }
 
     public Canvas() {
         selectionTool = new SelectionTool(this);
@@ -138,17 +154,29 @@ public class Canvas extends Control implements Focusable{
     public void draw(GFX gfx) {
         gfx.setPaint(FlatColor.fromRGBInts(230,230,230));
         gfx.fillRect(0,0,getWidth(),getHeight());
-        drawTarget(gfx,target);
+        drawMasterRoot(gfx, masterRoot);
         drawBindings(gfx);
         drawSelectionOverlay(gfx);
         drawActiveBindingLineOverlay(gfx);
         drawHandles(gfx);
+        drawGroupEditOverlay(gfx);
+        drawDebug(gfx);
     }
 
-    private void drawHandles(GFX gfx) {
-        for(Handle handle : this.handles) {
-            handle.draw(gfx);
+
+    private void drawMasterRoot(GFX gfx, TreeNode<SketchNode> root) {
+        for(SketchNode n : root.children()) {
+            drawNode(gfx, n);
         }
+    }
+
+    private void drawNode(GFX gfx, SketchNode n) {
+        gfx.translate(n.getTranslateX(), n.getTranslateY());
+        n.draw(gfx);
+        for(SketchNode c : n.children()) {
+            drawNode(gfx,c);
+        }
+        gfx.translate(-n.getTranslateX(), -n.getTranslateY());
     }
 
     private void drawBindings(GFX gfx) {
@@ -165,6 +193,36 @@ public class Canvas extends Control implements Focusable{
         }
     }
 
+    private void drawSelectionOverlay(GFX gfx) {
+        if(getSelection().getSize() < 1) return;
+        Point2D pt = new Point2D.Double(0,0);
+        if(getEditRoot() instanceof SketchNode) {
+            SketchNode sn = (SketchNode) getEditRoot();
+            pt = MathUtils.transform(pt,sn.getTranslateX(),sn.getTranslateY());
+        }
+        Bounds b = MathUtils.unionBounds(getSelection());
+        b = MathUtils.transform(b,pt);
+        gfx.setPaint(FlatColor.fromRGBInts(100,100,100));
+        gfx.drawRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
+        gfx.setPaint(FlatColor.fromRGBInts(200,200,200));
+        gfx.drawRect(b.getX() - 1, b.getY() - 1, b.getWidth() + 2, b.getHeight() + 2);
+    }
+
+
+    private void drawHandles(GFX gfx) {
+        Point2D pt = new Point2D.Double(0,0);
+        if(getEditRoot() instanceof SketchNode) {
+            SketchNode sn = (SketchNode) getEditRoot();
+            pt = MathUtils.transform(pt,sn.getTranslateX(),sn.getTranslateY());
+        }
+        gfx.translate(pt.getX(),pt.getY());
+        for(Handle handle : this.handles) {
+            handle.draw(gfx);
+        }
+        gfx.translate(-pt.getX(),-pt.getY());
+    }
+
+
     private void drawActiveBindingLineOverlay(GFX gfx) {
         if(startDragPoint != null && currentDragPoint != null && dragging) {
             gfx.setPaint(FlatColor.RED);
@@ -173,33 +231,30 @@ public class Canvas extends Control implements Focusable{
         }
     }
 
-    private void drawSelectionOverlay(GFX gfx) {
-        if(getSelection().getSize() < 1) return;
-        Bounds b = MathUtils.unionBounds(getSelection());
-        gfx.setPaint(FlatColor.fromRGBInts(100,100,100));
-        gfx.drawRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
-        gfx.setPaint(FlatColor.fromRGBInts(200,200,200));
-        gfx.drawRect(b.getX()-1,b.getY()-1,b.getWidth()+2,b.getHeight()+2);
-    }
 
-    private void drawTarget(GFX gfx, TreeNode<SketchNode> target) {
-        for(SketchNode n : this.target.children()) {
-            drawNode(gfx, n);
+    private void drawGroupEditOverlay(GFX gfx) {
+        if(editRoot != masterRoot && editRoot instanceof SketchNode) {
+            SketchNode root = (SketchNode) editRoot;
+            Bounds bounds = root.getInputBounds();
+            bounds = MathUtils.transform(bounds,root.getTranslateX(),root.getTranslateY());
+            gfx.setPaint(FlatColor.hsb(0,1,1,0.4));
+            gfx.fillRect(0,0,bounds.getX(),getHeight());
+            gfx.fillRect(bounds.getX2(),0,getWidth()-bounds.getX2(),getHeight());
+            gfx.fillRect(bounds.getX(),0,bounds.getWidth(),bounds.getY());
+            gfx.fillRect(bounds.getX(),bounds.getY2(),bounds.getWidth(),getHeight()-bounds.getY2());
         }
     }
 
-    private void drawNode(GFX gfx, SketchNode n) {
-        gfx.translate(n.getTranslateX(),n.getTranslateY());
-        n.draw(gfx);
-        for(SketchNode c : n.children()) {
-            drawNode(gfx,c);
-        }
-        gfx.translate(-n.getTranslateX(),-n.getTranslateY());
+    private void drawDebug(GFX gfx) {
+        gfx.setPaint(FlatColor.hsb(0, 0, 0.7));
+        gfx.fillRect(0, 0, 400, 20);
+        gfx.setPaint(FlatColor.BLACK);
+        gfx.drawText("edit root: " + getEditRoot().getClass().getName(), Font.DEFAULT, 5, 15);
     }
 
 
     SketchNode findNode(Point2D pt) {
-        for(SketchNode n : this.target.children()) {
+        for(SketchNode n : this.editRoot.children()) {
             if(n.contains(pt)) return n;
         }
         return null;
@@ -207,9 +262,6 @@ public class Canvas extends Control implements Focusable{
 
 
 
-    public void setTarget(TreeNode<SketchNode> level) {
-        this.target = level;
-    }
 
     public void addToSelection(SketchNode node) {
         this.selection.add(node);
@@ -224,6 +276,7 @@ public class Canvas extends Control implements Focusable{
             popup2.setVisible(false);
         }
         this.selection.clear();
+        this.handles.clear();
         setDrawingDirty();
     }
 
@@ -247,9 +300,6 @@ public class Canvas extends Control implements Focusable{
         setDrawingDirty();
     }
 
-    public TreeNode<SketchNode> getTarget() {
-        return target;
-    }
 
     public boolean isFocused() {
         return true;
@@ -270,5 +320,32 @@ public class Canvas extends Control implements Focusable{
             if(handle.contains(pointInNodeCoords)) return handle;
         }
         return null;
+    }
+
+    private Stack<TreeNode<SketchNode>> editStack = new Stack<TreeNode<SketchNode>>();
+
+    public void navigateInto(SketchNode node) {
+        editStack.push(getEditRoot());
+        clearSelection();
+        setEditRoot(node);
+        redraw();
+    }
+
+    public void navigateOutof() {
+        //if(getEditRoot() instanceof SketchNode) {
+            setEditRoot(editStack.pop());
+            clearSelection();
+            redraw();
+        //}
+    }
+
+    public Point2D toEditRootCoords(Point2D pointInNodeCoords) {
+        if(this.editRoot == this.masterRoot) return pointInNodeCoords;
+        if(this.editRoot instanceof SketchNode) {
+            SketchNode node = (SketchNode) editRoot;
+            return MathUtils.transform(pointInNodeCoords,-node.getTranslateX(),-node.getTranslateY());
+        }
+        u.p("possible error in toEditRootCoords. shouldn't get here");
+        return  pointInNodeCoords;
     }
 }

@@ -62,7 +62,8 @@ public class TreeGui implements Runnable {
 
             //hook up the canvas
             final Canvas canvas = (Canvas) find("canvas",rootControl);
-            canvas.setTarget(doc.get(0).get(0));
+            canvas.setMasterRoot(doc.get(0).get(0));
+            canvas.setEditRoot(doc.get(0).get(0));
             canvas.setPropsView(propsView);
 
 
@@ -121,7 +122,7 @@ public class TreeGui implements Runnable {
 
                 public void call(MouseEvent event) throws Exception {
                     if(event.getType() == MouseEvent.MouseDragged) {
-                        Point2D pt = event.getPointInNodeCoords(canvas);
+                        Point2D pt = canvas.toEditRootCoords(event.getPointInNodeCoords(canvas));
                         if(created && dupe != null) {
                             //pt = canvas.transformToCanvas(pt);
                             Bounds b = dupe.getInputBounds();
@@ -138,7 +139,8 @@ public class TreeGui implements Runnable {
                             dupe = node.duplicate(null);
                             Bounds b = dupe.getInputBounds();
                             //sd.getCurrentPage().add(dupe);
-                            sd.get(0).get(0).add(dupe);
+                            canvas.getEditRoot().add(dupe);
+                            //sd.get(0).get(0).add(dupe);
                             //Point2D pt = event.getPointInNodeCoords(context.getCanvas());
                             //pt = context.getSketchCanvas().transformToCanvas(pt);
                             dupe.setTranslateX(pt.getX() - b.getWidth() / 2);

@@ -2,11 +2,9 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.SketchNode;
-import com.joshondesign.treegui.model.TreeNode;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -33,9 +31,9 @@ public class SelectionTool extends CanvasTool {
             public double startTX;
             public double startTY;
             public long lastClick;
-            private Stack<TreeNode<SketchNode>> editStack = new Stack<TreeNode<SketchNode>>();
 
             public void call(MouseEvent mouseEvent) throws Exception {
+                Point2D pt = canvas.toEditRootCoords(mouseEvent.getPointInNodeCoords(canvas));
                 if (mouseEvent.getType() == MouseEvent.OpenContextMenu && canvas.getSelection() != null) {
                     canvas.showBindingMenu(mouseEvent.getPointInNodeCoords(canvas));
                 }
@@ -43,71 +41,64 @@ public class SelectionTool extends CanvasTool {
                     Core.getShared().getFocusManager().setFocusedNode(canvas);
                     long oldClick = lastClick;
                     lastClick = System.currentTimeMillis();
+
                     if(lastClick-oldClick < 250) {
-                        SketchNode node = canvas.findNode(mouseEvent.getPointInNodeCoords(canvas));
+                        SketchNode node = canvas.findNode(pt);
                         if(node == null) {
-                            navigateUp();
+                            canvas.navigateOutof();
+                            return;
                         }
-                        if(node instanceof Group) {
-                            navigateDown(node);
+                        if(node.isContainer()) {
+                            canvas.navigateInto(node);
                         }
                     } else {
-                        Handle handle = canvas.findHandle(mouseEvent.getPointInNodeCoords(canvas));
+                        Handle handle = canvas.findHandle(pt);
                         if(handle != null) {
                             startDragHandle(handle,mouseEvent);
                             return;
                         }
-                        SketchNode node = canvas.findNode(mouseEvent.getPointInNodeCoords(canvas));
+                        SketchNode node = canvas.findNode(pt);
                         if(!mouseEvent.isShiftPressed()) {
                             canvas.clearSelection();
                         }
                         if(node == null) return;
                         addToSelection(node);
-                        startDragGesture(mouseEvent);
+                        startDragGesture(mouseEvent,pt);
                     }
                 }
                 if(mouseEvent.getType() == MouseEvent.MouseDragged && canvas.getSelection() != null) {
                     if(activeHandle != null) {
-                        continueDragHandle(mouseEvent);
+                        continueDragHandle(mouseEvent,pt);
                         return;
                     }
-                    continueDragGesture(mouseEvent);
+                    continueDragGesture(mouseEvent,pt);
                 }
                 if(mouseEvent.getType() == MouseEvent.MouseReleased) {
                     if(activeHandle != null) {
-                        endDragHandle(mouseEvent);
+                        endDragHandle(mouseEvent,pt);
                     }
                 }
             }
 
-            private void startDragGesture(MouseEvent mouseEvent) {
+            private void startDragGesture(MouseEvent mouseEvent, Point2D pt) {
                 if(canvas.getSelection().getSize() < 1) return;
-                Point2D pt = mouseEvent.getPointInNodeCoords(canvas);
+                //Point2D pt = mouseEvent.getPointInNodeCoords(canvas);
                 startPoint = pt;
                 startTX = canvas.getSelection().get(0).getTranslateX();
                 startTY = canvas.getSelection().get(0).getTranslateY();
             }
 
-            private void continueDragGesture(MouseEvent mouseEvent) {
+            private void continueDragGesture(MouseEvent mouseEvent, Point2D pt) {
                 if(canvas.getSelection().getSize() < 1) return;
-                Point2D pt = mouseEvent.getPointInNodeCoords(canvas);
+                //Point2D pt = mouseEvent.getPointInNodeCoords(canvas);
                 canvas.getSelection().get(0).setTranslateX(startTX + (pt.getX() - startPoint.getX()));
                 canvas.getSelection().get(0).setTranslateY(startTY + (pt.getY() - startPoint.getY()));
                 canvas.redraw();
             }
 
             private void navigateDown(SketchNode node) {
-                canvas.clearSelection();
-                editStack.push(canvas.getTarget());
-                canvas.setTarget(node);
-                canvas.redraw();
             }
             private void navigateUp() {
-                if(canvas.getTarget() instanceof  Group) {
-                    canvas.setTarget(editStack.pop());
-                    canvas.clearSelection();
-                    canvas.redraw();
-                }
             }
         });
 
@@ -134,12 +125,12 @@ public class SelectionTool extends CanvasTool {
         activeHandle = handle;
     }
 
-    private void continueDragHandle(MouseEvent mouseEvent) {
-        activeHandle.drag(mouseEvent, mouseEvent.getPointInNodeCoords(canvas));
+    private void continueDragHandle(MouseEvent mouseEvent, Point2D pt) {
+        activeHandle.drag(mouseEvent, pt);
         canvas.redraw();
     }
 
-    private void endDragHandle(MouseEvent mouseEvent) {
+    private void endDragHandle(MouseEvent mouseEvent, Point2D pt) {
         activeHandle = null;
     }
 
@@ -155,7 +146,7 @@ public class SelectionTool extends CanvasTool {
             toMove.add(child);
         }
         for(SketchNode child : toMove){
-            canvas.getTarget().remove(child);
+            canvas.getEditRoot().remove(child);
         }
         canvas.clearSelection();
     }
@@ -173,20 +164,20 @@ public class SelectionTool extends CanvasTool {
         canvas.clearSelection();
         for(SketchNode child: toMove) {
             group.remove(child);
-            canvas.getTarget().add(child);
+            canvas.getEditRoot().add(child);
             canvas.addToSelection(child);
         }
-        canvas.getTarget().remove(group);
+        canvas.getEditRoot().remove(group);
     }
 
     private void groupSelection() {
         if(canvas.getSelection().getSize() > 1) {
             Group group = new Group();
             for(SketchNode node : canvas.getSelection().children()) {
-                canvas.getTarget().remove(node);
+                canvas.getEditRoot().remove(node);
                 group.add(node);
             }
-            canvas.getTarget().add(group);
+            canvas.getEditRoot().add(group);
             canvas.clearSelection();
             canvas.addToSelection(group);
         }
