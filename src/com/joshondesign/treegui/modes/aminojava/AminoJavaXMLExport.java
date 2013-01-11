@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.AnchorPanel;
 import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Page;
@@ -15,6 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.node.Node;
+import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
@@ -90,7 +92,17 @@ public class AminoJavaXMLExport extends JAction {
         for(Elem echild : xml.xpath("children/node")) {
             Node nchild = parse(echild);
             Container container = (Container) node;
-            container.add(nchild);
+            if(container instanceof AnchorPanel && nchild instanceof Control) {
+                AnchorPanel anchorPanel = (AnchorPanel) container;
+                Control control = (Control) nchild;
+                AnchorPanel.AnchorSettings anchor = new AnchorPanel.AnchorSettings(
+                        20, true, 20, true,
+                        0, true, 0, false);
+                anchorPanel.DEBUG = true;
+                anchorPanel.add(control, anchor);
+            }else {
+                container.add(nchild);
+            }
         }
         return (Node) node;
     }
@@ -126,11 +138,15 @@ public class AminoJavaXMLExport extends JAction {
         ;
         for (Property prop : node.getSortedProperties()) {
             if (!prop.isExported()) continue;
-            xml.start("property")
-                    .attr("name", prop.getName())
-                    .attr("value", prop.encode())
-                    .attr("type", prop.getType().getCanonicalName())
-                    .end()
+            xml.start("property");
+            if(prop.getExportName() != null) {
+                xml.attr("name", prop.getExportName());
+            }else {
+                xml.attr("name", prop.getName());
+            }
+            xml.attr("value", prop.encode())
+                .attr("type", prop.getType().getCanonicalName())
+                .end()
             ;
         }
         xml.start("children");

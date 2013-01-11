@@ -13,6 +13,7 @@ public class Property {
     private final Class type;
     private Object value;
     private boolean exported = true;
+    private String exportName;
 
     public Property(String name, Class type, Object value) {
         this.name = name;
@@ -54,6 +55,7 @@ public class Property {
 
     public Property duplicate() {
         Property p = new Property(this.name,this.type,this.value);
+        p.exportName = this.exportName;
         p.setExported(this.isExported());
         return p;
     }
@@ -82,5 +84,14 @@ public class Property {
 
     public void setDoubleValue(double w) {
         this.value = new Double(w);
+    }
+
+    public Property setExportName(String exportName) {
+        this.exportName = exportName;
+        return this;
+    }
+
+    public String getExportName() {
+        return exportName;
     }
 }

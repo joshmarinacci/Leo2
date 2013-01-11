@@ -294,8 +294,8 @@ public class TreeGui implements Runnable {
         button.addProperty(new Property("id", String.class, "arandomid").setExported(true));
         button.addProperty(new Property("translateX", Double.class, 0));
         button.addProperty(new Property("translateY", Double.class, 0));
-        button.addProperty(new Property("width", Double.class, 80));
-        button.addProperty(new Property("height", Double.class, 20));
+        button.addProperty(new Property("width", Double.class, 80).setExportName("prefWidth"));
+        button.addProperty(new Property("height", Double.class, 20).setExportName("prefHeight"));
         button.addProperty(new Property("text", CharSequence.class, "a button"));
         button.addProperty(new Property("selected", Boolean.class, false));
         button.addProperty(new Property("resize", String.class, "any").setExported(false));
@@ -342,7 +342,7 @@ public class TreeGui implements Runnable {
         panel.setName("Panel");
         panel.setVisual(true);
         panel.setResizable(true);
-        panel.addProperty(new Property("class", String.class, "org.joshy.gfx.node.layout.Panel"))
+        panel.addProperty(new Property("class", String.class, "com.joshondesign.treegui.AnchorPanel"))
             .addProperty(new Property("resize", String.class, "any").setExported(false))
             .addProperty(new Property("id", String.class, "arandomid"))
             .addProperty(new Property("translateX", Double.class, 0))
