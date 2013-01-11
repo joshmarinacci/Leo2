@@ -8,6 +8,10 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
 import com.joshondesign.treegui.modes.amino.*;
+import com.joshondesign.treegui.modes.aminojava.AminoJavaXMLExport;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminojava.GuiTest;
+import com.joshondesign.treegui.modes.aminojava.Property;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -35,7 +39,7 @@ public class TreeGui implements Runnable {
 
     public void run() {
         final TreeNode<Mode> modes = initModes();
-        Mode mode = modes.get(0);
+        Mode mode = modes.get(1);
         final SketchDocument doc = initDoc();
         Stage stage = Stage.createStage();
         stage.setWidth(800);
@@ -87,8 +91,10 @@ public class TreeGui implements Runnable {
             exp.canvas = canvas;
             exp.page = doc.get(0);
             actions.add(exp);
+            actions.add(new AminoJavaXMLExport(canvas,doc.get(0)));
             ToolbarListView toolbar = (ToolbarListView) find("toolbar", rootControl);
             toolbar.setModel(actions);
+
 
             //hook up the symbols view
 
@@ -170,9 +176,9 @@ public class TreeGui implements Runnable {
 
     private TreeNode<Mode> initModes() {
         TreeNode<Mode> modes = new TreeNode<Mode>();
-        Mode amino = new Mode();
-        amino.setId("com.joshondesign.modes.aminojs");
-        modes.add(amino);
+        Mode aminojs = new Mode();
+        aminojs.setId("com.joshondesign.modes.aminojs");
+        modes.add(aminojs);
 
         TreeNode<JAction> actions = new TreeNode<JAction>();
         actions.add(new JAction() {
@@ -184,7 +190,7 @@ public class TreeGui implements Runnable {
                 return "Save XML";
             }
         });
-        amino.add(actions);
+        aminojs.add(actions);
 
 
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
@@ -254,9 +260,110 @@ public class TreeGui implements Runnable {
         symbols.add(fq);
 
 
-        amino.add(symbols);
+        aminojs.add(symbols);
+
+        modes.add(setupJavaMode());
+
+
 
         return modes;
+    }
+
+    private Mode setupJavaMode() {
+
+        Mode aminojava = new Mode();
+        aminojava.setId("com.joshondesign.modes.aminojava");
+        TreeNode<JAction> javaactions = new TreeNode<JAction>();
+        aminojava.add(javaactions);
+
+
+        TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
+        aminojava.add(symbols);
+
+        //Rect rect = new Rect();
+        //rect.setId("Rect");
+        //symbols.add(rect);
+
+        DynamicNode button = new DynamicNode();
+        button.setName("Button");
+        button.setResizable(true);
+        button.setVisual(true);
+
+        button.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
+        button.addProperty(new Property("id", String.class, "arandomid").setExported(true));
+        button.addProperty(new Property("translateX", Double.class, 0));
+        button.addProperty(new Property("translateY", Double.class, 0));
+        button.addProperty(new Property("width", Double.class, 80));
+        button.addProperty(new Property("height", Double.class, 20));
+        button.addProperty(new Property("text", String.class, "a button"));
+        button.addProperty(new Property("selected", Boolean.class, false));
+        button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0).setExported(false));
+        button.setDrawDelegate(new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                String t = node.getProperty("text").getStringValue();
+
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawText(t, Font.DEFAULT, 5, 15);
+                g.drawRect(0, 0, w, h);
+
+            }
+        });
+        symbols.add(button);
+
+        DynamicNode label = new DynamicNode();
+        label.setName("Label");
+        label.setResizable(true);
+        label.setVisual(true);
+        label.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"));
+        label.addProperty(new Property("id", String.class, "arandomid").setExported(true));
+        label.addProperty(new Property("translateX", Double.class, 0));
+        label.addProperty(new Property("translateY", Double.class, 0));
+        label.addProperty(new Property("width", Double.class, 60));
+        label.addProperty(new Property("height", Double.class, 20));
+        label.addProperty(new Property("text", String.class, "a label"));
+        label.setDrawDelegate(new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                String t = node.getProperty("text").getStringValue();
+
+                g.setPaint(FlatColor.BLACK);
+                g.drawText(t, Font.DEFAULT, 5, 15);
+                //g.drawRect(0, 0, w, h);
+
+            }
+        });
+
+        symbols.add(label);
+
+        DynamicNode panel = new DynamicNode();
+        panel.setName("Panel");
+        panel.setResizable(true);
+        panel.setVisual(true);
+        panel.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"));
+        panel.addProperty(new Property("id", String.class, "arandomid").setExported(true));
+        panel.addProperty(new Property("translateX", Double.class, 0));
+        panel.addProperty(new Property("translateY", Double.class, 0));
+        panel.addProperty(new Property("width", Double.class, 50));
+        panel.addProperty(new Property("height", Double.class, 50));
+        panel.setDrawDelegate(new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0,0,w,h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRect(0, 0, w, h);
+
+            }
+        });
+
+        symbols.add(panel);
+        return aminojava;
     }
 
     private SketchDocument initDoc() {
