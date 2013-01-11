@@ -42,6 +42,9 @@ public class Property {
             }
             return ((Double)value).toString();
         }
+        if(type == CharSequence.class) {
+            return ((CharSequence)value).toString();
+        }
         return null;
     }
 
@@ -70,6 +73,9 @@ public class Property {
     public String getStringValue() {
         if(type == String.class) {
             return ((String)value);
+        }
+        if(type == CharSequence.class) {
+            return ((CharSequence)value).toString();
         }
         return "ERROR";
     }

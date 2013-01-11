@@ -23,6 +23,9 @@ public class DynamicNode extends SketchNode {
     private DrawDelegate drawDelegate;
     private boolean container = false;
 
+    public DynamicNode() {
+    }
+
     public void setDrawDelegate(DrawDelegate drawDelegate) {
         this.drawDelegate = drawDelegate;
     }
@@ -48,6 +51,7 @@ public class DynamicNode extends SketchNode {
             nd.visual = this.visual;
             nd.resizable = this.resizable;
             nd.drawDelegate = this.drawDelegate;
+            nd.setContainer(this.isContainer());
             for(Property p : this.getProperties()) {
                 nd.addProperty(p.duplicate());
             }
@@ -80,6 +84,18 @@ public class DynamicNode extends SketchNode {
             g.setPaint(FlatColor.GREEN);
             g.fillRect(0,0,20,40);
         }
+    }
+
+    @Override
+    public SketchNode setTranslateX(double translateX) {
+        this.getProperty("translateX").setDoubleValue(translateX);
+        return super.setTranslateX(translateX);
+    }
+
+    @Override
+    public SketchNode setTranslateY(double translateY) {
+        this.getProperty("translateY").setDoubleValue(translateY);
+        return super.setTranslateY(translateY);
     }
 
     @Override
