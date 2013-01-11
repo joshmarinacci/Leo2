@@ -297,6 +297,7 @@ public class TreeGui implements Runnable {
         button.addProperty(new Property("height", Double.class, 20));
         button.addProperty(new Property("text", String.class, "a button"));
         button.addProperty(new Property("selected", Boolean.class, false));
+        button.addProperty(new Property("resize", String.class, "any"));
         button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0).setExported(false));
         button.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
@@ -324,17 +325,13 @@ public class TreeGui implements Runnable {
         label.addProperty(new Property("translateY", Double.class, 0));
         label.addProperty(new Property("width", Double.class, 60));
         label.addProperty(new Property("height", Double.class, 20));
+        label.addProperty(new Property("resize", String.class, "width"));
         label.addProperty(new Property("text", String.class, "a label"));
         label.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
                 String t = node.getProperty("text").getStringValue();
-
                 g.setPaint(FlatColor.BLACK);
                 g.drawText(t, Font.DEFAULT, 5, 15);
-                //g.drawRect(0, 0, w, h);
-
             }
         });
 
@@ -342,23 +339,25 @@ public class TreeGui implements Runnable {
 
         DynamicNode panel = new DynamicNode();
         panel.setName("Panel");
-        panel.setResizable(true);
         panel.setVisual(true);
-        panel.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"));
-        panel.addProperty(new Property("id", String.class, "arandomid").setExported(true));
-        panel.addProperty(new Property("translateX", Double.class, 0));
-        panel.addProperty(new Property("translateY", Double.class, 0));
-        panel.addProperty(new Property("width", Double.class, 50));
-        panel.addProperty(new Property("height", Double.class, 50));
+        panel.setResizable(true);
+        panel.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"))
+            .addProperty(new Property("resize", String.class, "any"))
+            .addProperty(new Property("id", String.class, "arandomid").setExported(true))
+            .addProperty(new Property("translateX", Double.class, 0))
+            .addProperty(new Property("translateY", Double.class, 0))
+            .addProperty(new Property("width", Double.class, 50))
+            .addProperty(new Property("height", Double.class, 50))
+        ;
+        panel.setContainer(true);
         panel.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
                 g.setPaint(FlatColor.GRAY);
-                g.fillRect(0,0,w,h);
+                g.fillRect(0, 0, w, h);
                 g.setPaint(FlatColor.BLACK);
                 g.drawRect(0, 0, w, h);
-
             }
         });
 

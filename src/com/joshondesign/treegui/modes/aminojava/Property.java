@@ -11,7 +11,7 @@ public class Property {
 
     private final String name;
     private final Class type;
-    private final Object value;
+    private Object value;
     private boolean exported = true;
 
     public Property(String name, Class type, Object value) {
@@ -72,5 +72,9 @@ public class Property {
             return ((String)value);
         }
         return "ERROR";
+    }
+
+    public void setDoubleValue(double w) {
+        this.value = new Double(w);
     }
 }

@@ -21,6 +21,7 @@ public class DynamicNode extends SketchNode {
     private boolean resizable = true;
     private Map<String, Property> properies = new HashMap<String, Property>();
     private DrawDelegate drawDelegate;
+    private boolean container = false;
 
     public void setDrawDelegate(DrawDelegate drawDelegate) {
         this.drawDelegate = drawDelegate;
@@ -28,6 +29,10 @@ public class DynamicNode extends SketchNode {
 
     public Property getProperty(String width) {
         return properies.get(width);
+    }
+
+    public void setContainer(boolean container) {
+        this.container = container;
     }
 
     public static interface DrawDelegate {
@@ -100,8 +105,9 @@ public class DynamicNode extends SketchNode {
         return this.resizable;
     }
 
-    public void addProperty(Property property) {
+    public DynamicNode addProperty(Property property) {
         this.properies.put(property.getName(),property);
+        return this;
     }
 
     public Iterable<? extends Property> getProperties() {
@@ -117,5 +123,10 @@ public class DynamicNode extends SketchNode {
             }
         });
         return props;
+    }
+
+    @Override
+    public boolean isContainer() {
+        return this.container;
     }
 }

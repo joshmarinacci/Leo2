@@ -7,6 +7,7 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.amino.ActionProp;
 import com.joshondesign.treegui.modes.amino.AminoAdapter;
 import com.joshondesign.treegui.modes.amino.TriggerProp;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -324,6 +325,12 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         for(SketchNode node : this.getSelection().children()) {
             if(node instanceof ResizableRectNode) {
                 handles.add(new ResizeHandle((ResizableRectNode) node));
+            }
+            if(node instanceof DynamicNode) {
+                DynamicNode dnode = (DynamicNode) node;
+                if(dnode.isResizable()) {
+                    handles.add(new DynamicResizeHandle((DynamicNode) node));
+                }
             }
         }
     }
