@@ -14,6 +14,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
@@ -68,7 +70,17 @@ public class AminoJavaXMLExport extends JAction {
     private Node parse(Elem xml) throws ClassNotFoundException, IllegalAccessException, InstantiationException, XPathExpressionException, NoSuchMethodException, InvocationTargetException {
         Class clazz = getClass().forName(xml.attr("class"));
         Node node = (Node) clazz.newInstance();
+
+        List<String> skipList = new ArrayList<String>();
+        skipList.add("anchorLeft");
+        skipList.add("anchorRight");
+        skipList.add("anchorTop");
+        skipList.add("anchorBottom");
+        skipList.add("right");
+        skipList.add("bottom");
+
         for(Elem eprop : xml.xpath("property")) {
+            if(skipList.contains(eprop.attr("name"))) continue;
             if(eprop.attrEquals("name","class")) continue;
             String setter = "set" + eprop.attr("name").substring(0,1).toUpperCase()
                     + eprop.attr("name").substring(1);
@@ -95,9 +107,8 @@ public class AminoJavaXMLExport extends JAction {
             if(container instanceof AnchorPanel && nchild instanceof Control) {
                 AnchorPanel anchorPanel = (AnchorPanel) container;
                 Control control = (Control) nchild;
-                AnchorPanel.AnchorSettings anchor = new AnchorPanel.AnchorSettings(
-                        20, true, 20, true,
-                        0, true, 0, false);
+                AnchorPanel.AnchorSettings anchor = parseAnchor(echild);
+                u.p("anchor = " + anchor);
                 anchorPanel.DEBUG = true;
                 anchorPanel.add(control, anchor);
             }else {
@@ -105,6 +116,54 @@ public class AminoJavaXMLExport extends JAction {
             }
         }
         return (Node) node;
+    }
+
+    private AnchorPanel.AnchorSettings parseAnchor(Elem echild) throws XPathExpressionException {
+
+        double left = 0;
+        boolean leftSet = false;
+        double right = 0;
+        boolean rightSet = false;
+        double top = 0;
+        boolean topSet = false;
+        double bottom = 0;
+        boolean bottomSet = false;
+
+        double translateX = 0;
+        double translateY = 0;
+        for(Elem eprop : echild.xpath("property")) {
+            if(eprop.attrEquals("name","translateX")) {
+                translateX = Double.parseDouble(eprop.attr("value"));
+            }
+            if(eprop.attrEquals("name","translateY")) {
+                translateY = Double.parseDouble(eprop.attr("value"));
+            }
+            if(eprop.attrEquals("name","anchorLeft")) {
+                leftSet = eprop.attrEquals("value","true");
+            }
+            if(eprop.attrEquals("name","anchorRight")) {
+                rightSet = eprop.attrEquals("value","true");
+            }
+            if(eprop.attrEquals("name","right")) {
+                right = Double.parseDouble(eprop.attr("value"));
+            }
+            if(eprop.attrEquals("name","anchorTop")) {
+                topSet = eprop.attrEquals("value","true");
+            }
+            if(eprop.attrEquals("name","anchorBottom")) {
+                bottomSet = eprop.attrEquals("value","true");
+            }
+            if(eprop.attrEquals("name","bottom")) {
+                bottom = Double.parseDouble(eprop.attr("value"));
+            }
+        }
+        if(leftSet) {
+            left = translateX;
+        }
+        if(topSet) {
+            top = translateY;
+        }
+        return new AnchorPanel.AnchorSettings(left, leftSet, right, rightSet, top, topSet, bottom, bottomSet);
     }
 
     private Method findSetter(Class clazz, String setter, Elem eprop) throws ClassNotFoundException, NoSuchMethodException {
@@ -125,11 +184,12 @@ public class AminoJavaXMLExport extends JAction {
     public static void exportToXML(PrintWriter printWriter, DynamicNode root) throws FileNotFoundException, UnsupportedEncodingException, URISyntaxException {
         XMLWriter xml = new XMLWriter(printWriter, new URI(""));
         xml.header();
-        exportNode(xml,root);
+        exportNode(xml,root, 200,200, false);
         xml.close();
     }
 
-    private static void exportNode(XMLWriter xml, DynamicNode node) {
+    private static void exportNode(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
+        u.p("exporting. parent size = " + width + " " + height);
         xml.start("node")
                 .attr("class", node.getProperty("class").encode())
                 .attr("visual", Boolean.toString(node.isVisual()))
@@ -149,11 +209,28 @@ public class AminoJavaXMLExport extends JAction {
                 .end()
             ;
         }
+
+        if(parentAnchor) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            double tx = node.getTranslateX();
+            double ty = node.getTranslateY();
+            xml.start("property","name","right")
+                    .attr("type","java.lang.Double")
+                    .attr("value",""+(width-tx - w))
+                .end()
+            ;
+            xml.start("property","name","bottom")
+                    .attr("type","java.lang.Double")
+                    .attr("value",""+(height-ty-h))
+                    .end();
+        }
+
         xml.start("children");
         if(node.getSize() > 0) {
             for(SketchNode nd : node.children()) {
                 DynamicNode nd2 = (DynamicNode) nd;
-                exportNode(xml,nd2);
+                exportNode(xml,nd2, node.getProperty("width").getDoubleValue(), node.getProperty("height").getDoubleValue(), true);
             }
         }
         xml.end();

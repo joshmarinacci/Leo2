@@ -25,20 +25,29 @@ public class AnchorPanel extends Panel {
             if(an == null) {
                 continue;
             }
+            if(an.leftSet && !an.rightSet) {
+                control.setTranslateX(an.left);
+                control.setWidth(control.getPrefWidth());
+            }
             if(an.leftSet && an.rightSet) {
                 control.setTranslateX(an.left);
                 control.setWidth(getWidth()-an.left-an.right);
             }
             if(!an.leftSet && an.rightSet) {
                 u.p("setting from the right edge");
+                control.setWidth(control.getPrefWidth());
                 control.setTranslateX(getWidth()-control.getPrefWidth());
             }
             if(an.topSet && an.bottomSet) {
                 control.setTranslateY(an.top);
                 control.setHeight(getHeight()-an.top-an.bottom);
             }
+            if(!an.topSet && an.bottomSet) {
+                control.setHeight(control.getPrefHeight());
+                control.setTranslateY(getHeight()-control.getHeight()-an.bottom);
+            }
             if(DEBUG) {
-                u.p("fonal control = " + control.getTranslateX() + " " + control.getTranslateY() + " " + control.getWidth() + " " + control.getHeight());
+                u.p("final control = (" + control.getTranslateX() + " , " + control.getTranslateY() + ") (" + control.getWidth() + " x " + control.getHeight()+")");
                 u.p("pref = " + control.getPrefWidth() + " " + control.getPrefHeight());
             }
         }
@@ -54,8 +63,8 @@ public class AnchorPanel extends Panel {
 
         private double left;
         private boolean leftSet;
-        private double right;
-        private boolean rightSet;
+        public double right;
+        public boolean rightSet;
         private double top;
         private boolean topSet;
         private double bottom;

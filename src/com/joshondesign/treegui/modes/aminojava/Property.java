@@ -57,6 +57,7 @@ public class Property {
     public Property duplicate() {
         Property p = new Property(this.name,this.type,this.value);
         p.exportName = this.exportName;
+        p.setVisible(this.isVisible());
         p.setExported(this.isExported());
         return p;
     }

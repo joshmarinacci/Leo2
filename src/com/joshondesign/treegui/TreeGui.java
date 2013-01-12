@@ -296,13 +296,17 @@ public class TreeGui implements Runnable {
         button.addProperty(new Property("translateY", Double.class, 0));
         button.addProperty(new Property("width", Double.class, 80)
                 .setExportName("prefWidth"));
-        button.addProperty(new Property("height", Double.class, 20)
+        button.addProperty(new Property("height", Double.class, 30)
                 .setExportName("prefHeight"));
         button.addProperty(new Property("text", CharSequence.class, "a button"));
         button.addProperty(new Property("selected", Boolean.class, false));
-        button.addProperty(new Property("resize", String.class, "any").setExported(false));
+        button.addProperty(new Property("resize", String.class, "any").setExported(false).setVisible(false));
         button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
                 .setExported(false).setVisible(false));
+        button.addProperty(new Property("anchorLeft", Boolean.class, true));
+        button.addProperty(new Property("anchorRight", Boolean.class, false));
+        button.addProperty(new Property("anchorTop", Boolean.class, true));
+        button.addProperty(new Property("anchorBottom", Boolean.class, false));
         button.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
@@ -331,6 +335,10 @@ public class TreeGui implements Runnable {
         label.addProperty(new Property("height", Double.class, 20));
         label.addProperty(new Property("resize", String.class, "width").setExported(false));
         label.addProperty(new Property("text", String.class, "a label"));
+        label.addProperty(new Property("anchorLeft", Boolean.class, true));
+        label.addProperty(new Property("anchorRight", Boolean.class, false));
+        label.addProperty(new Property("anchorTop", Boolean.class, true));
+        label.addProperty(new Property("anchorBottom", Boolean.class, false));
         label.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 String t = node.getProperty("text").getStringValue();

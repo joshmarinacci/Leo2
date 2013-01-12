@@ -30,7 +30,7 @@ public class PropsView extends GridBox {
         super.reset();
         setPadding(1);
         setPrefWidth(270);
-        createColumn(50, Align.Right);
+        createColumn(60, Align.Right);
         createColumn(200, Align.Fill);
         debug(false);
     }
