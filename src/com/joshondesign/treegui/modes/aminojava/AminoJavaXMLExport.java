@@ -81,7 +81,7 @@ public class AminoJavaXMLExport extends JAction {
 
         for(Elem eprop : xml.xpath("property")) {
             if(skipList.contains(eprop.attr("name"))) continue;
-            if(eprop.attrEquals("name","class")) continue;
+            if(eprop.attrEquals("name", "class")) continue;
             String setter = "set" + eprop.attr("name").substring(0,1).toUpperCase()
                     + eprop.attr("name").substring(1);
 
@@ -98,6 +98,11 @@ public class AminoJavaXMLExport extends JAction {
             if(eprop.attrEquals("type","java.lang.Double")) {
                 Method method = findSetter(clazz, setter, eprop);
                 method.invoke(node, Double.parseDouble(value));
+            }
+            if(eprop.attrEquals("enum","true")) {
+                Class clazz2 = clazz.forName(eprop.attr("type"));
+                Method method = clazz.getMethod(setter, clazz2);
+                method.invoke(node, Enum.valueOf(clazz2, eprop.attr("value")));
             }
 
         }
@@ -139,7 +144,7 @@ public class AminoJavaXMLExport extends JAction {
                 translateY = Double.parseDouble(eprop.attr("value"));
             }
             if(eprop.attrEquals("name","anchorLeft")) {
-                leftSet = eprop.attrEquals("value","true");
+                leftSet = eprop.attrEquals("value", "true");
             }
             if(eprop.attrEquals("name","anchorRight")) {
                 rightSet = eprop.attrEquals("value","true");
@@ -148,7 +153,7 @@ public class AminoJavaXMLExport extends JAction {
                 right = Double.parseDouble(eprop.attr("value"));
             }
             if(eprop.attrEquals("name","anchorTop")) {
-                topSet = eprop.attrEquals("value","true");
+                topSet = eprop.attrEquals("value", "true");
             }
             if(eprop.attrEquals("name","anchorBottom")) {
                 bottomSet = eprop.attrEquals("value","true");
@@ -204,8 +209,12 @@ public class AminoJavaXMLExport extends JAction {
             }else {
                 xml.attr("name", prop.getName());
             }
+            if(prop.getType().isEnum()) {
+                u.p("name = " + prop.getType().getName());
+                xml.attr("enum", "true");
+            }
             xml.attr("value", prop.encode())
-                .attr("type", prop.getType().getCanonicalName())
+                .attr("type", prop.getType().getName())
                 .end()
             ;
         }

@@ -9,6 +9,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.GridBox;
+import org.joshy.gfx.util.ArrayListModel;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,8 +31,8 @@ public class PropsView extends GridBox {
         super.reset();
         setPadding(1);
         setPrefWidth(270);
-        createColumn(60, Align.Right);
-        createColumn(200, Align.Fill);
+        createColumn(70, Align.Right);
+        createColumn(190, Align.Fill);
         debug(false);
     }
 
@@ -125,7 +126,6 @@ public class PropsView extends GridBox {
                     }
                 });
                 addControl(tb);
-
             }
 
             if(prop.getType().isAssignableFrom(Boolean.class)) {
@@ -145,6 +145,23 @@ public class PropsView extends GridBox {
                 });
                 cb.setSelected(prop.getBooleanValue());
                 addControl(cb);
+            }
+
+            if(prop.getType().isEnum()) {
+                Object[] vals = prop.getType().getEnumConstants();
+                PopupMenuButton<Object> popup = new PopupMenuButton<Object>();
+                final ArrayListModel<Object> list = new ArrayListModel<Object>();
+                list.addAll(Arrays.asList(vals));
+                popup.setModel(list);
+                addControl(popup);
+
+                EventBus.getSystem().addListener(popup,SelectionEvent.Changed, new Callback<SelectionEvent>() {
+                    public void call(SelectionEvent selectionEvent) throws Exception {
+                        int index = selectionEvent.getView().getSelectedIndex();
+                        prop.setEnumValue(list.get(index));
+                    }
+                });
+
             }
             nextRow();
         }
@@ -245,8 +262,8 @@ public class PropsView extends GridBox {
         });
         cb.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
-                if(prop.setter != null) {
-                    prop.setter.invoke(object,cb.isSelected());
+                if (prop.setter != null) {
+                    prop.setter.invoke(object, cb.isSelected());
                 }
             }
         });

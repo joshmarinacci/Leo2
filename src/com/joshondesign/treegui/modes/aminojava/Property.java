@@ -47,6 +47,10 @@ public class Property {
         if(type == CharSequence.class) {
             return ((CharSequence)value).toString();
         }
+        if(type.isEnum()) {
+            Object[] vals = type.getEnumConstants();
+            return value.toString();
+        }
         return null;
     }
 
@@ -125,4 +129,7 @@ public class Property {
         return visible;
     }
 
+    public void setEnumValue(Object o) {
+        this.value = o;
+    }
 }

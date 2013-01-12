@@ -37,10 +37,13 @@ public class DynamicResizeHandle extends Handle {
     @Override
     public void drag(MouseEvent mouseEvent, Point2D pt) {
         double w = pt.getX() - node.getTranslateX();
+        w = Math.floor(w/10)*10;
         node.getProperty("width").setDoubleValue(w);
         String resize = node.getProperty("resize").getStringValue();
         if(resize.equals("any")) {
-            node.getProperty("height").setDoubleValue(pt.getY()-node.getTranslateY());
+            double h = pt.getY()-node.getTranslateY();
+            h = Math.floor(h/10)*10;
+            node.getProperty("height").setDoubleValue(h);
         }
     }
 

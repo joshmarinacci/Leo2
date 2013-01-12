@@ -353,7 +353,7 @@ public class TreeGui implements Runnable {
         panel.setResizable(true);
         panel.addProperty(new Property("class", String.class, "com.joshondesign.treegui.AnchorPanel"))
             .addProperty(new Property("resize", String.class, "any")
-                    .setExported(false))
+                    .setExported(false).setVisible(false))
             .addProperty(new Property("id", String.class, "arandomid"))
             .addProperty(new Property("translateX", Double.class, 0))
             .addProperty(new Property("translateY", Double.class, 0))
@@ -388,7 +388,7 @@ public class TreeGui implements Runnable {
                 .addProperty(new Property("height", Double.class, 100)
                         .setExportName("prefHeight"))
                 .addProperty(new Property("resize", String.class, "any")
-                        .setExported(false))
+                        .setExported(false).setVisible(false))
                 .addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
                     .setExported(false)
                     .setVisible(false))
@@ -396,6 +396,9 @@ public class TreeGui implements Runnable {
                 .addProperty(new Property("anchorRight", Boolean.class, false))
                 .addProperty(new Property("anchorTop", Boolean.class, true))
                 .addProperty(new Property("anchorBottom", Boolean.class, false))
+                .addProperty(new Property("rowHeight", Double.class, 20))
+                .addProperty(new Property("columnWidth", Double.class, 100))
+                .addProperty(new Property("orientation", ListView.Orientation.class, ListView.Orientation.Vertical))
                 ;
 
         listview.setDrawDelegate(new DynamicNode.DrawDelegate() {
