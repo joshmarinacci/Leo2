@@ -1,5 +1,7 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import org.joshy.gfx.draw.FlatColor;
+
 /**
  * Created with IntelliJ IDEA.
  * User: josh
@@ -46,6 +48,9 @@ public class Property {
         }
         if(type == CharSequence.class) {
             return ((CharSequence)value).toString();
+        }
+        if(type == FlatColor.class) {
+            return Integer.toHexString(((FlatColor)value).getRGBA());
         }
         if(type.isEnum()) {
             Object[] vals = type.getEnumConstants();
@@ -95,6 +100,10 @@ public class Property {
         return false;
     }
 
+    public FlatColor getColorValue() {
+        return (FlatColor) value;
+    }
+
     public void setDoubleValue(double w) {
         this.value = new Double(w);
     }
@@ -131,5 +140,9 @@ public class Property {
 
     public void setEnumValue(Object o) {
         this.value = o;
+    }
+
+    public void setColorValue(FlatColor value) {
+        this.value = value;
     }
 }

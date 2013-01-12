@@ -359,6 +359,7 @@ public class TreeGui implements Runnable {
             .addProperty(new Property("translateY", Double.class, 0))
             .addProperty(new Property("width", Double.class, 50))
             .addProperty(new Property("height", Double.class, 50))
+            .addProperty(new Property("fill",FlatColor.class, FlatColor.PURPLE))
         ;
         panel.setContainer(true);
         panel.setDrawDelegate(new DynamicNode.DrawDelegate() {

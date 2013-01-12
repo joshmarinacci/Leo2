@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPathExpressionException;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
@@ -63,6 +64,8 @@ public class AminoJavaXMLExport extends JAction {
         Node node = parse(xml.root());
         Stage stage = Stage.createStage();
         stage.setContent(node);
+        node.setTranslateX(0);
+        node.setTranslateY(0);
         stage.setWidth(600);
         stage.setHeight(400);
     }
@@ -98,6 +101,10 @@ public class AminoJavaXMLExport extends JAction {
             if(eprop.attrEquals("type","java.lang.Double")) {
                 Method method = findSetter(clazz, setter, eprop);
                 method.invoke(node, Double.parseDouble(value));
+            }
+            if(eprop.attrEquals("type","org.joshy.gfx.draw.FlatColor")) {
+                Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
+                method.invoke(node, new FlatColor(eprop.attr("value")));
             }
             if(eprop.attrEquals("enum","true")) {
                 Class clazz2 = clazz.forName(eprop.attr("type"));

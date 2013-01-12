@@ -163,6 +163,19 @@ public class PropsView extends GridBox {
                 });
 
             }
+
+            if(prop.getType() == FlatColor.class) {
+                final SwatchColorPicker cp = new SwatchColorPicker();
+                cp.onColorSelected(new Callback<ChangedEvent>() {
+                    public void call(ChangedEvent changedEvent) throws Exception {
+                        prop.setColorValue((FlatColor)changedEvent.getValue());
+                    }
+                });
+                cp.setSelectedColor(prop.getColorValue());
+                addControl(cp);
+                this.nextRow();
+
+            }
             nextRow();
         }
     }
