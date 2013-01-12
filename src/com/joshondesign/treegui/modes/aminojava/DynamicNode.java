@@ -22,6 +22,7 @@ public class DynamicNode extends SketchNode {
     private Map<String, Property> properies = new HashMap<String, Property>();
     private DrawDelegate drawDelegate;
     private boolean container = false;
+    private boolean custom;
 
     public DynamicNode() {
     }
@@ -44,6 +45,14 @@ public class DynamicNode extends SketchNode {
         }
     }
 
+    public void setCustom(boolean custom) {
+        this.custom = custom;
+    }
+
+    public boolean isCustom() {
+        return custom;
+    }
+
     public static interface DrawDelegate {
         public void draw(GFX g, DynamicNode node);
     }
@@ -57,6 +66,7 @@ public class DynamicNode extends SketchNode {
             nd.visual = this.visual;
             nd.resizable = this.resizable;
             nd.drawDelegate = this.drawDelegate;
+            nd.custom = this.custom;
             nd.setContainer(this.isContainer());
             for(Property p : this.getProperties()) {
                 nd.addProperty(p.duplicate());

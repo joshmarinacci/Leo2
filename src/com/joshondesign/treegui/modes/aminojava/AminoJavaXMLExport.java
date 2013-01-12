@@ -4,6 +4,7 @@ import com.joshondesign.treegui.AnchorPanel;
 import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Page;
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
@@ -77,7 +78,12 @@ public class AminoJavaXMLExport extends JAction {
     }
 
     private Node parse(Elem xml) throws ClassNotFoundException, IllegalAccessException, InstantiationException, XPathExpressionException, NoSuchMethodException, InvocationTargetException {
-        Class clazz = getClass().forName(xml.attr("class"));
+        Class clazz = null;
+        if(xml.attrEquals("custom","true")) {
+            clazz = getClass().forName(xml.attr("customClass"));
+        } else {
+            clazz = getClass().forName(xml.attr("class"));
+        }
         Node node = (Node) clazz.newInstance();
 
         List<String> skipList = new ArrayList<String>();
@@ -94,8 +100,10 @@ public class AminoJavaXMLExport extends JAction {
             String setter = "set" + eprop.attr("name").substring(0,1).toUpperCase()
                     + eprop.attr("name").substring(1);
 
+
             String value = eprop.attr("value");
             u.p(" setting " + eprop.attr("name") + " with " + setter + " to " + value);
+            try {
             if(eprop.attrEquals("type","java.lang.String")) {
                 Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
                 method.invoke(node, eprop.attr("value"));
@@ -117,11 +125,13 @@ public class AminoJavaXMLExport extends JAction {
                 Method method = clazz.getMethod(setter, clazz2);
                 method.invoke(node, Enum.valueOf(clazz2, eprop.attr("value")));
             }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
         }
         for(Elem echild : xml.xpath("children/node")) {
             Node nchild = parse(echild);
-
             if(node instanceof  Container) {
                 Container container = (Container) node;
                 if(container instanceof AnchorPanel && nchild instanceof Control) {
@@ -202,7 +212,7 @@ public class AminoJavaXMLExport extends JAction {
 
     @Override
     public String getShortName() {
-        return "Export XML";
+        return "Run";
     }
 
     public static void exportToXML(PrintWriter printWriter, DynamicNode root) throws FileNotFoundException, UnsupportedEncodingException, URISyntaxException {
@@ -219,9 +229,14 @@ public class AminoJavaXMLExport extends JAction {
                 .attr("visual", Boolean.toString(node.isVisual()))
                 .attr("resizable", Boolean.toString(node.isResizable()))
                 .attr("container", Boolean.toString(node.isContainer()))
+                .attr("custom", Boolean.toString(node.isCustom()))
         ;
+        if(node.isCustom()) {
+            xml.attr("customClass",node.getProperty("customClass").getStringValue());
+        }
         for (Property prop : node.getSortedProperties()) {
             if (!prop.isExported()) continue;
+            if(prop.getName().equals("customClass")) continue;
             xml.start("property");
             if(prop.getExportName() != null) {
                 xml.attr("name", prop.getExportName());
@@ -265,4 +280,23 @@ public class AminoJavaXMLExport extends JAction {
         xml.end();
     }
 
+    public static class Save extends JAction {
+
+        private final SketchDocument page;
+        private final Canvas canvas;
+
+        public Save(Canvas canvas, SketchDocument page) {
+            this.page = page;
+            this.canvas = canvas;
+        }
+
+        @Override
+        public void execute() {
+        }
+
+        @Override
+        public String getShortName() {
+            return "Save";
+        }
+    }
 }

@@ -8,10 +8,7 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
 import com.joshondesign.treegui.modes.amino.*;
-import com.joshondesign.treegui.modes.aminojava.AminoJavaXMLExport;
-import com.joshondesign.treegui.modes.aminojava.DynamicNode;
-import com.joshondesign.treegui.modes.aminojava.GuiTest;
-import com.joshondesign.treegui.modes.aminojava.Property;
+import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -91,8 +88,11 @@ public class TreeGui implements Runnable {
             HTMLBindingExport exp = new HTMLBindingExport();
             exp.canvas = canvas;
             exp.page = doc.get(0);
-            actions.add(exp);
+            //actions.add(exp);
             actions.add(new AminoJavaXMLExport(canvas,doc.get(0)));
+            actions.add(new AminoJavaXMLImport(canvas));
+            actions.add(new AminoJavaXMLExport.Save(canvas, doc));
+
             ToolbarListView toolbar = (ToolbarListView) find("toolbar", rootControl);
             toolbar.setModel(actions);
 
@@ -390,6 +390,7 @@ public class TreeGui implements Runnable {
                     .setVisible(false))
                 .addProperty(new Property("rowHeight", Double.class, 20))
                 .addProperty(new Property("columnWidth", Double.class, 100))
+                .addProperty(new Property("renderer", String.class, "none"))
                 .addProperty(new Property("orientation",
                         ListView.Orientation.class, ListView.Orientation.Vertical))
                 ;
@@ -434,8 +435,6 @@ public class TreeGui implements Runnable {
                 )
                 )
         ;
-
-        ;
         scroll.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
@@ -452,6 +451,38 @@ public class TreeGui implements Runnable {
         scroll.getProperty("height").setDoubleValue(90);
 
         symbols.add(scroll);
+
+
+        DynamicNode custom = new DynamicNode();
+        custom.setName("Custom View");
+        custom.copyPropertiesFrom(base);
+        custom.setVisual(true);
+        custom.setResizable(true);
+        custom.setContainer(false);
+        custom
+                .addProperty(new Property("class", String.class,
+                        "org.joshy.gfx.node.control.ScrollPane"))
+                .addProperty(new Property("id", String.class, "foo2"))
+                .addProperty(new Property("customClass",String.class, "none"))
+                .addProperty(new Property("resize", String.class, "any")
+                        .setExported(false).setVisible(false))
+                ;
+        custom.setCustom(true);
+        custom.setDrawDelegate(new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRect(0, 0, w, h);
+                g.drawLine(0,0, w, h);
+                g.drawLine(0, h, w, 0);
+            }
+        });
+        custom.getProperty("width").setDoubleValue(90);
+        custom.getProperty("height").setDoubleValue(90);
+        symbols.add(custom);
         return aminojava;
     }
 
