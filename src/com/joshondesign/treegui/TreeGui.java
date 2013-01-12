@@ -111,7 +111,11 @@ public class TreeGui implements Runnable {
 
                     gfx.fillRect(0, h-20, w, 20);
                     gfx.setPaint(FlatColor.BLACK);
-                    gfx.drawText(node.getId(), Font.DEFAULT,5,h-4);
+                    if(node instanceof DynamicNode) {
+                        gfx.drawText(((DynamicNode) node).getName(), Font.DEFAULT, 5, h-4);
+                    } else {
+                        gfx.drawText(node.getId(), Font.DEFAULT,5,h-4);
+                    }
                     gfx.translate(-x,-y);
                     if(listView.getSelectedIndex() == index) {
                         gfx.setPaint(new FlatColor(1.0,0,0,0.3));
@@ -280,19 +284,27 @@ public class TreeGui implements Runnable {
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
         aminojava.add(symbols);
 
+        DynamicNode base = new DynamicNode();
+        base.addProperty(new Property("translateX", Double.class, 0));
+        base.addProperty(new Property("translateY", Double.class, 0));
+        base.addProperty(new Property("width", Double.class, 80)
+                .setExportName("prefWidth"));
+        base.addProperty(new Property("height", Double.class, 30)
+                .setExportName("prefHeight"));
+        base.addProperty(new Property("anchorLeft", Boolean.class, true));
+        base.addProperty(new Property("anchorRight", Boolean.class, false));
+        base.addProperty(new Property("anchorTop", Boolean.class, true));
+        base.addProperty(new Property("anchorBottom", Boolean.class, false));
+
+
         DynamicNode button = new DynamicNode();
         button.setName("Button");
         button.setResizable(true);
         button.setVisual(true);
 
+        button.copyPropertiesFrom(base);
         button.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
         button.addProperty(new Property("id", String.class, "arandomid"));
-        button.addProperty(new Property("translateX", Double.class, 0));
-        button.addProperty(new Property("translateY", Double.class, 0));
-        button.addProperty(new Property("width", Double.class, 80)
-                .setExportName("prefWidth"));
-        button.addProperty(new Property("height", Double.class, 30)
-                .setExportName("prefHeight"));
         button.addProperty(new Property("text", CharSequence.class, "a button"));
         button.addProperty(new Property("selected", Boolean.class, false));
         button.addProperty(new Property("resize", String.class, "any")
@@ -301,16 +313,11 @@ public class TreeGui implements Runnable {
         button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
                 .setExported(false)
                 .setVisible(false));
-        button.addProperty(new Property("anchorLeft", Boolean.class, true));
-        button.addProperty(new Property("anchorRight", Boolean.class, false));
-        button.addProperty(new Property("anchorTop", Boolean.class, true));
-        button.addProperty(new Property("anchorBottom", Boolean.class, false));
         button.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
                 String t = node.getProperty("text").getStringValue();
-
                 g.setPaint(FlatColor.GRAY);
                 g.fillRect(0, 0, w, h);
                 g.setPaint(FlatColor.BLACK);
@@ -321,22 +328,17 @@ public class TreeGui implements Runnable {
         });
         symbols.add(button);
 
+
         DynamicNode label = new DynamicNode();
+        label.copyPropertiesFrom(base);
         label.setName("Label");
         label.setResizable(true);
         label.setVisual(true);
         label.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"));
         label.addProperty(new Property("id", String.class, "arandomid").setExported(true));
-        label.addProperty(new Property("translateX", Double.class, 0));
-        label.addProperty(new Property("translateY", Double.class, 0));
-        label.addProperty(new Property("width", Double.class, 60));
-        label.addProperty(new Property("height", Double.class, 20));
+        label.copyPropertiesFrom(button);
         label.addProperty(new Property("resize", String.class, "width").setExported(false));
         label.addProperty(new Property("text", String.class, "a label"));
-        label.addProperty(new Property("anchorLeft", Boolean.class, true));
-        label.addProperty(new Property("anchorRight", Boolean.class, false));
-        label.addProperty(new Property("anchorTop", Boolean.class, true));
-        label.addProperty(new Property("anchorBottom", Boolean.class, false));
         label.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 String t = node.getProperty("text").getStringValue();
@@ -348,6 +350,7 @@ public class TreeGui implements Runnable {
         symbols.add(label);
 
         DynamicNode panel = new DynamicNode();
+        panel.copyPropertiesFrom(base);
         panel.setName("Panel");
         panel.setVisual(true);
         panel.setResizable(true);
@@ -355,15 +358,7 @@ public class TreeGui implements Runnable {
             .addProperty(new Property("resize", String.class, "any")
                     .setExported(false).setVisible(false))
             .addProperty(new Property("id", String.class, "arandomid"))
-            .addProperty(new Property("translateX", Double.class, 0))
-            .addProperty(new Property("translateY", Double.class, 0))
-            .addProperty(new Property("width", Double.class, 50))
-            .addProperty(new Property("height", Double.class, 50))
             .addProperty(new Property("fill",FlatColor.class, FlatColor.PURPLE))
-            .addProperty(new Property("anchorLeft", Boolean.class, true))
-            .addProperty(new Property("anchorRight", Boolean.class, false))
-            .addProperty(new Property("anchorTop", Boolean.class, true))
-            .addProperty(new Property("anchorBottom", Boolean.class, false))
         ;
         panel.setContainer(true);
         panel.setDrawDelegate(new DynamicNode.DrawDelegate() {
@@ -381,31 +376,22 @@ public class TreeGui implements Runnable {
 
 
         DynamicNode listview = new DynamicNode();
+        listview.copyPropertiesFrom(base);
         listview.setName("ListView");
         listview.setVisual(true);
         listview.setResizable(true);
         listview.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ListView"))
                 .addProperty(new Property("id", String.class, "foo"))
-                .addProperty(new Property("translateX", Double.class, 0))
-                .addProperty(new Property("translateY", Double.class, 0))
-                .addProperty(new Property("width", Double.class, 70)
-                        .setExportName("prefWidth"))
-                .addProperty(new Property("height", Double.class, 100)
-                        .setExportName("prefHeight"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
                 .addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
                     .setExported(false)
                     .setVisible(false))
-                .addProperty(new Property("anchorLeft", Boolean.class, true))
-                .addProperty(new Property("anchorRight", Boolean.class, false))
-                .addProperty(new Property("anchorTop", Boolean.class, true))
-                .addProperty(new Property("anchorBottom", Boolean.class, false))
                 .addProperty(new Property("rowHeight", Double.class, 20))
                 .addProperty(new Property("columnWidth", Double.class, 100))
-                .addProperty(new Property("orientation", ListView.Orientation.class, ListView.Orientation.Vertical))
+                .addProperty(new Property("orientation",
+                        ListView.Orientation.class, ListView.Orientation.Vertical))
                 ;
-
         listview.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
@@ -415,12 +401,43 @@ public class TreeGui implements Runnable {
                 g.setPaint(FlatColor.BLACK);
                 g.drawRect(0, 0, w, h);
                 //lines
-                for(int i=0; i<5; i++) {
-                    g.drawRect(0,i*15,w,15);
+                for (int i = 0; i < 5; i++) {
+                    g.drawRect(0, i * 15, w, 15);
                 }
             }
         });
+        listview.getProperty("width").setDoubleValue(60);
+        listview.getProperty("height").setDoubleValue(90);
         symbols.add(listview);
+
+
+        DynamicNode scroll = new DynamicNode();
+        scroll.copyPropertiesFrom(base);
+        scroll.setName("ScrollPane");
+        scroll.setVisual(true);
+        scroll.setResizable(true);
+        scroll.setContainer(true);
+        scroll.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ScrollPane"))
+            .addProperty(new Property("id", String.class, "foo2"))
+            .addProperty(new Property("resize", String.class, "any")
+                    .setExported(false).setVisible(false))
+        ;
+        scroll.setDrawDelegate(new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRect(0, 0, w, h);
+                g.drawRect(0, h-10, w, 10);
+                g.drawRect(w-10,0,10,h);
+            }
+        });
+        scroll.getProperty("width").setDoubleValue(60);
+        scroll.getProperty("height").setDoubleValue(90);
+
+        symbols.add(scroll);
         return aminojava;
     }
 

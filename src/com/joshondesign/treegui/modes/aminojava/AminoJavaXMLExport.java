@@ -20,6 +20,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
@@ -120,16 +121,22 @@ public class AminoJavaXMLExport extends JAction {
         }
         for(Elem echild : xml.xpath("children/node")) {
             Node nchild = parse(echild);
-            Container container = (Container) node;
-            if(container instanceof AnchorPanel && nchild instanceof Control) {
-                AnchorPanel anchorPanel = (AnchorPanel) container;
-                Control control = (Control) nchild;
-                AnchorPanel.AnchorSettings anchor = parseAnchor(echild);
-                u.p("anchor = " + anchor);
-                anchorPanel.DEBUG = true;
-                anchorPanel.add(control, anchor);
-            }else {
-                container.add(nchild);
+
+            if(node instanceof  Container) {
+                Container container = (Container) node;
+                if(container instanceof AnchorPanel && nchild instanceof Control) {
+                    AnchorPanel anchorPanel = (AnchorPanel) container;
+                    Control control = (Control) nchild;
+                    AnchorPanel.AnchorSettings anchor = parseAnchor(echild);
+                    anchorPanel.DEBUG = true;
+                    anchorPanel.add(control, anchor);
+                }else {
+                    container.add(nchild);
+                }
+            }
+            if(node instanceof ScrollPane) {
+                ScrollPane sp = (ScrollPane) node;
+                sp.setContent(nchild);
             }
         }
         return (Node) node;

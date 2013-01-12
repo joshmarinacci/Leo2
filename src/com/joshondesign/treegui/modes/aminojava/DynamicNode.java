@@ -38,6 +38,12 @@ public class DynamicNode extends SketchNode {
         this.container = container;
     }
 
+    public void copyPropertiesFrom(DynamicNode parent) {
+        for(Property prop : parent.getProperties()) {
+            addProperty(prop.duplicate());
+        }
+    }
+
     public static interface DrawDelegate {
         public void draw(GFX g, DynamicNode node);
     }
