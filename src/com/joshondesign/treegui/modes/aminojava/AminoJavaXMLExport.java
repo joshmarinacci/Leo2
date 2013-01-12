@@ -34,6 +34,7 @@ import org.joshy.gfx.util.u;
 public class AminoJavaXMLExport extends JAction {
     private final Canvas canvas;
     private final Page page;
+    private Stage demoStage;
 
     public AminoJavaXMLExport(Canvas canvas, Page page) {
         super();
@@ -62,12 +63,16 @@ public class AminoJavaXMLExport extends JAction {
     private void loadAndRun(File file) throws Exception {
         Doc xml = XMLParser.parse(file);
         Node node = parse(xml.root());
-        Stage stage = Stage.createStage();
-        stage.setContent(node);
+        if(demoStage == null) {
+            demoStage = Stage.createStage();
+            demoStage.setWidth(600);
+            demoStage.setHeight(400);
+            demoStage.setAlwaysOnTop(true);
+        }
         node.setTranslateX(0);
         node.setTranslateY(0);
-        stage.setWidth(600);
-        stage.setHeight(400);
+        demoStage.setContent(node);
+        demoStage.raiseToTop();
     }
 
     private Node parse(Elem xml) throws ClassNotFoundException, IllegalAccessException, InstantiationException, XPathExpressionException, NoSuchMethodException, InvocationTargetException {
