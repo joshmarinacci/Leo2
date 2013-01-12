@@ -360,6 +360,10 @@ public class TreeGui implements Runnable {
             .addProperty(new Property("width", Double.class, 50))
             .addProperty(new Property("height", Double.class, 50))
             .addProperty(new Property("fill",FlatColor.class, FlatColor.PURPLE))
+            .addProperty(new Property("anchorLeft", Boolean.class, true))
+            .addProperty(new Property("anchorRight", Boolean.class, false))
+            .addProperty(new Property("anchorTop", Boolean.class, true))
+            .addProperty(new Property("anchorBottom", Boolean.class, false))
         ;
         panel.setContainer(true);
         panel.setDrawDelegate(new DynamicNode.DrawDelegate() {
