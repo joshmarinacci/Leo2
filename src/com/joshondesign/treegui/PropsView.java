@@ -1,5 +1,7 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminojava.Property;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -7,7 +9,6 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.GridBox;
-import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,6 +38,12 @@ public class PropsView extends GridBox {
     public void setSelection(final Object object) {
         reset();
         if(object == null) return;
+
+        if(object instanceof DynamicNode) {
+            setSelectionDynamicNode((DynamicNode)object);
+            return;
+        }
+
         List<Prop> props = findGetters(object);
         Collections.sort(props, new Comparator<Prop>() {
             public int compare(Prop a, Prop b) {
@@ -67,6 +74,79 @@ public class PropsView extends GridBox {
             if(prop.getter.getReturnType() == List.class) {
                 addListProperty(prop, object);
             }
+        }
+    }
+
+    private void setSelectionDynamicNode(DynamicNode node) {
+        for(final Property prop : node.getSortedProperties()) {
+            if(!prop.isVisible()) continue;
+            addControl(new Label(prop.getName()));
+            if(prop.getType().isAssignableFrom(String.class)) {
+                final Textbox tb = new Textbox();
+                tb.setText("" + prop.getStringValue());
+                tb.setPrefWidth(100);
+                EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        prop.setStringValue(tb.getText());
+                        //prop.setValue(tb.getText());
+                        if (updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                tb.onAction(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        prop.setStringValue(tb.getText());
+                        if (updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                addControl(tb);
+            }
+            if(prop.getType().isAssignableFrom(Double.class)) {
+                final Textbox tb = new Textbox();
+                tb.setText(""+prop.getDoubleValue());
+                tb.setPrefWidth(100);
+                EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        prop.setDoubleValue(tb.getText());
+                        if (updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                tb.onAction(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        prop.setDoubleValue(tb.getText());
+                        if (updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                addControl(tb);
+
+            }
+
+            if(prop.getType().isAssignableFrom(Boolean.class)) {
+                final Checkbox cb = new Checkbox(prop.getName());
+                EventBus.getSystem().addListener(cb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        prop.setBooleanValue(cb.isSelected());
+                        if(updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                cb.onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        prop.setBooleanValue(cb.isSelected());
+                    }
+                });
+                cb.setSelected(prop.getBooleanValue());
+                addControl(cb);
+            }
+            nextRow();
         }
     }
 

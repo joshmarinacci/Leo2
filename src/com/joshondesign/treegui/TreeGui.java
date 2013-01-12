@@ -291,15 +291,18 @@ public class TreeGui implements Runnable {
         button.setVisual(true);
 
         button.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
-        button.addProperty(new Property("id", String.class, "arandomid").setExported(true));
+        button.addProperty(new Property("id", String.class, "arandomid"));
         button.addProperty(new Property("translateX", Double.class, 0));
         button.addProperty(new Property("translateY", Double.class, 0));
-        button.addProperty(new Property("width", Double.class, 80).setExportName("prefWidth"));
-        button.addProperty(new Property("height", Double.class, 20).setExportName("prefHeight"));
+        button.addProperty(new Property("width", Double.class, 80)
+                .setExportName("prefWidth"));
+        button.addProperty(new Property("height", Double.class, 20)
+                .setExportName("prefHeight"));
         button.addProperty(new Property("text", CharSequence.class, "a button"));
         button.addProperty(new Property("selected", Boolean.class, false));
         button.addProperty(new Property("resize", String.class, "any").setExported(false));
-        button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0).setExported(false));
+        button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
+                .setExported(false).setVisible(false));
         button.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();

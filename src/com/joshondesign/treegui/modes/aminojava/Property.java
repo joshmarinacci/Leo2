@@ -14,6 +14,7 @@ public class Property {
     private Object value;
     private boolean exported = true;
     private String exportName;
+    private boolean visible = true;
 
     public Property(String name, Class type, Object value) {
         this.name = name;
@@ -82,6 +83,13 @@ public class Property {
         return "ERROR";
     }
 
+    public boolean getBooleanValue() {
+        if(type == Boolean.class) {
+            return ((Boolean)value);
+        }
+        return false;
+    }
+
     public void setDoubleValue(double w) {
         this.value = new Double(w);
     }
@@ -94,4 +102,26 @@ public class Property {
     public String getExportName() {
         return exportName;
     }
+
+    public void setStringValue(String text) {
+        this.value = text;
+    }
+
+    public void setDoubleValue(String text) {
+        this.value = Double.parseDouble(text);
+    }
+
+    public void setBooleanValue(boolean selected) {
+        this.value = new Boolean(selected);
+    }
+
+    public Property setVisible(boolean visible) {
+        this.visible = visible;
+        return this;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
 }

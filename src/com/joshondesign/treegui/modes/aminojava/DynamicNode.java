@@ -99,6 +99,16 @@ public class DynamicNode extends SketchNode {
     }
 
     @Override
+    public double getTranslateX() {
+        return this.getProperty("translateX").getDoubleValue();
+    }
+
+    @Override
+    public double getTranslateY() {
+        return this.getProperty("translateY").getDoubleValue();
+    }
+
+    @Override
     public boolean contains(Point2D pt) {
         return getInputBounds().contains(MathUtils.transform(pt,-getTranslateX(),-getTranslateY()));
     }
