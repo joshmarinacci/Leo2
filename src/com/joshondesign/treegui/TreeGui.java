@@ -27,6 +27,7 @@ import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 
@@ -417,10 +418,23 @@ public class TreeGui implements Runnable {
         scroll.setVisual(true);
         scroll.setResizable(true);
         scroll.setContainer(true);
-        scroll.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ScrollPane"))
-            .addProperty(new Property("id", String.class, "foo2"))
-            .addProperty(new Property("resize", String.class, "any")
-                    .setExported(false).setVisible(false))
+        scroll.addProperty(new Property("class", String.class,
+                "org.joshy.gfx.node.control.ScrollPane"))
+                .addProperty(new Property("id", String.class, "foo2"))
+                .addProperty(new Property("resize", String.class, "any")
+                        .setExported(false).setVisible(false))
+                .addProperty(new Property("horizontalVisiblePolicy",
+                        ScrollPane.VisiblePolicy.class,
+                        ScrollPane.VisiblePolicy.WhenNeeded
+                )
+                )
+                .addProperty(new Property("verticalVisiblePolicy",
+                        ScrollPane.VisiblePolicy.class,
+                        ScrollPane.VisiblePolicy.WhenNeeded
+                )
+                )
+        ;
+
         ;
         scroll.setDrawDelegate(new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
@@ -430,8 +444,8 @@ public class TreeGui implements Runnable {
                 g.fillRect(0, 0, w, h);
                 g.setPaint(FlatColor.BLACK);
                 g.drawRect(0, 0, w, h);
-                g.drawRect(0, h-10, w, 10);
-                g.drawRect(w-10,0,10,h);
+                g.drawRect(0, h - 10, w, 10);
+                g.drawRect(w - 10, 0, 10, h);
             }
         });
         scroll.getProperty("width").setDoubleValue(60);

@@ -11,13 +11,6 @@ import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.util.ArrayListModel;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 12/30/12
- * Time: 9:07 PM
- * To change this template use File | Settings | File Templates.
- */
 public class PropsView extends GridBox {
     private PropFilter filter;
     private Callback<Void> updateCallback;
@@ -153,6 +146,8 @@ public class PropsView extends GridBox {
                 final ArrayListModel<Object> list = new ArrayListModel<Object>();
                 list.addAll(Arrays.asList(vals));
                 popup.setModel(list);
+                Enum en = prop.getEnumValue();
+                popup.setSelectedIndex(en.ordinal());
                 addControl(popup);
 
                 EventBus.getSystem().addListener(popup,SelectionEvent.Changed, new Callback<SelectionEvent>() {

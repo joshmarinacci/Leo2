@@ -145,4 +145,8 @@ public class Property {
     public void setColorValue(FlatColor value) {
         this.value = value;
     }
+
+    public Enum getEnumValue() {
+        return (Enum) this.value;
+    }
 }
