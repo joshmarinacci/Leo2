@@ -280,11 +280,6 @@ public class TreeGui implements Runnable {
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
         aminojava.add(symbols);
 
-        //Rect rect = new Rect();
-        //rect.setId("Rect");
-        //symbols.add(rect);
-        //new Button().setText();
-
         DynamicNode button = new DynamicNode();
         button.setName("Button");
         button.setResizable(true);
@@ -300,9 +295,12 @@ public class TreeGui implements Runnable {
                 .setExportName("prefHeight"));
         button.addProperty(new Property("text", CharSequence.class, "a button"));
         button.addProperty(new Property("selected", Boolean.class, false));
-        button.addProperty(new Property("resize", String.class, "any").setExported(false).setVisible(false));
+        button.addProperty(new Property("resize", String.class, "any")
+                .setExported(false)
+                .setVisible(false));
         button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
-                .setExported(false).setVisible(false));
+                .setExported(false)
+                .setVisible(false));
         button.addProperty(new Property("anchorLeft", Boolean.class, true));
         button.addProperty(new Property("anchorRight", Boolean.class, false));
         button.addProperty(new Property("anchorTop", Boolean.class, true));
@@ -354,7 +352,8 @@ public class TreeGui implements Runnable {
         panel.setVisual(true);
         panel.setResizable(true);
         panel.addProperty(new Property("class", String.class, "com.joshondesign.treegui.AnchorPanel"))
-            .addProperty(new Property("resize", String.class, "any").setExported(false))
+            .addProperty(new Property("resize", String.class, "any")
+                    .setExported(false))
             .addProperty(new Property("id", String.class, "arandomid"))
             .addProperty(new Property("translateX", Double.class, 0))
             .addProperty(new Property("translateY", Double.class, 0))
@@ -372,8 +371,48 @@ public class TreeGui implements Runnable {
                 g.drawRect(0, 0, w, h);
             }
         });
-
         symbols.add(panel);
+
+
+
+        DynamicNode listview = new DynamicNode();
+        listview.setName("ListView");
+        listview.setVisual(true);
+        listview.setResizable(true);
+        listview.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ListView"))
+                .addProperty(new Property("id", String.class, "foo"))
+                .addProperty(new Property("translateX", Double.class, 0))
+                .addProperty(new Property("translateY", Double.class, 0))
+                .addProperty(new Property("width", Double.class, 70)
+                        .setExportName("prefWidth"))
+                .addProperty(new Property("height", Double.class, 100)
+                        .setExportName("prefHeight"))
+                .addProperty(new Property("resize", String.class, "any")
+                        .setExported(false))
+                .addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
+                    .setExported(false)
+                    .setVisible(false))
+                .addProperty(new Property("anchorLeft", Boolean.class, true))
+                .addProperty(new Property("anchorRight", Boolean.class, false))
+                .addProperty(new Property("anchorTop", Boolean.class, true))
+                .addProperty(new Property("anchorBottom", Boolean.class, false))
+                ;
+
+        listview.setDrawDelegate(new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRect(0, 0, w, h);
+                //lines
+                for(int i=0; i<5; i++) {
+                    g.drawRect(0,i*15,w,15);
+                }
+            }
+        });
+        symbols.add(listview);
         return aminojava;
     }
 

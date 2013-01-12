@@ -42,16 +42,6 @@ public class DynamicResizeHandle extends Handle {
         if(resize.equals("any")) {
             node.getProperty("height").setDoubleValue(pt.getY()-node.getTranslateY());
         }
-            /*
-            switch(node.getConstraint()) {
-                case PreserveAspectOnly:
-                    node.setHeight(node.getWidth());
-                    break;
-                case Any:
-                case VerticalOnly:
-                    node.setHeight(pt.getY()-node.getTranslateY());
-                    break;
-            }*/
     }
 
     @Override

@@ -165,7 +165,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         drawActiveBindingLineOverlay(gfx);
         drawHandles(gfx);
         drawGroupEditOverlay(gfx);
-        drawDebug(gfx);
+        //drawDebug(gfx);
     }
 
     private void drawDocumentBounds(GFX gfx, TreeNode<SketchNode> masterRoot) {

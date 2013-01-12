@@ -34,7 +34,7 @@ public class AnchorPanel extends Panel {
                 control.setWidth(getWidth()-an.left-an.right);
             }
             if(!an.leftSet && an.rightSet) {
-                u.p("setting from the right edge");
+                //u.p("setting from the right edge");
                 control.setWidth(control.getPrefWidth());
                 control.setTranslateX(getWidth()-control.getPrefWidth());
             }
@@ -47,8 +47,8 @@ public class AnchorPanel extends Panel {
                 control.setTranslateY(getHeight()-control.getHeight()-an.bottom);
             }
             if(DEBUG) {
-                u.p("final control = (" + control.getTranslateX() + " , " + control.getTranslateY() + ") (" + control.getWidth() + " x " + control.getHeight()+")");
-                u.p("pref = " + control.getPrefWidth() + " " + control.getPrefHeight());
+               // u.p("final control = (" + control.getTranslateX() + " , " + control.getTranslateY() + ") (" + control.getWidth() + " x " + control.getHeight()+")");
+               // u.p("pref = " + control.getPrefWidth() + " " + control.getPrefHeight());
             }
         }
         super.doLayout();
