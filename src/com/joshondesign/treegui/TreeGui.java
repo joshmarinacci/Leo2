@@ -323,7 +323,9 @@ public class TreeGui implements Runnable {
                 .setVisible(false));
         button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
                 .setExported(false)
-                .setVisible(false));
+                .setVisible(false)
+                .setBindable(true)
+        );
 
         drawMap.put(button.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
@@ -551,7 +553,8 @@ public class TreeGui implements Runnable {
         flickrQuery.setResizable(false);
         flickrQuery.copyPropertiesFrom(serviceBase);
         flickrQuery
-                .addProperty(new Property("class", String.class,"com.joshondesign.treegui.modes.aminojava.FlickrQuery"))
+                .addProperty(new Property("class", String.class,
+                        "com.joshondesign.treegui.modes.aminojava.FlickrQuery"))
                 .addProperty(new Property("execute", ActionProp.class, null).setBindable(true))
                 .addProperty(new Property("query", String.class, "london").setBindable(true))
                 .addProperty(new Property("results", List.class, null).setBindable(true))

@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojava;
 
 import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.util.ArrayListModel;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,11 +12,10 @@ import org.joshy.gfx.node.control.ListModel;
  */
 public class FlickrQuery {
     private String query;
-    private ListModel results;
+    private ArrayListModel<String> results = new ArrayListModel<String>();
+
 
     public FlickrQuery() {
-        setQuery("oregon");
-        ListModel model = getResults();
     }
 
     public void setQuery(String query) {
@@ -31,6 +31,12 @@ public class FlickrQuery {
     }
 
     public void setResults(ListModel results) {
-        this.results = results;
+        //this.results = results;
+    }
+
+    public void execute() {
+        System.out.println("doing a flickr query");
+        results.add("oregon one");
+        results.add("oregon two");
     }
 }
