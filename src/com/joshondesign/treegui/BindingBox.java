@@ -1,6 +1,7 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
+import java.awt.geom.Point2D;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -77,7 +78,8 @@ public class BindingBox extends GridBox {
                         canvas.startDragPoint = null;
                         canvas.currentDragPoint = null;
                         setDrawingDirty();
-                        SketchNode node = canvas.findNode(mouseEvent.getPointInNodeCoords(canvas));
+                        Point2D pt = canvas.toEditRootCoords(mouseEvent.getPointInNodeCoords(canvas));
+                        SketchNode node = canvas.findNode(pt);
                         if(node == null) return;
                         canvas.showTargetPopup(node, mouseEvent);
                     }
