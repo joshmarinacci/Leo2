@@ -15,6 +15,7 @@ import com.joshondesign.xml.XMLParser;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
@@ -330,7 +331,6 @@ public class TreeGui implements Runnable {
                 g.setPaint(FlatColor.BLACK);
                 g.drawText(t, Font.DEFAULT, 5, 15);
                 g.drawRect(0, 0, w, h);
-
             }
         });
         button.setDrawDelegate(drawMap.get(button.getName()));
@@ -347,7 +347,7 @@ public class TreeGui implements Runnable {
         label.copyPropertiesFrom(button);
         label.addProperty(new Property("resize", String.class, "width").setExported(false));
         label.addProperty(new Property("text", String.class, "a label"));
-        drawMap.put(label.getName(),new DynamicNode.DrawDelegate() {
+        drawMap.put(label.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 String t = node.getProperty("text").getStringValue();
                 g.setPaint(FlatColor.BLACK);
@@ -367,10 +367,10 @@ public class TreeGui implements Runnable {
             .addProperty(new Property("resize", String.class, "any")
                     .setExported(false).setVisible(false))
             .addProperty(new Property("id", String.class, "arandomid"))
-            .addProperty(new Property("fill",FlatColor.class, FlatColor.PURPLE))
+            .addProperty(new Property("fill", FlatColor.class, FlatColor.PURPLE))
         ;
         panel.setContainer(true);
-        drawMap.put(panel.getName(),new DynamicNode.DrawDelegate() {
+        drawMap.put(panel.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -403,7 +403,7 @@ public class TreeGui implements Runnable {
                 .addProperty(new Property("orientation",
                         ListView.Orientation.class, ListView.Orientation.Vertical))
                 ;
-        drawMap.put(listview.getName(),new DynamicNode.DrawDelegate() {
+        drawMap.put(listview.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -445,7 +445,7 @@ public class TreeGui implements Runnable {
                 )
                 )
         ;
-        drawMap.put(scroll.getName(),new DynamicNode.DrawDelegate() {
+        drawMap.put(scroll.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -479,7 +479,7 @@ public class TreeGui implements Runnable {
                         .setExported(false).setVisible(false))
                 ;
         custom.setCustom(true);
-        drawMap.put(custom.getName(),new DynamicNode.DrawDelegate() {
+        drawMap.put(custom.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -487,7 +487,7 @@ public class TreeGui implements Runnable {
                 g.fillRect(0, 0, w, h);
                 g.setPaint(FlatColor.BLACK);
                 g.drawRect(0, 0, w, h);
-                g.drawLine(0,0, w, h);
+                g.drawLine(0, 0, w, h);
                 g.drawLine(0, h, w, 0);
             }
         });
@@ -495,6 +495,93 @@ public class TreeGui implements Runnable {
         custom.getProperty("width").setDoubleValue(90);
         custom.getProperty("height").setDoubleValue(90);
         symbols.add(custom);
+
+        DynamicNode textbox = new DynamicNode();
+        textbox.setName("Textbox");
+        textbox.copyPropertiesFrom(base);
+        textbox.setVisual(true);
+        textbox.setResizable(true);
+        textbox.setContainer(false);
+        textbox
+            .addProperty(new Property("class", String.class,
+                    "org.joshy.gfx.node.control.Textbox"))
+            .addProperty(new Property("id", String.class, "foo2"))
+            .addProperty(new Property("text", CharSequence.class, "a textfield"))
+            .addProperty(new Property("resize", String.class, "any")
+                    .setExported(false).setVisible(false))
+        ;
+        drawMap.put(textbox.getName(), new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                String t = node.getProperty("text").getStringValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRect(0, 0, w, h);
+                g.drawText(t, Font.DEFAULT, 5, 15);
+            }
+        });
+        textbox.setDrawDelegate(drawMap.get(textbox.getName()));
+        textbox.getProperty("width").setDoubleValue(80);
+        textbox.getProperty("height").setDoubleValue(30);
+        symbols.add(textbox);
+
+        DynamicNode serviceBase = new DynamicNode();
+        serviceBase.addProperty(new Property("translateX", Double.class, 0))
+                .addProperty(new Property("translateY", Double.class, 0));
+        drawMap.put("servicebase",new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = 90;
+                double h = 50;
+                g.setPaint(FlatColor.YELLOW);
+                g.fillRoundRect(0, 0, w, h,10,10);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRoundRect(0, 0, w, h,10,10);
+                g.drawText(node.getName(), Font.DEFAULT, 5, 15);
+            }
+        });
+
+        DynamicNode flickrQuery = new DynamicNode();
+        flickrQuery.setName("Flickr Search");
+        flickrQuery.setVisual(false);
+        flickrQuery.setResizable(false);
+        flickrQuery.copyPropertiesFrom(serviceBase);
+        flickrQuery
+                .addProperty(new Property("class", String.class,
+                        "com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("execute", ActionProp.class, null))
+        ;
+        flickrQuery.setDrawDelegate(drawMap.get("servicebase"));
+        symbols.add(flickrQuery);
+
+        DynamicNode action = new DynamicNode();
+        action.setName("action");
+        action.setVisual(false);
+        action.setResizable(false);
+        action.copyPropertiesFrom(serviceBase);
+        action.addProperty(new Property("class", String.class,
+                "com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("execute", ActionProp.class, null))
+                ;
+        action.setDrawDelegate(drawMap.get("servicebase"));
+        symbols.add(action);
+
+        DynamicNode document = new DynamicNode();
+        document.setName("Document");
+        document.setVisual(false);
+        document.setResizable(false);
+        document.copyPropertiesFrom(serviceBase);
+        document
+            .addProperty(new Property("class", String.class,"com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("pages", String.class, null))
+                .addProperty(new Property("currentPage", Page.class, null))
+                .addProperty(new Property("selection", List.class, null))
+        ;
+        document.setDrawDelegate(drawMap.get("servicebase"));
+
+        symbols.add(document);
+
         return aminojava;
     }
 
