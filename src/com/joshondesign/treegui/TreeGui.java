@@ -14,6 +14,8 @@ import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -50,6 +52,8 @@ public class TreeGui implements Runnable {
         });
 
         Control rootControl;
+
+
 
         try {
             File file = new File("/Users/josh/projects/Leo/nodes.xml");
@@ -274,13 +278,14 @@ public class TreeGui implements Runnable {
         return modes;
     }
 
+    public static Map<String,DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
+
     private Mode setupJavaMode() {
 
         Mode aminojava = new Mode();
         aminojava.setId("com.joshondesign.modes.aminojava");
         TreeNode<JAction> javaactions = new TreeNode<JAction>();
         aminojava.add(javaactions);
-
 
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
         aminojava.add(symbols);
@@ -314,7 +319,8 @@ public class TreeGui implements Runnable {
         button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
                 .setExported(false)
                 .setVisible(false));
-        button.setDrawDelegate(new DynamicNode.DrawDelegate() {
+
+        drawMap.put(button.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -327,6 +333,7 @@ public class TreeGui implements Runnable {
 
             }
         });
+        button.setDrawDelegate(drawMap.get(button.getName()));
         symbols.add(button);
 
 
@@ -340,13 +347,14 @@ public class TreeGui implements Runnable {
         label.copyPropertiesFrom(button);
         label.addProperty(new Property("resize", String.class, "width").setExported(false));
         label.addProperty(new Property("text", String.class, "a label"));
-        label.setDrawDelegate(new DynamicNode.DrawDelegate() {
+        drawMap.put(label.getName(),new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 String t = node.getProperty("text").getStringValue();
                 g.setPaint(FlatColor.BLACK);
                 g.drawText(t, Font.DEFAULT, 5, 15);
             }
         });
+        label.setDrawDelegate(drawMap.get(label.getName()));
 
         symbols.add(label);
 
@@ -362,7 +370,7 @@ public class TreeGui implements Runnable {
             .addProperty(new Property("fill",FlatColor.class, FlatColor.PURPLE))
         ;
         panel.setContainer(true);
-        panel.setDrawDelegate(new DynamicNode.DrawDelegate() {
+        drawMap.put(panel.getName(),new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -372,6 +380,7 @@ public class TreeGui implements Runnable {
                 g.drawRect(0, 0, w, h);
             }
         });
+        panel.setDrawDelegate(drawMap.get(panel.getName()));
         symbols.add(panel);
 
 
@@ -394,7 +403,7 @@ public class TreeGui implements Runnable {
                 .addProperty(new Property("orientation",
                         ListView.Orientation.class, ListView.Orientation.Vertical))
                 ;
-        listview.setDrawDelegate(new DynamicNode.DrawDelegate() {
+        drawMap.put(listview.getName(),new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -408,6 +417,7 @@ public class TreeGui implements Runnable {
                 }
             }
         });
+        listview.setDrawDelegate(drawMap.get(listview.getName()));
         listview.getProperty("width").setDoubleValue(60);
         listview.getProperty("height").setDoubleValue(90);
         symbols.add(listview);
@@ -435,7 +445,7 @@ public class TreeGui implements Runnable {
                 )
                 )
         ;
-        scroll.setDrawDelegate(new DynamicNode.DrawDelegate() {
+        drawMap.put(scroll.getName(),new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -447,6 +457,7 @@ public class TreeGui implements Runnable {
                 g.drawRect(w - 10, 0, 10, h);
             }
         });
+        scroll.setDrawDelegate(drawMap.get(scroll.getName()));
         scroll.getProperty("width").setDoubleValue(60);
         scroll.getProperty("height").setDoubleValue(90);
 
@@ -468,7 +479,7 @@ public class TreeGui implements Runnable {
                         .setExported(false).setVisible(false))
                 ;
         custom.setCustom(true);
-        custom.setDrawDelegate(new DynamicNode.DrawDelegate() {
+        drawMap.put(custom.getName(),new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -480,6 +491,7 @@ public class TreeGui implements Runnable {
                 g.drawLine(0, h, w, 0);
             }
         });
+        custom.setDrawDelegate(drawMap.get(custom.getName()));
         custom.getProperty("width").setDoubleValue(90);
         custom.getProperty("height").setDoubleValue(90);
         symbols.add(custom);

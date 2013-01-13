@@ -230,12 +230,13 @@ public class AminoJavaXMLExport extends JAction {
                 .attr("resizable", Boolean.toString(node.isResizable()))
                 .attr("container", Boolean.toString(node.isContainer()))
                 .attr("custom", Boolean.toString(node.isCustom()))
+                .attr("name", node.getName())
         ;
         if(node.isCustom()) {
             xml.attr("customClass",node.getProperty("customClass").getStringValue());
         }
         for (Property prop : node.getSortedProperties()) {
-            if (!prop.isExported()) continue;
+
             if(prop.getName().equals("customClass")) continue;
             xml.start("property");
             if(prop.getExportName() != null) {
@@ -248,9 +249,9 @@ public class AminoJavaXMLExport extends JAction {
                 xml.attr("enum", "true");
             }
             xml.attr("value", prop.encode())
-                .attr("type", prop.getType().getName())
-                .end()
-            ;
+                .attr("type", prop.getType().getName());
+            xml.attr("exported",Boolean.toString(prop.isExported()));
+            xml.end();
         }
 
         if(parentAnchor) {
@@ -282,16 +283,25 @@ public class AminoJavaXMLExport extends JAction {
 
     public static class Save extends JAction {
 
-        private final SketchDocument page;
+        private final SketchDocument doc;
         private final Canvas canvas;
 
-        public Save(Canvas canvas, SketchDocument page) {
-            this.page = page;
+        public Save(Canvas canvas, SketchDocument doc) {
+            this.doc = doc;
             this.canvas = canvas;
         }
 
         @Override
         public void execute() {
+            File file = new File("foo.xml");
+
+            DynamicNode root = (DynamicNode) this.doc.get(0).get(0).get(0);
+            try {
+                exportToXML(new PrintWriter(new FileOutputStream(file)), root);
+                u.p("exported to : " + file.getAbsolutePath());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

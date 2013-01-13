@@ -1,7 +1,15 @@
 package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.Canvas;
+import com.joshondesign.treegui.TreeGui;
 import com.joshondesign.treegui.actions.JAction;
+import com.joshondesign.treegui.docmodel.Layer;
+import com.joshondesign.xml.Doc;
+import com.joshondesign.xml.Elem;
+import com.joshondesign.xml.XMLParser;
+import java.io.File;
+import javax.xml.xpath.XPathExpressionException;
+import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +28,61 @@ public class AminoJavaXMLImport extends JAction {
 
     @Override
     public void execute() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        File file = new File("foo.xml");
+        u.p("loading"  + file.getAbsolutePath());
+        try {
+            Doc xml = XMLParser.parse(file);
+            DynamicNode node = process(xml.root());
+            Layer layer = new Layer();
+            layer.add(node);
+            canvas.setMasterRoot(layer);
+            canvas.setEditRoot(layer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private DynamicNode process(Elem xml) throws XPathExpressionException, ClassNotFoundException {
+        DynamicNode node = new DynamicNode();
+        node.setName(xml.attr("name"));
+        node.addProperty(new Property("class", String.class, xml.attr("class")));
+        node.setVisual(xml.attrEquals("visual", "true"));
+        node.setContainer(xml.attrEquals("container", "true"));
+        node.setResizable(xml.attrEquals("resizable", "true"));
+        node.setCustom(xml.attrEquals("custom", "true"));
+        for(Elem prop : xml.xpath("property")) {
+            u.p("prop = " + prop);
+            Object val = null;
+            Class type = Class.forName(prop.attr("type"));
+            String sval = prop.attr("value");
+            if(type == Double.class) {
+                val = (Double)Double.parseDouble(sval);
+            }
+            if(type == Boolean.class) {
+                val = (Boolean)Boolean.parseBoolean(sval);
+            }
+            if(type == String.class) {
+                val = (String)sval;
+            }
+            if(type == CharSequence.class) {
+                val = (CharSequence)sval;
+            }
+            String name = prop.attr("name");
+            if(name.equals("prefWidth")) {
+                name = "width";
+            }
+            if(name.equals("prefHeight")) {
+                name = "height";
+            }
+            node.addProperty(new Property(name, type, val));
+        }
+
+
+        node.setDrawDelegate(TreeGui.drawMap.get(node.getName()));
+        for(Elem echild : xml.xpath("children/node")) {
+            node.add(process(echild));
+        }
+        return node;
     }
 
     @Override
