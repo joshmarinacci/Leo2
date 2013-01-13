@@ -17,7 +17,7 @@ public class Property {
     private boolean exported = true;
     private String exportName;
     private boolean visible = true;
-    private boolean bindable = true;
+    private boolean bindable = false;
 
     public Property(String name, Class type, Object value) {
         this.name = name;

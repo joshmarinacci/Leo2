@@ -129,6 +129,9 @@ public class DynamicNode extends SketchNode {
         return getInputBounds().contains(MathUtils.transform(pt,-getTranslateX(),-getTranslateY()));
     }
 
+    private boolean hasProperty(String name) {
+        return this.properies.containsKey(name);
+    }
     @Override
     public Bounds getInputBounds() {
         if(isResizable()) {
@@ -136,7 +139,12 @@ public class DynamicNode extends SketchNode {
             double h = getProperty("height").getDoubleValue();
             return new Bounds(0,0,w,h);
         }
-        return new Bounds(0,0,20,40);
+        if(hasProperty("width") && hasProperty("height")) {
+            double w = getProperty("width").getDoubleValue();
+            double h = getProperty("height").getDoubleValue();
+            return new Bounds(0,0,w,h);
+        }
+        return new Bounds(0,0,40,40);
     }
 
     public void setResizable(boolean rs) {

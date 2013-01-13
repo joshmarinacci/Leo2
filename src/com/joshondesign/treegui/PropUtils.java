@@ -1,6 +1,7 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.joshy.gfx.util.u;
@@ -14,6 +15,11 @@ import org.joshy.gfx.util.u;
  */
 public class PropUtils {
     public static Class getPropertyType(Object object, String propname) {
+        if(object instanceof DynamicNode) {
+            DynamicNode node = (DynamicNode) object;
+            return node.getProperty(propname).getType();
+        }
+
         Class clazz = object.getClass();
         Method[] methods = clazz.getMethods();
         for(Method meth : methods) {

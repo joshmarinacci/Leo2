@@ -71,7 +71,32 @@ public class PropsView extends GridBox {
         }
     }
 
-    private void setSelectionDynamicNode(DynamicNode node) {
+    private void setSelectionDynamicNode(final DynamicNode node) {
+
+        addControl(new Label("id"));
+        final Textbox idtb = new Textbox();
+        idtb.setText("" + node.getId());
+        idtb.setPrefWidth(100);
+        EventBus.getSystem().addListener(idtb, FocusEvent.Lost, new Callback<FocusEvent>() {
+            public void call(FocusEvent focusEvent) throws Exception {
+                node.setId(idtb.getText());
+                if (updateCallback != null) {
+                    updateCallback.call(null);
+                }
+            }
+        });
+        idtb.onAction(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                node.setId(idtb.getText());
+                if (updateCallback != null) {
+                    updateCallback.call(null);
+                }
+            }
+        });
+        addControl(idtb);
+        nextRow();
+
+
         for(final Property prop : node.getSortedProperties()) {
             if(!prop.isVisible()) continue;
             addControl(new Label(prop.getName()));
@@ -163,13 +188,19 @@ public class PropsView extends GridBox {
                 final SwatchColorPicker cp = new SwatchColorPicker();
                 cp.onColorSelected(new Callback<ChangedEvent>() {
                     public void call(ChangedEvent changedEvent) throws Exception {
-                        prop.setColorValue((FlatColor)changedEvent.getValue());
+                        prop.setColorValue((FlatColor) changedEvent.getValue());
                     }
                 });
                 cp.setSelectedColor(prop.getColorValue());
                 addControl(cp);
-                this.nextRow();
+            }
 
+            if(prop.getType() == List.class) {
+                final Textarea ta = new Textarea();
+                ta.setText("" + prop.getStringValue());
+                ta.setPrefWidth(100);
+                ta.setPrefHeight(100);
+                addControl(ta);
             }
             nextRow();
         }

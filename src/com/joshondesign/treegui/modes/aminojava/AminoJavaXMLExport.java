@@ -1,8 +1,10 @@
 package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.AnchorPanel;
+import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.actions.JAction;
+import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
@@ -11,7 +13,6 @@ import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import com.joshondesign.xml.XMLWriter;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -46,19 +47,14 @@ public class AminoJavaXMLExport extends JAction {
 
     @Override
     public void execute() {
-        for(SketchNode nd : page.get(0).children()) {
-            if(nd instanceof DynamicNode) {
-                try {
-                    File file = File.createTempFile("foo",".xml");
-                    exportToXML(new PrintWriter(new FileWriter(file)), (DynamicNode) nd);
-                    u.p("wrote out to " + file);
-                    u.p(u.fileToString(new FileInputStream(file)));
-
-                    loadAndRun(file);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        try {
+            File file = File.createTempFile("foo",".xml");
+            //PrintWriter pw = new PrintWriter(new FileOutputStream(file));
+            PrintWriter pw = new PrintWriter(System.out);
+            exportToXML(pw, page, canvas);
+            //loadAndRun(file);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -77,7 +73,7 @@ public class AminoJavaXMLExport extends JAction {
         demoStage.raiseToTop();
     }
 
-    private Node parse(Elem xml) throws ClassNotFoundException, IllegalAccessException, InstantiationException, XPathExpressionException, NoSuchMethodException, InvocationTargetException {
+    private Node parse(Elem xml) throws Exception {
         Class clazz = null;
         if(xml.attrEquals("custom","true")) {
             clazz = getClass().forName(xml.attr("customClass"));
@@ -215,6 +211,64 @@ public class AminoJavaXMLExport extends JAction {
         return "Run";
     }
 
+    public static void exportToXML(PrintWriter printWriter, Page page, Canvas canvas) throws URISyntaxException {
+        XMLWriter xml = new XMLWriter(printWriter, new URI(""));
+        xml.header();
+        xml.start("page");
+        // render non-visual nodes first
+
+        xml.start("nonvisual");
+        for(Layer layer : page.children()) {
+            for(SketchNode node : layer.children()) {
+                if(!node.isVisual() && node instanceof DynamicNode) {
+                    DynamicNode nd = (DynamicNode) node;
+                    u.p("spitting out " + nd);
+                    xml.start("node")
+                        .attr("class", nd.getProperty("class").encode())
+                        .attr("name", nd.getName())
+                        .attr("id", nd.getId())
+                    ;
+                    for (Property prop : nd.getSortedProperties()) {
+                        xml.start("property");
+                        xml.attr("name", prop.getName());
+                        xml.attr("value", prop.encode());
+                        xml.attr("type", prop.getType().getName());
+                        xml.end();
+                    }
+                    xml.end();
+                }
+            }
+        }
+        xml.end();
+
+        xml.start("visual");
+        //render visual nodes next
+        for(Layer layer : page.children()) {
+            for(SketchNode node : layer.children()) {
+                if(node.isVisual() && node instanceof DynamicNode) {
+                    exportNode(xml, (DynamicNode) node, 200, 200, false);
+                }
+            }
+        }
+        xml.end();
+
+        //bindings
+        xml.start("bindings");
+        for(Binding binding : canvas.getBindings()) {
+            xml.start("binding");
+            xml.attr("sourceid",binding.getSource().getId());
+            xml.attr("sourceprop",binding.getSourceProperty());
+            xml.attr("targetid",binding.getTarget().getId());
+            xml.attr("targetprop",binding.getTargetProperty());
+            xml.attr("sourcetype",binding.getSourceType().getName());
+            xml.attr("targettype",binding.getTargetType().getName());
+            xml.end();
+        }
+        xml.end();
+
+        xml.end();
+        xml.close();
+    }
     public static void exportToXML(PrintWriter printWriter, DynamicNode root) throws FileNotFoundException, UnsupportedEncodingException, URISyntaxException {
         XMLWriter xml = new XMLWriter(printWriter, new URI(""));
         xml.header();

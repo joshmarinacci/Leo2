@@ -14,6 +14,7 @@ import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -312,7 +313,7 @@ public class TreeGui implements Runnable {
         button.copyPropertiesFrom(base);
         button.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
         button.addProperty(new Property("id", String.class, "arandomid"));
-        button.addProperty(new Property("text", CharSequence.class, "a button"));
+        button.addProperty(new Property("text", CharSequence.class, "a button").setBindable(true));
         button.addProperty(new Property("selected", Boolean.class, false));
         button.addProperty(new Property("resize", String.class, "any")
                 .setExported(false)
@@ -346,7 +347,7 @@ public class TreeGui implements Runnable {
         label.addProperty(new Property("id", String.class, "arandomid").setExported(true));
         label.copyPropertiesFrom(button);
         label.addProperty(new Property("resize", String.class, "width").setExported(false));
-        label.addProperty(new Property("text", String.class, "a label"));
+        label.addProperty(new Property("text", String.class, "a label").setBindable(true));
         drawMap.put(label.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 String t = node.getProperty("text").getStringValue();
@@ -394,12 +395,10 @@ public class TreeGui implements Runnable {
                 .addProperty(new Property("id", String.class, "foo"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
-                .addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
-                    .setExported(false)
-                    .setVisible(false))
                 .addProperty(new Property("rowHeight", Double.class, 20))
                 .addProperty(new Property("columnWidth", Double.class, 100))
                 .addProperty(new Property("renderer", String.class, "none"))
+                .addProperty(new Property("data", List.class, null).setBindable(true))
                 .addProperty(new Property("orientation",
                         ListView.Orientation.class, ListView.Orientation.Vertical))
                 ;
@@ -471,8 +470,7 @@ public class TreeGui implements Runnable {
         custom.setResizable(true);
         custom.setContainer(false);
         custom
-                .addProperty(new Property("class", String.class,
-                        "org.joshy.gfx.node.control.ScrollPane"))
+                .addProperty(new Property("class", String.class,"org.joshy.gfx.node.control.ScrollPane"))
                 .addProperty(new Property("id", String.class, "foo2"))
                 .addProperty(new Property("customClass",String.class, "none"))
                 .addProperty(new Property("resize", String.class, "any")
@@ -503,10 +501,9 @@ public class TreeGui implements Runnable {
         textbox.setResizable(true);
         textbox.setContainer(false);
         textbox
-            .addProperty(new Property("class", String.class,
-                    "org.joshy.gfx.node.control.Textbox"))
+            .addProperty(new Property("class", String.class,"org.joshy.gfx.node.control.Textbox"))
             .addProperty(new Property("id", String.class, "foo2"))
-            .addProperty(new Property("text", CharSequence.class, "a textfield"))
+            .addProperty(new Property("text", CharSequence.class, "a textfield").setBindable(true))
             .addProperty(new Property("resize", String.class, "any")
                     .setExported(false).setVisible(false))
         ;
@@ -529,15 +526,18 @@ public class TreeGui implements Runnable {
 
         DynamicNode serviceBase = new DynamicNode();
         serviceBase.addProperty(new Property("translateX", Double.class, 0))
-                .addProperty(new Property("translateY", Double.class, 0));
+                .addProperty(new Property("translateY", Double.class, 0))
+                .addProperty(new Property("width", Double.class, 90).setBindable(false).setExported(false))
+                .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
+        ;
         drawMap.put("servicebase",new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = 90;
                 double h = 50;
                 g.setPaint(FlatColor.YELLOW);
-                g.fillRoundRect(0, 0, w, h,10,10);
+                g.fillRoundRect(0, 0, w, h, 10, 10);
                 g.setPaint(FlatColor.BLACK);
-                g.drawRoundRect(0, 0, w, h,10,10);
+                g.drawRoundRect(0, 0, w, h, 10, 10);
                 g.drawText(node.getName(), Font.DEFAULT, 5, 15);
             }
         });
@@ -548,9 +548,10 @@ public class TreeGui implements Runnable {
         flickrQuery.setResizable(false);
         flickrQuery.copyPropertiesFrom(serviceBase);
         flickrQuery
-                .addProperty(new Property("class", String.class,
-                        "com.joshondesign.flickr.FlickrQuery"))
-                .addProperty(new Property("execute", ActionProp.class, null))
+                .addProperty(new Property("class", String.class,"com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("execute", ActionProp.class, null).setBindable(true))
+                .addProperty(new Property("querystring", String.class, "london").setBindable(true))
+                .addProperty(new Property("results", List.class, null).setBindable(true))
         ;
         flickrQuery.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(flickrQuery);
@@ -560,9 +561,8 @@ public class TreeGui implements Runnable {
         action.setVisual(false);
         action.setResizable(false);
         action.copyPropertiesFrom(serviceBase);
-        action.addProperty(new Property("class", String.class,
-                "com.joshondesign.flickr.FlickrQuery"))
-                .addProperty(new Property("execute", ActionProp.class, null))
+        action.addProperty(new Property("class", String.class,"com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("execute", ActionProp.class, null).setBindable(true))
                 ;
         action.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(action);
@@ -574,13 +574,33 @@ public class TreeGui implements Runnable {
         document.copyPropertiesFrom(serviceBase);
         document
             .addProperty(new Property("class", String.class,"com.joshondesign.flickr.FlickrQuery"))
-                .addProperty(new Property("pages", String.class, null))
-                .addProperty(new Property("currentPage", Page.class, null))
-                .addProperty(new Property("selection", List.class, null))
+                .addProperty(new Property("pages", String.class, null).setBindable(true))
+                .addProperty(new Property("currentPage", Page.class, null).setBindable(true))
+                .addProperty(new Property("selection", List.class, null).setBindable(true))
         ;
         document.setDrawDelegate(drawMap.get("servicebase"));
-
         symbols.add(document);
+
+        DynamicNode stringList = new DynamicNode();
+        stringList.setName("String List");
+        stringList.setVisual(false);
+        stringList.setResizable(false);
+        stringList.copyPropertiesFrom(serviceBase);
+        List<String> dummyStringListData = new ArrayList<String>();
+        dummyStringListData.add("foo");
+        dummyStringListData.add("bar");
+        dummyStringListData.add("baz");
+        stringList
+                .addProperty(new Property("class", String.class,
+                        "com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("data",List.class, dummyStringListData)
+                        .setVisible(true).setBindable(true))
+                .addProperty(new Property("this",DynamicNode.class, null)
+                        .setVisible(false).setBindable(true))
+                ;
+        stringList.setDrawDelegate(drawMap.get("servicebase"));
+        symbols.add(stringList);
+
 
         return aminojava;
     }
