@@ -13,7 +13,6 @@ import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import com.joshondesign.xml.XMLWriter;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -260,23 +259,7 @@ public class AminoJavaXMLExport extends JAction {
         xml.start("nonvisual");
         for(Layer layer : page.children()) {
             for(SketchNode node : layer.children()) {
-                if(!node.isVisual() && node instanceof DynamicNode) {
-                    DynamicNode nd = (DynamicNode) node;
-                    u.p("spitting out " + nd);
-                    xml.start("node")
-                        .attr("class", nd.getProperty("class").encode())
-                        .attr("name", nd.getName())
-                        .attr("id", nd.getId())
-                    ;
-                    for (Property prop : nd.getSortedProperties()) {
-                        xml.start("property");
-                        xml.attr("name", prop.getName());
-                        xml.attr("value", prop.encode());
-                        xml.attr("type", prop.getType().getName());
-                        xml.end();
-                    }
-                    xml.end();
-                }
+                exportNonVisualNode(node, xml);
             }
         }
         xml.end();
@@ -285,8 +268,8 @@ public class AminoJavaXMLExport extends JAction {
         //render visual nodes next
         for(Layer layer : page.children()) {
             for(SketchNode node : layer.children()) {
-                if(node.isVisual() && node instanceof DynamicNode) {
-                    exportNode(xml, (DynamicNode) node, 200, 200, false);
+                if(node instanceof DynamicNode) {
+                    exportVisualNode(xml, (DynamicNode) node, 200, 200, false);
                 }
             }
         }
@@ -309,15 +292,40 @@ public class AminoJavaXMLExport extends JAction {
         xml.end();
         xml.close();
     }
+
+    private static void exportNonVisualNode(SketchNode node, XMLWriter xml) {
+        if(!node.isVisual() && node instanceof DynamicNode) {
+            DynamicNode nd = (DynamicNode) node;
+            u.p("spitting out " + nd);
+            xml.start("node")
+                    .attr("class", nd.getProperty("class").encode())
+                    .attr("name", nd.getName())
+                    .attr("id", nd.getId())
+            ;
+            for (Property prop : nd.getSortedProperties()) {
+                xml.start("property");
+                xml.attr("name", prop.getName());
+                xml.attr("value", prop.encode());
+                xml.attr("type", prop.getType().getName());
+                xml.end();
+            }
+            xml.end();
+        }
+        for(SketchNode child : node.children()) {
+            exportNonVisualNode(child,xml);
+        }
+    }
+
     public static void exportToXML(PrintWriter printWriter, DynamicNode root) throws FileNotFoundException, UnsupportedEncodingException, URISyntaxException {
         XMLWriter xml = new XMLWriter(printWriter, new URI(""));
         xml.header();
-        exportNode(xml,root, 200,200, false);
+        exportVisualNode(xml, root, 200, 200, false);
         xml.close();
     }
 
-    private static void exportNode(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
+    private static void exportVisualNode(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
         u.p("exporting. parent size = " + width + " " + height);
+
         xml.start("node")
                 .attr("id", node.getId())
                 .attr("class", node.getProperty("class").encode())
@@ -369,7 +377,11 @@ public class AminoJavaXMLExport extends JAction {
         if(node.getSize() > 0) {
             for(SketchNode nd : node.children()) {
                 DynamicNode nd2 = (DynamicNode) nd;
-                exportNode(xml,nd2, node.getProperty("width").getDoubleValue(), node.getProperty("height").getDoubleValue(), true);
+                if(nd2.isVisual()) {
+                    exportVisualNode(xml, nd2,
+                            node.getProperty("width").getDoubleValue(),
+                            node.getProperty("height").getDoubleValue(), true);
+                }
             }
         }
         xml.end();

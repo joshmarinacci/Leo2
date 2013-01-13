@@ -8,6 +8,8 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
 import com.joshondesign.treegui.modes.amino.*;
+import com.joshondesign.treegui.modes.amino.FlickrQuery;
+import com.joshondesign.treegui.modes.amino.StringListModel;
 import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
@@ -549,9 +551,9 @@ public class TreeGui implements Runnable {
         flickrQuery.setResizable(false);
         flickrQuery.copyPropertiesFrom(serviceBase);
         flickrQuery
-                .addProperty(new Property("class", String.class,"com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("class", String.class,"com.joshondesign.treegui.modes.aminojava.FlickrQuery"))
                 .addProperty(new Property("execute", ActionProp.class, null).setBindable(true))
-                .addProperty(new Property("querystring", String.class, "london").setBindable(true))
+                .addProperty(new Property("query", String.class, "london").setBindable(true))
                 .addProperty(new Property("results", List.class, null).setBindable(true))
         ;
         flickrQuery.setDrawDelegate(drawMap.get("servicebase"));
