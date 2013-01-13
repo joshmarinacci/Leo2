@@ -3,7 +3,7 @@ package com.joshondesign.treegui.modes.aminojava;
 import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.TreeGui;
 import com.joshondesign.treegui.actions.JAction;
-import com.joshondesign.treegui.docmodel.Layer;
+import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -32,14 +32,24 @@ public class AminoJavaXMLImport extends JAction {
         u.p("loading"  + file.getAbsolutePath());
         try {
             Doc xml = XMLParser.parse(file);
-            DynamicNode node = process(xml.root());
-            Layer layer = new Layer();
-            layer.add(node);
-            canvas.setMasterRoot(layer);
-            canvas.setEditRoot(layer);
+            Page page = processPage(xml.root());
+            canvas.setMasterRoot(page.get(0));
+            canvas.setEditRoot(page.get(0));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private Page processPage(Elem root) {
+        Page page = new Page();
+
+        //non visual
+//        for(Elem nonvis : root.xpath("nonvisual")) {
+
+//        }
+        //visual
+        //bind them together
+        return page;
     }
 
     private DynamicNode process(Elem xml) throws XPathExpressionException, ClassNotFoundException {

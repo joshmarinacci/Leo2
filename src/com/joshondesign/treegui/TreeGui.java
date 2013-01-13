@@ -98,6 +98,7 @@ public class TreeGui implements Runnable {
             actions.add(new AminoJavaXMLExport(canvas,doc.get(0)));
             actions.add(new AminoJavaXMLImport(canvas));
             actions.add(new AminoJavaXMLExport.Save(canvas, doc));
+            actions.add(new AminoJavaXMLExport.Test(canvas));
 
             ToolbarListView toolbar = (ToolbarListView) find("toolbar", rootControl);
             toolbar.setModel(actions);
@@ -593,7 +594,7 @@ public class TreeGui implements Runnable {
         stringList
                 .addProperty(new Property("class", String.class,
                         "com.joshondesign.flickr.FlickrQuery"))
-                .addProperty(new Property("data",List.class, dummyStringListData)
+                .addProperty(new Property("data", List.class, dummyStringListData)
                         .setVisible(true).setBindable(true))
                 .addProperty(new Property("this",DynamicNode.class, null)
                         .setVisible(false).setBindable(true))

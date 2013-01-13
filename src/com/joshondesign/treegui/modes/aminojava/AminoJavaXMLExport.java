@@ -13,15 +13,19 @@ import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import com.joshondesign.xml.XMLWriter;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.stage.Stage;
@@ -52,7 +56,7 @@ public class AminoJavaXMLExport extends JAction {
             //PrintWriter pw = new PrintWriter(new FileOutputStream(file));
             PrintWriter pw = new PrintWriter(System.out);
             exportToXML(pw, page, canvas);
-            //loadAndRun(file);
+            loadAndRun(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,7 +64,7 @@ public class AminoJavaXMLExport extends JAction {
 
     private void loadAndRun(File file) throws Exception {
         Doc xml = XMLParser.parse(file);
-        Node node = parse(xml.root());
+        Node node = parsePage(xml.root());
         if(demoStage == null) {
             demoStage = Stage.createStage();
             demoStage.setWidth(600);
@@ -71,6 +75,42 @@ public class AminoJavaXMLExport extends JAction {
         node.setTranslateY(0);
         demoStage.setContent(node);
         demoStage.raiseToTop();
+    }
+
+    private static Node parsePage(Elem root) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        Map<String, Object> nonvisualMap = new HashMap<String, Object>();
+        Map<String, Object> visualMap = new HashMap<String, Object>();
+
+        for(Elem nonvis : root.xpath("nonvisual/node")) {
+            Class clazz  = Class.forName(nonvis.attr("class"));
+            Object obj = clazz.newInstance();
+            nonvisualMap.put(nonvis.attr("id"),obj);
+        }
+
+        Node last = null;
+        for(Elem vis : root.xpath("visual/node")) {
+            Class clazz  = Class.forName(vis.attr("class"));
+            Object obj = clazz.newInstance();
+            visualMap.put(vis.attr("id"),obj);
+            if(obj instanceof Node) last = (Node) obj;
+        }
+
+        for(Elem binding : root.xpath("bindings/binding")) {
+            Object src = nonvisualMap.get(binding.attr("sourceid"));
+            //assume we are using 'this'
+            Object tgt = visualMap.get(binding.attr("targetid"));
+            String tgtProp = binding.attr("targetprop");
+            //assume we are using a setter to bind them
+            try {
+                u.p("getting setter for model from object " + tgt.getClass().getName());
+                Method setter = tgt.getClass().getMethod("setModel",ListModel.class);
+                setter.invoke(tgt,src);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return last;
     }
 
     private Node parse(Elem xml) throws Exception {
@@ -256,8 +296,8 @@ public class AminoJavaXMLExport extends JAction {
         xml.start("bindings");
         for(Binding binding : canvas.getBindings()) {
             xml.start("binding");
-            xml.attr("sourceid",binding.getSource().getId());
-            xml.attr("sourceprop",binding.getSourceProperty());
+            xml.attr("sourceid", binding.getSource().getId());
+            xml.attr("sourceprop", binding.getSourceProperty());
             xml.attr("targetid",binding.getTarget().getId());
             xml.attr("targetprop",binding.getTargetProperty());
             xml.attr("sourcetype",binding.getSourceType().getName());
@@ -279,6 +319,7 @@ public class AminoJavaXMLExport extends JAction {
     private static void exportNode(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
         u.p("exporting. parent size = " + width + " " + height);
         xml.start("node")
+                .attr("id", node.getId())
                 .attr("class", node.getProperty("class").encode())
                 .attr("visual", Boolean.toString(node.isVisual()))
                 .attr("resizable", Boolean.toString(node.isResizable()))
@@ -348,10 +389,8 @@ public class AminoJavaXMLExport extends JAction {
         @Override
         public void execute() {
             File file = new File("foo.xml");
-
-            DynamicNode root = (DynamicNode) this.doc.get(0).get(0).get(0);
             try {
-                exportToXML(new PrintWriter(new FileOutputStream(file)), root);
+                exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), canvas);
                 u.p("exported to : " + file.getAbsolutePath());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -361,6 +400,41 @@ public class AminoJavaXMLExport extends JAction {
         @Override
         public String getShortName() {
             return "Save";
+        }
+    }
+
+    public static class Test extends JAction {
+        private final Canvas canvas;
+
+        public Test(Canvas canvas) {
+            this.canvas = canvas;
+        }
+
+        @Override
+        public void execute() {
+            try {
+                File file = new File("foo.xml");
+                Doc xml = XMLParser.parse(file);
+                Node node = parsePage(xml.root());
+                Stage demoStage = null;
+                if(demoStage == null) {
+                    demoStage = Stage.createStage();
+                    demoStage.setWidth(600);
+                    demoStage.setHeight(400);
+                    demoStage.setAlwaysOnTop(true);
+                }
+                node.setTranslateX(0);
+                node.setTranslateY(0);
+                demoStage.setContent(node);
+                demoStage.raiseToTop();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public String getShortName() {
+            return "Test";
         }
     }
 }
