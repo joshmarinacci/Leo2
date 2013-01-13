@@ -4,9 +4,6 @@ import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
-import com.joshondesign.treegui.modes.amino.ActionProp;
-import com.joshondesign.treegui.modes.amino.AminoAdapter;
-import com.joshondesign.treegui.modes.amino.TriggerProp;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -69,65 +66,31 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             popup.reset();
             popup.setVisible(true);
         }
-        populateWithBindableProperties(popup, getSelection().get(0));
+        SketchNode node = getSelection().get(0);
+        if(node instanceof DynamicNode) {
+            BindingUtils.populateWithBindablePropertiesDynamic(popup, (DynamicNode) node, this);
+        } else {
+            BindingUtils.populateWithBindablePropertiesRegular(popup, node, this);
+        }
         popup.setTranslateX(pt.getX() + this.getTranslateX());
         popup.setTranslateY(pt.getY() + this.getTranslateY());
     }
 
 
-    private void populateWithBindableProperties(BindingBox popup, SketchNode selection) {
-        for(final String prop : AminoAdapter.getProps(selection).keySet()) {
-            if("id".equals(prop)) continue; //skip the ID property
-
-            final Binding sourceBinding = findSourceBinding(selection, prop);
-            final Binding targetBinding = findTargetBinding(selection, prop);
-            popup.addProperty(this, selection, prop, sourceBinding, targetBinding, true, true);
-        }
-    }
-
-    private Binding findTargetBinding(SketchNode selection, String prop) {
-        for(Binding binding : bindings) {
-            if(binding.getTarget() == selection) {
-                if(binding.getTargetProperty().equals(prop)) {
-                    return binding;
-                }
-            }
-        }
-        return null;
-    }
-
-    private Binding findSourceBinding(SketchNode selection, String prop) {
-        for(Binding binding : bindings) {
-            if(binding.getSource() == selection) {
-                if(binding.getSourceProperty().equals(prop)) {
-                    return binding;
-                }
-            }
-        }
-        return null;
-    }
-
     void showTargetPopup(final SketchNode node, MouseEvent mouseEvent) {
         if(popup2 == null) {
             popup2 = new BindingBox();
             this.getParent().getStage().getPopupLayer().add(popup2);
-            //popup2.setFill(FlatColor.GRAY);
         }
         if(popup2 != null) {
             popup2.reset();
             popup2.setVisible(true);
         }
-        for(final String prop : AminoAdapter.getProps(node).keySet()) {
-            if(prop.equals("id")) continue;
-            final Binding sourceBinding = findSourceBinding(node, prop);
-            final Binding targetBinding = findTargetBinding(node, prop);
-            boolean canUse = true;
-            if(currentBinding.getSourceType() == TriggerProp.class) {
-                if(PropUtils.getPropertyType(node,prop) != ActionProp.class) {
-                    canUse = false;
-                }
-            }
-            popup2.addProperty(this, node, prop, sourceBinding, targetBinding, false, canUse);
+        if(node instanceof DynamicNode) {
+            BindingUtils.populateWithTargetPropertiesDynamic(popup2, (DynamicNode)node, currentBinding, this);
+        } else {
+            BindingUtils.populateWithTargetPropertiesRegular(popup2, node, currentBinding, this);
+
         }
         Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
         popup2.setTranslateX(pt.getX() + this.getTranslateX());

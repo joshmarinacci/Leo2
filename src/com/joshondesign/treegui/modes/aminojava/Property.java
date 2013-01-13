@@ -17,6 +17,7 @@ public class Property {
     private boolean exported = true;
     private String exportName;
     private boolean visible = true;
+    private boolean bindable = true;
 
     public Property(String name, Class type, Object value) {
         this.name = name;
@@ -68,6 +69,7 @@ public class Property {
         p.exportName = this.exportName;
         p.setVisible(this.isVisible());
         p.setExported(this.isExported());
+        p.setBindable(this.isBindable());
         return p;
     }
 
@@ -148,5 +150,14 @@ public class Property {
 
     public Enum getEnumValue() {
         return (Enum) this.value;
+    }
+
+    public Property setBindable(boolean bindable) {
+        this.bindable = bindable;
+        return this;
+    }
+
+    public boolean isBindable() {
+        return bindable;
     }
 }

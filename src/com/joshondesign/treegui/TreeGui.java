@@ -298,10 +298,10 @@ public class TreeGui implements Runnable {
                 .setExportName("prefWidth"));
         base.addProperty(new Property("height", Double.class, 30)
                 .setExportName("prefHeight"));
-        base.addProperty(new Property("anchorLeft", Boolean.class, true));
-        base.addProperty(new Property("anchorRight", Boolean.class, false));
-        base.addProperty(new Property("anchorTop", Boolean.class, true));
-        base.addProperty(new Property("anchorBottom", Boolean.class, false));
+        base.addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false));
+        base.addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false));
+        base.addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false));
+        base.addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false));
 
 
         DynamicNode button = new DynamicNode();
