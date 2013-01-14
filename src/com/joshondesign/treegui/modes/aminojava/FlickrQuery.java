@@ -16,6 +16,7 @@ public class FlickrQuery {
 
 
     public FlickrQuery() {
+        setQuery("london");
         results.add("foo");
     }
 
@@ -36,8 +37,8 @@ public class FlickrQuery {
     }
 
     public void execute() {
-        System.out.println("doing a flickr query");
-        results.add("oregon one");
-        results.add("oregon two");
+        results.clear();
+        results.add(getQuery() + " one");
+        results.add(getQuery() + " two");
     }
 }

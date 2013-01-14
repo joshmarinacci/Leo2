@@ -12,7 +12,9 @@ import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import com.joshondesign.xml.XMLWriter;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,13 +24,11 @@ import java.util.List;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.Event;
-import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
@@ -94,30 +94,39 @@ public class AminoJavaXMLExport extends JAction {
             u.p("last node is set to: " + last);
         }
 
-        for(Elem binding : root.xpath("bindings/binding")) {
-            Object src = objectMap.get(binding.attr("sourceid"));
-            u.p("processing binding for " + src + " " + binding.attr("sourceprop"));
+        for(final Elem binding : root.xpath("bindings/binding")) {
+            final Object src = objectMap.get(binding.attr("sourceid"));
             final Object tgt = objectMap.get(binding.attr("targetid"));
             final String tgtProp = binding.attr("targetprop");
 
             if(binding.attrEquals("sourcetype", GuiTest.TriggerType.class.getName())) {
-                u.p("doing a trigger binding");
                 EventBus.getSystem().addListener(src, ActionEvent.Action, new Callback<Event>() {
                     public void call(Event event) throws Exception {
-                        u.p("binding action callback called");
                         tgt.getClass().getMethod(tgtProp).invoke(tgt);
                     }
                 });
+                continue;
+            }
+            if(binding.attrEquals("sourcetype","java.lang.String") && src instanceof Textbox) {
+                EventBus.getSystem().addListener(src, ChangedEvent.StringChanged, new Callback<ChangedEvent>() {
+                    public void call(ChangedEvent changedEvent) throws Exception {
+                        setWithSetter(src, binding.attr("sourceprop"),
+                                tgt,tgtProp, binding.attr("targettype"));
+                    }
+                });
+                continue;
             }
             if(binding.attrEquals("sourcetype","java.lang.String")) {
                 setWithSetter(
                         src,binding.attr("sourceprop"),
                         tgt, tgtProp, binding.attr("targettype"));
+                continue;
             }
             if(binding.attrEquals("sourcetype", ListModel.class.getName())) {
                 setWithSetter(
                         src,binding.attr("sourceprop"),
                         tgt, tgtProp, binding.attr("targettype"));
+                continue;
             }
         }
 
@@ -127,10 +136,10 @@ public class AminoJavaXMLExport extends JAction {
     private static void setWithSetter(Object src, String sourceprop, Object tgt, String tgtProp, String tgttype) throws Exception {
         String getterName = "get"+sourceprop.substring(0,1).toUpperCase()+sourceprop.substring(1);
         String setterName = "set"+tgtProp.substring(0,1).toUpperCase()+tgtProp.substring(1);
-        u.p("using getter " + getterName + " on " + src);
+        //u.p("using getter " + getterName + " on " + src);
         Method getter = src.getClass().getMethod(getterName);
         Object value = getter.invoke(src);
-        u.p("using setter " + setterName + " oin " + tgt);
+        //u.p("using setter " + setterName + " oin " + tgt);
         Method setter = tgt.getClass().getMethod(setterName, Class.forName(tgttype));
         setter.invoke(tgt,value);
     }
