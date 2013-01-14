@@ -43,7 +43,6 @@ public class FlickrQuery {
     }
 
     public void execute() throws InterruptedException {
-        u.p("FlickrQuery executing");
         setActive(true);
         results.clear();
         results.add(getQuery() + " one");
@@ -56,7 +55,6 @@ public class FlickrQuery {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                u.p("background thread done");
                 return null;
             }
 
