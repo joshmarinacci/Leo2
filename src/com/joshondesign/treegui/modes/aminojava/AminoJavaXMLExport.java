@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.Event;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ListModel;
@@ -100,11 +104,18 @@ public class AminoJavaXMLExport extends JAction {
         for(Elem binding : root.xpath("bindings/binding")) {
             Object src = objectMap.get(binding.attr("sourceid"));
             u.p("processing binding for " + src + " " + binding.attr("sourceprop"));
-            //assume we are using 'this'
-            Object tgt = objectMap.get(binding.attr("targetid"));
-            String tgtProp = binding.attr("targetprop");
-            //assume we are using a setter to bind them
+            final Object tgt = objectMap.get(binding.attr("targetid"));
+            final String tgtProp = binding.attr("targetprop");
 
+            if(binding.attrEquals("sourcetype", GuiTest.TriggerType.class.getName())) {
+                u.p("doing a trigger binding");
+                EventBus.getSystem().addListener(src, ActionEvent.Action, new Callback<Event>() {
+                    public void call(Event event) throws Exception {
+                        u.p("binding action callback called");
+                        tgt.getClass().getMethod(tgtProp).invoke(tgt);
+                    }
+                });
+            }
             if(binding.attrEquals("sourcetype","java.lang.String")) {
                 setWithSetter(
                         src,binding.attr("sourceprop"),
@@ -143,15 +154,12 @@ public class AminoJavaXMLExport extends JAction {
                 Node child = (Node) obj;
 
                 if(root instanceof Container) {
-                    u.p("doing container: "+ root);
                     Container container = (Container) root;
-                    u.p("child = " + child);
                     if(container instanceof AnchorPanel && child instanceof Control) {
                         AnchorPanel anchorPanel = (AnchorPanel) container;
                         Control control = (Control) child;
                         AnchorPanel.AnchorSettings anchor = parseAnchor(vis);
-                        anchorPanel.DEBUG = true;
-                        u.p("added anchor child: " + control);
+                        //anchorPanel.DEBUG = true;
                         anchorPanel.add(control, anchor);
                     }else {
                         container.add(child);
