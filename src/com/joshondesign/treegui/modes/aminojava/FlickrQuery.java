@@ -16,6 +16,7 @@ public class FlickrQuery {
 
 
     public FlickrQuery() {
+        results.add("foo");
     }
 
     public void setQuery(String query) {

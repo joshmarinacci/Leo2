@@ -29,6 +29,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.stage.Stage;
@@ -402,8 +403,9 @@ public class TreeGui implements Runnable {
                         .setExported(false).setVisible(false))
                 .addProperty(new Property("rowHeight", Double.class, 20))
                 .addProperty(new Property("columnWidth", Double.class, 100))
-                .addProperty(new Property("renderer", String.class, "none"))
-                .addProperty(new Property("data", List.class, null).setBindable(true))
+                .addProperty(new Property("renderer", ListView.ItemRenderer.class, "none"))
+                .addProperty(new Property("model", ListModel.class, null)
+                        .setBindable(true).setExported(false).setVisible(false))
                 .addProperty(new Property("orientation",
                         ListView.Orientation.class, ListView.Orientation.Vertical))
                 ;
@@ -508,7 +510,7 @@ public class TreeGui implements Runnable {
         textbox
             .addProperty(new Property("class", String.class,"org.joshy.gfx.node.control.Textbox"))
             .addProperty(new Property("id", String.class, "foo2"))
-            .addProperty(new Property("text", CharSequence.class, "a textfield").setBindable(true))
+            .addProperty(new Property("text", String.class, "a textfield").setBindable(true))
             .addProperty(new Property("resize", String.class, "any")
                     .setExported(false).setVisible(false))
         ;
@@ -557,7 +559,7 @@ public class TreeGui implements Runnable {
                         "com.joshondesign.treegui.modes.aminojava.FlickrQuery"))
                 .addProperty(new Property("execute", ActionProp.class, null).setBindable(true))
                 .addProperty(new Property("query", String.class, "london").setBindable(true))
-                .addProperty(new Property("results", List.class, null).setBindable(true))
+                .addProperty(new Property("results", ListModel.class, null).setBindable(true))
         ;
         flickrQuery.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(flickrQuery);

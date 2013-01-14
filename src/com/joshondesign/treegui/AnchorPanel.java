@@ -28,6 +28,7 @@ public class AnchorPanel extends Panel {
             if(an.leftSet && !an.rightSet) {
                 control.setTranslateX(an.left);
                 control.setWidth(control.getPrefWidth());
+                u.p("  set control to " + control.getTranslateX() + " " + control.getPrefWidth());
             }
             if(an.leftSet && an.rightSet) {
                 control.setTranslateX(an.left);

@@ -76,40 +76,141 @@ public class AminoJavaXMLExport extends JAction {
         demoStage.raiseToTop();
     }
 
-    private static Node parsePage(Elem root) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Map<String, Object> nonvisualMap = new HashMap<String, Object>();
-        Map<String, Object> visualMap = new HashMap<String, Object>();
+    private static Node parsePage(Elem root) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
 
         for(Elem nonvis : root.xpath("nonvisual/node")) {
             Class clazz  = Class.forName(nonvis.attr("class"));
             Object obj = clazz.newInstance();
-            nonvisualMap.put(nonvis.attr("id"),obj);
+            objectMap.put(nonvis.attr("id"), obj);
         }
 
         Node last = null;
         for(Elem vis : root.xpath("visual/node")) {
             Class clazz  = Class.forName(vis.attr("class"));
             Object obj = clazz.newInstance();
-            visualMap.put(vis.attr("id"),obj);
-            if(obj instanceof Node) last = (Node) obj;
+            objectMap.put(vis.attr("id"),obj);
+            if(obj instanceof Node) {
+                last = (Node) obj;
+                processNodeChildren(last,vis,objectMap);
+            }
+            u.p("last node is set to: " + last);
         }
 
         for(Elem binding : root.xpath("bindings/binding")) {
-            Object src = nonvisualMap.get(binding.attr("sourceid"));
+            Object src = objectMap.get(binding.attr("sourceid"));
+            u.p("processing binding for " + src + " " + binding.attr("sourceprop"));
             //assume we are using 'this'
-            Object tgt = visualMap.get(binding.attr("targetid"));
+            Object tgt = objectMap.get(binding.attr("targetid"));
             String tgtProp = binding.attr("targetprop");
             //assume we are using a setter to bind them
-            try {
-                u.p("getting setter for model from object " + tgt.getClass().getName());
-                Method setter = tgt.getClass().getMethod("setModel",ListModel.class);
-                setter.invoke(tgt,src);
-            } catch (Exception e) {
-                e.printStackTrace();
+
+            if(binding.attrEquals("sourcetype","java.lang.String")) {
+                setWithSetter(
+                        src,binding.attr("sourceprop"),
+                        tgt, tgtProp, binding.attr("targettype"));
+            }
+            if(binding.attrEquals("sourcetype", ListModel.class.getName())) {
+                setWithSetter(
+                        src,binding.attr("sourceprop"),
+                        tgt, tgtProp, binding.attr("targettype"));
             }
         }
 
         return last;
+    }
+
+    private static void setWithSetter(Object src, String sourceprop, Object tgt, String tgtProp, String tgttype) throws Exception {
+        String getterName = "get"+sourceprop.substring(0,1).toUpperCase()+sourceprop.substring(1);
+        String setterName = "set"+tgtProp.substring(0,1).toUpperCase()+tgtProp.substring(1);
+        u.p("using getter " + getterName + " on " + src);
+        Method getter = src.getClass().getMethod(getterName);
+        Object value = getter.invoke(src);
+        u.p("using setter " + setterName + " oin " + tgt);
+        Method setter = tgt.getClass().getMethod(setterName, Class.forName(tgttype));
+        setter.invoke(tgt,value);
+    }
+
+    private static void processNodeChildren(Node root, Elem elem, Map<String, Object> objectMap) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        for(Elem vis : elem.xpath("children/node")) {
+            Class clazz  = Class.forName(vis.attr("class"));
+            Object obj = clazz.newInstance();
+            objectMap.put(vis.attr("id"),obj);
+
+            initObject(obj,vis);
+
+            if(obj instanceof Node) {
+                Node child = (Node) obj;
+
+                if(root instanceof Container) {
+                    u.p("doing container: "+ root);
+                    Container container = (Container) root;
+                    u.p("child = " + child);
+                    if(container instanceof AnchorPanel && child instanceof Control) {
+                        AnchorPanel anchorPanel = (AnchorPanel) container;
+                        Control control = (Control) child;
+                        AnchorPanel.AnchorSettings anchor = parseAnchor(vis);
+                        anchorPanel.DEBUG = true;
+                        u.p("added anchor child: " + control);
+                        anchorPanel.add(control, anchor);
+                    }else {
+                        container.add(child);
+                    }
+
+                }
+
+                processNodeChildren(child, vis, objectMap);
+            }
+        }
+    }
+
+    private static void initObject(Object node, Elem xml) throws XPathExpressionException {
+        List<String> skipList = new ArrayList<String>();
+        skipList.add("anchorLeft");
+        skipList.add("anchorRight");
+        skipList.add("anchorTop");
+        skipList.add("anchorBottom");
+        skipList.add("right");
+        skipList.add("bottom");
+
+        Class clazz = node.getClass();
+        for(Elem eprop : xml.xpath("property")) {
+            if(skipList.contains(eprop.attr("name"))) continue;
+            if(eprop.attrEquals("exported", Boolean.FALSE.toString())) continue;
+            if(eprop.attrEquals("name", "class")) continue;
+            String setter = "set" + eprop.attr("name").substring(0,1).toUpperCase()
+                    + eprop.attr("name").substring(1);
+
+
+            String value = eprop.attr("value");
+            u.p(" setting " + eprop.attr("name") + " with " + setter + " to " + value);
+            try {
+                if(eprop.attrEquals("type","java.lang.String")) {
+                    Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
+                    method.invoke(node, eprop.attr("value"));
+                }
+                if(eprop.attrEquals("type","java.lang.CharSequence")) {
+                    Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
+                    method.invoke(node, eprop.attr("value"));
+                }
+                if(eprop.attrEquals("type","java.lang.Double")) {
+                    Method method = findSetter(clazz, setter, eprop);
+                    method.invoke(node, Double.parseDouble(value));
+                }
+                if(eprop.attrEquals("type","org.joshy.gfx.draw.FlatColor")) {
+                    Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
+                    method.invoke(node, new FlatColor(eprop.attr("value")));
+                }
+                if(eprop.attrEquals("enum","true")) {
+                    Class clazz2 = clazz.forName(eprop.attr("type"));
+                    Method method = clazz.getMethod(setter, clazz2);
+                    method.invoke(node, Enum.valueOf(clazz2, eprop.attr("value")));
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     private Node parse(Elem xml) throws Exception {
@@ -187,7 +288,7 @@ public class AminoJavaXMLExport extends JAction {
         return (Node) node;
     }
 
-    private AnchorPanel.AnchorSettings parseAnchor(Elem echild) throws XPathExpressionException {
+    private static AnchorPanel.AnchorSettings parseAnchor(Elem echild) throws XPathExpressionException {
 
         double left = 0;
         boolean leftSet = false;
@@ -235,7 +336,7 @@ public class AminoJavaXMLExport extends JAction {
         return new AnchorPanel.AnchorSettings(left, leftSet, right, rightSet, top, topSet, bottom, bottomSet);
     }
 
-    private Method findSetter(Class clazz, String setter, Elem eprop) throws ClassNotFoundException, NoSuchMethodException {
+    private static Method findSetter(Class clazz, String setter, Elem eprop) throws ClassNotFoundException, NoSuchMethodException {
         try {
             Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
             return method;
@@ -281,9 +382,9 @@ public class AminoJavaXMLExport extends JAction {
             xml.start("binding");
             xml.attr("sourceid", binding.getSource().getId());
             xml.attr("sourceprop", binding.getSourceProperty());
+            xml.attr("sourcetype",binding.getSourceType().getName());
             xml.attr("targetid",binding.getTarget().getId());
             xml.attr("targetprop",binding.getTargetProperty());
-            xml.attr("sourcetype",binding.getSourceType().getName());
             xml.attr("targettype",binding.getTargetType().getName());
             xml.end();
         }

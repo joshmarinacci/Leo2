@@ -58,7 +58,7 @@ public class Binding {
     }
 
     public Class getSourceType() {
-        return PropUtils.getPropertyType(source,sourceProperty);
+        return PropUtils.getPropertyType(source, sourceProperty);
     }
 
     public Class getTargetType() {
