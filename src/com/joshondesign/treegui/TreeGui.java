@@ -9,6 +9,7 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListView;
 import com.joshondesign.treegui.modes.amino.*;
 import com.joshondesign.treegui.modes.amino.FlickrQuery;
+import com.joshondesign.treegui.modes.amino.Spinner;
 import com.joshondesign.treegui.modes.amino.StringListModel;
 import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.xml.Doc;
@@ -470,6 +471,36 @@ public class TreeGui implements Runnable {
         symbols.add(scroll);
 
 
+        DynamicNode spinner = new DynamicNode();
+        spinner.copyPropertiesFrom(base);
+        spinner.setName("Spinner");
+        spinner.setVisual(true);
+        spinner.setResizable(true);
+        spinner
+                .addProperty(new Property("class", String.class,
+                        "com.joshondesign.treegui.modes.aminojava.Spinner"))
+                .addProperty(new Property("id", String.class, "foo2"))
+                .addProperty(new Property("resize", String.class, "any")
+                        .setExported(false).setVisible(false))
+                .addProperty(new Property("active", Boolean.class,Boolean.TRUE)
+                        .setBindable(true))
+                ;
+        drawMap.put(spinner.getName(), new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillOval(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawOval(0, 0, w, h);
+            }
+        });
+        spinner.setDrawDelegate(drawMap.get(spinner.getName()));
+        spinner.getProperty("width").setDoubleValue(50);
+        spinner.getProperty("height").setDoubleValue(50);
+        symbols.add(spinner);
+
+
         DynamicNode custom = new DynamicNode();
         custom.setName("Custom View");
         custom.copyPropertiesFrom(base);
@@ -508,7 +539,8 @@ public class TreeGui implements Runnable {
         textbox.setResizable(true);
         textbox.setContainer(false);
         textbox
-            .addProperty(new Property("class", String.class,"org.joshy.gfx.node.control.Textbox"))
+            .addProperty(new Property("class", String.class,
+                    "org.joshy.gfx.node.control.Textbox"))
             .addProperty(new Property("id", String.class, "foo2"))
             .addProperty(new Property("text", String.class, "a textfield").setBindable(true))
             .addProperty(new Property("resize", String.class, "any")
@@ -563,6 +595,8 @@ public class TreeGui implements Runnable {
                         .setBindable(true).setVisible(true))
                 .addProperty(new Property("results", ListModel.class, null)
                         .setBindable(true).setVisible(false))
+                .addProperty(new Property("active", Boolean.class, Boolean.TRUE)
+                        .setBindable(true))
         ;
         flickrQuery.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(flickrQuery);

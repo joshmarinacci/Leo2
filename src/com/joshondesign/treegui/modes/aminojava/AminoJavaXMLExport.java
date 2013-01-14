@@ -3,6 +3,7 @@ package com.joshondesign.treegui.modes.aminojava;
 import com.joshondesign.treegui.AnchorPanel;
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.Canvas;
+import com.joshondesign.treegui.PropUtils;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
@@ -114,6 +115,16 @@ public class AminoJavaXMLExport extends JAction {
                 });
                 continue;
             }
+            if(binding.attrEquals("sourcetype","java.lang.Boolean")) {
+                u.p("doing a boolean bind");
+                EventBus.getSystem().addListener(src, ChangedEvent.BooleanChanged, new Callback<ChangedEvent>() {
+                    public void call(ChangedEvent changedEvent) throws Exception {
+                        setWithSetter(src, binding.attr("sourceprop"),
+                                tgt, tgtProp, binding.attr("targettype"));
+                    }
+                });
+                continue;
+            }
             if(binding.attrEquals("sourcetype","java.lang.String")) {
                 setWithSetter(
                         src,binding.attr("sourceprop"),
@@ -132,14 +143,8 @@ public class AminoJavaXMLExport extends JAction {
     }
 
     private static void setWithSetter(Object src, String sourceprop, Object tgt, String tgtProp, String tgttype) throws Exception {
-        String getterName = "get"+sourceprop.substring(0,1).toUpperCase()+sourceprop.substring(1);
-        String setterName = "set"+tgtProp.substring(0,1).toUpperCase()+tgtProp.substring(1);
-        //u.p("using getter " + getterName + " on " + src);
-        Method getter = src.getClass().getMethod(getterName);
-        Object value = getter.invoke(src);
-        //u.p("using setter " + setterName + " oin " + tgt);
-        Method setter = tgt.getClass().getMethod(setterName, Class.forName(tgttype));
-        setter.invoke(tgt,value);
+        Object value = PropUtils.findGetter(src,sourceprop).invoke(src);
+        PropUtils.findSetter(tgt,tgtProp).invoke(tgt,value);
     }
 
     private static void processNodeChildren(Node root, Elem elem, Map<String, Object> objectMap) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
@@ -488,7 +493,7 @@ public class AminoJavaXMLExport extends JAction {
                 demoStage.setContent(node);
                 demoStage.raiseToTop();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                u.p(ex);
             }
         }
 
