@@ -82,18 +82,12 @@ public class AminoJavaXMLExport extends JAction {
     private static Node parsePage(Elem root) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
 
-        for(Elem nonvis : root.xpath("nonvisual/node")) {
-            Class clazz  = Class.forName(nonvis.attr("class"));
-            Object obj = clazz.newInstance();
-            objectMap.put(nonvis.attr("id"), obj);
-        }
-
         Node last = null;
-        for(Elem vis : root.xpath("visual/node")) {
+        for(Elem vis : root.xpath("nodes/node")) {
             Class clazz  = Class.forName(vis.attr("class"));
             Object obj = clazz.newInstance();
             objectMap.put(vis.attr("id"),obj);
-            if(obj instanceof Node) {
+            if(obj instanceof Node && vis.attrEquals("visual","true")) {
                 last = (Node) obj;
                 processNodeChildren(last,vis,objectMap);
             }
@@ -289,20 +283,16 @@ public class AminoJavaXMLExport extends JAction {
         xml.start("page");
         // render non-visual nodes first
 
-        xml.start("nonvisual");
-        for(Layer layer : page.children()) {
-            for(SketchNode node : layer.children()) {
-                exportNonVisualNode(node, xml);
-            }
-        }
-        xml.end();
-
-        xml.start("visual");
+        xml.start("nodes");
         //render visual nodes next
         for(Layer layer : page.children()) {
             for(SketchNode node : layer.children()) {
                 if(node instanceof DynamicNode) {
-                    exportVisualNode(xml, (DynamicNode) node, 200, 200, false);
+                    if(node.isVisual()) {
+                        visualNodeToXML(xml, (DynamicNode) node, 200, 200, false);
+                    } else {
+                        exportNonVisualNode(node, xml);
+                    }
                 }
             }
         }
@@ -340,6 +330,7 @@ public class AminoJavaXMLExport extends JAction {
                 xml.attr("name", prop.getName());
                 xml.attr("value", prop.encode());
                 xml.attr("type", prop.getType().getName());
+                xml.attr("exported",Boolean.toString(prop.isExported()));
                 xml.end();
             }
             xml.end();
@@ -349,9 +340,7 @@ public class AminoJavaXMLExport extends JAction {
         }
     }
 
-    private static void exportVisualNode(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
-        u.p("exporting. parent size = " + width + " " + height);
-
+    private static void visualNodeToXML(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
         xml.start("node")
                 .attr("id", node.getId())
                 .attr("class", node.getProperty("class").encode())
@@ -404,9 +393,11 @@ public class AminoJavaXMLExport extends JAction {
             for(SketchNode nd : node.children()) {
                 DynamicNode nd2 = (DynamicNode) nd;
                 if(nd2.isVisual()) {
-                    exportVisualNode(xml, nd2,
+                    visualNodeToXML(xml, nd2,
                             node.getProperty("width").getDoubleValue(),
                             node.getProperty("height").getDoubleValue(), true);
+                } else {
+                    exportNonVisualNode(nd2,xml);
                 }
             }
         }

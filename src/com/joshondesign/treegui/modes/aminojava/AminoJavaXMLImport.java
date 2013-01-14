@@ -52,14 +52,8 @@ public class AminoJavaXMLImport extends JAction {
         Layer layer = new Layer();
         page.add(layer);
 
-        //non visual
-        for(Elem nonvis : root.xpath("nonvisual/node")) {
-            DynamicNode node = process(nonvis);
-            layer.add(node);
-        }
-        //visual
 
-        for(Elem vis : root.xpath("visual/node")) {
+        for(Elem vis : root.xpath("nodes/node")) {
             DynamicNode node = process(vis);
             layer.add(node);
         }
@@ -105,6 +99,7 @@ public class AminoJavaXMLImport extends JAction {
                 name = "height";
             }
             Property property = new Property(name, type, val);
+            property.setExported(prop.attrEquals("exported","true"));
             node.addProperty(property);
         }
         u.p("restored node " + node.getName());
@@ -114,6 +109,10 @@ public class AminoJavaXMLImport extends JAction {
 
 
         node.setDrawDelegate(TreeGui.drawMap.get(node.getName()));
+        if(!node.isVisual()) {
+            node.setDrawDelegate(TreeGui.drawMap.get("servicebase"));
+
+        }
         for(Elem echild : xml.xpath("children/node")) {
             node.add(process(echild));
         }

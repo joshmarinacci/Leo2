@@ -532,8 +532,8 @@ public class TreeGui implements Runnable {
         symbols.add(textbox);
 
         DynamicNode serviceBase = new DynamicNode();
-        serviceBase.addProperty(new Property("translateX", Double.class, 0))
-                .addProperty(new Property("translateY", Double.class, 0))
+        serviceBase.addProperty(new Property("translateX", Double.class, 0).setExported(false))
+                .addProperty(new Property("translateY", Double.class, 0).setExported(false))
                 .addProperty(new Property("width", Double.class, 90).setBindable(false).setExported(false))
                 .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
         ;
