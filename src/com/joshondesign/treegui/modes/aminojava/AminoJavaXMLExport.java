@@ -29,7 +29,6 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
@@ -221,81 +220,6 @@ public class AminoJavaXMLExport extends JAction {
 
     }
 
-    private Node parse(Elem xml) throws Exception {
-        Class clazz = null;
-        if(xml.attrEquals("custom","true")) {
-            clazz = getClass().forName(xml.attr("customClass"));
-        } else {
-            clazz = getClass().forName(xml.attr("class"));
-        }
-        Node node = (Node) clazz.newInstance();
-
-        List<String> skipList = new ArrayList<String>();
-        skipList.add("anchorLeft");
-        skipList.add("anchorRight");
-        skipList.add("anchorTop");
-        skipList.add("anchorBottom");
-        skipList.add("right");
-        skipList.add("bottom");
-
-        for(Elem eprop : xml.xpath("property")) {
-            if(skipList.contains(eprop.attr("name"))) continue;
-            if(eprop.attrEquals("name", "class")) continue;
-            String setter = "set" + eprop.attr("name").substring(0,1).toUpperCase()
-                    + eprop.attr("name").substring(1);
-
-
-            String value = eprop.attr("value");
-            u.p(" setting " + eprop.attr("name") + " with " + setter + " to " + value);
-            try {
-            if(eprop.attrEquals("type","java.lang.String")) {
-                Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
-                method.invoke(node, eprop.attr("value"));
-            }
-            if(eprop.attrEquals("type","java.lang.CharSequence")) {
-                Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
-                method.invoke(node, eprop.attr("value"));
-            }
-            if(eprop.attrEquals("type","java.lang.Double")) {
-                Method method = findSetter(clazz, setter, eprop);
-                method.invoke(node, Double.parseDouble(value));
-            }
-            if(eprop.attrEquals("type","org.joshy.gfx.draw.FlatColor")) {
-                Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
-                method.invoke(node, new FlatColor(eprop.attr("value")));
-            }
-            if(eprop.attrEquals("enum","true")) {
-                Class clazz2 = clazz.forName(eprop.attr("type"));
-                Method method = clazz.getMethod(setter, clazz2);
-                method.invoke(node, Enum.valueOf(clazz2, eprop.attr("value")));
-            }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-        }
-        for(Elem echild : xml.xpath("children/node")) {
-            Node nchild = parse(echild);
-            if(node instanceof  Container) {
-                Container container = (Container) node;
-                if(container instanceof AnchorPanel && nchild instanceof Control) {
-                    AnchorPanel anchorPanel = (AnchorPanel) container;
-                    Control control = (Control) nchild;
-                    AnchorPanel.AnchorSettings anchor = parseAnchor(echild);
-                    anchorPanel.DEBUG = true;
-                    anchorPanel.add(control, anchor);
-                }else {
-                    container.add(nchild);
-                }
-            }
-            if(node instanceof ScrollPane) {
-                ScrollPane sp = (ScrollPane) node;
-                sp.setContent(nchild);
-            }
-        }
-        return (Node) node;
-    }
-
     private static AnchorPanel.AnchorSettings parseAnchor(Elem echild) throws XPathExpressionException {
 
         double left = 0;
@@ -423,13 +347,6 @@ public class AminoJavaXMLExport extends JAction {
         for(SketchNode child : node.children()) {
             exportNonVisualNode(child,xml);
         }
-    }
-
-    public static void exportToXML(PrintWriter printWriter, DynamicNode root) throws FileNotFoundException, UnsupportedEncodingException, URISyntaxException {
-        XMLWriter xml = new XMLWriter(printWriter, new URI(""));
-        xml.header();
-        exportVisualNode(xml, root, 200, 200, false);
-        xml.close();
     }
 
     private static void exportVisualNode(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
