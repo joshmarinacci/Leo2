@@ -99,7 +99,7 @@ public class TreeGui implements Runnable {
             exp.page = doc.get(0);
             //actions.add(exp);
             actions.add(new AminoJavaXMLExport(canvas,doc.get(0)));
-            actions.add(new AminoJavaXMLImport(canvas));
+            actions.add(new AminoJavaXMLImport(canvas,doc));
             actions.add(new AminoJavaXMLExport.Save(canvas, doc));
             actions.add(new AminoJavaXMLExport.Test(canvas));
 
