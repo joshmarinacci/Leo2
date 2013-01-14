@@ -557,9 +557,12 @@ public class TreeGui implements Runnable {
         flickrQuery
                 .addProperty(new Property("class", String.class,
                         "com.joshondesign.treegui.modes.aminojava.FlickrQuery"))
-                .addProperty(new Property("execute", ActionProp.class, null).setBindable(true))
-                .addProperty(new Property("query", String.class, "london").setBindable(true))
-                .addProperty(new Property("results", ListModel.class, null).setBindable(true))
+                .addProperty(new Property("execute", ActionProp.class, null)
+                        .setBindable(true).setVisible(false))
+                .addProperty(new Property("query", String.class, "london")
+                        .setBindable(true).setVisible(true))
+                .addProperty(new Property("results", ListModel.class, null)
+                        .setBindable(true).setVisible(false))
         ;
         flickrQuery.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(flickrQuery);

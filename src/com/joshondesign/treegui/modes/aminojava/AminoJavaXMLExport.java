@@ -179,12 +179,16 @@ public class AminoJavaXMLExport extends JAction {
             if(skipList.contains(eprop.attr("name"))) continue;
             if(eprop.attrEquals("exported", Boolean.FALSE.toString())) continue;
             if(eprop.attrEquals("name", "class")) continue;
-            String setter = "set" + eprop.attr("name").substring(0,1).toUpperCase()
-                    + eprop.attr("name").substring(1);
+
+            String name = eprop.attr("name");
+            if(eprop.hasAttr("exportname")) {
+                name = eprop.attr("exportname");
+            }
+            String setter = "set" + name.substring(0,1).toUpperCase() + name.substring(1);
 
 
             String value = eprop.attr("value");
-            u.p(" setting " + eprop.attr("name") + " with " + setter + " to " + value);
+            u.p(" setting " + name + " with " + setter + " to " + value);
             try {
                 if(eprop.attrEquals("type","java.lang.String")) {
                     Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
@@ -291,7 +295,7 @@ public class AminoJavaXMLExport extends JAction {
                     if(node.isVisual()) {
                         visualNodeToXML(xml, (DynamicNode) node, 200, 200, false);
                     } else {
-                        exportNonVisualNode(node, xml);
+                        nonvisualNodeToXML(node, xml);
                     }
                 }
             }
@@ -316,7 +320,7 @@ public class AminoJavaXMLExport extends JAction {
         xml.close();
     }
 
-    private static void exportNonVisualNode(SketchNode node, XMLWriter xml) {
+    private static void nonvisualNodeToXML(SketchNode node, XMLWriter xml) {
         if(!node.isVisual() && node instanceof DynamicNode) {
             DynamicNode nd = (DynamicNode) node;
             u.p("spitting out " + nd);
@@ -331,12 +335,17 @@ public class AminoJavaXMLExport extends JAction {
                 xml.attr("value", prop.encode());
                 xml.attr("type", prop.getType().getName());
                 xml.attr("exported",Boolean.toString(prop.isExported()));
+                xml.attr("visible", Boolean.toString(prop.isVisible()));
+                xml.attr("bindable", Boolean.toString(prop.isBindable()));
+                if(prop.getExportName() != null) {
+                    xml.attr("exportname", prop.getExportName());
+                }
                 xml.end();
             }
             xml.end();
         }
         for(SketchNode child : node.children()) {
-            exportNonVisualNode(child,xml);
+            nonvisualNodeToXML(child, xml);
         }
     }
 
@@ -357,18 +366,18 @@ public class AminoJavaXMLExport extends JAction {
 
             if(prop.getName().equals("customClass")) continue;
             xml.start("property");
+            xml.attr("name", prop.getName());
             if(prop.getExportName() != null) {
-                xml.attr("name", prop.getExportName());
-            }else {
-                xml.attr("name", prop.getName());
+                xml.attr("exportname", prop.getExportName());
             }
             if(prop.getType().isEnum()) {
-                u.p("name = " + prop.getType().getName());
                 xml.attr("enum", "true");
             }
             xml.attr("value", prop.encode())
                 .attr("type", prop.getType().getName());
             xml.attr("exported",Boolean.toString(prop.isExported()));
+            xml.attr("visible", Boolean.toString(prop.isVisible()));
+            xml.attr("bindable", Boolean.toString(prop.isBindable()));
             xml.end();
         }
 
@@ -397,7 +406,7 @@ public class AminoJavaXMLExport extends JAction {
                             node.getProperty("width").getDoubleValue(),
                             node.getProperty("height").getDoubleValue(), true);
                 } else {
-                    exportNonVisualNode(nd2,xml);
+                    nonvisualNodeToXML(nd2, xml);
                 }
             }
         }
