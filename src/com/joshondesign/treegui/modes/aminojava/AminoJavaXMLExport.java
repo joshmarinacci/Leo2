@@ -26,9 +26,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
@@ -111,7 +109,7 @@ public class AminoJavaXMLExport extends JAction {
                 EventBus.getSystem().addListener(src, ChangedEvent.StringChanged, new Callback<ChangedEvent>() {
                     public void call(ChangedEvent changedEvent) throws Exception {
                         setWithSetter(src, binding.attr("sourceprop"),
-                                tgt,tgtProp, binding.attr("targettype"));
+                                tgt, tgtProp, binding.attr("targettype"));
                     }
                 });
                 continue;
@@ -146,7 +144,19 @@ public class AminoJavaXMLExport extends JAction {
 
     private static void processNodeChildren(Node root, Elem elem, Map<String, Object> objectMap) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         for(Elem vis : elem.xpath("children/node")) {
-            Class clazz  = Class.forName(vis.attr("class"));
+            String classname = vis.attr("class");
+            if(vis.attrEquals("custom","true")) {
+                classname = vis.attr("customClass");
+            }
+            Class clazz = null;
+
+            try {
+                clazz  = Class.forName(classname);
+            } catch (ClassNotFoundException clfn) {
+                u.p("couldn't find a the class: " + classname);
+                u.p("   substituting a button");
+                clazz = Button.class;
+            }
             Object obj = clazz.newInstance();
             objectMap.put(vis.attr("id"),obj);
 
@@ -167,6 +177,9 @@ public class AminoJavaXMLExport extends JAction {
                         container.add(child);
                     }
 
+                }
+                if(root instanceof ScrollPane) {
+                    ((ScrollPane)root).setContent(child);
                 }
 
                 processNodeChildren(child, vis, objectMap);

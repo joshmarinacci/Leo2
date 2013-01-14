@@ -142,6 +142,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
 
     private void drawMasterRoot(GFX gfx, TreeNode<SketchNode> root) {
+        if(root == null) return;
         for(SketchNode n : root.children()) {
             drawNode(gfx, n);
         }
