@@ -13,13 +13,6 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/4/13
- * Time: 10:47 AM
- * To change this template use File | Settings | File Templates.
- */
 public class SelectionTool extends CanvasTool {
     private final Canvas canvas;
     private Handle activeHandle;

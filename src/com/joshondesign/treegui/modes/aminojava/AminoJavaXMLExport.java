@@ -217,16 +217,29 @@ public class AminoJavaXMLExport extends JAction {
 
         @Override
         public void execute() {
-            java.awt.FileDialog fd = new java.awt.FileDialog((Frame) null);
-            fd.setMode(FileDialog.SAVE);
-            fd.setVisible(true);
-            if(fd.getFile() == null) {
-                return;
+
+            File file = null;
+
+            //get a file to write to
+            if(doc.getFile() != null) {
+                file = doc.getFile();
+            } else {
+                java.awt.FileDialog fd = new java.awt.FileDialog((Frame) null);
+                fd.setMode(FileDialog.SAVE);
+                fd.setVisible(true);
+                if(fd.getFile() == null) {
+                    return;
+                }
+                file = new File(fd.getDirectory(),fd.getFile());
             }
-            File file = new File(fd.getDirectory(),fd.getFile());
+
+
+            //write to the file
             try {
-                exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), canvas);
-                u.p("exported to : " + file.getAbsolutePath());
+                if(file != null) {
+                    exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), canvas);
+                    u.p("exported to : " + file.getAbsolutePath());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

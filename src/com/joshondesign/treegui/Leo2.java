@@ -134,6 +134,11 @@ public class Leo2 {
             doc = initDoc();
         } else {
             doc = AminoJavaXMLImport.open(docFile, canvasView);
+            doc.setFile(file);
+        }
+
+        if(doc.getFile() != null) {
+            stage.setTitle(doc.getFile().getName());
         }
 
         canvasView.setDocument(doc);
