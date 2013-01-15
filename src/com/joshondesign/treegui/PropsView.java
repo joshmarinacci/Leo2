@@ -1,5 +1,7 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import java.lang.reflect.InvocationTargetException;
@@ -10,10 +12,12 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.util.ArrayListModel;
+import org.joshy.gfx.util.u;
 
 public class PropsView extends GridBox {
     private PropFilter filter;
     private Callback<Void> updateCallback;
+    private SketchDocument document;
 
     public PropsView() {
     }
@@ -339,6 +343,25 @@ public class PropsView extends GridBox {
 
     public void onUpdate(Callback<Void> callback) {
         this.updateCallback = callback;
+    }
+
+    public void setDocument(SketchDocument document) {
+        this.document = document;
+        document.getSelection().addListener(new TreeNode.TreeListener() {
+            public void added(TreeNode node) {
+                setSelection(node);
+                setDrawingDirty();
+            }
+
+            public void removed(TreeNode node) {
+                setDrawingDirty();
+            }
+
+            public void modified(TreeNode node) {
+                setSelection(node);
+                setDrawingDirty();
+            }
+        });
     }
 
     public static interface PropFilter {

@@ -76,7 +76,6 @@ public class TreeGui implements Runnable {
             final Canvas canvas = (Canvas) find("canvas",rootControl);
             canvas.setMasterRoot(doc.get(0).get(0));
             canvas.setEditRoot(doc.get(0).get(0));
-            canvas.setPropsView(propsView);
             canvas.setDocument(doc);
 
 
@@ -86,6 +85,7 @@ public class TreeGui implements Runnable {
                     return true;
                 }
             });
+            propsView.setDocument(doc);
             propsView.setSelection(doc.get(0).get(0).get(0));
             propsView.onUpdate(new Callback<Void>() {
                 public void call(Void aVoid) throws Exception {

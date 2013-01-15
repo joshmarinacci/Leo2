@@ -21,8 +21,6 @@ import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.util.u;
 
 public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAware {
-    //private TreeNode<SketchNode> selection = new TreeNode<SketchNode>();
-    private PropsView propsView;
     BindingBox popup;
     BindingBox popup2;
     Point2D startDragPoint;
@@ -261,19 +259,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         setDrawingDirty();
     }
     */
-     /*
-    public TreeNode<SketchNode> getSelection() {
-        return selection;
-    }
-    */
-
-    public void setPropsView(PropsView propsView) {
-        this.propsView = propsView;
-    }
-
-    public PropsView getPropsView() {
-        return propsView;
-    }
 
     public List<Binding> getBindings() {
         return bindings;
@@ -364,17 +349,14 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         selectionTool = new SelectionTool(this, document);
         document.getSelection().addListener(new TreeNode.TreeListener() {
             public void added(TreeNode node) {
-                u.p("added to selection");
                 redraw();
             }
 
             public void removed(TreeNode node) {
-                u.p("removed from selection");
                 redraw();
             }
 
             public void modified(TreeNode node) {
-                u.p("modified in selection");
                 redraw();
             }
         });

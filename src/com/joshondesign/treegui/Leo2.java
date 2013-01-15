@@ -158,12 +158,12 @@ public class Leo2 {
             }
         });
         propsView.setSelection(doc.get(0).get(0).get(0));
+        propsView.setDocument(doc);
 
 
         //set up the canvas
         canvasView.setMasterRoot(doc.get(0).get(0));
         canvasView.setEditRoot(doc.get(0).get(0));
-        canvasView.setPropsView(propsView);
 
 
         //set up  the buttons
