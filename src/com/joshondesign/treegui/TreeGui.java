@@ -190,7 +190,7 @@ public class TreeGui implements Runnable {
 
     }
 
-    private TreeNode<Mode> initModes() {
+    public static TreeNode<Mode> initModes() {
         TreeNode<Mode> modes = new TreeNode<Mode>();
         Mode aminojs = new Mode();
         aminojs.setId("com.joshondesign.modes.aminojs");
@@ -287,7 +287,7 @@ public class TreeGui implements Runnable {
 
     public static Map<String,DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
 
-    private Mode setupJavaMode() {
+    private static Mode setupJavaMode() {
 
         Mode aminojava = new Mode();
         aminojava.setId("com.joshondesign.modes.aminojava");

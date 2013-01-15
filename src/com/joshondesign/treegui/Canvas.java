@@ -37,10 +37,12 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     public void setMasterRoot(TreeNode<SketchNode> masterRoot) {
         this.masterRoot = masterRoot;
+        setDrawingDirty();
     }
 
     public void setEditRoot(TreeNode<SketchNode> editRoot) {
         this.editRoot = editRoot;
+        setDrawingDirty();
     }
 
     public TreeNode<SketchNode> getEditRoot() {

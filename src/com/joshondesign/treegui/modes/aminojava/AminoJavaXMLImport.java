@@ -11,6 +11,8 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +39,11 @@ public class AminoJavaXMLImport extends JAction {
 
     @Override
     public void execute() {
-        File file = new File("foo.xml");
+        FileDialog fd = new FileDialog((Frame)null);
+        fd.setMode(FileDialog.LOAD);
+        fd.setVisible(true);
+        if(fd.getFile() == null) return;
+        File file = new File(fd.getDirectory(),fd.getFile());
         try {
             Doc xml = XMLParser.parse(file);
             Page page = processPage(xml.root());
@@ -87,6 +93,9 @@ public class AminoJavaXMLImport extends JAction {
         node.setContainer(xml.attrEquals("container", "true"));
         node.setResizable(xml.attrEquals("resizable", "true"));
         node.setCustom(xml.attrEquals("custom", "true"));
+        if(node.isCustom()) {
+            node.addProperty(new Property("customClass",String.class,xml.attr("customClass")));
+        }
         node.setId(xml.attr("id"));
         ids.put(node.getId(),node);
         for(Elem prop : xml.xpath("property")) {

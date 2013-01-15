@@ -1,34 +1,23 @@
 package com.joshondesign.treegui.modes.aminojava;
 
-import com.joshondesign.treegui.AnchorPanel;
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.Canvas;
-import com.joshondesign.treegui.PropUtils;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.xml.Doc;
-import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import com.joshondesign.xml.XMLWriter;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.xml.xpath.XPathExpressionException;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 
@@ -65,7 +54,7 @@ public class AminoJavaXMLExport extends JAction {
 
     private void loadAndRun(File file) throws Exception {
         Doc xml = XMLParser.parse(file);
-        Node node = parsePage(xml.root());
+        Node node = AminoParser.parsePage(xml.root());
         if(demoStage == null) {
             demoStage = Stage.createStage();
             demoStage.setWidth(600);
@@ -76,231 +65,6 @@ public class AminoJavaXMLExport extends JAction {
         node.setTranslateY(0);
         demoStage.setContent(node);
         demoStage.raiseToTop();
-    }
-
-    private static Node parsePage(Elem root) throws Exception {
-        Map<String, Object> objectMap = new HashMap<String, Object>();
-
-        Node last = null;
-        for(Elem vis : root.xpath("nodes/node")) {
-            Class clazz  = Class.forName(vis.attr("class"));
-            Object obj = clazz.newInstance();
-            objectMap.put(vis.attr("id"),obj);
-            if(obj instanceof Node && vis.attrEquals("visual","true")) {
-                last = (Node) obj;
-                processNodeChildren(last,vis,objectMap);
-            }
-            u.p("last node is set to: " + last);
-        }
-
-        for(final Elem binding : root.xpath("bindings/binding")) {
-            final Object src = objectMap.get(binding.attr("sourceid"));
-            final Object tgt = objectMap.get(binding.attr("targetid"));
-            final String tgtProp = binding.attr("targetprop");
-
-            if(binding.attrEquals("sourcetype", GuiTest.TriggerType.class.getName())) {
-                EventBus.getSystem().addListener(src, ActionEvent.Action, new Callback<Event>() {
-                    public void call(Event event) throws Exception {
-                        tgt.getClass().getMethod(tgtProp).invoke(tgt);
-                    }
-                });
-                continue;
-            }
-            if(binding.attrEquals("sourcetype","java.lang.String") && src instanceof Textbox) {
-                EventBus.getSystem().addListener(src, ChangedEvent.StringChanged, new Callback<ChangedEvent>() {
-                    public void call(ChangedEvent changedEvent) throws Exception {
-                        setWithSetter(src, binding.attr("sourceprop"),
-                                tgt, tgtProp, binding.attr("targettype"));
-                    }
-                });
-                continue;
-            }
-            if(binding.attrEquals("sourcetype","java.lang.Boolean")) {
-                u.p("doing a boolean bind");
-                EventBus.getSystem().addListener(src, ChangedEvent.BooleanChanged, new Callback<ChangedEvent>() {
-                    public void call(ChangedEvent changedEvent) throws Exception {
-                        setWithSetter(src, binding.attr("sourceprop"),
-                                tgt, tgtProp, binding.attr("targettype"));
-                    }
-                });
-                continue;
-            }
-            if(binding.attrEquals("sourcetype","java.lang.String")) {
-                setWithSetter(
-                        src,binding.attr("sourceprop"),
-                        tgt, tgtProp, binding.attr("targettype"));
-                continue;
-            }
-            if(binding.attrEquals("sourcetype", ListModel.class.getName())) {
-                setWithSetter(
-                        src,binding.attr("sourceprop"),
-                        tgt, tgtProp, binding.attr("targettype"));
-                continue;
-            }
-        }
-
-        return last;
-    }
-
-    private static void setWithSetter(Object src, String sourceprop, Object tgt, String tgtProp, String tgttype) throws Exception {
-        Object value = PropUtils.findGetter(src,sourceprop).invoke(src);
-        PropUtils.findSetter(tgt,tgtProp).invoke(tgt,value);
-    }
-
-    private static void processNodeChildren(Node root, Elem elem, Map<String, Object> objectMap) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        for(Elem vis : elem.xpath("children/node")) {
-            String classname = vis.attr("class");
-            if(vis.attrEquals("custom","true")) {
-                classname = vis.attr("customClass");
-            }
-            Class clazz = null;
-
-            try {
-                clazz  = Class.forName(classname);
-            } catch (ClassNotFoundException clfn) {
-                u.p("couldn't find a the class: " + classname);
-                u.p("   substituting a button");
-                clazz = Button.class;
-            }
-            Object obj = clazz.newInstance();
-            objectMap.put(vis.attr("id"),obj);
-
-            initObject(obj,vis);
-
-            if(obj instanceof Node) {
-                Node child = (Node) obj;
-
-                if(root instanceof Container) {
-                    Container container = (Container) root;
-                    if(container instanceof AnchorPanel && child instanceof Control) {
-                        AnchorPanel anchorPanel = (AnchorPanel) container;
-                        Control control = (Control) child;
-                        AnchorPanel.AnchorSettings anchor = parseAnchor(vis);
-                        //anchorPanel.DEBUG = true;
-                        anchorPanel.add(control, anchor);
-                    }else {
-                        container.add(child);
-                    }
-
-                }
-                if(root instanceof ScrollPane) {
-                    ((ScrollPane)root).setContent(child);
-                }
-
-                processNodeChildren(child, vis, objectMap);
-            }
-        }
-    }
-
-    private static void initObject(Object node, Elem xml) throws XPathExpressionException {
-        List<String> skipList = new ArrayList<String>();
-        skipList.add("anchorLeft");
-        skipList.add("anchorRight");
-        skipList.add("anchorTop");
-        skipList.add("anchorBottom");
-        skipList.add("right");
-        skipList.add("bottom");
-
-        Class clazz = node.getClass();
-        for(Elem eprop : xml.xpath("property")) {
-            if(skipList.contains(eprop.attr("name"))) continue;
-            if(eprop.attrEquals("exported", Boolean.FALSE.toString())) continue;
-            if(eprop.attrEquals("name", "class")) continue;
-
-            String name = eprop.attr("name");
-            if(eprop.hasAttr("exportname")) {
-                name = eprop.attr("exportname");
-            }
-            String setter = "set" + name.substring(0,1).toUpperCase() + name.substring(1);
-
-
-            String value = eprop.attr("value");
-            u.p(" setting " + name + " with " + setter + " to " + value);
-            try {
-                if(eprop.attrEquals("type","java.lang.String")) {
-                    Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
-                    method.invoke(node, eprop.attr("value"));
-                }
-                if(eprop.attrEquals("type","java.lang.CharSequence")) {
-                    Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
-                    method.invoke(node, eprop.attr("value"));
-                }
-                if(eprop.attrEquals("type","java.lang.Double")) {
-                    Method method = findSetter(clazz, setter, eprop);
-                    method.invoke(node, Double.parseDouble(value));
-                }
-                if(eprop.attrEquals("type","org.joshy.gfx.draw.FlatColor")) {
-                    Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
-                    method.invoke(node, new FlatColor(eprop.attr("value")));
-                }
-                if(eprop.attrEquals("enum","true")) {
-                    Class clazz2 = clazz.forName(eprop.attr("type"));
-                    Method method = clazz.getMethod(setter, clazz2);
-                    method.invoke(node, Enum.valueOf(clazz2, eprop.attr("value")));
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-    }
-
-    private static AnchorPanel.AnchorSettings parseAnchor(Elem echild) throws XPathExpressionException {
-
-        double left = 0;
-        boolean leftSet = false;
-        double right = 0;
-        boolean rightSet = false;
-        double top = 0;
-        boolean topSet = false;
-        double bottom = 0;
-        boolean bottomSet = false;
-
-        double translateX = 0;
-        double translateY = 0;
-        for(Elem eprop : echild.xpath("property")) {
-            if(eprop.attrEquals("name","translateX")) {
-                translateX = Double.parseDouble(eprop.attr("value"));
-            }
-            if(eprop.attrEquals("name","translateY")) {
-                translateY = Double.parseDouble(eprop.attr("value"));
-            }
-            if(eprop.attrEquals("name","anchorLeft")) {
-                leftSet = eprop.attrEquals("value", "true");
-            }
-            if(eprop.attrEquals("name","anchorRight")) {
-                rightSet = eprop.attrEquals("value","true");
-            }
-            if(eprop.attrEquals("name","right")) {
-                right = Double.parseDouble(eprop.attr("value"));
-            }
-            if(eprop.attrEquals("name","anchorTop")) {
-                topSet = eprop.attrEquals("value", "true");
-            }
-            if(eprop.attrEquals("name","anchorBottom")) {
-                bottomSet = eprop.attrEquals("value","true");
-            }
-            if(eprop.attrEquals("name","bottom")) {
-                bottom = Double.parseDouble(eprop.attr("value"));
-            }
-        }
-        if(leftSet) {
-            left = translateX;
-        }
-        if(topSet) {
-            top = translateY;
-        }
-        return new AnchorPanel.AnchorSettings(left, leftSet, right, rightSet, top, topSet, bottom, bottomSet);
-    }
-
-    private static Method findSetter(Class clazz, String setter, Elem eprop) throws ClassNotFoundException, NoSuchMethodException {
-        try {
-            Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
-            return method;
-        } catch (NoSuchMethodException e) {
-            Method method = clazz.getMethod(setter, Double.TYPE);
-            return method;
-        }
     }
 
     @Override
@@ -453,7 +217,13 @@ public class AminoJavaXMLExport extends JAction {
 
         @Override
         public void execute() {
-            File file = new File("foo.xml");
+            java.awt.FileDialog fd = new java.awt.FileDialog((Frame) null);
+            fd.setMode(FileDialog.SAVE);
+            fd.setVisible(true);
+            if(fd.getFile() == null) {
+                return;
+            }
+            File file = new File(fd.getDirectory(),fd.getFile());
             try {
                 exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), canvas);
                 u.p("exported to : " + file.getAbsolutePath());
@@ -480,7 +250,7 @@ public class AminoJavaXMLExport extends JAction {
             try {
                 File file = new File("foo.xml");
                 Doc xml = XMLParser.parse(file);
-                Node node = parsePage(xml.root());
+                Node node = AminoParser.parsePage(xml.root());
                 Stage demoStage = null;
                 if(demoStage == null) {
                     demoStage = Stage.createStage();
