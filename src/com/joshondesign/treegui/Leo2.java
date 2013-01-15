@@ -60,14 +60,20 @@ public class Leo2 {
             });
 
 
+            //bind new doc action
             Button newdocButton = (Button) AminoParser.find("newdocButton", root);
             newdocButton.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
-                    u.p("new doc");
-                    doNewDoc();
+                    doNewDoc(null);
                 }
             });
-            //bind new doc action
+
+            //edit self button
+            ((Button)AminoParser.find("editselfButton",root)).onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    doNewDoc(new File("main.xml"));
+                }
+            });
 
             //create stage to match it's size
             Stage stage = Stage.createStage();
@@ -96,12 +102,11 @@ public class Leo2 {
         }
     }
 
-    private static void doNewDoc() throws Exception {
+    private static void doNewDoc(File docFile) throws Exception {
         //init modes
         TreeNode<Mode> modes = TreeGui.initModes();
         Mode mode = modes.get(1);
-        //init doc
-        final SketchDocument doc = initDoc();
+
         //init window
 
         File file = new File("main.xml");
@@ -121,6 +126,15 @@ public class Leo2 {
         final ListView symbolsView = (ListView) AminoParser.find("symbolsView", root);
         final Canvas canvasView = (Canvas) AminoParser.find("canvasView", root);
         final PropsView propsView = (PropsView) AminoParser.find("propsView", root);
+
+        //init doc
+        SketchDocument doc = null;
+        if(docFile == null) {
+            doc = initDoc();
+        } else {
+            doc = AminoJavaXMLImport.open(docFile, canvasView);
+        }
+
 
         //setup the symbols view
         final TreeNode<SketchNode> symbols = mode.get(1);
@@ -150,14 +164,15 @@ public class Leo2 {
             public void call(ActionEvent actionEvent) throws Exception {
             }
         });
+        final SketchDocument finalDoc = doc;
         ((Button) AminoParser.find("openButton", root)).onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
-                new AminoJavaXMLImport(canvasView, doc).execute();
+                new AminoJavaXMLImport(canvasView, finalDoc).execute();
             }
         });
         ((Button) AminoParser.find("saveButton", root)).onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
-                new AminoJavaXMLExport.Save(canvasView, doc).execute();
+                new AminoJavaXMLExport.Save(canvasView, finalDoc).execute();
             }
         });
         ((Button) AminoParser.find("testButton", root)).onClicked(new Callback<ActionEvent>() {

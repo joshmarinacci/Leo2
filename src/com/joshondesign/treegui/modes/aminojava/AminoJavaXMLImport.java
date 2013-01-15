@@ -46,7 +46,7 @@ public class AminoJavaXMLImport extends JAction {
         File file = new File(fd.getDirectory(),fd.getFile());
         try {
             Doc xml = XMLParser.parse(file);
-            Page page = processPage(xml.root());
+            Page page = processPage(xml.root(), canvas);
             doc.clear();
             doc.add(page);
             canvas.setMasterRoot(page.get(0));
@@ -56,7 +56,7 @@ public class AminoJavaXMLImport extends JAction {
         }
     }
 
-    private Page processPage(Elem root) throws XPathExpressionException, ClassNotFoundException {
+    private static Page processPage(Elem root, Canvas canvas) throws XPathExpressionException, ClassNotFoundException {
         Page page = new Page();
 
         Layer layer = new Layer();
@@ -76,7 +76,7 @@ public class AminoJavaXMLImport extends JAction {
         return page;
     }
 
-    private Binding processBinding(Elem elem, Map<String, SketchNode> ids) {
+    private static Binding processBinding(Elem elem, Map<String, SketchNode> ids) {
         Binding binding = new Binding();
         binding.setSource(ids.get(elem.attr("sourceid")));
         binding.setSourceProperty(elem.attr("sourceprop"));
@@ -85,7 +85,7 @@ public class AminoJavaXMLImport extends JAction {
         return binding;
     }
 
-    private DynamicNode processNode(Elem xml, Map<String, SketchNode> ids) throws XPathExpressionException, ClassNotFoundException {
+    private static DynamicNode processNode(Elem xml, Map<String, SketchNode> ids) throws XPathExpressionException, ClassNotFoundException {
         DynamicNode node = new DynamicNode();
         node.setName(xml.attr("name"));
         node.addProperty(new Property("class", String.class, xml.attr("class")));
@@ -156,5 +156,16 @@ public class AminoJavaXMLImport extends JAction {
     @Override
     public String getShortName() {
         return "Open";
+    }
+
+    public static SketchDocument open(File file, Canvas canvas) throws Exception {
+        Doc xml = XMLParser.parse(file);
+        Page page = processPage(xml.root(), canvas);
+        SketchDocument doc = new SketchDocument();
+        doc.clear();
+        doc.add(page);
+        canvas.setMasterRoot(page.get(0));
+        canvas.setEditRoot(page.get(0));
+        return doc;
     }
 }
