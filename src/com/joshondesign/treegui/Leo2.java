@@ -12,6 +12,7 @@ import com.joshondesign.treegui.modes.amino.Rect;
 import com.joshondesign.treegui.modes.aminojava.AminoJavaXMLExport;
 import com.joshondesign.treegui.modes.aminojava.AminoJavaXMLImport;
 import com.joshondesign.treegui.modes.aminojava.AminoParser;
+import com.joshondesign.treegui.modes.aminojava.DocumentActions;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;
@@ -177,6 +178,11 @@ public class Leo2 {
         });
         ((Button) AminoParser.find("testButton", root)).onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
+            }
+        });
+        ((Button) AminoParser.find("deleteButton", root)).onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                DocumentActions.deleteSelection(canvasView);
             }
         });
 
