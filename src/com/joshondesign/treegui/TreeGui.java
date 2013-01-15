@@ -77,6 +77,7 @@ public class TreeGui implements Runnable {
             canvas.setMasterRoot(doc.get(0).get(0));
             canvas.setEditRoot(doc.get(0).get(0));
             canvas.setPropsView(propsView);
+            canvas.setDocument(doc);
 
 
             //hoook up the props view
@@ -173,8 +174,8 @@ public class TreeGui implements Runnable {
                     }
                     if(event.getType() == MouseEvent.MouseReleased) {
                         if(created) {
-                            canvas.clearSelection();
-                            canvas.addToSelection(dupe);
+                            doc.getSelection().clear();
+                            doc.getSelection().add(dupe);
                             dupe = null;
                             created = false;
                             prevx = 0;

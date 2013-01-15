@@ -136,6 +136,7 @@ public class Leo2 {
             doc = AminoJavaXMLImport.open(docFile, canvasView);
         }
 
+        canvasView.setDocument(doc);
 
         //setup the symbols view
         final TreeNode<SketchNode> symbols = mode.get(1);
@@ -180,9 +181,10 @@ public class Leo2 {
             public void call(ActionEvent actionEvent) throws Exception {
             }
         });
+        final SketchDocument finalDoc1 = doc;
         ((Button) AminoParser.find("deleteButton", root)).onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
-                DocumentActions.deleteSelection(canvasView);
+                DocumentActions.deleteSelection(finalDoc1);
             }
         });
 

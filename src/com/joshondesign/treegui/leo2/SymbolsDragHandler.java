@@ -57,8 +57,7 @@ public class SymbolsDragHandler implements Callback<MouseEvent> {
         }
         if (event.getType() == MouseEvent.MouseReleased) {
             if (created) {
-                canvasView.clearSelection();
-                canvasView.addToSelection(dupe);
+                doc.getSelection().clear().add(dupe);
                 dupe = null;
                 created = false;
                 prevx = 0;

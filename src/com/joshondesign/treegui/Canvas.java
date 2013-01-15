@@ -2,6 +2,7 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
@@ -20,7 +21,7 @@ import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.util.u;
 
 public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAware {
-    private TreeNode<SketchNode> selection = new TreeNode<SketchNode>();
+    //private TreeNode<SketchNode> selection = new TreeNode<SketchNode>();
     private PropsView propsView;
     BindingBox popup;
     BindingBox popup2;
@@ -29,10 +30,11 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     Point2D currentDragPoint;
     Binding currentBinding;
     List<Binding> bindings = new ArrayList<Binding>();
-    private final SelectionTool selectionTool;
+    private SelectionTool selectionTool;
     private TreeNode<SketchNode> masterRoot;
     private TreeNode<SketchNode> editRoot;
     private ScrollPane scrollPane;
+    private SketchDocument document;
 
 
     public void setMasterRoot(TreeNode<SketchNode> masterRoot) {
@@ -50,7 +52,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     public Canvas() {
-        selectionTool = new SelectionTool(this);
     }
 
 
@@ -58,7 +59,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     void showBindingMenu(Point2D pt) {
 
         currentBinding = new Binding();
-        currentBinding.setSource(getSelection().get(0));
+        currentBinding.setSource(document.getSelection().get(0));
 
         if(popup == null) {
             popup = new BindingBox();
@@ -68,7 +69,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             popup.reset();
             popup.setVisible(true);
         }
-        SketchNode node = getSelection().get(0);
+        SketchNode node = document.getSelection().get(0);
         if(node instanceof DynamicNode) {
             BindingUtils.populateWithBindablePropertiesDynamic(popup, (DynamicNode) node, this);
         } else {
@@ -174,13 +175,13 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     private void drawSelectionOverlay(GFX gfx) {
-        if(getSelection().getSize() < 1) return;
+        if(document.getSelection().getSize() < 1) return;
         Point2D pt = new Point2D.Double(0,0);
         if(getEditRoot() instanceof SketchNode) {
             SketchNode sn = (SketchNode) getEditRoot();
             pt = MathUtils.transform(pt,sn.getTranslateX(),sn.getTranslateY());
         }
-        Bounds b = MathUtils.unionBounds(getSelection());
+        Bounds b = MathUtils.unionBounds(document.getSelection());
         b = MathUtils.transform(b,pt);
         gfx.setPaint(FlatColor.fromRGBInts(100,100,100));
         gfx.drawRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
@@ -242,7 +243,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
 
 
-
+    /*
     public void addToSelection(SketchNode node) {
         this.selection.add(node);
         this.getPropsView().setSelection(node);
@@ -259,10 +260,12 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         this.handles.clear();
         setDrawingDirty();
     }
-
+    */
+     /*
     public TreeNode<SketchNode> getSelection() {
         return selection;
     }
+    */
 
     public void setPropsView(PropsView propsView) {
         this.propsView = propsView;
@@ -288,7 +291,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     List<Handle> handles = new ArrayList<Handle>();
     public void rebuildHandles() {
         this.handles.clear();
-        for(SketchNode node : this.getSelection().children()) {
+        for(SketchNode node : document.getSelection().children()) {
             if(node instanceof ResizableRectNode) {
                 handles.add(new ResizeHandle((ResizableRectNode) node));
             }
@@ -312,14 +315,14 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     public void navigateInto(SketchNode node) {
         editStack.push(getEditRoot());
-        clearSelection();
+        document.getSelection().clear();
         setEditRoot(node);
         redraw();
     }
 
     public void navigateOutof() {
         setEditRoot(editStack.pop());
-        clearSelection();
+        document.getSelection().clear();
         redraw();
     }
 
@@ -354,5 +357,26 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     public void setScrollParent(ScrollPane scrollPane) {
         this.scrollPane = scrollPane;
+    }
+
+    public void setDocument(SketchDocument document) {
+        this.document = document;
+        selectionTool = new SelectionTool(this, document);
+        document.getSelection().addListener(new TreeNode.TreeListener() {
+            public void added(TreeNode node) {
+                u.p("added to selection");
+                redraw();
+            }
+
+            public void removed(TreeNode node) {
+                u.p("removed from selection");
+                redraw();
+            }
+
+            public void modified(TreeNode node) {
+                u.p("modified in selection");
+                redraw();
+            }
+        });
     }
 }
