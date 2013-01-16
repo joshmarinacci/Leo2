@@ -8,11 +8,9 @@ import com.joshondesign.treegui.leo2.SymbolRenderer;
 import com.joshondesign.treegui.leo2.SymbolsDragHandler;
 import com.joshondesign.treegui.leo2.TreeNodeListModel;
 import com.joshondesign.treegui.model.TreeNode;
+import com.joshondesign.treegui.modes.amino.AminoJSMode;
 import com.joshondesign.treegui.modes.amino.Rect;
-import com.joshondesign.treegui.modes.aminojava.AminoJavaXMLExport;
-import com.joshondesign.treegui.modes.aminojava.AminoJavaXMLImport;
-import com.joshondesign.treegui.modes.aminojava.AminoParser;
-import com.joshondesign.treegui.modes.aminojava.DocumentActions;
+import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;
@@ -102,10 +100,16 @@ public class Leo2 {
             e.printStackTrace();
         }
     }
+    public static TreeNode<Mode> initModes() {
+        TreeNode<Mode> modes = new TreeNode<Mode>();
+        modes.add(new AminoJSMode());
+        modes.add(new AminoJavaMode());
+        return modes;
+    }
 
     private static void doNewDoc(File docFile) throws Exception {
         //init modes
-        TreeNode<Mode> modes = TreeGui.initModes();
+        TreeNode<Mode> modes = initModes();
         Mode mode = modes.get(1);
 
         //init window

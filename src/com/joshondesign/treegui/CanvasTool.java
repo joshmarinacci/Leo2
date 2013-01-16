@@ -7,5 +7,5 @@ package com.joshondesign.treegui;
  * Time: 10:47 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class CanvasTool extends TreeGui {
+public abstract class CanvasTool {
 }
