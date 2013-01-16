@@ -6,13 +6,6 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.MouseEvent;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/11/13
- * Time: 2:08 PM
- * To change this template use File | Settings | File Templates.
- */
 public class DynamicResizeHandle extends Handle {
     private final DynamicNode node;
 
@@ -39,7 +32,15 @@ public class DynamicResizeHandle extends Handle {
         double w = pt.getX() - node.getTranslateX();
         w = Math.floor(w/10)*10;
         node.getProperty("width").setDoubleValue(w);
+
         String resize = node.getProperty("resize").getStringValue();
+        if(mouseEvent.isShiftPressed()) {
+            if(resize.equals("any")) {
+                node.getProperty("height").setDoubleValue(node.getProperty("width").getDoubleValue());
+            }
+            return;
+        }
+
         if(resize.equals("any")) {
             double h = pt.getY()-node.getTranslateY();
             h = Math.floor(h/10)*10;

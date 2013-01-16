@@ -42,6 +42,12 @@ public class ResizeHandle extends Handle {
     @Override
     public void drag(MouseEvent mouseEvent, Point2D pt) {
         node.setWidth(pt.getX()-node.getTranslateX());
+        if(mouseEvent.isShiftPressed()) {
+            if(node.getConstraint() == ResizableRectNode.ResizeConstraint.Any) {
+                node.setHeight(node.getWidth());
+            }
+            return;
+        }
         switch(node.getConstraint()) {
             case PreserveAspectOnly:
                 node.setHeight(node.getWidth());
