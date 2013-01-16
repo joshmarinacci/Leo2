@@ -1,7 +1,6 @@
 package com.joshondesign.treegui;
 
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
+import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.leo2.SymbolRenderer;
@@ -9,14 +8,13 @@ import com.joshondesign.treegui.leo2.SymbolsDragHandler;
 import com.joshondesign.treegui.leo2.TreeNodeListModel;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.amino.AminoJSMode;
-import com.joshondesign.treegui.modes.amino.Rect;
 import com.joshondesign.treegui.modes.aminojava.*;
+import com.joshondesign.treegui.modes.sketch.SketchMode;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;
 import javax.swing.JFrame;
 import org.joshy.gfx.Core;
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.stage.Stage;
@@ -38,6 +36,12 @@ public class Leo2 {
         });
     }
 
+    public static Callback<ActionEvent> quitHandler = new Callback<ActionEvent>() {
+        public void call(ActionEvent actionEvent) throws Exception {
+            System.exit(0);
+        }
+    };
+
     private static void init() {
         try {
             //load up the new doc page
@@ -55,19 +59,27 @@ public class Leo2 {
                 }
             });
 
+            final TreeNode<Mode> modes = initModes();
 
             //bind new doc action
             Button newdocButton = (Button) AminoParser.find("newdocButton", root);
             newdocButton.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
-                    doNewDoc(null);
+                    doNewDoc(modes.get(1),null);
+                }
+            });
+
+            Button newsketchButton = (Button) AminoParser.find("newsketchButton", root);
+            newsketchButton.onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    doNewDoc(modes.get(2),null);
                 }
             });
 
             //edit self button
             ((Button)AminoParser.find("editselfButton",root)).onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
-                    doNewDoc(new File("resources/main.xml"));
+                    doNewDoc(modes.get(1), new File("resources/main.xml"));
                 }
             });
 
@@ -87,11 +99,7 @@ public class Leo2 {
 
 
             //extra stuff
-            EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<Event>() {
-                public void call(Event event) throws Exception {
-                    System.exit(0);
-                }
-            });
+            EventBus.getSystem().addListener(SystemMenuEvent.Quit, quitHandler);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,14 +109,11 @@ public class Leo2 {
         TreeNode<Mode> modes = new TreeNode<Mode>();
         modes.add(new AminoJSMode());
         modes.add(new AminoJavaMode());
+        modes.add(new SketchMode());
         return modes;
     }
 
-    private static void doNewDoc(File docFile) throws Exception {
-        //init modes
-        TreeNode<Mode> modes = initModes();
-        Mode mode = modes.get(1);
-
+    private static void doNewDoc(Mode mode, File docFile) throws Exception {
         //init window
 
         File file = new File("resources/main.xml");
@@ -132,7 +137,7 @@ public class Leo2 {
         //init doc
         SketchDocument doc = null;
         if(docFile == null) {
-            doc = initDoc();
+            doc = mode.createEmptyDoc();
         } else {
             doc = AminoJavaXMLImport.open(docFile, canvasView);
             doc.setFile(file);
@@ -145,8 +150,8 @@ public class Leo2 {
         canvasView.setDocument(doc);
 
         //setup the symbols view
-        final TreeNode<SketchNode> symbols = mode.get(1);
-        symbolsView.setModel(new TreeNodeListModel(symbols));
+        final TreeNode<SketchNode> symbols = mode.getSymbols();
+        symbolsView.setModel(asListModel(symbols));
         symbolsView.setRenderer(new SymbolRenderer());
         EventBus.getSystem().addListener(symbolsView, MouseEvent.MouseAll,
                 new SymbolsDragHandler(canvasView, symbolsView, doc));
@@ -158,7 +163,6 @@ public class Leo2 {
                 return true;
             }
         });
-        propsView.setSelection(doc.get(0).get(0).get(0));
         propsView.setDocument(doc);
 
 
@@ -201,30 +205,34 @@ public class Leo2 {
         stage.raiseToTop();
 
         Menubar menubar = new Menubar((JFrame) stage.getNativeWindow());
-        Menu filemenu = new Menu().setTitle("File");
-        filemenu.addItem("Open", new AminoAction() {
-            @Override
-            public void execute() throws Exception {
-                new AminoJavaXMLImport(canvasView, finalDoc).execute();
-            }
-        });
-        filemenu.addItem("Save", new AminoAction() {
-            @Override
-            public void execute() throws Exception {
-                new AminoJavaXMLExport.Save(canvasView, finalDoc).execute();
-            }
-        });
-        menubar.add(filemenu);
+        Menu fileMenu = new Menu().setTitle("File");
+        fileMenu.addItem("Open", asAction(new AminoJavaXMLImport(canvasView, finalDoc)));
+        fileMenu.addItem("Save", asAction(new AminoJavaXMLExport.Save(canvasView, finalDoc)));
+        fileMenu.addItem("Quit", asAction(quitHandler));
+        menubar.add(fileMenu);
     }
 
-    private static SketchDocument initDoc() {
-        SketchDocument doc = new SketchDocument();
-        Layer layer = new Layer();
-        layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
-        Page page = new Page();
-        page.add(layer);
-        doc.add(page);
-        return doc;
+    private static ListModel asListModel(TreeNode<SketchNode> symbols) {
+        return new TreeNodeListModel(symbols);
     }
+
+    private static AminoAction asAction(final JAction jAction) {
+        return new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                jAction.execute();
+            }
+        };
+    }
+
+    private static AminoAction asAction(final Callback<ActionEvent> quitHandler) {
+        return new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                quitHandler.call(null);
+            }
+        };
+    }
+
 
 }

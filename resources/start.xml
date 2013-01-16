@@ -78,7 +78,7 @@
                     <property name='bottom' type='java.lang.Double' value='210.0'>                    </property>
                     <children>                    </children>
                 </node>
-                <node id='id622351' class='org.joshy.gfx.node.control.Button' visual='true' resizable='true' container='false' custom='false' name='Button'>
+                <node id='newsketchButton' class='org.joshy.gfx.node.control.Button' visual='true' resizable='true' container='false' custom='false' name='Button'>
                     <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>

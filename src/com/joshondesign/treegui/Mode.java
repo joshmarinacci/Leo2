@@ -1,5 +1,7 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 
 /**
@@ -12,4 +14,11 @@ import com.joshondesign.treegui.model.TreeNode;
 public class Mode extends TreeNode {
 
 
+    public TreeNode<SketchNode> getSymbols() {
+        return get(1);
+    }
+
+    public SketchDocument createEmptyDoc() {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
 }

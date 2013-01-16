@@ -2,10 +2,13 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
+import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.amino.ActionProp;
+import com.joshondesign.treegui.modes.amino.Rect;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -378,5 +381,17 @@ public class AminoJavaMode extends Mode {
         ;
         stringList.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(stringList);
+    }
+
+
+    @Override
+    public SketchDocument createEmptyDoc() {
+        SketchDocument doc = new SketchDocument();
+        Layer layer = new Layer();
+        layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
+        Page page = new Page();
+        page.add(layer);
+        doc.add(page);
+        return doc;
     }
 }
