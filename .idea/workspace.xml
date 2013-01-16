@@ -2,18 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="223b08a1-17b7-473c-8b91-8a8950e1dd55" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Leo2Core.iml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TreeGUITest.iml" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaMode.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLImport.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLImport.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/TreeGui.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/TreeGui.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TreeGUITest.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358306230925" ignored="false" />
+    <file path="/Dummy.txt" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358306893670" ignored="false" />
     <file path="/Canvas.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358306519303" ignored="false" />
-    <file path="/TreeGui.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358294794880" ignored="false" />
+    <file path="/TreeGui.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358307774694" ignored="false" />
     <file path="/SketchNode.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357775299499" ignored="false" />
     <file path="/fragment.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358306541172" ignored="false" />
     <file path="/PropsView.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358294310698" ignored="false" />
@@ -32,7 +33,7 @@
     <file path="/Rect.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357323501129" ignored="false" />
     <file path="/Button.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357507028654" ignored="false" />
     <file path="/TreeNode.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358292480436" ignored="false" />
-    <file path="/SelectionTool.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358295167603" ignored="false" />
+    <file path="/SelectionTool.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358307555572" ignored="false" />
     <file path="/ControlLoader.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357325443931" ignored="false" />
     <file path="/CanvasTool.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357325529943" ignored="false" />
     <file path="/MathUtils.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357776036514" ignored="false" />
@@ -66,15 +67,16 @@
     <file path="/AminoJavaXMLExport.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358294786355" ignored="false" />
     <file path="/DynamicResizeHandle.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357969164573" ignored="false" />
     <file path="/AnchorPanel.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358121785787" ignored="false" />
-    <file path="/AminoJavaXMLImport.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358294700000" ignored="false" />
+    <file path="/AminoJavaXMLImport.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358307820014" ignored="false" />
     <file path="/BindingUtils.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358294931276" ignored="false" />
-    <file path="/Leo2.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358293921313" ignored="false" />
+    <file path="/Leo2.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358307542942" ignored="false" />
     <file path="/AminoParser.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358205365262" ignored="false" />
     <file path="/SymbolsDragHandler.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358292472414" ignored="false" />
     <file path="/DocumentActions.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358293129445" ignored="false" />
     <file path="/SketchDocument.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358293352175" ignored="false" />
     <file path="/Selection.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358291740123" ignored="false" />
     <file path="$PROJECT_DIR$/lib/amino-core.jar!/org/joshy/gfx/test/control/translationtest.xml" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358306606848" ignored="false" />
+    <file path="/AminoJavaMode.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358307815859" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,19 +141,70 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Canvas.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java">
+      <file leaf-file-name="Leo2.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="167" column="42" selection-start="5162" selection-end="5162" vertical-scroll-proportion="0.32482123">
+            <state line="107" column="44" selection-start="3807" selection-end="3807" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TreeGui.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/TreeGui.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="294" column="0" selection-start="10759" selection-end="10759" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AminoJavaXMLImport.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLImport.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="146" column="46" selection-start="5435" selection-end="5435" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Leo2.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java">
+      <file leaf-file-name="AminoJavaMode.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaMode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="129" selection-start="2156" selection-end="2156" vertical-scroll-proportion="0.0">
+            <state line="2" column="7" selection-start="58" selection-end="58" vertical-scroll-proportion="0.030643513">
+              <folding>
+                <element signature="e#795#829#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SelectionTool.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="159" column="13" selection-start="6374" selection-end="6374" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="method#SelectionTool#0;class#SelectionTool#0" expanded="false" />
+                <element signature="class#959:4428" expanded="false" />
+                <element signature="method#startDragHandle#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#continueDragHandle#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#endDragHandle#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#addToSelection#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#ungroupSelection#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#groupSelection#0;class#SelectionTool#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Canvas.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="357" column="0" selection-start="11306" selection-end="11306" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -178,22 +231,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/TreeNodeListModel.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Selection.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/SymbolsDragHandler.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/model/TreeNode.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DocumentActions.java" />
-        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/PropsView.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/SketchDocument.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/BindingBox.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/HTMLBindingExport.java" />
-        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLImport.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLExport.java" />
-        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/TreeGui.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/BindingUtils.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java" />
+        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" />
+        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLImport.java" />
+        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/TreeGui.java" />
+        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaMode.java" />
       </list>
     </option>
   </component>
@@ -240,6 +293,60 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Leo2Core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Leo2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Leo2Core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.joshondesign.treegui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Leo2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Leo2Core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.joshondesign.treegui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aminojava" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Leo2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Leo2Core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.joshondesign.treegui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -860,7 +967,11 @@
       <created>1358295265318</created>
       <updated>1358295265319</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="added some missing files for the project&#10;make the canvas scroll">
+      <created>1358306898482</created>
+      <updated>1358306898482</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -928,7 +1039,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="moved bindings to the document" />
+    <option name="LAST_COMMIT_MESSAGE" value="added some missing files for the project&#10;make the canvas scroll" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -941,7 +1052,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="more import/export load/save support" />
     <MESSAGE value="added more component stubs&#10;added textbox" />
     <MESSAGE value="make binding work with dynamic nodes" />
     <MESSAGE value="rewrite export to support binding" />
@@ -966,6 +1076,7 @@
     <MESSAGE value="make the stage show the current file&#10;resave into existing file if there is an existing file" />
     <MESSAGE value="make props view update" />
     <MESSAGE value="moved bindings to the document" />
+    <MESSAGE value="added some missing files for the project&#10;make the canvas scroll" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -975,26 +1086,12 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DocumentActions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="16" selection-start="691" selection-end="691" vertical-scroll-proportion="0.32130778">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/model/TreeNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="61" column="0" selection-start="1309" selection-end="1309" vertical-scroll-proportion="0.016910935">
           <folding>
             <element signature="e#272#286#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="517" selection-end="517" vertical-scroll-proportion="0.06764374">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1028,30 +1125,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLImport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="161" column="0" selection-start="5768" selection-end="5768" vertical-scroll-proportion="0.33263597">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLExport.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="233" column="92" selection-start="8405" selection-end="8405" vertical-scroll-proportion="0.015690377">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/TreeGui.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="0" selection-start="1856" selection-end="1856" vertical-scroll-proportion="0.27579162">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="129" selection-start="2156" selection-end="2156" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1090,8 +1166,58 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="167" column="42" selection-start="5162" selection-end="5162" vertical-scroll-proportion="0.32482123">
+        <state line="357" column="0" selection-start="11306" selection-end="11306" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="159" column="13" selection-start="6374" selection-end="6374" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="method#SelectionTool#0;class#SelectionTool#0" expanded="false" />
+            <element signature="class#959:4428" expanded="false" />
+            <element signature="method#startDragHandle#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#continueDragHandle#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#endDragHandle#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#addToSelection#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#ungroupSelection#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#groupSelection#0;class#SelectionTool#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="44" selection-start="3807" selection-end="3807" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/TreeGui.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="294" column="0" selection-start="10759" selection-end="10759" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaXMLImport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="146" column="46" selection-start="5435" selection-end="5435" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaMode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="7" selection-start="58" selection-end="58" vertical-scroll-proportion="0.030643513">
+          <folding>
+            <element signature="e#795#829#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

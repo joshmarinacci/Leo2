@@ -2,7 +2,6 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.Canvas;
-import com.joshondesign.treegui.TreeGui;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
@@ -142,9 +141,9 @@ public class AminoJavaXMLImport extends JAction {
         }
 
 
-        node.setDrawDelegate(TreeGui.drawMap.get(node.getName()));
+        node.setDrawDelegate(AminoJavaMode.drawMap.get(node.getName()));
         if(!node.isVisual()) {
-            node.setDrawDelegate(TreeGui.drawMap.get("servicebase"));
+            node.setDrawDelegate(AminoJavaMode.drawMap.get("servicebase"));
 
         }
         for(Elem echild : xml.xpath("children/node")) {

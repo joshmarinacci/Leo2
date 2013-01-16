@@ -27,7 +27,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     boolean dragging;
     Point2D currentDragPoint;
     Binding currentBinding;
-    private SelectionTool selectionTool;
     private TreeNode<SketchNode> masterRoot;
     private TreeNode<SketchNode> editRoot;
     private ScrollPane scrollPane;
@@ -356,7 +355,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     /* ============ more stuff ================== */
     public void setDocument(SketchDocument document) {
         this.document = document;
-        selectionTool = new SelectionTool(this, document);
         document.getSelection().addListener(new TreeNode.TreeListener() {
             public void added(TreeNode node) {
                 redraw();

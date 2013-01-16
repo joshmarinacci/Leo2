@@ -17,10 +17,12 @@ public class SelectionTool extends CanvasTool {
     private final Canvas canvas;
     private Handle activeHandle;
     private final SketchDocument document;
+    private final Mode mode;
 
-    public SelectionTool(final Canvas canvas, final SketchDocument document) {
+    public SelectionTool(final Canvas canvas, final SketchDocument document, Mode mode) {
         this.canvas = canvas;
         this.document = document;
+        this.mode = mode;
 
         EventBus.getSystem().addListener(canvas, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             private Point2D startPoint;

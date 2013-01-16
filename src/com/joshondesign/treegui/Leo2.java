@@ -165,6 +165,9 @@ public class Leo2 {
         canvasView.setMasterRoot(doc.get(0).get(0));
         canvasView.setEditRoot(doc.get(0).get(0));
 
+        SelectionTool selectionTool = new SelectionTool(canvasView, doc, mode);
+
+
 
         //set up  the buttons
         ((Button) AminoParser.find("runButton", root)).onClicked(new Callback<ActionEvent>() {
@@ -192,6 +195,10 @@ public class Leo2 {
                 DocumentActions.deleteSelection(finalDoc1);
             }
         });
+
+
+
+        stage.raiseToTop();
 
 
     }
