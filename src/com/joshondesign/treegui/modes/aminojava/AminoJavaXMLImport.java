@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.util.u;
 
 /**
@@ -48,6 +49,7 @@ public class AminoJavaXMLImport extends JAction {
             Page page = processPage(xml.root(), doc);
             doc.clear();
             doc.add(page);
+            doc.setFile(file);
             canvas.setMasterRoot(page.get(0));
             canvas.setEditRoot(page.get(0));
         } catch (Exception e) {
@@ -167,4 +169,45 @@ public class AminoJavaXMLImport extends JAction {
         canvas.setEditRoot(page.get(0));
         return doc;
     }
+
+    public static SketchDocument read(File file) throws Exception {
+        Doc xml = XMLParser.parse(file);
+        SketchDocument doc = new SketchDocument();
+        Page page = processPage(xml.root(), doc);
+        doc.clear();
+        doc.add(page);
+        return doc;
+    }
+
+    public static class Open extends JAction {
+        private Callback<SketchDocument> callback;
+
+        @Override
+        public void execute() {
+            FileDialog fd = new FileDialog((Frame)null);
+            fd.setMode(FileDialog.LOAD);
+            fd.setVisible(true);
+            if(fd.getFile() == null) return;
+            File file = new File(fd.getDirectory(),fd.getFile());
+            try {
+                SketchDocument doc = read(file);
+                if(callback != null) {
+                    callback.call(doc);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public String getShortName() {
+            return "Open";
+        }
+
+        public void onOpened(Callback<SketchDocument> callback) {
+            this.callback = callback;
+        }
+    }
 }
+
+

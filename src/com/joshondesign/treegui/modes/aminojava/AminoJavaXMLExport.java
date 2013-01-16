@@ -233,6 +233,7 @@ public class AminoJavaXMLExport extends JAction {
                 if(file != null) {
                     exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
                     u.p("exported to : " + file.getAbsolutePath());
+                    doc.setFile(file);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -247,18 +248,20 @@ public class AminoJavaXMLExport extends JAction {
 
     public static class Test extends JAction {
         private final Canvas canvas;
+        private final SketchDocument document;
+        Stage demoStage = null;
 
-        public Test(Canvas canvas) {
+        public Test(Canvas canvas, SketchDocument document) {
             this.canvas = canvas;
+            this.document = document;
         }
 
         @Override
         public void execute() {
             try {
-                File file = new File("foo.xml");
+                File file = document.getFile();
                 Doc xml = XMLParser.parse(file);
                 Node node = AminoParser.parsePage(xml.root());
-                Stage demoStage = null;
                 if(demoStage == null) {
                     demoStage = Stage.createStage();
                     demoStage.setWidth(600);

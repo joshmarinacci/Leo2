@@ -89,6 +89,7 @@ public class AminoParser {
 
     private static Object processNode(Elem vis, Map<String, Object> objectMap) throws IllegalAccessException, InstantiationException, ClassNotFoundException, XPathExpressionException {
         String classname = vis.attr("class");
+
         if(vis.attrEquals("custom","true")) {
             classname = vis.attr("customClass");
         }
@@ -105,7 +106,12 @@ public class AminoParser {
         Object obj = clazz.newInstance();
         objectMap.put(vis.attr("id"),obj);
 
-        initObject(obj, vis);
+        try {
+            initObject(obj, vis);
+        } catch (Exception ex) {
+            u.p("problem with class: " + classname);
+            u.p(ex);
+        }
 
         if(obj instanceof Control) {
             ((Control)obj).setId(vis.attr("id"));

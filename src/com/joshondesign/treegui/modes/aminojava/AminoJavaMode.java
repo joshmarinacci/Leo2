@@ -33,17 +33,17 @@ public class AminoJavaMode extends Mode {
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
         add(symbols);
 
-        DynamicNode base = new DynamicNode();
-        base.addProperty(new Property("translateX", Double.class, 0));
-        base.addProperty(new Property("translateY", Double.class, 0));
-        base.addProperty(new Property("width", Double.class, 80)
+        DynamicNode visualBase = new DynamicNode();
+        visualBase.addProperty(new Property("translateX", Double.class, 0));
+        visualBase.addProperty(new Property("translateY", Double.class, 0));
+        visualBase.addProperty(new Property("width", Double.class, 80)
                 .setExportName("prefWidth"));
-        base.addProperty(new Property("height", Double.class, 30)
+        visualBase.addProperty(new Property("height", Double.class, 30)
                 .setExportName("prefHeight"));
-        base.addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false));
-        base.addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false));
-        base.addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false));
-        base.addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false));
+        visualBase.addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false));
+        visualBase.addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false));
+        visualBase.addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false));
+        visualBase.addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false));
 
 
         DynamicNode button = new DynamicNode();
@@ -51,7 +51,7 @@ public class AminoJavaMode extends Mode {
         button.setResizable(true);
         button.setVisual(true);
 
-        button.copyPropertiesFrom(base);
+        button.copyPropertiesFrom(visualBase);
         button.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
         button.addProperty(new Property("id", String.class, "arandomid"));
         button.addProperty(new Property("text", CharSequence.class, "a button").setBindable(true));
@@ -82,7 +82,7 @@ public class AminoJavaMode extends Mode {
 
 
         DynamicNode label = new DynamicNode();
-        label.copyPropertiesFrom(base);
+        label.copyPropertiesFrom(visualBase);
         label.setName("Label");
         label.setResizable(true);
         label.setVisual(true);
@@ -103,7 +103,7 @@ public class AminoJavaMode extends Mode {
         symbols.add(label);
 
         DynamicNode panel = new DynamicNode();
-        panel.copyPropertiesFrom(base);
+        panel.copyPropertiesFrom(visualBase);
         panel.setName("Panel");
         panel.setVisual(true);
         panel.setResizable(true);
@@ -130,7 +130,7 @@ public class AminoJavaMode extends Mode {
 
 
         DynamicNode listview = new DynamicNode();
-        listview.copyPropertiesFrom(base);
+        listview.copyPropertiesFrom(visualBase);
         listview.setName("ListView");
         listview.setVisual(true);
         listview.setResizable(true);
@@ -167,7 +167,7 @@ public class AminoJavaMode extends Mode {
 
 
         DynamicNode scroll = new DynamicNode();
-        scroll.copyPropertiesFrom(base);
+        scroll.copyPropertiesFrom(visualBase);
         scroll.setName("ScrollPane");
         scroll.setVisual(true);
         scroll.setResizable(true);
@@ -208,7 +208,7 @@ public class AminoJavaMode extends Mode {
 
 
         DynamicNode spinner = new DynamicNode();
-        spinner.copyPropertiesFrom(base);
+        spinner.copyPropertiesFrom(visualBase);
         spinner.setName("Spinner");
         spinner.setVisual(true);
         spinner.setResizable(true);
@@ -239,7 +239,7 @@ public class AminoJavaMode extends Mode {
 
         DynamicNode custom = new DynamicNode();
         custom.setName("Custom View");
-        custom.copyPropertiesFrom(base);
+        custom.copyPropertiesFrom(visualBase);
         custom.setVisual(true);
         custom.setResizable(true);
         custom.setContainer(false);
@@ -270,7 +270,7 @@ public class AminoJavaMode extends Mode {
 
         DynamicNode textbox = new DynamicNode();
         textbox.setName("Textbox");
-        textbox.copyPropertiesFrom(base);
+        textbox.copyPropertiesFrom(visualBase);
         textbox.setVisual(true);
         textbox.setResizable(true);
         textbox.setContainer(false);
@@ -381,6 +381,51 @@ public class AminoJavaMode extends Mode {
         ;
         stringList.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(stringList);
+
+
+
+
+        DynamicNode alarmList = new DynamicNode();
+        alarmList.setName("Alarm List");
+        alarmList.setVisual(false);
+        alarmList.setResizable(false);
+        alarmList.copyPropertiesFrom(serviceBase);
+        List<String> data2 = new ArrayList<String>();
+        data2.add("foo");
+        data2.add("bar");
+        data2.add("baz");
+        alarmList.addProperty(new Property("class", String.class,
+                "com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("data", List.class,data2)
+                        .setVisible(true).setBindable(true))
+                .addProperty(new Property("this",DynamicNode.class, null)
+                        .setVisible(false).setBindable(true));
+        alarmList.setDrawDelegate(drawMap.get("servicebase"));
+        symbols.add(alarmList);
+
+        DynamicNode compoundList = new DynamicNode();
+        compoundList.setName("Compound List");
+        compoundList.copyPropertiesFrom(visualBase);
+        compoundList.setVisual(true);
+        compoundList.setResizable(true);
+        compoundList.setContainer(true);
+        compoundList
+                .addProperty(new Property("class", String.class,
+                        "org.joshy.gfx.node.control.CompoundListView"))
+                .addProperty(new Property("resize", String.class, "any")
+                        .setExported(false).setVisible(false))
+                //.addProperty(new Property("rowHeight", Double.class, 20))
+                //.addProperty(new Property("columnWidth", Double.class, 100))
+                //.addProperty(new Property("renderer", ListView.ItemRenderer.class, "none"))
+                .addProperty(new Property("model", ListModel.class, null)
+                        .setBindable(true).setExported(false).setVisible(false))
+                //.addProperty(new Property("orientation",
+//                        ListView.Orientation.class, ListView.Orientation.Vertical))
+        ;
+        compoundList.setDrawDelegate(drawMap.get(listview.getName()));
+        compoundList.getProperty("width").setDoubleValue(80);
+        compoundList.getProperty("height").setDoubleValue(80);
+        symbols.add(compoundList);
     }
 
 
