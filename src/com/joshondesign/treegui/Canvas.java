@@ -36,11 +36,46 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private double scrollX;
     private double scrollY;
     private CanvasTool currentTool;
+    private Bounds maxBounds;
+    private Bounds baseBounds = new Bounds(0,0,600,400);
+    private Bounds totalBounds = new Bounds(-100,-100,600+200,400+200);
+    private boolean boundsRecalcEnabled = false;
 
 
-    public void setMasterRoot(TreeNode<SketchNode> masterRoot) {
+    public void setMasterRoot(final TreeNode<SketchNode> masterRoot) {
         this.masterRoot = masterRoot;
+        masterRoot.addListener(new TreeNode.TreeListener() {
+            public void added(TreeNode node) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public void removed(TreeNode node) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public void modified(TreeNode node) {
+                if(!boundsRecalcEnabled) return;
+                recalcBounds();
+            }
+        });
         setDrawingDirty();
+    }
+
+    public void recalcBounds() {
+        Bounds tmp = MathUtils.unionBounds(masterRoot);
+        maxBounds = new Bounds(tmp.getX()-100,tmp.getY()-100,tmp.getWidth()+200,tmp.getHeight()+200);
+        //maxBounds = tmp;
+        if (maxBounds.getX2() > baseBounds.getX2()
+                || maxBounds.getY2() > baseBounds.getY2()
+                || maxBounds.getX() < baseBounds.getX()
+                || maxBounds.getY() < baseBounds.getY()
+                ) {
+            totalBounds = maxBounds.union(baseBounds);
+            setLayoutDirty();
+            setDrawingDirty();
+        } else {
+            totalBounds = baseBounds;
+        }
     }
 
     public void setEditRoot(TreeNode<SketchNode> editRoot) {
@@ -74,6 +109,14 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             }
         });
 
+    }
+
+    public void setBoundsRecalcEnabled(boolean boundsRecalcEnabled) {
+        this.boundsRecalcEnabled = boundsRecalcEnabled;
+    }
+
+    public boolean isBoundsRecalcEnabled() {
+        return boundsRecalcEnabled;
     }
 
     public static class CanvasMouseEvent {
@@ -160,7 +203,10 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         gfx.setPaint(FlatColor.fromRGBInts(230,230,230));
         gfx.fillRect(0,0,getWidth(),getHeight());
 
-        gfx.translate(scrollX,scrollY);
+
+        double dx = scrollX-totalBounds.getX();
+        double dy = scrollY-totalBounds.getY();
+        gfx.translate(dx,dy);
 
         drawDocumentBounds(gfx, masterRoot);
         drawMasterRoot(gfx, masterRoot);
@@ -173,7 +219,16 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
         drawToolOverlay(gfx);
 
-        gfx.translate(-scrollX,-scrollY);
+        gfx.translate(-dx,-dy);
+
+        //drawMaxBounds(gfx,maxBounds);
+    }
+
+    private void drawMaxBounds(GFX gfx, Bounds maxBounds) {
+        if(maxBounds == null) return;
+        gfx.setPaint(FlatColor.PURPLE);
+        if(!masterRoot.children().iterator().hasNext()) return;
+        gfx.drawRect(maxBounds.getX(),maxBounds.getY(),maxBounds.getWidth(),maxBounds.getHeight());
     }
 
     private void drawToolOverlay(GFX gfx) {
@@ -359,7 +414,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     public Point2D toEditRootCoords(Point2D pt) {
-        Point2D pt2 = MathUtils.transform(pt, -scrollX, -scrollY);
+        Point2D pt2 = MathUtils.transform(pt, -scrollX+totalBounds.getX(), -scrollY+totalBounds.getY());
 
         if(this.editRoot == this.masterRoot) return pt2;
         if(this.editRoot instanceof SketchNode) {
@@ -375,11 +430,11 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     /* ======== scrolling aware implementation ========== */
 
     public double getFullWidth(double w, double h) {
-        return 600;
+        return totalBounds.getWidth();
     }
 
     public double getFullHeight(double v, double v2) {
-        return 400;
+        return totalBounds.getHeight();
     }
 
     public void setScrollX(double v) {

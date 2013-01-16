@@ -62,6 +62,7 @@ public class SymbolsDragHandler implements Callback<MouseEvent> {
                 created = false;
                 prevx = 0;
             }
+            canvasView.recalcBounds();
             canvasView.redraw();
         }
 

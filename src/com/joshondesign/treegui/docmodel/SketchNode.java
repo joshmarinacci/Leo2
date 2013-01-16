@@ -28,6 +28,9 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
 
     public SketchNode setTranslateX(double translateX) {
         this.translateX = translateX;
+        if(getParent() != null) {
+             getParent().markModified(this);
+        }
         return this;
     }
 

@@ -13,12 +13,12 @@ import org.joshy.gfx.node.Bounds;
  * To change this template use File | Settings | File Templates.
  */
 public class MathUtils {
-    public static Bounds unionBounds(TreeNode<SketchNode> nodes) {
+    public static Bounds unionBounds(TreeNode<SketchNode> root) {
         double minx = Double.MAX_VALUE;
         double miny = Double.MAX_VALUE;
         double maxx = Double.MIN_VALUE;
         double maxy = Double.MIN_VALUE;
-        for(SketchNode child : nodes.children()) {
+        for(SketchNode child : root.children()) {
             Bounds bounds = child.getInputBounds();
             bounds = transform(bounds,child.getTranslateX(),child.getTranslateY());
             minx = Math.min(minx, bounds.getX());

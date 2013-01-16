@@ -94,6 +94,7 @@ public class SelectionTool extends CanvasTool {
 
     @Override
     public void released(Canvas.CanvasMouseEvent event) {
+        event.canvas.recalcBounds();
         if(activeHandle != null) {
             endDragHandle(event.mouseEvent,event.pt);
             return;
