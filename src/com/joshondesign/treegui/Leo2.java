@@ -36,8 +36,8 @@ public class Leo2 {
         });
     }
 
-    public static Callback<ActionEvent> quitHandler = new Callback<ActionEvent>() {
-        public void call(ActionEvent actionEvent) throws Exception {
+    public static Callback<SystemMenuEvent> quitHandler = new Callback<SystemMenuEvent>() {
+        public void call(SystemMenuEvent actionEvent) throws Exception {
             System.exit(0);
         }
     };
@@ -171,7 +171,7 @@ public class Leo2 {
         canvasView.setEditRoot(doc.get(0).get(0));
 
         SelectionTool selectionTool = new SelectionTool(canvasView, doc, mode);
-
+        canvasView.setTool(selectionTool);
 
 
         //set up  the buttons
@@ -225,7 +225,7 @@ public class Leo2 {
         };
     }
 
-    private static AminoAction asAction(final Callback<ActionEvent> quitHandler) {
+    private static AminoAction asAction(final Callback quitHandler) {
         return new AminoAction() {
             @Override
             public void execute() throws Exception {

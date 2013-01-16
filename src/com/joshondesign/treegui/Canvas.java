@@ -33,6 +33,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private SketchDocument document;
     private double scrollX;
     private double scrollY;
+    private CanvasTool currentTool;
 
 
     public void setMasterRoot(TreeNode<SketchNode> masterRoot) {
@@ -134,7 +135,15 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         drawGroupEditOverlay(gfx);
         //drawDebug(gfx);
 
+        drawToolOverlay(gfx);
+
         gfx.translate(-scrollX,-scrollY);
+    }
+
+    private void drawToolOverlay(GFX gfx) {
+        if(currentTool != null) {
+            currentTool.drawOverlay(gfx);
+        }
     }
 
     private void drawDocumentBounds(GFX gfx, TreeNode<SketchNode> masterRoot) {
@@ -368,5 +377,9 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
                 redraw();
             }
         });
+    }
+
+    public void setTool(SelectionTool selectionTool) {
+        this.currentTool = selectionTool;
     }
 }

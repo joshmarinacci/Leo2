@@ -1,5 +1,7 @@
 package com.joshondesign.treegui;
 
+import org.joshy.gfx.draw.GFX;
+
 /**
  * Created with IntelliJ IDEA.
  * User: josh
@@ -8,4 +10,5 @@ package com.joshondesign.treegui;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class CanvasTool {
+    public abstract void drawOverlay(GFX gfx);
 }
