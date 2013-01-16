@@ -13,6 +13,8 @@ import java.util.Stack;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
@@ -51,6 +53,40 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     public Canvas() {
+
+        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+            public void call(MouseEvent mouseEvent) throws Exception {
+                if(currentTool == null) return;
+                Point2D pt = toEditRootCoords(mouseEvent.getPointInNodeCoords(Canvas.this));
+                if (mouseEvent.getType() == MouseEvent.OpenContextMenu && document.getSelection() != null) {
+                    showBindingMenu(mouseEvent.getPointInNodeCoords(Canvas.this));
+                }
+
+                if (mouseEvent.getType() == MouseEvent.MousePressed) {
+                    currentTool.pressed(new CanvasMouseEvent(Canvas.this, pt, mouseEvent));
+                }
+                if(mouseEvent.getType() == MouseEvent.MouseDragged) {
+                    currentTool.dragged(new CanvasMouseEvent(Canvas.this, pt, mouseEvent));
+                }
+                if(mouseEvent.getType() == MouseEvent.MouseReleased) {
+                    currentTool.released(new CanvasMouseEvent(Canvas.this, pt, mouseEvent));
+                }
+            }
+        });
+
+    }
+
+    public static class CanvasMouseEvent {
+
+        final Point2D pt;
+        final MouseEvent mouseEvent;
+        public Canvas canvas;
+
+        public CanvasMouseEvent(Canvas canvas, Point2D pt, MouseEvent mouseEvent) {
+            this.canvas = canvas;
+            this.pt = pt;
+            this.mouseEvent = mouseEvent;
+        }
     }
 
 
