@@ -45,7 +45,7 @@ public class Leo2 {
     private static void init() {
         try {
             //load up the new doc page
-            File file = new File("start.xml");
+            File file = new File("resources/start.xml");
             Doc xml = XMLParser.parse(file);
             Control root = (Control) AminoParser.parsePage(xml.root());
             root.setTranslateX(0);
@@ -72,7 +72,7 @@ public class Leo2 {
             //edit self button
             ((Button)AminoParser.find("editselfButton",root)).onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
-                    doNewDoc(new File("main.xml"));
+                    doNewDoc(new File("resources/main.xml"));
                 }
             });
 
@@ -110,7 +110,7 @@ public class Leo2 {
 
         //init window
 
-        File file = new File("main.xml");
+        File file = new File("resources/main.xml");
         Doc xml = XMLParser.parse(file);
         Control root = (Control) AminoParser.parsePage(xml.root());
         root.setTranslateX(0);

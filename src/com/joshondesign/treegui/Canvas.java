@@ -32,6 +32,8 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private TreeNode<SketchNode> editRoot;
     private ScrollPane scrollPane;
     private SketchDocument document;
+    private double scrollX;
+    private double scrollY;
 
 
     public void setMasterRoot(TreeNode<SketchNode> masterRoot) {
@@ -121,6 +123,9 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     public void draw(GFX gfx) {
         gfx.setPaint(FlatColor.fromRGBInts(230,230,230));
         gfx.fillRect(0,0,getWidth(),getHeight());
+
+        gfx.translate(scrollX,scrollY);
+
         drawDocumentBounds(gfx, masterRoot);
         drawMasterRoot(gfx, masterRoot);
         drawBindings(gfx);
@@ -129,6 +134,8 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         drawHandles(gfx);
         drawGroupEditOverlay(gfx);
         //drawDebug(gfx);
+
+        gfx.translate(-scrollX,-scrollY);
     }
 
     private void drawDocumentBounds(GFX gfx, TreeNode<SketchNode> masterRoot) {
@@ -331,15 +338,22 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     public void setScrollX(double v) {
+        this.scrollX = v;
     }
 
     public void setScrollY(double v) {
+        this.scrollY = v;
     }
 
     public void setScrollParent(ScrollPane scrollPane) {
         this.scrollPane = scrollPane;
     }
 
+
+
+
+
+    /* ============ more stuff ================== */
     public void setDocument(SketchDocument document) {
         this.document = document;
         selectionTool = new SelectionTool(this, document);

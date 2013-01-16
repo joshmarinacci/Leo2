@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TreeGUITest.iml" filepath="$PROJECT_DIR$/TreeGUITest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Leo2Core.iml" filepath="$PROJECT_DIR$/Leo2Core.iml" />
     </modules>
   </component>
 </project>
