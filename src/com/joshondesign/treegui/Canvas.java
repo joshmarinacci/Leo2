@@ -322,15 +322,16 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         redraw();
     }
 
-    public Point2D toEditRootCoords(Point2D pointInNodeCoords) {
-        if(this.editRoot == this.masterRoot) return pointInNodeCoords;
+    public Point2D toEditRootCoords(Point2D pt) {
+        Point2D pt2 = MathUtils.transform(pt, -scrollX, -scrollY);
+
+        if(this.editRoot == this.masterRoot) return pt2;
         if(this.editRoot instanceof SketchNode) {
             SketchNode node = (SketchNode) editRoot;
-            return MathUtils.transform(pointInNodeCoords,
-                    -node.getTranslateX(),-node.getTranslateY());
+            return MathUtils.transform(pt2,-node.getTranslateX(),-node.getTranslateY());
         }
         u.p("possible error in toEditRootCoords. shouldn't get here");
-        return  pointInNodeCoords;
+        return  pt2;
     }
 
 
