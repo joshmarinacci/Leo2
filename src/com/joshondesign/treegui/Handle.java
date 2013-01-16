@@ -6,6 +6,9 @@ import org.joshy.gfx.event.MouseEvent;
 
 public abstract class Handle {
     public abstract void draw(GFX gfx);
+    public abstract void startDrag(MouseEvent mouseEvent);
     public abstract void drag(MouseEvent mouseEvent, Point2D point);
+    public abstract void endDrag(MouseEvent mouseEvent, Point2D pt);
     public abstract boolean contains(Point2D pointInNodeCoords);
+
 }

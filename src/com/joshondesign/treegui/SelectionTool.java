@@ -50,6 +50,7 @@ public class SelectionTool extends CanvasTool {
 
     private void startDragHandle(Handle handle, MouseEvent mouseEvent) {
         activeHandle = handle;
+        handle.startDrag(mouseEvent);
     }
 
     private void continueDragHandle(MouseEvent mouseEvent, Point2D pt) {
@@ -58,6 +59,7 @@ public class SelectionTool extends CanvasTool {
     }
 
     private void endDragHandle(MouseEvent mouseEvent, Point2D pt) {
+        activeHandle.endDrag(mouseEvent,pt);
         activeHandle = null;
     }
 
@@ -111,11 +113,11 @@ public class SelectionTool extends CanvasTool {
             Bounds bounds = document.getSelection().get(0).getInputBounds();
 
             gfx.setPaint(FlatColor.GRAY);
-            gfx.translate(tx + bounds.getX2()+10, ty +bounds.getCenterY());
+            gfx.translate(tx + bounds.getX2()+10, ty +bounds.getCenterY()-25/2);
             gfx.fillRoundRect(0,0,80, 30, 5, 5);
             gfx.setPaint(FlatColor.BLACK);
             gfx.drawText(tx + ", " + ty, Font.DEFAULT, 5,15);
-            gfx.translate(-tx - bounds.getX2()-10, -ty -bounds.getCenterY());
+            gfx.translate(-tx - bounds.getX2()-10, -ty -bounds.getCenterY()+25/2);
         }
     }
 

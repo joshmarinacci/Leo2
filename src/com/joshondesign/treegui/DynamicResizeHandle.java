@@ -48,6 +48,11 @@ public class DynamicResizeHandle extends Handle {
     }
 
     @Override
+    public void endDrag(MouseEvent mouseEvent, Point2D pt) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void draw(GFX gfx) {
         double w = node.getProperty("width").getDoubleValue();
         double h = node.getProperty("height").getDoubleValue();
@@ -55,6 +60,11 @@ public class DynamicResizeHandle extends Handle {
         gfx.setPaint(FlatColor.PURPLE);
         gfx.fillCircle(w, h, 5);
         gfx.translate(-node.getTranslateX(), -node.getTranslateY());
+    }
+
+    @Override
+    public void startDrag(MouseEvent mouseEvent) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 
