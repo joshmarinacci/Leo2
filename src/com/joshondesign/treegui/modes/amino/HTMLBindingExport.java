@@ -1,5 +1,6 @@
-package com.joshondesign.treegui;
+package com.joshondesign.treegui.modes.amino;
 
+import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
