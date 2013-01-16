@@ -27,7 +27,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     boolean dragging;
     Point2D currentDragPoint;
     Binding currentBinding;
-    List<Binding> bindings = new ArrayList<Binding>();
     private SelectionTool selectionTool;
     private TreeNode<SketchNode> masterRoot;
     private TreeNode<SketchNode> editRoot;
@@ -69,9 +68,9 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         }
         SketchNode node = document.getSelection().get(0);
         if(node instanceof DynamicNode) {
-            BindingUtils.populateWithBindablePropertiesDynamic(popup, (DynamicNode) node, this);
+            BindingUtils.populateWithBindablePropertiesDynamic(popup, (DynamicNode) node, this, document);
         } else {
-            BindingUtils.populateWithBindablePropertiesRegular(popup, node, this);
+            BindingUtils.populateWithBindablePropertiesRegular(popup, node, this, document);
         }
         popup.setTranslateX(pt.getX() + this.getTranslateX());
         popup.setTranslateY(pt.getY() + this.getTranslateY());
@@ -88,9 +87,9 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             popup2.setVisible(true);
         }
         if(node instanceof DynamicNode) {
-            BindingUtils.populateWithTargetPropertiesDynamic(popup2, (DynamicNode)node, currentBinding, this);
+            BindingUtils.populateWithTargetPropertiesDynamic(popup2, (DynamicNode)node, currentBinding, this, document);
         } else {
-            BindingUtils.populateWithTargetPropertiesRegular(popup2, node, currentBinding, this);
+            BindingUtils.populateWithTargetPropertiesRegular(popup2, node, currentBinding, this, document);
 
         }
         Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
@@ -159,7 +158,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     private void drawBindings(GFX gfx) {
-        for(Binding binding : bindings) {
+        for(Binding binding : document.getBindings()) {
             gfx.setPaint(FlatColor.BLACK);
             Bounds sbounds = binding.getSource().getInputBounds();
             Bounds tbounds = binding.getTarget().getInputBounds();
@@ -260,9 +259,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
     */
 
-    public List<Binding> getBindings() {
-        return bindings;
-    }
 
     public void redraw() {
         setDrawingDirty();

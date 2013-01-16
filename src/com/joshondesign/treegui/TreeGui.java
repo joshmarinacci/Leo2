@@ -72,8 +72,8 @@ public class TreeGui implements Runnable {
 
             PropsView propsView = (PropsView) find("propsview", rootControl);
 
-            //hook up the canvas
-            final Canvas canvas = (Canvas) find("canvas",rootControl);
+            //hook up the document
+            final Canvas canvas = (Canvas) find("document",rootControl);
             canvas.setMasterRoot(doc.get(0).get(0));
             canvas.setEditRoot(doc.get(0).get(0));
             canvas.setDocument(doc);
@@ -97,10 +97,10 @@ public class TreeGui implements Runnable {
             //hook up the actions toolbar
             TreeNode<JAction> actions = (TreeNode<JAction>)mode.get(0);
             HTMLBindingExport exp = new HTMLBindingExport();
-            exp.canvas = canvas;
+            exp.document = doc;
             exp.page = doc.get(0);
             //actions.add(exp);
-            actions.add(new AminoJavaXMLExport(canvas,doc.get(0)));
+            actions.add(new AminoJavaXMLExport(doc,doc.get(0)));
             actions.add(new AminoJavaXMLImport(canvas,doc));
             actions.add(new AminoJavaXMLExport.Save(canvas, doc));
             actions.add(new AminoJavaXMLExport.Test(canvas));
@@ -147,7 +147,7 @@ public class TreeGui implements Runnable {
                     if(event.getType() == MouseEvent.MouseDragged) {
                         Point2D pt = canvas.toEditRootCoords(event.getPointInNodeCoords(canvas));
                         if(created && dupe != null) {
-                            //pt = canvas.transformToCanvas(pt);
+                            //pt = document.transformToCanvas(pt);
                             Bounds b = dupe.getInputBounds();
                             dupe.setTranslateX(pt.getX()-b.getWidth()/2);
                             dupe.setTranslateY(pt.getY()-b.getHeight()/2);

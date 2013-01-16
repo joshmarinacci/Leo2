@@ -134,7 +134,7 @@ public class SelectionTool extends CanvasTool {
 
     private void addToSelection(SketchNode node) {
         document.getSelection().add(node);
-        //canvas.rebuildHandles();
+        canvas.rebuildHandles();
     }
 
 

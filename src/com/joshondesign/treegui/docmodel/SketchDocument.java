@@ -1,11 +1,15 @@
 package com.joshondesign.treegui.docmodel;
 
+import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.model.TreeNode;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SketchDocument extends TreeNode<Page> {
     private final Selection selection;
     private File file;
+    List<Binding> bindings = new ArrayList<Binding>();
 
     public SketchDocument() {
         selection = new Selection();
@@ -45,4 +49,9 @@ public class SketchDocument extends TreeNode<Page> {
         }
         return null;
     }
+
+    public List<Binding> getBindings() {
+        return bindings;
+    }
+
 }

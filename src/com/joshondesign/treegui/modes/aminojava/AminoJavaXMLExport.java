@@ -21,21 +21,15 @@ import org.joshy.gfx.node.Node;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/11/13
- * Time: 1:38 PM
- * To change this template use File | Settings | File Templates.
- */
+
 public class AminoJavaXMLExport extends JAction {
-    private final Canvas canvas;
+    private final SketchDocument document;
     private final Page page;
     private Stage demoStage;
 
-    public AminoJavaXMLExport(Canvas canvas, Page page) {
+    public AminoJavaXMLExport(SketchDocument document, Page page) {
         super();
-        this.canvas = canvas;
+        this.document = document;
         this.page = page;
     }
 
@@ -45,7 +39,7 @@ public class AminoJavaXMLExport extends JAction {
             File file = File.createTempFile("foo",".xml");
             //PrintWriter pw = new PrintWriter(new FileOutputStream(file));
             PrintWriter pw = new PrintWriter(System.out);
-            exportToXML(pw, page, canvas);
+            exportToXML(pw, page, document);
             loadAndRun(file);
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,7 +66,7 @@ public class AminoJavaXMLExport extends JAction {
         return "Run";
     }
 
-    public static void exportToXML(PrintWriter printWriter, Page page, Canvas canvas) throws URISyntaxException {
+    public static void exportToXML(PrintWriter printWriter, Page page, SketchDocument document) throws URISyntaxException {
         XMLWriter xml = new XMLWriter(printWriter, new URI(""));
         xml.header();
         xml.start("page");
@@ -95,7 +89,7 @@ public class AminoJavaXMLExport extends JAction {
 
         //bindings
         xml.start("bindings");
-        for(Binding binding : canvas.getBindings()) {
+        for(Binding binding : document.getBindings()) {
             xml.start("binding");
             xml.attr("sourceid", binding.getSource().getId());
             xml.attr("sourceprop", binding.getSourceProperty());
@@ -237,7 +231,7 @@ public class AminoJavaXMLExport extends JAction {
             //write to the file
             try {
                 if(file != null) {
-                    exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), canvas);
+                    exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
                     u.p("exported to : " + file.getAbsolutePath());
                 }
             } catch (Exception e) {

@@ -46,7 +46,7 @@ public class AminoJavaXMLImport extends JAction {
         File file = new File(fd.getDirectory(),fd.getFile());
         try {
             Doc xml = XMLParser.parse(file);
-            Page page = processPage(xml.root(), canvas);
+            Page page = processPage(xml.root(), doc);
             doc.clear();
             doc.add(page);
             canvas.setMasterRoot(page.get(0));
@@ -56,7 +56,7 @@ public class AminoJavaXMLImport extends JAction {
         }
     }
 
-    private static Page processPage(Elem root, Canvas canvas) throws XPathExpressionException, ClassNotFoundException {
+    private static Page processPage(Elem root, SketchDocument doc) throws XPathExpressionException, ClassNotFoundException {
         Page page = new Page();
 
         Layer layer = new Layer();
@@ -68,10 +68,10 @@ public class AminoJavaXMLImport extends JAction {
             layer.add(node);
         }
         //bind them together
-        canvas.getBindings().clear();
+        doc.getBindings().clear();
         for(Elem binding : root.xpath("bindings/binding")) {
             Binding b = processBinding(binding, ids);
-            canvas.getBindings().add(b);
+            doc.getBindings().add(b);
         }
         return page;
     }
@@ -160,8 +160,8 @@ public class AminoJavaXMLImport extends JAction {
 
     public static SketchDocument open(File file, Canvas canvas) throws Exception {
         Doc xml = XMLParser.parse(file);
-        Page page = processPage(xml.root(), canvas);
         SketchDocument doc = new SketchDocument();
+        Page page = processPage(xml.root(), doc);
         doc.clear();
         doc.add(page);
         canvas.setMasterRoot(page.get(0));

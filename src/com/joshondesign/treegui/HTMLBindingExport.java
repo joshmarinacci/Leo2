@@ -3,6 +3,7 @@ package com.joshondesign.treegui;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.amino.AminoAdapter;
 import java.io.*;
@@ -16,7 +17,7 @@ import org.joshy.gfx.util.u;
 
 public class HTMLBindingExport extends JAction {
 
-    public Canvas canvas;
+    public SketchDocument document;
     public Page page;
 
     @Override
@@ -33,7 +34,7 @@ public class HTMLBindingExport extends JAction {
                 w.indent();
                 for(SketchNode node : layer.children()) {
                     exportNode(w, node, true);
-                    if(node.isVisual() && AminoAdapter.shouldAddToScene(node,canvas.getBindings())) {
+                    if(node.isVisual() && AminoAdapter.shouldAddToScene(node, document.getBindings())) {
                         w.p("root.add(" + node.getId() + ");");
                     }
                     if(AminoAdapter.useSetup(node)) {
@@ -43,7 +44,7 @@ public class HTMLBindingExport extends JAction {
                 w.outdent();
             }
 
-            for(Binding binding : canvas.getBindings()) {
+            for(Binding binding : document.getBindings()) {
                 exportBinding(out,binding);
             }
 

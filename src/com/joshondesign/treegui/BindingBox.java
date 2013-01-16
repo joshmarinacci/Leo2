@@ -1,5 +1,6 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.draw.FlatColor;
@@ -14,13 +15,6 @@ import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.util.u;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/7/13
- * Time: 6:59 PM
- * To change this template use File | Settings | File Templates.
- */
 public class BindingBox extends GridBox {
     public BindingBox() {
         setFill(FlatColor.BLACK);
@@ -28,7 +22,7 @@ public class BindingBox extends GridBox {
     }
 
 
-    public void addProperty(final Canvas canvas, final SketchNode node,
+    public void addProperty(final Canvas canvas, final SketchDocument doc, final SketchNode node,
                             final String prop,
                             final Binding sourceBinding, Binding targetBinding, boolean isSource, boolean canUse) {
         //HFlexBox row = new HFlexBox();
@@ -64,7 +58,7 @@ public class BindingBox extends GridBox {
                         canvas.startDragPoint = mouseEvent.getPointInNodeCoords(canvas);
                         if(sourceBinding != null) {
                             sourceButton.setSelected(false);
-                            canvas.getBindings().remove(sourceBinding);
+                            doc.getBindings().remove(sourceBinding);
                         }
                         canvas.currentBinding.setSourceProperty(prop);
                     }
@@ -93,7 +87,7 @@ public class BindingBox extends GridBox {
                     canvas.currentBinding.setTarget(node);
                     currentBinding.setTargetProperty(prop);
                     u.p("added a binding: " + currentBinding);
-                    canvas.bindings.add(currentBinding);
+                    doc.getBindings().add(currentBinding);
                     canvas.currentBinding = null;
                     canvas.popup2.setVisible(false);
                     canvas.popup.setVisible(false);
