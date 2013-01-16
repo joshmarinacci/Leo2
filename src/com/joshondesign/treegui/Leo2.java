@@ -14,14 +14,12 @@ import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;
+import javax.swing.JFrame;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.*;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,7 +51,6 @@ public class Leo2 {
             Button quitButton = (Button) AminoParser.find("quitButton", root);
             quitButton.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
-                    u.p("quitting");
                     System.exit(0);
                 }
             });
@@ -201,10 +198,23 @@ public class Leo2 {
         });
 
 
-
         stage.raiseToTop();
 
-
+        Menubar menubar = new Menubar((JFrame) stage.getNativeWindow());
+        Menu filemenu = new Menu().setTitle("File");
+        filemenu.addItem("Open", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                new AminoJavaXMLImport(canvasView, finalDoc).execute();
+            }
+        });
+        filemenu.addItem("Save", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                new AminoJavaXMLExport.Save(canvasView, finalDoc).execute();
+            }
+        });
+        menubar.add(filemenu);
     }
 
     private static SketchDocument initDoc() {

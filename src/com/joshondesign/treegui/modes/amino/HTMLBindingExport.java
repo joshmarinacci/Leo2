@@ -6,7 +6,6 @@ import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
-import com.joshondesign.treegui.modes.amino.AminoAdapter;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
