@@ -176,6 +176,7 @@ public class AminoJavaXMLImport extends JAction {
         Page page = processPage(xml.root(), doc);
         doc.clear();
         doc.add(page);
+        doc.setFile(file);
         return doc;
     }
 

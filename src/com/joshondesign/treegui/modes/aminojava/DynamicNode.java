@@ -71,6 +71,9 @@ public class DynamicNode extends SketchNode {
             for(Property p : this.getProperties()) {
                 nd.addProperty(p.duplicate());
             }
+            for(SketchNode ch : this.children()) {
+                nd.add(ch.duplicate(null));
+            }
             node = nd;
         }
         return super.duplicate(node);

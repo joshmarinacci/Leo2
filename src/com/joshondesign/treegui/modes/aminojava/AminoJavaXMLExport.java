@@ -224,7 +224,11 @@ public class AminoJavaXMLExport extends JAction {
                 if(fd.getFile() == null) {
                     return;
                 }
-                file = new File(fd.getDirectory(),fd.getFile());
+                String filename = fd.getFile();
+                if(!filename.toLowerCase().endsWith(".xml")) {
+                    filename += ".xml";
+                }
+                file = new File(fd.getDirectory(),filename);
             }
 
 

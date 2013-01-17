@@ -86,11 +86,11 @@ public class AminoJavaMode extends Mode {
         label.setName("Label");
         label.setResizable(true);
         label.setVisual(true);
+        label.copyPropertiesFrom(visualBase);
         label.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"));
         label.addProperty(new Property("id", String.class, "arandomid").setExported(true));
-        label.copyPropertiesFrom(button);
         label.addProperty(new Property("resize", String.class, "width").setExported(false));
-        label.addProperty(new Property("text", String.class, "a label").setBindable(true));
+        label.addProperty(new Property("text", CharSequence.class, "a label").setBindable(true));
         drawMap.put(label.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 String t = node.getProperty("text").getStringValue();
@@ -395,11 +395,12 @@ public class AminoJavaMode extends Mode {
         data2.add("bar");
         data2.add("baz");
         alarmList.addProperty(new Property("class", String.class,
-                "com.joshondesign.flickr.FlickrQuery"))
-                .addProperty(new Property("data", List.class,data2)
-                        .setVisible(true).setBindable(true))
-                .addProperty(new Property("this",DynamicNode.class, null)
-                        .setVisible(false).setBindable(true));
+                "com.joshondesign.treegui.modes.aminojava.AlarmList"))
+                .addProperty(new Property("data", ListModel.class,data2)
+                        .setVisible(false).setBindable(true))
+                //.addProperty(new Property("this",DynamicNode.class, null)
+                //                        .setVisible(false).setBindable(true))
+        ;
         alarmList.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(alarmList);
 
@@ -414,17 +415,15 @@ public class AminoJavaMode extends Mode {
                         "org.joshy.gfx.node.control.CompoundListView"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
-                //.addProperty(new Property("rowHeight", Double.class, 20))
-                //.addProperty(new Property("columnWidth", Double.class, 100))
-                //.addProperty(new Property("renderer", ListView.ItemRenderer.class, "none"))
+                .addProperty(new Property("rowHeight", Double.class, 30))
                 .addProperty(new Property("model", ListModel.class, null)
                         .setBindable(true).setExported(false).setVisible(false))
-                //.addProperty(new Property("orientation",
-//                        ListView.Orientation.class, ListView.Orientation.Vertical))
         ;
         compoundList.setDrawDelegate(drawMap.get(listview.getName()));
         compoundList.getProperty("width").setDoubleValue(80);
         compoundList.getProperty("height").setDoubleValue(80);
+        compoundList.add(panel.duplicate(null));
+
         symbols.add(compoundList);
     }
 

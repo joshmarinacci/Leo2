@@ -15,15 +15,9 @@ import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.Container;
+import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.util.u;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/14/13
- * Time: 3:01 PM
- * To change this template use File | Settings | File Templates.
- */
 public class AminoParser {
     public static Node parsePage(Elem root) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
@@ -78,7 +72,7 @@ public class AminoParser {
             }
             if(binding.attrEquals("sourcetype", ListModel.class.getName())) {
                 setWithSetter(
-                        src,binding.attr("sourceprop"),
+                        src, binding.attr("sourceprop"),
                         tgt, tgtProp, binding.attr("targettype"));
                 continue;
             }
@@ -107,7 +101,7 @@ public class AminoParser {
         objectMap.put(vis.attr("id"),obj);
 
         try {
-            initObject(obj, vis);
+            initObject(obj, vis, objectMap);
         } catch (Exception ex) {
             u.p("problem with class: " + classname);
             u.p(ex);
@@ -151,7 +145,7 @@ public class AminoParser {
     }
 
 
-    private static void initObject(Object node, Elem xml) throws XPathExpressionException {
+    private static void initObject(Object node, final Elem xml, final Map<String, Object> objectMap) throws XPathExpressionException {
         List<String> skipList = new ArrayList<String>();
         skipList.add("anchorLeft");
         skipList.add("anchorRight");
@@ -199,6 +193,29 @@ public class AminoParser {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+            }
+
+
+            if(node instanceof CompoundListView) {
+                CompoundListView lv = (CompoundListView) node;
+                lv.setItemViewFactory(new CompoundListView.ItemViewFactory() {
+                    @Override
+                    public Control createItemView(CompoundListView view, int n, Control control) {
+                        Object item = view.getModel().get(n);
+                        if (item == null) return null;
+                        u.p("the item is: " + item);
+
+                        try {
+                            GrabPanel panel = new GrabPanel();
+                            processNodeChildren(panel, xml, objectMap);
+                            List<Node> children = panel.getChildren();
+                            return (Control) children.get(0);
+                        } catch (Exception e) {
+                            u.p(e);
+                            return null;
+                        }
+                    }
+                });
             }
         }
 
@@ -276,4 +293,11 @@ public class AminoParser {
         return null;
     }
 
+
+    private static class GrabPanel extends Panel {
+
+        public List<Node> getChildren() {
+            return children;
+        }
+    }
 }
