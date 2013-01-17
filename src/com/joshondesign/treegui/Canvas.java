@@ -64,8 +64,8 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     public void recalcBounds() {
         Bounds tmp = MathUtils.unionBounds(masterRoot);
-        maxBounds = new Bounds(tmp.getX()-100,tmp.getY()-100,tmp.getWidth()+200,tmp.getHeight()+200);
-        //maxBounds = tmp;
+        //maxBounds = new Bounds(tmp.getX()-100,tmp.getY()-100,tmp.getWidth()+200,tmp.getHeight()+200);
+        maxBounds = tmp;
         if (maxBounds.getX2() > baseBounds.getX2()
                 || maxBounds.getY2() > baseBounds.getY2()
                 || maxBounds.getX() < baseBounds.getX()
@@ -267,15 +267,31 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private void drawBindings(GFX gfx) {
         for(Binding binding : document.getBindings()) {
             gfx.setPaint(FlatColor.BLACK);
-            Bounds sbounds = binding.getSource().getInputBounds();
-            Bounds tbounds = binding.getTarget().getInputBounds();
-            gfx.drawLine(
-                    binding.getSource().getTranslateX() + sbounds.getCenterX(),
-                    binding.getSource().getTranslateY() + sbounds.getCenterY(),
-                    binding.getTarget().getTranslateX() + tbounds.getCenterX(),
-                    binding.getTarget().getTranslateY() + tbounds.getCenterY()
-            );
+            Bounds sb = binding.getSource().getInputBounds();
+            Bounds tb = binding.getTarget().getInputBounds();
+            Point2D start = toRootCoords(
+                    new Point2D.Double(sb.getCenterX(), sb.getCenterY()),
+                    binding.getSource());
+            Point2D end = toRootCoords(
+                    new Point2D.Double(tb.getCenterX(), tb.getCenterY()),
+                    binding.getTarget());
+            gfx.drawLine(start.getX(), start.getY(), end.getX(), end.getY());
         }
+    }
+
+    private Point2D toRootCoords(Point2D start, SketchNode source) {
+        start = new Point2D.Double(
+                start.getX()+source.getTranslateX(),
+                start.getY()+source.getTranslateY());
+        if(source == getEditRoot()) {
+            return start;
+        }
+
+        if(!(source.getParent() instanceof SketchNode)) {
+            return start;
+        }
+        SketchNode parent = (SketchNode) source.getParent();
+        return toRootCoords(start, parent);
     }
 
     private void drawSelectionOverlay(GFX gfx) {
