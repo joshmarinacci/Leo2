@@ -46,14 +46,15 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         this.masterRoot = masterRoot;
         masterRoot.addListener(new TreeNode.TreeListener() {
             public void added(TreeNode node) {
-                //To change body of implemented methods use File | Settings | File Templates.
+                setDrawingDirty();
             }
 
             public void removed(TreeNode node) {
-                //To change body of implemented methods use File | Settings | File Templates.
+                setDrawingDirty();
             }
 
             public void modified(TreeNode node) {
+                setDrawingDirty();
                 if(!boundsRecalcEnabled) return;
                 recalcBounds();
             }

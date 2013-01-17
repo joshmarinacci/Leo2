@@ -3,6 +3,7 @@ package com.joshondesign.treegui;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
+import org.joshy.gfx.node.control.Menu;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,5 +21,8 @@ public class Mode extends TreeNode {
 
     public SketchDocument createEmptyDoc() {
         return null;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    public void modifyNodeMenu(Menu nodeMenu, SketchDocument doc) {
     }
 }

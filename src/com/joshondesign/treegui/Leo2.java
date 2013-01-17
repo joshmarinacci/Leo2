@@ -236,6 +236,13 @@ public class Leo2 {
         fileMenu.addItem("Save", asAction(new AminoJavaXMLExport.Save(canvasView, finalDoc)));
         fileMenu.addItem("Quit", asAction(quitHandler));
         menubar.add(fileMenu);
+
+        Menu editMenu = new Menu().setTitle("Edit");
+        menubar.add(editMenu);
+
+        Menu nodeMenu = new Menu().setTitle("Node");
+        mode.modifyNodeMenu(nodeMenu, doc);
+        menubar.add(nodeMenu);
     }
 
     private static ListModel asListModel(TreeNode<SketchNode> symbols) {

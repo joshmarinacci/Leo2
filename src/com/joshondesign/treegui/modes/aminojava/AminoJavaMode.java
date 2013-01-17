@@ -16,13 +16,14 @@ import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.Menu;
 import org.joshy.gfx.node.control.ScrollPane;
 
 public class AminoJavaMode extends Mode {
     public static Map<String,DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
-
 
     public AminoJavaMode() {
         setId("com.joshondesign.modes.aminojava");
@@ -437,5 +438,30 @@ public class AminoJavaMode extends Mode {
         page.add(layer);
         doc.add(page);
         return doc;
+    }
+
+    @Override
+    public void modifyNodeMenu(Menu nodeMenu, final SketchDocument doc) {
+        super.modifyNodeMenu(nodeMenu, doc);
+
+        nodeMenu.addItem("Align Right", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                if(doc.getSelection().getSize() < 2) return;
+
+                double maxX = Double.MIN_VALUE;
+                for(SketchNode node : doc.getSelection().children()) {
+                    double x = node.getInputBounds().getX2() + node.getTranslateX();
+                    maxX = Math.max(x,maxX);
+                }
+                for(SketchNode node : doc.getSelection().children()) {
+                    double x = node.getInputBounds().getX2() + node.getTranslateX();
+                    double dx = maxX-x;
+                    node.setTranslateX(node.getTranslateX()+dx);
+                }
+
+            }
+        });
+
     }
 }
