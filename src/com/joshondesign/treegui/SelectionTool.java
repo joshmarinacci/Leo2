@@ -3,6 +3,7 @@ package com.joshondesign.treegui;
 import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DocumentActions;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.awt.geom.Point2D;
@@ -17,6 +18,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 public class SelectionTool extends CanvasTool {
     private final Canvas canvas;
@@ -28,6 +30,9 @@ public class SelectionTool extends CanvasTool {
     private Point2D startPoint;
     public double startTX;
     public double startTY;
+    private long lastMove;
+    private Thread timerThread;
+    private boolean timerGoing = false;
 
     public SelectionTool(final Canvas canvas, final SketchDocument document, Mode mode) {
         this.canvas = canvas;
@@ -164,7 +169,10 @@ public class SelectionTool extends CanvasTool {
     }
 
     private void continueDragGesture(Point2D pt) {
+        u.p("dragging: " + pt + document.getSelection().getSize());
+
         if(document.getSelection().getSize() < 1) return;
+        startTimeout();
         double tx = startTX + (pt.getX() - startPoint.getX());
         double ty = startTY + (pt.getY() - startPoint.getY());
         tx = Math.floor(tx/10)*10;
@@ -178,7 +186,68 @@ public class SelectionTool extends CanvasTool {
         canvas.redraw();
     }
 
+    private void stopTimeout() {
+        timerGoing = false;
+    }
+
+    private void startTimeout() {
+        if(timerThread == null) {
+            timerThread = new Thread(new Runnable() {
+                public void run() {
+                    while(true) {
+                        try {
+                            Thread.sleep(100);
+                            if(timerGoing && System.currentTimeMillis()-lastMove > 1000) {
+                                u.p("hit the timerThread");
+                                //get back on the main thread
+                                Core.getShared().defer(new Runnable() {
+                                    public void run() {
+                                        dragPaused();
+                                    }
+                                });
+                                timerGoing = false;
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            timerThread.start();
+        }
+        lastMove = System.currentTimeMillis();
+        timerGoing = true;
+    }
+
+    private void dragPaused() {
+        //check the selection
+        SketchNode node = document.getSelection().get(0);
+        Point2D pt = new Point2D.Double(node.getTranslateX(),node.getTranslateY());
+        SketchNode under = canvas.findNodeSkipping(pt, node);
+        if(under != null && under.isContainer()) {
+            canvas.navigateInto(under);
+            node.getParent().remove(node);
+            under.add(node);
+            document.getSelection().clear().add(node);
+            return;
+        }
+
+        if(under == null && canvas.getEditRoot() != canvas.getMasterRoot()) {
+            if(canvas.getEditRoot() instanceof SketchNode) {
+                SketchNode root = (SketchNode) canvas.getEditRoot();
+                if(!root.getInputBounds().contains(pt)) {
+                    canvas.navigateOutof();
+                    node.getParent().remove(node);
+                    TreeNode<SketchNode> eroot = canvas.getEditRoot();
+                    eroot.add(node);
+                    document.getSelection().clear().add(node);
+                }
+            }
+        }
+    }
+
     private void endDragGesture(Point2D pt) {
+        stopTimeout();
         moving = false;
         canvas.redraw();
     }

@@ -2,42 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="223b08a1-17b7-473c-8b91-8a8950e1dd55" name="Default" comment="code cleanup">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaMode.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoJavaMode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoParser.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/Binding.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/Binding.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DocumentActions.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DocumentActions.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DynamicNode.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DynamicNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/DynamicResizeHandle.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/DynamicResizeHandle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/model/FilterTreeNode.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/model/FilterTreeNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/FlickrQuery.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/FlickrQuery.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Group.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Group.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/actions/JAction.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/actions/JAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/Leo2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/MathUtils.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/MathUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/Mode.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/Mode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Page.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Page.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/PropUtils.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/PropUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/Property.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/Property.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/PropsView.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/PropsView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/ResizableRectNode.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/ResizableRectNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/ResizeHandle.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/ResizeHandle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Selection.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Selection.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/SketchNode.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/SketchNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/Spinner.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/Spinner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/SymbolRenderer.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/SymbolRenderer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/SymbolsDragHandler.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/SymbolsDragHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/model/TestTreeNode.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/model/TestTreeNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/TreeNodeListModel.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/TreeNodeListModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/model/TreeNodeListView.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/model/TreeNodeListView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/model/Trees.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/model/Trees.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TreeGUITest.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358398884899" ignored="false" />
-    <file path="/Canvas.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358396495677" ignored="false" />
+    <file path="/Dummy.txt" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358459225116" ignored="false" />
+    <file path="/Canvas.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358457689834" ignored="false" />
     <file path="/TreeGui.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358308005722" ignored="false" />
     <file path="/SketchNode.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358369748585" ignored="false" />
     <file path="/fragment.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358377213674" ignored="false" />
@@ -57,7 +29,7 @@
     <file path="/Rect.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357323501129" ignored="false" />
     <file path="/Button.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357507028654" ignored="false" />
     <file path="/TreeNode.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358292480436" ignored="false" />
-    <file path="/SelectionTool.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358397380709" ignored="false" />
+    <file path="/SelectionTool.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358459049301" ignored="false" />
     <file path="/ControlLoader.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357325443931" ignored="false" />
     <file path="/CanvasTool.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358368963791" ignored="false" />
     <file path="/MathUtils.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357776036514" ignored="false" />
@@ -183,22 +155,40 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Trees.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/model/Trees.java">
+      <file leaf-file-name="SelectionTool.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="238" column="43" selection-start="8426" selection-end="8426" vertical-scroll-proportion="0.3956044">
+              <folding>
+                <element signature="method#ungroupSelection#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#groupSelection#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#startDragGesture#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#stopTimeout#0;class#SelectionTool#0" expanded="false" />
+                <element signature="method#startTimeout#0;class#SelectionTool#0" expanded="false" />
+                <element signature="e#6573#7475#0" expanded="true" />
+                <element signature="e#7005#7203#0" expanded="true" />
+                <element signature="e#7168#7169#0" expanded="true" />
+                <element signature="e#7460#7461#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Layer.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Layer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="16" column="121" selection-start="411" selection-end="411" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Canvas.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Canvas.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="68" selection-start="1467" selection-end="1467" vertical-scroll-proportion="0.35873017">
+            <state line="86" column="32" selection-start="2993" selection-end="2993" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="method#Canvas#0;class#Canvas#0" expanded="false" />
-                <element signature="class#CanvasMouseEvent#0;class#Canvas#0" expanded="false" />
                 <element signature="method#showTargetPopup#0;class#Canvas#0" expanded="false" />
                 <element signature="method#doPrefLayout#0;class#Canvas#0" expanded="false" />
                 <element signature="method#setLayoutDirty#0;class#Canvas#0" expanded="false" />
@@ -206,13 +196,9 @@
                 <element signature="method#drawNode#0;class#Canvas#0" expanded="false" />
                 <element signature="method#drawSelectionOverlay#0;class#Canvas#0" expanded="false" />
                 <element signature="method#drawHandles#0;class#Canvas#0" expanded="false" />
-                <element signature="method#drawGroupEditOverlay#0;class#Canvas#0" expanded="false" />
                 <element signature="method#drawDebug#0;class#Canvas#0" expanded="false" />
-                <element signature="method#findNode#0;class#Canvas#0" expanded="false" />
                 <element signature="method#rebuildHandles#0;class#Canvas#0" expanded="false" />
                 <element signature="method#findHandle#0;class#Canvas#0" expanded="false" />
-                <element signature="method#navigateInto#0;class#Canvas#0" expanded="false" />
-                <element signature="method#navigateOutof#0;class#Canvas#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -236,7 +222,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Page.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Group.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/model/FilterTreeNode.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/model/TestTreeNode.java" />
@@ -252,6 +237,7 @@
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DocumentActions.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoParser.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" />
+        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" />
       </list>
     </option>
   </component>
@@ -259,10 +245,10 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="52" />
+    <option name="x" value="63" />
     <option name="y" value="22" />
-    <option name="width" value="1228" />
-    <option name="height" value="778" />
+    <option name="width" value="1857" />
+    <option name="height" value="1058" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -374,12 +360,12 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -1003,29 +989,33 @@
       <created>1358396615755</created>
       <updated>1358396615755</updated>
     </task>
-    <option name="localTasksCounter" value="104" />
+    <task id="LOCAL-00104" summary="code cleanup">
+      <created>1358398899645</created>
+      <updated>1358398899646</updated>
+    </task>
+    <option name="localTasksCounter" value="105" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="52" y="22" width="1228" height="778" extended-state="6" />
+    <frame x="63" y="22" width="1857" height="1058" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36474165" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36460555" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24959481" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3988604" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32753327" sideWeight="0.36595744" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36717427" sideWeight="0.6352584" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36664826" sideWeight="0.6352584" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.7227319" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3996613" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1962775" sideWeight="0.6352584" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37394246" sideWeight="0.6352584" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37382662" sideWeight="0.63539445" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -1071,7 +1061,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix drawing bindings" />
+    <option name="LAST_COMMIT_MESSAGE" value="code cleanup" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1095,7 +1085,6 @@
     <MESSAGE value="added some missing files for the project&#10;make the canvas scroll" />
     <MESSAGE value="move a bunch of code to AminoJavaMode" />
     <MESSAGE value="moved more code to a separate mode" />
-    <MESSAGE value="code cleanup" />
     <MESSAGE value="start integrating with menubar" />
     <MESSAGE value="updated start file to add another button" />
     <MESSAGE value="added first stab at a 'sketch mode' to bring over existing leo stuff" />
@@ -1109,6 +1098,7 @@
     <MESSAGE value="start of alarm demo&#10;added compound list view&#10;fix label looking like button when running&#10;append .xml when saving files if needed&#10;set the file on the document when loading from disk&#10;make DynamicNode.duplicate also duplicate the children" />
     <MESSAGE value="add 'align right' action&#10;repaint the canvas whenever" />
     <MESSAGE value="fix drawing bindings" />
+    <MESSAGE value="code cleanup" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1118,46 +1108,14 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Page.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Group.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="0" selection-start="992" selection-end="992" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/model/FilterTreeNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="41" selection-end="41" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/model/TestTreeNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="198" column="0" selection-start="6074" selection-end="6074" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/model/TreeNodeListView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="131" selection-end="131" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="5" column="0" selection-start="131" selection-end="131" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="170" column="55" selection-start="7025" selection-end="7025" vertical-scroll-proportion="0.15753424">
-          <folding />
-        </state>
+        <state line="170" column="55" selection-start="7025" selection-end="7025" vertical-scroll-proportion="0.15753424" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DocumentActions.java">
@@ -1169,9 +1127,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/FlickrQuery.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="260" selection-end="260" vertical-scroll-proportion="0.052718285">
-          <folding />
-        </state>
+        <state line="8" column="0" selection-start="260" selection-end="260" vertical-scroll-proportion="0.052718285" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/Property.java">
@@ -1183,9 +1139,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/Spinner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="236" selection-end="236" vertical-scroll-proportion="0.052718285">
-          <folding />
-        </state>
+        <state line="8" column="0" selection-start="236" selection-end="236" vertical-scroll-proportion="0.052718285" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/TreeNodeListModel.java">
@@ -1197,23 +1151,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/SymbolsDragHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="375" selection-end="375" vertical-scroll-proportion="0.03809524">
-          <folding />
-        </state>
+        <state line="11" column="0" selection-start="375" selection-end="375" vertical-scroll-proportion="0.03809524" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/SymbolRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="347" selection-end="347" vertical-scroll-proportion="0.023809524">
-          <folding />
-        </state>
+        <state line="10" column="0" selection-start="347" selection-end="347" vertical-scroll-proportion="0.023809524" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/actions/JAction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="92" selection-end="92" vertical-scroll-proportion="0.05079365">
-          <folding />
-        </state>
+        <state line="4" column="0" selection-start="92" selection-end="92" vertical-scroll-proportion="0.05079365" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/model/Trees.java">
@@ -1223,12 +1171,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/SketchNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="51" column="28" selection-start="1094" selection-end="1094" vertical-scroll-proportion="0.7912088">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DynamicNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="134" column="19" selection-start="3529" selection-end="3529" vertical-scroll-proportion="0.35164836">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="68" selection-start="1467" selection-end="1467" vertical-scroll-proportion="0.35873017">
+        <state line="86" column="32" selection-start="2993" selection-end="2993" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="method#Canvas#0;class#Canvas#0" expanded="false" />
-            <element signature="class#CanvasMouseEvent#0;class#Canvas#0" expanded="false" />
             <element signature="method#showTargetPopup#0;class#Canvas#0" expanded="false" />
             <element signature="method#doPrefLayout#0;class#Canvas#0" expanded="false" />
             <element signature="method#setLayoutDirty#0;class#Canvas#0" expanded="false" />
@@ -1236,13 +1197,33 @@
             <element signature="method#drawNode#0;class#Canvas#0" expanded="false" />
             <element signature="method#drawSelectionOverlay#0;class#Canvas#0" expanded="false" />
             <element signature="method#drawHandles#0;class#Canvas#0" expanded="false" />
-            <element signature="method#drawGroupEditOverlay#0;class#Canvas#0" expanded="false" />
             <element signature="method#drawDebug#0;class#Canvas#0" expanded="false" />
-            <element signature="method#findNode#0;class#Canvas#0" expanded="false" />
             <element signature="method#rebuildHandles#0;class#Canvas#0" expanded="false" />
             <element signature="method#findHandle#0;class#Canvas#0" expanded="false" />
-            <element signature="method#navigateInto#0;class#Canvas#0" expanded="false" />
-            <element signature="method#navigateOutof#0;class#Canvas#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Layer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="121" selection-start="411" selection-end="411" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="238" column="43" selection-start="8426" selection-end="8426" vertical-scroll-proportion="0.3956044">
+          <folding>
+            <element signature="method#ungroupSelection#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#groupSelection#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#startDragGesture#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#stopTimeout#0;class#SelectionTool#0" expanded="false" />
+            <element signature="method#startTimeout#0;class#SelectionTool#0" expanded="false" />
+            <element signature="e#6573#7475#0" expanded="true" />
+            <element signature="e#7005#7203#0" expanded="true" />
+            <element signature="e#7168#7169#0" expanded="true" />
+            <element signature="e#7460#7461#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -120,6 +120,11 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         return boundsRecalcEnabled;
     }
 
+    public TreeNode<SketchNode> getMasterRoot() {
+        return masterRoot;
+    }
+
+
     public static class CanvasMouseEvent {
 
         final Point2D pt;
@@ -356,6 +361,13 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     SketchNode findNode(Point2D pt) {
         for(SketchNode n : this.editRoot.reverseChildren()) {
             if(n.contains(pt)) return n;
+        }
+        return null;
+    }
+
+    public SketchNode findNodeSkipping(Point2D pt, SketchNode node) {
+        for(SketchNode n : this.editRoot.reverseChildren()) {
+            if(n.contains(pt) && n != node) return n;
         }
         return null;
     }
