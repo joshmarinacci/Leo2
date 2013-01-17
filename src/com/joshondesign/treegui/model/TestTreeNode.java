@@ -72,12 +72,12 @@ public class TestTreeNode {
 
             @Override
             public boolean contains(Point2D pt) {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
+                return false;
             }
 
             @Override
             public Bounds getInputBounds() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return null;
             }
         }.setWidth(100).setHeight(100).setTranslateX(100));
     }
@@ -195,7 +195,7 @@ public class TestTreeNode {
             Core.init();
             ListViewImpl();
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 
@@ -296,6 +296,5 @@ public class TestTreeNode {
     */
 
     private static void dummyop(TreeNode child) {
-        //To change body of created methods use File | Settings | File Templates.
     }
 }

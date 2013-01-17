@@ -4,6 +4,7 @@ import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.aminojava.DocumentActions;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,8 +169,12 @@ public class SelectionTool extends CanvasTool {
         double ty = startTY + (pt.getY() - startPoint.getY());
         tx = Math.floor(tx/10)*10;
         ty = Math.floor(ty/10)*10;
-        document.getSelection().get(0).setTranslateX(tx);
-        document.getSelection().get(0).setTranslateY(ty);
+        SketchNode node = document.getSelection().get(0);
+        if(node instanceof DynamicNode) {
+            if(((DynamicNode) node).isPositionLocked()) return;
+        }
+        node.setTranslateX(tx);
+        node.setTranslateY(ty);
         canvas.redraw();
     }
 

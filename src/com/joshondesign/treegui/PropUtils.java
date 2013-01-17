@@ -6,13 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.joshy.gfx.util.u;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/2/13
- * Time: 8:37 PM
- * To change this template use File | Settings | File Templates.
- */
 public class PropUtils {
     public static Class getPropertyType(Object object, String propname) {
         if(object instanceof DynamicNode) {

@@ -9,13 +9,6 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ListView;
 
-/**
-* Created with IntelliJ IDEA.
-* User: josh
-* Date: 1/14/13
-* Time: 4:00 PM
-* To change this template use File | Settings | File Templates.
-*/
 public class SymbolsDragHandler implements Callback<MouseEvent> {
     private final Canvas canvasView;
     private final ListView symbolsView;

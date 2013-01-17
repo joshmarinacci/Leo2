@@ -81,13 +81,13 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
 
     @Override
     public void remove(int i) {
-        super.remove(i);    //To change body of overridden methods use File | Settings | File Templates.
+        super.remove(i);
     }
 
     @Override
     public void remove(SketchNode child1) {
         child1.setParent(null);
-        super.remove(child1);    //To change body of overridden methods use File | Settings | File Templates.
+        super.remove(child1);
     }
 
 

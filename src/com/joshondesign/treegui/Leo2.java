@@ -19,13 +19,6 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.stage.Stage;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/13/13
- * Time: 6:52 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Leo2 {
     public static void main(String... args) throws Exception {
         Core.init();

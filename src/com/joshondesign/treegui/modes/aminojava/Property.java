@@ -2,13 +2,6 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import org.joshy.gfx.draw.FlatColor;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/11/13
- * Time: 1:10 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Property {
 
     private final String name;

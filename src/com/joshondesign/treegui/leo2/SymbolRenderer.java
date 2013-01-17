@@ -8,13 +8,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.ListView;
 
-/**
-* Created with IntelliJ IDEA.
-* User: josh
-* Date: 1/14/13
-* Time: 3:49 PM
-* To change this template use File | Settings | File Templates.
-*/
 public class SymbolRenderer implements ListView.ItemRenderer<TreeNode> {
     public void draw(GFX gfx, ListView listView, TreeNode treeNode, int index, double x, double y, double w, double h) {
         if(treeNode == null) return;

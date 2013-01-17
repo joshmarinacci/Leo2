@@ -8,13 +8,6 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/11/13
- * Time: 1:10 PM
- * To change this template use File | Settings | File Templates.
- */
 public class DynamicNode extends SketchNode {
     private String name;
     private boolean visual;
@@ -23,6 +16,7 @@ public class DynamicNode extends SketchNode {
     private DrawDelegate drawDelegate;
     private boolean container = false;
     private boolean custom;
+    private boolean positionLocked = false;
 
     public DynamicNode() {
     }
@@ -53,6 +47,15 @@ public class DynamicNode extends SketchNode {
         return custom;
     }
 
+    public DynamicNode setPositionLocked(boolean locked) {
+        this.positionLocked = locked;
+        return this;
+    }
+
+    public boolean isPositionLocked() {
+        return positionLocked;
+    }
+
     public static interface DrawDelegate {
         public void draw(GFX g, DynamicNode node);
     }
@@ -68,6 +71,7 @@ public class DynamicNode extends SketchNode {
             nd.drawDelegate = this.drawDelegate;
             nd.custom = this.custom;
             nd.setContainer(this.isContainer());
+            nd.positionLocked = this.positionLocked;
             for(Property p : this.getProperties()) {
                 nd.addProperty(p.duplicate());
             }

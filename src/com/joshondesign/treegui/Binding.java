@@ -2,13 +2,6 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/1/13
- * Time: 12:40 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Binding {
     private SketchNode source;
     private String sourceProperty;

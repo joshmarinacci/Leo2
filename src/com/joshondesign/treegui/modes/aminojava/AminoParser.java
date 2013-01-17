@@ -168,7 +168,6 @@ public class AminoParser {
 
 
             String value = eprop.attr("value");
-            u.p(" setting " + name + " with " + setter + " to " + value);
             try {
                 if(eprop.attrEquals("type","java.lang.String")) {
                     Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));

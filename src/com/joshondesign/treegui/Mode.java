@@ -5,13 +5,6 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import org.joshy.gfx.node.control.Menu;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/4/13
- * Time: 9:24 AM
- * To change this template use File | Settings | File Templates.
- */
 public class Mode extends TreeNode {
 
 
@@ -20,7 +13,7 @@ public class Mode extends TreeNode {
     }
 
     public SketchDocument createEmptyDoc() {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        return null;
     }
 
     public void modifyNodeMenu(Menu nodeMenu, SketchDocument doc) {

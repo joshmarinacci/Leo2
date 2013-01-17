@@ -5,13 +5,6 @@ import com.joshondesign.treegui.model.TreeNode;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.node.Bounds;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/4/13
- * Time: 11:04 AM
- * To change this template use File | Settings | File Templates.
- */
 public class MathUtils {
     public static Bounds unionBounds(TreeNode<SketchNode> root) {
         double minx = Double.MAX_VALUE;

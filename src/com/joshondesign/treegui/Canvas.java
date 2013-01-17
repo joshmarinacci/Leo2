@@ -37,7 +37,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private double scrollY;
     private CanvasTool currentTool;
     private Bounds maxBounds;
-    private Bounds baseBounds = new Bounds(0,0,600,400);
+    private Bounds baseBounds = new Bounds(-100,-100,600+200,400+200);
     private Bounds totalBounds = new Bounds(-100,-100,600+200,400+200);
     private boolean boundsRecalcEnabled = false;
 
@@ -64,8 +64,8 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     public void recalcBounds() {
         Bounds tmp = MathUtils.unionBounds(masterRoot);
-        //maxBounds = new Bounds(tmp.getX()-100,tmp.getY()-100,tmp.getWidth()+200,tmp.getHeight()+200);
-        maxBounds = tmp;
+        maxBounds = new Bounds(tmp.getX()-100,tmp.getY()-100,tmp.getWidth()+200,tmp.getHeight()+200);
+        //maxBounds = tmp;
         if (maxBounds.getX2() > baseBounds.getX2()
                 || maxBounds.getY2() > baseBounds.getY2()
                 || maxBounds.getX() < baseBounds.getX()
@@ -181,7 +181,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     @Override
     public void doLayout() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

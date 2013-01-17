@@ -6,13 +6,6 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.util.u;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/13/13
- * Time: 10:02 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Spinner extends Control {
     private final PropertyAnimator indeterminateAnim;
     private double animAngle = 0;

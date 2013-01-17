@@ -50,7 +50,6 @@ public class DynamicResizeHandle extends Handle {
 
     @Override
     public void endDrag(MouseEvent mouseEvent, Point2D pt) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -65,7 +64,6 @@ public class DynamicResizeHandle extends Handle {
 
     @Override
     public void startDrag(MouseEvent mouseEvent) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 

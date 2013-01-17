@@ -423,7 +423,9 @@ public class AminoJavaMode extends Mode {
         compoundList.setDrawDelegate(drawMap.get(listview.getName()));
         compoundList.getProperty("width").setDoubleValue(80);
         compoundList.getProperty("height").setDoubleValue(80);
-        compoundList.add(panel.duplicate(null));
+        DynamicNode template = (DynamicNode) panel.duplicate(null);
+        template.setPositionLocked(true);
+        compoundList.add(template);
 
         symbols.add(compoundList);
     }

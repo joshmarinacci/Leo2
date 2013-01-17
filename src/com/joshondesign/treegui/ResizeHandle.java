@@ -7,13 +7,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.MouseEvent;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/6/13
- * Time: 1:01 PM
- * To change this template use File | Settings | File Templates.
- */
 public class ResizeHandle extends Handle {
     private final ResizableRectNode node;
     private boolean active;

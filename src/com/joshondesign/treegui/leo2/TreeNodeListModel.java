@@ -4,13 +4,6 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import org.joshy.gfx.node.control.ListModel;
 
-/**
-* Created with IntelliJ IDEA.
-* User: josh
-* Date: 1/14/13
-* Time: 4:02 PM
-* To change this template use File | Settings | File Templates.
-*/
 public class TreeNodeListModel implements ListModel<TreeNode> {
     private final TreeNode<SketchNode> symbols;
 

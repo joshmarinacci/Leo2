@@ -3,13 +3,6 @@ package com.joshondesign.treegui.docmodel;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.node.Bounds;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 12/31/12
- * Time: 7:50 PM
- * To change this template use File | Settings | File Templates.
- */
 public abstract class ResizableRectNode extends SketchNode {
 
     protected ResizableRectNode() {

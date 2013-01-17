@@ -14,7 +14,6 @@ double click outside the group to exit the group editing.
 public class Group extends SketchNode {
     @Override
     public void draw(GFX g) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 

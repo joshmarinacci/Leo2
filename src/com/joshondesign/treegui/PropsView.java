@@ -12,7 +12,6 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.util.ArrayListModel;
-import org.joshy.gfx.util.u;
 
 public class PropsView extends GridBox {
     private PropFilter filter;
@@ -402,9 +401,9 @@ public class PropsView extends GridBox {
             try {
                 value = this.getter.invoke(this.obj);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             } catch (InvocationTargetException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             return (Double)value;
         }
@@ -414,9 +413,9 @@ public class PropsView extends GridBox {
             try {
                 value = this.getter.invoke(this.obj);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             } catch (InvocationTargetException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             return (FlatColor)value;
         }
@@ -426,9 +425,9 @@ public class PropsView extends GridBox {
             try {
                 value = this.getter.invoke(this.obj);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             } catch (InvocationTargetException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
 
 
@@ -480,7 +479,7 @@ public class PropsView extends GridBox {
                 try {
                     this.setter.invoke(this.obj, value);
                 } catch (InvocationTargetException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }

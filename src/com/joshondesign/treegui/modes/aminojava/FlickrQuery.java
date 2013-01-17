@@ -5,15 +5,7 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.util.ArrayListModel;
-import org.joshy.gfx.util.u;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/13/13
- * Time: 1:32 PM
- * To change this template use File | Settings | File Templates.
- */
 public class FlickrQuery {
     private String query;
     private ArrayListModel<String> results = new ArrayListModel<String>();
