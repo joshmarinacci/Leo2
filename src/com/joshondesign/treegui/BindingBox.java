@@ -55,7 +55,7 @@ public class BindingBox extends GridBox {
             Callback<MouseEvent> callback = new Callback<MouseEvent>() {
                 public void call(MouseEvent mouseEvent) throws Exception {
                     if(mouseEvent.getType() == MouseEvent.MousePressed) {
-                        canvas.startDragPoint = mouseEvent.getPointInNodeCoords(canvas);
+                        canvas.startDragPoint = canvas.toEditRootCoords(mouseEvent.getPointInNodeCoords(canvas));
                         if(sourceBinding != null) {
                             sourceButton.setSelected(false);
                             doc.getBindings().remove(sourceBinding);
@@ -64,7 +64,7 @@ public class BindingBox extends GridBox {
                     }
                     if(mouseEvent.getType() == MouseEvent.MouseDragged) {
                         canvas.dragging = true;
-                        canvas.currentDragPoint = mouseEvent.getPointInNodeCoords(canvas);
+                        canvas.currentDragPoint = canvas.toEditRootCoords(mouseEvent.getPointInNodeCoords(canvas));
                         setDrawingDirty();
                     }
                     if(mouseEvent.getType() == MouseEvent.MouseReleased) {
