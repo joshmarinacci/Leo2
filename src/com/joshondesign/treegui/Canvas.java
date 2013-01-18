@@ -20,7 +20,6 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Focusable;
 import org.joshy.gfx.node.control.ScrollPane;
-import org.joshy.gfx.util.u;
 
 public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAware {
     BindingBox popup;
@@ -442,15 +441,15 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     public Point2D toEditRootCoords(Point2D pt) {
-        Point2D pt2 = MathUtils.transform(pt, -scrollX+totalBounds.getX(), -scrollY+totalBounds.getY());
+        pt = toEditRootCoords(pt, this.editRoot);
+        return MathUtils.transform(pt, -scrollX+totalBounds.getX(), -scrollY+totalBounds.getY());
+    }
 
-        if(this.editRoot == this.masterRoot) return pt2;
-        if(this.editRoot instanceof SketchNode) {
-            SketchNode node = (SketchNode) editRoot;
-            return MathUtils.transform(pt2,-node.getTranslateX(),-node.getTranslateY());
-        }
-        u.p("possible error in toEditRootCoords. shouldn't get here");
-        return  pt2;
+    private Point2D toEditRootCoords(Point2D point, TreeNode<SketchNode> node) {
+        if(node == masterRoot) return point;
+        SketchNode sn = (SketchNode) node;
+        point = MathUtils.transform(point, -sn.getTranslateX(), -sn.getTranslateY());
+        return toEditRootCoords(point, sn.getParent());
     }
 
 

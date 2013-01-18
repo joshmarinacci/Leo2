@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="223b08a1-17b7-473c-8b91-8a8950e1dd55" name="Default" comment="code cleanup">
+    <list default="true" id="223b08a1-17b7-473c-8b91-8a8950e1dd55" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" afterPath="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TreeGUITest.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358459225116" ignored="false" />
-    <file path="/Canvas.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358457689834" ignored="false" />
+    <file path="/Dummy.txt" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358482394524" ignored="false" />
+    <file path="/Canvas.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358484410157" ignored="false" />
     <file path="/TreeGui.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358308005722" ignored="false" />
     <file path="/SketchNode.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358369748585" ignored="false" />
     <file path="/fragment.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358377213674" ignored="false" />
@@ -39,7 +38,7 @@
     <file path="/ListView.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357938477273" ignored="false" />
     <file path="/ResizeHandle.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358369442678" ignored="false" />
     <file path="/Handle.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358367917645" ignored="false" />
-    <file path="/BindingBox.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358294525519" ignored="false" />
+    <file path="/BindingBox.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358482303066" ignored="false" />
     <file path="/FlickrQuery.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1358145436854" ignored="false" />
     <file path="/Textbox.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357706758958" ignored="false" />
     <file path="/Image.java" changelist="223b08a1-17b7-473c-8b91-8a8950e1dd55" time="1357670544144" ignored="false" />
@@ -111,6 +110,7 @@
   </component>
   <component name="DebuggerManager">
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -155,51 +155,72 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="SelectionTool.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SelectionTool.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="238" column="43" selection-start="8426" selection-end="8426" vertical-scroll-proportion="0.3956044">
+            <state line="67" column="47" selection-start="2497" selection-end="2497" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="method#ungroupSelection#0;class#SelectionTool#0" expanded="false" />
                 <element signature="method#groupSelection#0;class#SelectionTool#0" expanded="false" />
                 <element signature="method#startDragGesture#0;class#SelectionTool#0" expanded="false" />
                 <element signature="method#stopTimeout#0;class#SelectionTool#0" expanded="false" />
                 <element signature="method#startTimeout#0;class#SelectionTool#0" expanded="false" />
-                <element signature="e#6573#7475#0" expanded="true" />
-                <element signature="e#7005#7203#0" expanded="true" />
-                <element signature="e#7168#7169#0" expanded="true" />
-                <element signature="e#7460#7461#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Layer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Layer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="121" selection-start="411" selection-end="411" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Canvas.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Canvas.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="86" column="32" selection-start="2993" selection-end="2993" vertical-scroll-proportion="0.0">
+            <state line="443" column="0" selection-start="14642" selection-end="14642" vertical-scroll-proportion="0.35459942">
               <folding>
-                <element signature="method#Canvas#0;class#Canvas#0" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="method#recalcBounds#0;class#Canvas#0" expanded="false" />
+                <element signature="method#setEditRoot#0;class#Canvas#0" expanded="false" />
+                <element signature="method#getEditRoot#0;class#Canvas#0" expanded="false" />
+                <element signature="method#setBoundsRecalcEnabled#0;class#Canvas#0" expanded="false" />
+                <element signature="method#isBoundsRecalcEnabled#0;class#Canvas#0" expanded="false" />
+                <element signature="method#getMasterRoot#0;class#Canvas#0" expanded="false" />
+                <element signature="class#CanvasMouseEvent#0;class#Canvas#0" expanded="false" />
+                <element signature="method#showBindingMenu#0;class#Canvas#0" expanded="false" />
                 <element signature="method#showTargetPopup#0;class#Canvas#0" expanded="false" />
+                <element signature="method#doLayout#0;class#Canvas#0" expanded="false" />
                 <element signature="method#doPrefLayout#0;class#Canvas#0" expanded="false" />
+                <element signature="method#doSkins#0;class#Canvas#0" expanded="false" />
                 <element signature="method#setLayoutDirty#0;class#Canvas#0" expanded="false" />
-                <element signature="method#drawMasterRoot#0;class#Canvas#0" expanded="false" />
-                <element signature="method#drawNode#0;class#Canvas#0" expanded="false" />
+                <element signature="method#draw#0;class#Canvas#0" expanded="false" />
+                <element signature="method#drawMaxBounds#0;class#Canvas#0" expanded="false" />
+                <element signature="method#drawToolOverlay#0;class#Canvas#0" expanded="false" />
+                <element signature="method#toRootCoords#0;class#Canvas#0" expanded="false" />
                 <element signature="method#drawSelectionOverlay#0;class#Canvas#0" expanded="false" />
                 <element signature="method#drawHandles#0;class#Canvas#0" expanded="false" />
+                <element signature="method#drawGroupEditOverlay#0;class#Canvas#0" expanded="false" />
                 <element signature="method#drawDebug#0;class#Canvas#0" expanded="false" />
+                <element signature="method#findNodeSkipping#0;class#Canvas#0" expanded="false" />
+                <element signature="method#redraw#0;class#Canvas#0" expanded="false" />
+                <element signature="method#isFocused#0;class#Canvas#0" expanded="false" />
                 <element signature="method#rebuildHandles#0;class#Canvas#0" expanded="false" />
                 <element signature="method#findHandle#0;class#Canvas#0" expanded="false" />
+                <element signature="method#navigateInto#0;class#Canvas#0" expanded="false" />
+                <element signature="method#navigateOutof#0;class#Canvas#0" expanded="false" />
+                <element signature="method#getFullWidth#0;class#Canvas#0" expanded="false" />
+                <element signature="method#getFullHeight#0;class#Canvas#0" expanded="false" />
+                <element signature="method#setScrollX#0;class#Canvas#0" expanded="false" />
+                <element signature="method#setScrollY#0;class#Canvas#0" expanded="false" />
+                <element signature="method#setScrollParent#0;class#Canvas#0" expanded="false" />
+                <element signature="method#setDocument#0;class#Canvas#0" expanded="false" />
+                <element signature="method#setTool#0;class#Canvas#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BindingBox.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/BindingBox.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="61" column="61" selection-start="2579" selection-end="2579" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -222,7 +243,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Group.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/model/FilterTreeNode.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/model/TestTreeNode.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/model/TreeNodeListView.java" />
@@ -236,8 +256,9 @@
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/FlickrQuery.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/DocumentActions.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoParser.java" />
-        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" />
         <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java" />
+        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/BindingBox.java" />
+        <option value="$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java" />
       </list>
     </option>
   </component>
@@ -245,10 +266,8 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="63" />
-    <option name="y" value="22" />
-    <option name="width" value="1857" />
-    <option name="height" value="1058" />
+    <option name="width" value="1280" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -264,7 +283,7 @@
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="PackagesPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -275,77 +294,7 @@
       <autoscrollFromSource />
       <sortByType />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Leo2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Default">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Leo2">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Leo2">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT=".idea">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="Changed Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="TreeGUITest">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="com/joshondesign/treegui">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane />
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
@@ -360,12 +309,12 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -993,29 +942,37 @@
       <created>1358398899645</created>
       <updated>1358398899646</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="let you drag and hover a node to move it in and out of a parent">
+      <created>1358459255931</created>
+      <updated>1358459255931</updated>
+    </task>
+    <task id="LOCAL-00106" summary="fix the position of the actively being drawn binding">
+      <created>1358482397037</created>
+      <updated>1358482397037</updated>
+    </task>
+    <option name="localTasksCounter" value="107" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="63" y="22" width="1857" height="1058" extended-state="6" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36460555" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36324787" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24959481" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3988604" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32753327" sideWeight="0.36595744" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36664826" sideWeight="0.6352584" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36628848" sideWeight="0.6352584" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.7227319" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3996613" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1962775" sideWeight="0.6352584" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37382662" sideWeight="0.63539445" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4197731" sideWeight="0.6367521" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -1061,7 +1018,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="code cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix the position of the actively being drawn binding" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1074,8 +1031,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="cleanup" />
-    <MESSAGE value="initial functioning version of Leo2" />
     <MESSAGE value="let the editor edit itself" />
     <MESSAGE value="added shared delete action" />
     <MESSAGE value="big refactor. move selection into document" />
@@ -1099,6 +1054,8 @@
     <MESSAGE value="add 'align right' action&#10;repaint the canvas whenever" />
     <MESSAGE value="fix drawing bindings" />
     <MESSAGE value="code cleanup" />
+    <MESSAGE value="let you drag and hover a node to move it in and out of a parent" />
+    <MESSAGE value="fix the position of the actively being drawn binding" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1108,11 +1065,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/model/TreeNodeListView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="131" selection-end="131" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/AminoParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="170" column="55" selection-start="7025" selection-end="7025" vertical-scroll-proportion="0.15753424" />
@@ -1132,9 +1084,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/Property.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="89" selection-end="89" vertical-scroll-proportion="0.052718285">
-          <folding />
-        </state>
+        <state line="4" column="0" selection-start="89" selection-end="89" vertical-scroll-proportion="0.052718285" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/modes/aminojava/Spinner.java">
@@ -1144,9 +1094,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/TreeNodeListModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="187" selection-end="187" vertical-scroll-proportion="0.039538715">
-          <folding />
-        </state>
+        <state line="6" column="0" selection-start="187" selection-end="187" vertical-scroll-proportion="0.039538715" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/leo2/SymbolsDragHandler.java">
@@ -1166,9 +1114,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/model/Trees.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/SketchNode.java">
@@ -1185,45 +1131,73 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java">
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Layer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="32" selection-start="2993" selection-end="2993" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="method#Canvas#0;class#Canvas#0" expanded="false" />
-            <element signature="method#showTargetPopup#0;class#Canvas#0" expanded="false" />
-            <element signature="method#doPrefLayout#0;class#Canvas#0" expanded="false" />
-            <element signature="method#setLayoutDirty#0;class#Canvas#0" expanded="false" />
-            <element signature="method#drawMasterRoot#0;class#Canvas#0" expanded="false" />
-            <element signature="method#drawNode#0;class#Canvas#0" expanded="false" />
-            <element signature="method#drawSelectionOverlay#0;class#Canvas#0" expanded="false" />
-            <element signature="method#drawHandles#0;class#Canvas#0" expanded="false" />
-            <element signature="method#drawDebug#0;class#Canvas#0" expanded="false" />
-            <element signature="method#rebuildHandles#0;class#Canvas#0" expanded="false" />
-            <element signature="method#findHandle#0;class#Canvas#0" expanded="false" />
-          </folding>
+        <state line="16" column="24" selection-start="411" selection-end="411" vertical-scroll-proportion="0.34124628">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/docmodel/Layer.java">
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/BindingBox.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="121" selection-start="411" selection-end="411" vertical-scroll-proportion="0.0">
+        <state line="61" column="61" selection-start="2579" selection-end="2579" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/SelectionTool.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="238" column="43" selection-start="8426" selection-end="8426" vertical-scroll-proportion="0.3956044">
+        <state line="67" column="47" selection-start="2497" selection-end="2497" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="method#ungroupSelection#0;class#SelectionTool#0" expanded="false" />
             <element signature="method#groupSelection#0;class#SelectionTool#0" expanded="false" />
             <element signature="method#startDragGesture#0;class#SelectionTool#0" expanded="false" />
             <element signature="method#stopTimeout#0;class#SelectionTool#0" expanded="false" />
             <element signature="method#startTimeout#0;class#SelectionTool#0" expanded="false" />
-            <element signature="e#6573#7475#0" expanded="true" />
-            <element signature="e#7005#7203#0" expanded="true" />
-            <element signature="e#7168#7169#0" expanded="true" />
-            <element signature="e#7460#7461#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/joshondesign/treegui/Canvas.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="443" column="0" selection-start="14642" selection-end="14642" vertical-scroll-proportion="0.35459942">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#recalcBounds#0;class#Canvas#0" expanded="false" />
+            <element signature="method#setEditRoot#0;class#Canvas#0" expanded="false" />
+            <element signature="method#getEditRoot#0;class#Canvas#0" expanded="false" />
+            <element signature="method#setBoundsRecalcEnabled#0;class#Canvas#0" expanded="false" />
+            <element signature="method#isBoundsRecalcEnabled#0;class#Canvas#0" expanded="false" />
+            <element signature="method#getMasterRoot#0;class#Canvas#0" expanded="false" />
+            <element signature="class#CanvasMouseEvent#0;class#Canvas#0" expanded="false" />
+            <element signature="method#showBindingMenu#0;class#Canvas#0" expanded="false" />
+            <element signature="method#showTargetPopup#0;class#Canvas#0" expanded="false" />
+            <element signature="method#doLayout#0;class#Canvas#0" expanded="false" />
+            <element signature="method#doPrefLayout#0;class#Canvas#0" expanded="false" />
+            <element signature="method#doSkins#0;class#Canvas#0" expanded="false" />
+            <element signature="method#setLayoutDirty#0;class#Canvas#0" expanded="false" />
+            <element signature="method#draw#0;class#Canvas#0" expanded="false" />
+            <element signature="method#drawMaxBounds#0;class#Canvas#0" expanded="false" />
+            <element signature="method#drawToolOverlay#0;class#Canvas#0" expanded="false" />
+            <element signature="method#toRootCoords#0;class#Canvas#0" expanded="false" />
+            <element signature="method#drawSelectionOverlay#0;class#Canvas#0" expanded="false" />
+            <element signature="method#drawHandles#0;class#Canvas#0" expanded="false" />
+            <element signature="method#drawGroupEditOverlay#0;class#Canvas#0" expanded="false" />
+            <element signature="method#drawDebug#0;class#Canvas#0" expanded="false" />
+            <element signature="method#findNodeSkipping#0;class#Canvas#0" expanded="false" />
+            <element signature="method#redraw#0;class#Canvas#0" expanded="false" />
+            <element signature="method#isFocused#0;class#Canvas#0" expanded="false" />
+            <element signature="method#rebuildHandles#0;class#Canvas#0" expanded="false" />
+            <element signature="method#findHandle#0;class#Canvas#0" expanded="false" />
+            <element signature="method#navigateInto#0;class#Canvas#0" expanded="false" />
+            <element signature="method#navigateOutof#0;class#Canvas#0" expanded="false" />
+            <element signature="method#getFullWidth#0;class#Canvas#0" expanded="false" />
+            <element signature="method#getFullHeight#0;class#Canvas#0" expanded="false" />
+            <element signature="method#setScrollX#0;class#Canvas#0" expanded="false" />
+            <element signature="method#setScrollY#0;class#Canvas#0" expanded="false" />
+            <element signature="method#setScrollParent#0;class#Canvas#0" expanded="false" />
+            <element signature="method#setDocument#0;class#Canvas#0" expanded="false" />
+            <element signature="method#setTool#0;class#Canvas#0" expanded="false" />
           </folding>
         </state>
       </provider>
