@@ -36,6 +36,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private double scrollY;
     private CanvasTool currentTool;
     private Bounds maxBounds;
+    private Bounds docBounds = new Bounds(0,0,600,400);
     private Bounds baseBounds = new Bounds(-100,-100,600+200,400+200);
     private Bounds totalBounds = new Bounds(-100,-100,600+200,400+200);
     private boolean boundsRecalcEnabled = false;
@@ -243,7 +244,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     private void drawDocumentBounds(GFX gfx, TreeNode<SketchNode> masterRoot) {
         gfx.setPaint(FlatColor.WHITE);
-        gfx.fillRect(0,0,getWidth(),getHeight());
+        gfx.fillRect(0,0,docBounds.getWidth(), docBounds.getHeight());
         if(masterRoot instanceof Layer) {
             gfx.setPaint(FlatColor.GRAY);
             gfx.drawRect(0,0,600,400);
@@ -300,10 +301,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private void drawSelectionOverlay(GFX gfx) {
         if(document.getSelection().getSize() < 1) return;
         Point2D pt = new Point2D.Double(0,0);
-        if(getEditRoot() instanceof SketchNode) {
-            SketchNode sn = (SketchNode) getEditRoot();
-            pt = MathUtils.transform(pt,sn.getTranslateX(),sn.getTranslateY());
-        }
+        pt = editRootToMasterRootCoords(pt, editRoot);
         Bounds b = MathUtils.unionBounds(document.getSelection());
         b = MathUtils.transform(b,pt);
         gfx.setPaint(FlatColor.fromRGBInts(100,100,100));
@@ -451,6 +449,14 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         point = MathUtils.transform(point, -sn.getTranslateX(), -sn.getTranslateY());
         return toEditRootCoords(point, sn.getParent());
     }
+
+    private Point2D editRootToMasterRootCoords(Point2D point, TreeNode root) {
+        if(root == masterRoot) return point;
+        SketchNode sn = (SketchNode) root;
+        point = MathUtils.transform(point, sn.getTranslateX(), sn.getTranslateY());
+        return editRootToMasterRootCoords(point, sn.getParent());
+    }
+
 
 
 
