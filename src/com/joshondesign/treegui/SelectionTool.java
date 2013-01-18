@@ -169,8 +169,6 @@ public class SelectionTool extends CanvasTool {
     }
 
     private void continueDragGesture(Point2D pt) {
-        u.p("dragging: " + pt + document.getSelection().getSize());
-
         if(document.getSelection().getSize() < 1) return;
         startTimeout();
         double tx = startTX + (pt.getX() - startPoint.getX());

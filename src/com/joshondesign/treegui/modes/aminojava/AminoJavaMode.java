@@ -395,14 +395,27 @@ public class AminoJavaMode extends Mode {
         data2.add("foo");
         data2.add("bar");
         data2.add("baz");
+        DynamicNode.DrawDelegate servicebaseDrawDelegate = drawMap.get("servicebase");
+
+        Property dataProp = new Property("data", ListModel.class, data2);
+        dataProp.setVisible(false);
+        dataProp.setBindable(true);
+        dataProp.setList(true);
+        DynamicNode alarm = new DynamicNode();
+        alarm.setName("Alarm");
+        alarm.setVisual(false);
+        alarm.setResizable(false);
+        alarm.copyPropertiesFrom(serviceBase);
+        alarm.addProperty(new Property("label", String.class, "Alarm Label").setBindable(true));
+        alarm.addProperty(new Property("time",  Double.class,5).setBindable(true));
+        alarm.addProperty(new Property("enabled", Boolean.class, false).setBindable(true));
+        alarm.setDrawDelegate(servicebaseDrawDelegate);
+        dataProp.setItemPrototype(alarm);
         alarmList.addProperty(new Property("class", String.class,
                 "com.joshondesign.treegui.modes.aminojava.AlarmList"))
-                .addProperty(new Property("data", ListModel.class,data2)
-                        .setVisible(false).setBindable(true))
-                //.addProperty(new Property("this",DynamicNode.class, null)
-                //                        .setVisible(false).setBindable(true))
+                .addProperty(dataProp)
         ;
-        alarmList.setDrawDelegate(drawMap.get("servicebase"));
+        alarmList.setDrawDelegate(servicebaseDrawDelegate);
         symbols.add(alarmList);
 
         DynamicNode compoundList = new DynamicNode();
@@ -418,13 +431,21 @@ public class AminoJavaMode extends Mode {
                         .setExported(false).setVisible(false))
                 .addProperty(new Property("rowHeight", Double.class, 30))
                 .addProperty(new Property("model", ListModel.class, null)
-                        .setBindable(true).setExported(false).setVisible(false))
+                        .setBindable(true).setExported(false).setVisible(false).setList(true))
         ;
         compoundList.setDrawDelegate(drawMap.get(listview.getName()));
         compoundList.getProperty("width").setDoubleValue(80);
         compoundList.getProperty("height").setDoubleValue(80);
         DynamicNode template = (DynamicNode) panel.duplicate(null);
         template.setPositionLocked(true);
+        DynamicNode mirror = new DynamicNode();
+        mirror.setMirror(true);
+        mirror.setName("Mirror");
+        mirror.setMirrorTarget("model");
+        mirror.copyPropertiesFrom(serviceBase);
+        mirror.setDrawDelegate(servicebaseDrawDelegate);
+        template.add(mirror);
+        //when entering the template, it checks if it has a mirror child. if so it asks the mirror to rebuild itself?
         compoundList.add(template);
 
         symbols.add(compoundList);

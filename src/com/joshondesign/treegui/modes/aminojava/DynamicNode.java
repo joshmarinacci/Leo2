@@ -1,12 +1,15 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.MathUtils;
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import java.awt.geom.Point2D;
 import java.util.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 public class DynamicNode extends SketchNode {
     private String name;
@@ -17,6 +20,8 @@ public class DynamicNode extends SketchNode {
     private boolean container = false;
     private boolean custom;
     private boolean positionLocked = false;
+    private boolean mirror;
+    private String mirrorTarget;
 
     public DynamicNode() {
     }
@@ -56,6 +61,61 @@ public class DynamicNode extends SketchNode {
         return positionLocked;
     }
 
+    public void setMirror(boolean mirror) {
+        this.mirror = mirror;
+    }
+
+    public boolean isMirror() {
+        return mirror;
+    }
+
+    public void setMirrorTarget(String mirrorTarget) {
+        this.mirrorTarget = mirrorTarget;
+    }
+
+    public String getMirrorTarget() {
+        return mirrorTarget;
+    }
+
+    public void refreshMirror(SketchDocument document) {
+        if(!isMirror()) {
+            u.p("tried to rescan something that's not a mirror!");
+            return;
+        }
+
+        u.p("rescanning a mirror. go up two levels to look for : " + getMirrorTarget());
+        DynamicNode par = (DynamicNode) ((DynamicNode) getParent()).getParent();
+        Property tprop = par.getProperty(getMirrorTarget());
+        u.p("the target prop is: " + tprop.getName());
+        u.p("is list = " + tprop.isList());
+        //find the thing it is bound to
+
+        Binding binding = findBindingForTarget(document.getBindings(),par,tprop);
+        u.p("found the binding");
+        DynamicNode source = ((DynamicNode)binding.getSource());
+        u.p("source = " + source.getName());
+        DynamicNode proto = source.getProperty(binding.getSourceProperty()).getItemPrototype();
+        u.p("prototype = " + proto);
+        for(Property prop : proto.getProperties()) {
+            u.p("looking at property: " + prop.getName());
+            if(prop.isBindable()) {
+                addProperty(prop.duplicate());
+            }
+            if(!prop.isBindable()) continue;
+        }
+    }
+
+    private Binding findBindingForTarget(List<Binding> bindings, DynamicNode par, Property tprop) {
+        for(Binding binding : bindings) {
+            if(binding.getTarget() == par) {
+                if(binding.getTargetProperty().equals(tprop.getName())) {
+                    return binding;
+                }
+            }
+        }
+        return null;
+    }
+
     public static interface DrawDelegate {
         public void draw(GFX g, DynamicNode node);
     }
@@ -72,6 +132,9 @@ public class DynamicNode extends SketchNode {
             nd.custom = this.custom;
             nd.setContainer(this.isContainer());
             nd.positionLocked = this.positionLocked;
+            nd.mirror = this.mirror;
+            nd.mirrorTarget = this.mirrorTarget;
+
             for(Property p : this.getProperties()) {
                 nd.addProperty(p.duplicate());
             }
@@ -136,7 +199,7 @@ public class DynamicNode extends SketchNode {
         return getInputBounds().contains(MathUtils.transform(pt,-getTranslateX(),-getTranslateY()));
     }
 
-    private boolean hasProperty(String name) {
+    boolean hasProperty(String name) {
         return this.properies.containsKey(name);
     }
     @Override

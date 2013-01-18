@@ -20,6 +20,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Focusable;
 import org.joshy.gfx.node.control.ScrollPane;
+import org.joshy.gfx.util.u;
 
 public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAware {
     BindingBox popup;
@@ -81,7 +82,21 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     public void setEditRoot(TreeNode<SketchNode> editRoot) {
         this.editRoot = editRoot;
+        scanForMirrors();
         setDrawingDirty();
+    }
+
+    private void scanForMirrors() {
+        for(SketchNode node : editRoot.children()) {
+            if(node instanceof DynamicNode) {
+                DynamicNode dnode = (DynamicNode) node;
+                if(dnode.isMirror()) {
+                    u.p("refreshing the mirror");
+                    dnode.refreshMirror(document);
+                }
+            }
+        }
+
     }
 
     public TreeNode<SketchNode> getEditRoot() {

@@ -21,21 +21,30 @@ import org.joshy.gfx.util.u;
 public class AminoParser {
     public static Node parsePage(Elem root) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
+        List<Elem> deferredBindings = new ArrayList<Elem>();
 
         Node last = null;
         for(Elem vis : root.xpath("nodes/node")) {
-            Object obj = processNode(vis, objectMap);
+            Object obj = processNode(vis, objectMap, deferredBindings);
             if(obj instanceof Node && vis.attrEquals("visual","true")) {
                 last = (Node) obj;
-                processNodeChildren(last,vis,objectMap);
+                processNodeChildren(last,vis,objectMap, deferredBindings);
             }
             u.p("last node is set to: " + last);
         }
 
         for(final Elem binding : root.xpath("bindings/binding")) {
+            if(binding.attrEquals("mirror","true")) {
+                u.p("it's a mirror binding. deferring");
+                deferredBindings.add(binding);
+                continue;
+            }
+
             final Object src = objectMap.get(binding.attr("sourceid"));
             final Object tgt = objectMap.get(binding.attr("targetid"));
             final String tgtProp = binding.attr("targetprop");
+
+            //applyBinding(binding);
 
             if(binding.attrEquals("sourcetype", GuiTest.TriggerType.class.getName())) {
                 EventBus.getSystem().addListener(src, ActionEvent.Action, new Callback<Event>() {
@@ -64,28 +73,49 @@ public class AminoParser {
                 });
                 continue;
             }
-            if(binding.attrEquals("sourcetype","java.lang.String")) {
-                setWithSetter(
-                        src,binding.attr("sourceprop"),
-                        tgt, tgtProp, binding.attr("targettype"));
-                continue;
-            }
-            if(binding.attrEquals("sourcetype", ListModel.class.getName())) {
-                setWithSetter(
-                        src, binding.attr("sourceprop"),
-                        tgt, tgtProp, binding.attr("targettype"));
-                continue;
-            }
+            applyBinding(src, tgt, binding);
         }
 
         return last;
     }
 
-    private static Object processNode(Elem vis, Map<String, Object> objectMap) throws IllegalAccessException, InstantiationException, ClassNotFoundException, XPathExpressionException {
+    private static void applyBinding(Object src, Object tgt, Elem binding) throws Exception {
+        final String tgtProp = binding.attr("targetprop");
+        if(binding.attrEquals("sourcetype","java.lang.String")) {
+            setWithSetter(
+                    src,binding.attr("sourceprop"),
+                    tgt, tgtProp, binding.attr("targettype"));
+            return;
+        }
+        if(binding.attrEquals("sourcetype","java.lang.Double") && binding.attrEquals("targettype","java.lang.CharSequence")) {
+            u.p("we need to coerce a double to a string");
+            Integer srcval = (Integer) PropUtils.findGetter(src, binding.attr("sourceprop")).invoke(src);
+            String strval = srcval.toString();
+            PropUtils.findSetter(tgt,tgtProp).invoke(tgt,strval);
+        }
+        if(binding.attrEquals("sourcetype", ListModel.class.getName())) {
+            setWithSetter(
+                    src, binding.attr("sourceprop"),
+                    tgt, tgtProp, binding.attr("targettype"));
+            return;
+        }
+    }
+
+    private static void setWithSetter(Object src, String sourceprop, Object tgt, String tgtProp, String tgttype) throws Exception {
+        Object value = PropUtils.findGetter(src, sourceprop).invoke(src);
+        PropUtils.findSetter(tgt,tgtProp).invoke(tgt,value);
+    }
+
+    private static Object processNode(Elem vis, Map<String, Object> objectMap, List<Elem> deferredBindings) throws IllegalAccessException, InstantiationException, ClassNotFoundException, XPathExpressionException {
         String classname = vis.attr("class");
 
         if(vis.attrEquals("custom","true")) {
             classname = vis.attr("customClass");
+        }
+
+        if(vis.attrEquals("mirror","true")) {
+            u.p("loading up a mirror. we don't really need to do this. skip it");
+            return null;
         }
         Class clazz = null;
 
@@ -101,7 +131,7 @@ public class AminoParser {
         objectMap.put(vis.attr("id"),obj);
 
         try {
-            initObject(obj, vis, objectMap);
+            initObject(obj, vis, objectMap, deferredBindings);
         } catch (Exception ex) {
             u.p("problem with class: " + classname);
             u.p(ex);
@@ -113,9 +143,9 @@ public class AminoParser {
         return obj;
     }
 
-    private static void processNodeChildren(Node root, Elem elem, Map<String, Object> objectMap) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+    private static void processNodeChildren(Node root, Elem elem, Map<String, Object> objectMap, List<Elem> deferredBindings) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         for(Elem vis : elem.xpath("children/node")) {
-            Object obj = processNode(vis, objectMap);
+            Object obj = processNode(vis, objectMap, deferredBindings);
             if(obj instanceof Node) {
                 Node child = (Node) obj;
                 if(root instanceof Container) {
@@ -135,17 +165,13 @@ public class AminoParser {
                     ((ScrollPane)root).setContent(child);
                 }
 
-                processNodeChildren(child, vis, objectMap);
+                processNodeChildren(child, vis, objectMap, deferredBindings);
             }
         }
     }
-    private static void setWithSetter(Object src, String sourceprop, Object tgt, String tgtProp, String tgttype) throws Exception {
-        Object value = PropUtils.findGetter(src, sourceprop).invoke(src);
-        PropUtils.findSetter(tgt,tgtProp).invoke(tgt,value);
-    }
 
 
-    private static void initObject(Object node, final Elem xml, final Map<String, Object> objectMap) throws XPathExpressionException {
+    private static void initObject(Object node, final Elem xml, final Map<String, Object> objectMap, final List<Elem> deferredBindings) throws XPathExpressionException {
         List<String> skipList = new ArrayList<String>();
         skipList.add("anchorLeft");
         skipList.add("anchorRight");
@@ -167,7 +193,7 @@ public class AminoParser {
             String setter = "set" + name.substring(0,1).toUpperCase() + name.substring(1);
 
 
-            String value = eprop.attr("value");
+            //String value = eprop.attr("value");
             try {
                 if(eprop.attrEquals("type","java.lang.String")) {
                     Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
@@ -179,7 +205,7 @@ public class AminoParser {
                 }
                 if(eprop.attrEquals("type","java.lang.Double")) {
                     Method method = findSetter(clazz, setter, eprop);
-                    method.invoke(node, Double.parseDouble(value));
+                    method.invoke(node, Double.parseDouble(eprop.attr("value")));
                 }
                 if(eprop.attrEquals("type","org.joshy.gfx.draw.FlatColor")) {
                     Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
@@ -206,7 +232,12 @@ public class AminoParser {
 
                         try {
                             GrabPanel panel = new GrabPanel();
-                            processNodeChildren(panel, xml, objectMap);
+                            processNodeChildren(panel, xml, objectMap, deferredBindings);
+                            List<Control> controls = new ArrayList<Control>();
+                            for(Control c : ((Container)panel.getChildren().get(0)).controlChildren()) {
+                                controls.add(c);
+                            }
+                            processDeferredBindings(controls,objectMap,item, deferredBindings);
                             List<Node> children = panel.getChildren();
                             return (Control) children.get(0);
                         } catch (Exception e) {
@@ -218,6 +249,37 @@ public class AminoParser {
             }
         }
 
+    }
+
+    private static void processDeferredBindings(List<Control> nodes, Map<String, Object> objectMap, Object dataItem, List<Elem> deferredBindings) {
+        u.p("----------");
+        u.p("doing a deferred binding");
+        for(Control node : nodes) {
+            String targetID = null;
+            for(Map.Entry<String,Object> entry : objectMap.entrySet()) {
+                if(entry.getValue() == node) {
+                    u.p("found the id: " + entry.getKey() + " for node " + node);
+                    targetID = entry.getKey();
+                }
+            }
+
+            u.p("target = " + targetID + " " + node);
+            if(targetID == null) return;
+            for(Elem binding : deferredBindings) {
+                if(binding.attrEquals("targetid",targetID)) {
+                    u.p("found matching binding");
+                    u.p("binding = " + binding.attr("sourceprop") + " => " + binding.attr("targetprop"));
+                    try {
+                        applyBinding(dataItem, node, binding);
+                    } catch (Exception e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+            }
+        }
+
+
+        u.p("------");
     }
 
     private static AnchorPanel.AnchorSettings parseAnchor(Elem echild) throws XPathExpressionException {

@@ -97,6 +97,12 @@ public class AminoJavaXMLExport extends JAction {
             xml.attr("targetid",binding.getTarget().getId());
             xml.attr("targetprop",binding.getTargetProperty());
             xml.attr("targettype",binding.getTargetType().getName());
+            if(binding.getSource() instanceof DynamicNode) {
+                DynamicNode nd = (DynamicNode) binding.getSource();
+                if(nd.isMirror()) {
+                    xml.attr("mirror","true");
+                }
+            }
             xml.end();
         }
         xml.end();
@@ -109,10 +115,16 @@ public class AminoJavaXMLExport extends JAction {
         if(!node.isVisual() && node instanceof DynamicNode) {
             DynamicNode nd = (DynamicNode) node;
             u.p("spitting out " + nd);
-            xml.start("node")
-                    .attr("class", nd.getProperty("class").encode())
-                    .attr("name", nd.getName())
-                    .attr("id", nd.getId())
+            xml.start("node");
+            if(nd.hasProperty("class")) {
+                xml.attr("class",nd.getProperty("class").encode());
+            } else {
+                xml.attr("class","unknown");
+            }
+            xml
+                .attr("name", nd.getName())
+                .attr("id", nd.getId())
+                .attr("mirror",Boolean.toString(nd.isMirror()))
             ;
             for (Property prop : nd.getSortedProperties()) {
                 xml.start("property");

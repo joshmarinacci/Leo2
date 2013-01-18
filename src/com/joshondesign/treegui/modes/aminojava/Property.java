@@ -11,6 +11,8 @@ public class Property {
     private String exportName;
     private boolean visible = true;
     private boolean bindable = false;
+    private boolean list;
+    private DynamicNode itemPrototype;
 
     public Property(String name, Class type, Object value) {
         this.name = name;
@@ -63,6 +65,8 @@ public class Property {
         p.setVisible(this.isVisible());
         p.setExported(this.isExported());
         p.setBindable(this.isBindable());
+        p.setList(this.isList());
+        p.setItemPrototype(this.getItemPrototype());
         return p;
     }
 
@@ -152,5 +156,22 @@ public class Property {
 
     public boolean isBindable() {
         return bindable;
+    }
+
+    public Property setList(boolean list) {
+        this.list = list;
+        return this;
+    }
+
+    public boolean isList() {
+        return list;
+    }
+
+    public void setItemPrototype(DynamicNode itemPrototype) {
+        this.itemPrototype = itemPrototype;
+    }
+
+    public DynamicNode getItemPrototype() {
+        return itemPrototype;
     }
 }

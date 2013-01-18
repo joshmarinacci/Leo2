@@ -14,9 +14,9 @@ public class AlarmList {
 
     private ArrayListModel<Alarm> results = new ArrayListModel<Alarm>();
     public AlarmList() {
-        results.add(new Alarm());
-        results.add(new Alarm());
-        results.add(new Alarm());
+        results.add(new Alarm().setLabel("l1").setTime(5));
+        results.add(new Alarm().setLabel("l2").setTime(10));
+        results.add(new Alarm().setLabel("l3").setTime(20));
     }
     public ListModel<Alarm> getData() {
         return results;

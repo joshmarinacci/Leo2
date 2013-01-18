@@ -18,16 +18,18 @@ public class Alarm {
         setRepeat(true);
     }
 
-    public void setLabel(String label) {
+    public Alarm setLabel(String label) {
         this.label = label;
+        return this;
     }
 
     public String getLabel() {
         return label;
     }
 
-    public void setTime(int time) {
+    public Alarm setTime(int time) {
         this.time = time;
+        return this;
     }
 
     public int getTime() {
