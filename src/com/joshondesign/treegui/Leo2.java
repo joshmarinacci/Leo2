@@ -22,6 +22,8 @@ import org.joshy.gfx.stage.Stage;
 public class Leo2 {
     public static void main(String... args) throws Exception {
         Core.init();
+        Core.getShared().loadCSS(new File("test.css"));
+        Core.setDebugCSS(new File("test.css"));
         Core.getShared().defer(new Runnable() {
             public void run() {
                 init();

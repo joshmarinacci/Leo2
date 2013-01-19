@@ -1,0 +1,178 @@
+
+* {
+    margin: 1px;
+    padding: 2px;
+    background-color: #444444;
+    color: #cccccc;
+    border-width: 1px;
+    border-color: #000000;
+    text-align: left;
+    border-radius: 0px;
+    shrink-to-fit: false;
+    font-size: 12pt;
+    font-family: OpenSans, serif;
+    font-weight: bold;
+    font-weight: normal;
+
+    /* turn these on to draw lines showing the box dimensions */
+    debug-margin:   true;
+    debug-border:   true;
+    debug-padding:  true;
+}
+
+
+
+
+.-class-Button, .-class-Togglebutton {
+    background: linear-gradient(center top, #505050 0%, #1a1a1a 100%);
+    color: #cccccc;
+    text-shadow: 0px 0px 0px #222222;
+    border-color: #000000;
+    font-size: 12pt;
+    font-family: OpenSans, serif;
+    font-weight: bold;
+}
+
+.-class-Button:hover, .-class-Togglebutton:hover {
+    background: linear-gradient(center top, #0186ba 0%, #002222 100%);
+    color: #ffffff;
+    border-color: #000000;
+}
+
+
+
+/* scroll bars */
+
+.-class-Scrollbar {
+    width: 100px;
+    height: 12px;
+    margin: 0px;
+    padding: 0px;
+    border-width: 1px;
+    border-color: #000000;
+    background-color: #e0e0e0;
+    border-radius: 0px;
+}
+
+.-class-Scrollbar:vertical {
+    width: 12px;
+    height: 100px;
+}
+
+.-class-Scrollbar::thumb {
+    background: linear-gradient(center top, #666666 0%, #666666 100%);
+    background-color: #888888;
+    border-color: #666666;
+    border-radius: 8px;
+    border-width: 1px;
+    margin: 2px 0px 2px 0px;
+}
+.-class-Scrollbar:vertical::thumb {
+    background: linear-gradient(left center, #666666 0%, #666666 100%);
+    margin: 1px 2px 3px 2px;
+    prop8: 8px;
+}
+
+
+
+.-class-Scrollbar::track {
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #999999 0%, #999999 100%);
+    border-color: #000000;
+    border-radius: 12px;
+    border-width: 0px;
+    margin: 1px 0px 0px 0px;
+    background-color: #a0a0a0;
+}
+
+.-class-Scrollbar:vertical::track {
+    background: linear-gradient(left center, #999999 0%, #999999 100%);
+    margin: 1px 1px 0px 1px;
+    prop8: 9px;
+}
+
+
+* {
+    background-color: #ffffff;
+}
+
+/* panels */
+.-class-Panel, .-class-TitlePanel, .-class-HFlexBox, .-class-VFlexBox, .-class-GridBox, .-class-Panel {
+    background-color: #303030;
+    border-width: 0px;
+    border-color: black;
+    margin: 0px;
+    padding: 3px;
+}
+
+.-class-Label {
+    color: #cccccc;
+}
+
+
+
+
+.-class-TabPanel {
+    background-color: #444444;
+}
+.-class-TabTop {
+    background-color: #303030;
+    /*background: linear-gradient(center top, #04acec 0%, #0186ba 100%);*/
+    border-color: #202020;
+    border-width: 1px 0px 0px 0px;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 4px 4px 0px 0px;
+    color: #aaaaaa;
+    text-align: center;
+}
+.-class-TabTop:selected {
+    background: linear-gradient(center top, #505050 0%, #444444 100%);
+    color: #aaaaaa;
+}
+
+
+/*  lists */
+
+.-class-ListView {
+    margin: 0px;
+    border-width: 1px;
+    border-color: #000000;
+    background-color:#303030;
+}
+.-class-ListView::item {
+    background-color: #303030;
+    border-color: #00ff00;
+    border-width: 0px;
+    color: #c0c0c0;
+}
+.-class-ListView::selected-item {
+    background: linear-gradient(center top, #0488cc 0%, #114499 100%);
+    border-color: #000000;
+    color: #ffffff;
+    margin: 0px 0px 0px 0px;
+    border-width: 1px 0px;
+}
+
+
+
+/* text boxes */
+
+.-class-Textbox, .-class-Passwordbox, .-class-Textarea {
+    margin: 2px;
+    padding: 2px 5px 2px 5px;
+    border-color: #666666;
+    border-width: 1px;
+    background-color: #444444;
+    shrink-to-fit: true;
+    selection-color : #5588aa;
+    cursor-color: #000000;
+    border-radius: 4px;
+}
+
+.-class-Textbox:focused, .-class-Passwordbox:focused, .-class-Textarea:focused {
+    background-color: #666666;
+    selection-color: #2266aa;
+    border-color: #888888;
+}
+
