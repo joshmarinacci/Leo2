@@ -47,26 +47,25 @@ public class AminoJavaMode extends Mode {
         visualBase.addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false));
 
 
-        DynamicNode button = new DynamicNode();
-        button.setName("Button");
-        button.setResizable(true);
-        button.setVisual(true);
+        DynamicNode pushButton = new DynamicNode();
+        pushButton.setName("Button");
+        pushButton.setResizable(true);
+        pushButton.setVisual(true);
 
-        button.copyPropertiesFrom(visualBase);
-        button.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
-        button.addProperty(new Property("id", String.class, "arandomid"));
-        button.addProperty(new Property("text", CharSequence.class, "a button").setBindable(true));
-        button.addProperty(new Property("selected", Boolean.class, false));
-        button.addProperty(new Property("resize", String.class, "any")
+        pushButton.copyPropertiesFrom(visualBase);
+        pushButton.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
+        pushButton.addProperty(new Property("id", String.class, "arandomid"));
+        pushButton.addProperty(new Property("text", CharSequence.class, "pushbutton").setBindable(true));
+        pushButton.addProperty(new Property("resize", String.class, "any")
                 .setExported(false)
                 .setVisible(false));
-        button.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
+        pushButton.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
                 .setExported(false)
                 .setVisible(false)
                 .setBindable(true)
         );
 
-        drawMap.put(button.getName(), new DynamicNode.DrawDelegate() {
+        drawMap.put(pushButton.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
                 double h = node.getProperty("height").getDoubleValue();
@@ -78,8 +77,47 @@ public class AminoJavaMode extends Mode {
                 g.drawRect(0, 0, w, h);
             }
         });
-        button.setDrawDelegate(drawMap.get(button.getName()));
-        symbols.add(button);
+        pushButton.setDrawDelegate(drawMap.get(pushButton.getName()));
+        symbols.add(pushButton);
+
+        DynamicNode toggleButton = new DynamicNode();
+        toggleButton.setName("Togglebutton");
+        toggleButton.setResizable(true);
+        toggleButton.setVisual(true);
+
+        toggleButton.copyPropertiesFrom(visualBase);
+        toggleButton.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Togglebutton"));
+        toggleButton.addProperty(new Property("id", String.class, "arandomid"));
+        toggleButton.addProperty(new Property("text", CharSequence.class, "togglebutton").setBindable(true));
+        toggleButton.addProperty(new Property("selected", Boolean.class, false));
+        toggleButton.addProperty(new Property("resize", String.class, "any")
+                .setExported(false)
+                .setVisible(false));
+        toggleButton.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
+                .setExported(false)
+                .setVisible(false)
+                .setBindable(true)
+        );
+
+        drawMap.put(toggleButton.getName(), new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getProperty("width").getDoubleValue();
+                double h = node.getProperty("height").getDoubleValue();
+                String t = node.getProperty("text").getStringValue();
+                boolean b = node.getProperty("selected").getBooleanValue();
+
+                g.setPaint(FlatColor.GRAY);
+                if(b) {
+                    g.setPaint(FlatColor.BLUE);
+                }
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawText(t, Font.DEFAULT, 5, 15);
+                g.drawRect(0, 0, w, h);
+            }
+        });
+        toggleButton.setDrawDelegate(drawMap.get(toggleButton.getName()));
+        symbols.add(toggleButton);
 
 
         DynamicNode label = new DynamicNode();
@@ -440,6 +478,7 @@ public class AminoJavaMode extends Mode {
         template.setPositionLocked(true);
         DynamicNode mirror = new DynamicNode();
         mirror.setMirror(true);
+        mirror.setResizable(false);
         mirror.setName("Mirror");
         mirror.setMirrorTarget("model");
         mirror.copyPropertiesFrom(serviceBase);
