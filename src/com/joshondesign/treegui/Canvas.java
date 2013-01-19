@@ -252,9 +252,13 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     private void drawToolOverlay(GFX gfx) {
+        Point2D pt = new Point2D.Double(0,0);
+        pt = editRootToMasterRootCoords(pt, editRoot);
+        gfx.translate(pt.getX(),pt.getY());
         if(currentTool != null) {
             currentTool.drawOverlay(gfx);
         }
+        gfx.translate(-pt.getX(),-pt.getY());
     }
 
     private void drawDocumentBounds(GFX gfx, TreeNode<SketchNode> masterRoot) {
@@ -317,21 +321,19 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         if(document.getSelection().getSize() < 1) return;
         Point2D pt = new Point2D.Double(0,0);
         pt = editRootToMasterRootCoords(pt, editRoot);
+        gfx.translate(pt.getX(),pt.getY());
         Bounds b = MathUtils.unionBounds(document.getSelection());
-        b = MathUtils.transform(b,pt);
         gfx.setPaint(FlatColor.fromRGBInts(100,100,100));
         gfx.drawRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
         gfx.setPaint(FlatColor.fromRGBInts(200,200,200));
         gfx.drawRect(b.getX() - 1, b.getY() - 1, b.getWidth() + 2, b.getHeight() + 2);
+        gfx.translate(-pt.getX(),-pt.getY());
     }
 
 
     private void drawHandles(GFX gfx) {
         Point2D pt = new Point2D.Double(0,0);
-        if(getEditRoot() instanceof SketchNode) {
-            SketchNode sn = (SketchNode) getEditRoot();
-            pt = MathUtils.transform(pt,sn.getTranslateX(),sn.getTranslateY());
-        }
+        pt = editRootToMasterRootCoords(pt, editRoot);
         gfx.translate(pt.getX(),pt.getY());
         for(Handle handle : this.handles) {
             handle.draw(gfx);
@@ -351,9 +353,11 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     private void drawGroupEditOverlay(GFX gfx) {
         if(editRoot != masterRoot && editRoot instanceof SketchNode) {
+            Point2D pt = new Point2D.Double(0,0);
+            pt = editRootToMasterRootCoords(pt, editRoot);
             SketchNode root = (SketchNode) editRoot;
             Bounds bounds = root.getInputBounds();
-            bounds = MathUtils.transform(bounds,root.getTranslateX(),root.getTranslateY());
+            bounds = MathUtils.transform(bounds,pt.getX(),pt.getY());
             gfx.setPaint(FlatColor.hsb(0,1,1,0.4));
             gfx.fillRect(0,0,bounds.getX(),getHeight());
             gfx.fillRect(bounds.getX2(),0,getWidth()-bounds.getX2(),getHeight());
