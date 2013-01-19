@@ -44,11 +44,11 @@ public class SymbolRenderer implements ListView.ItemRenderer<TreeNode> {
         //selection overlay
         if(listView.getSelectedIndex() == index) {
             gfx.setPaint(new FlatColor(1.0,0,0,0.3));
-            gfx.fillRect(x,y,w,h);
+            gfx.fillRoundRect(x+2,y+2,w-4,h-4,10,10);
         }
 
         //border
-        gfx.setPaint(FlatColor.BLACK);
+        //gfx.setPaint(FlatColor.BLACK);
         //gfx.drawRect(x,y,w,h);
     }
 }

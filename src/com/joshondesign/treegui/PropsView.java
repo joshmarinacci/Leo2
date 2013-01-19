@@ -26,9 +26,8 @@ public class PropsView extends GridBox {
         removeAll();
         super.reset();
         setPadding(1);
-        setPrefWidth(270);
-        createColumn(70, Align.Right);
-        createColumn(190, Align.Fill);
+        createColumn(90, Align.Right);
+        createColumn(130, Align.Fill);
         debug(false);
     }
 
@@ -76,7 +75,7 @@ public class PropsView extends GridBox {
 
     private void setSelectionDynamicNode(final DynamicNode node) {
 
-        addControl(new Label("id").setColor(FlatColor.WHITE));
+        addControl(new Label("id"));
         final Textbox idtb = new Textbox();
         idtb.setText("" + node.getId());
         idtb.setPrefWidth(100);
@@ -102,7 +101,7 @@ public class PropsView extends GridBox {
 
         for(final Property prop : node.getSortedProperties()) {
             if(!prop.isVisible()) continue;
-            addControl(new Label(prop.getName()).setColor(FlatColor.WHITE));
+            addControl(new Label(prop.getName()));
             if(prop.getType().isAssignableFrom(String.class)) {
                 final Textbox tb = new Textbox();
                 tb.setText("" + prop.getStringValue());
