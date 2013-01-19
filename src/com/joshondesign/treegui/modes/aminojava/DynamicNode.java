@@ -9,7 +9,6 @@ import java.util.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 public class DynamicNode extends SketchNode {
     private String name;
@@ -78,30 +77,21 @@ public class DynamicNode extends SketchNode {
     }
 
     public void refreshMirror(SketchDocument document) {
-        if(!isMirror()) {
-            u.p("tried to rescan something that's not a mirror!");
-            return;
-        }
+        if(!isMirror()) return;
 
-        u.p("rescanning a mirror. go up two levels to look for : " + getMirrorTarget());
         DynamicNode par = (DynamicNode) ((DynamicNode) getParent()).getParent();
+        if(par == null) return;
         Property tprop = par.getProperty(getMirrorTarget());
-        u.p("the target prop is: " + tprop.getName());
-        u.p("is list = " + tprop.isList());
+        if(!tprop.isList()) return;
         //find the thing it is bound to
-
         Binding binding = findBindingForTarget(document.getBindings(),par,tprop);
-        u.p("found the binding");
+        if(binding == null) return;
         DynamicNode source = ((DynamicNode)binding.getSource());
-        u.p("source = " + source.getName());
         DynamicNode proto = source.getProperty(binding.getSourceProperty()).getItemPrototype();
-        u.p("prototype = " + proto);
         for(Property prop : proto.getProperties()) {
-            u.p("looking at property: " + prop.getName());
             if(prop.isBindable()) {
                 addProperty(prop.duplicate());
             }
-            if(!prop.isBindable()) continue;
         }
     }
 
