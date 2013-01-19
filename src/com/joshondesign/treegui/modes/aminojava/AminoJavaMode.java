@@ -444,6 +444,7 @@ public class AminoJavaMode extends Mode {
         mirror.setMirrorTarget("model");
         mirror.copyPropertiesFrom(serviceBase);
         mirror.setDrawDelegate(servicebaseDrawDelegate);
+        mirror.getProperty("translateX").setDoubleValue(-100);
         template.add(mirror);
         //when entering the template, it checks if it has a mirror child. if so it asks the mirror to rebuild itself?
         compoundList.add(template);
