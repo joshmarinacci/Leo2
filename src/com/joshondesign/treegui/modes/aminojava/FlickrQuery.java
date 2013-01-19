@@ -5,6 +5,7 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.util.ArrayListModel;
+import org.joshy.gfx.util.u;
 
 public class FlickrQuery {
     private String query;
@@ -35,6 +36,7 @@ public class FlickrQuery {
     }
 
     public void execute() throws InterruptedException {
+        u.p("flickr query starting");
         setActive(true);
         results.clear();
         results.add(getQuery() + " one");
@@ -43,6 +45,7 @@ public class FlickrQuery {
             @Override
             protected String onWork(String s) {
                 try {
+                    u.p("flickr query sleeping");
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -52,7 +55,10 @@ public class FlickrQuery {
 
             @Override
             protected void onEnd(String result) {
+                results.add(getQuery() + " three");
+                results.add(getQuery() + " four");
                 setActive(false);
+                u.p("flickr query ending");
             }
         };
         task.start();
@@ -60,7 +66,7 @@ public class FlickrQuery {
 
     public void setActive(boolean active) {
         this.active = active;
-        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.BooleanChanged, new Boolean(active),this));
+        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.BooleanChanged, active,this));
     }
 
     public boolean isActive() {

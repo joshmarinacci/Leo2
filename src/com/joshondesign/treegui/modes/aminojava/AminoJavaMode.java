@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.BindingUtils;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
@@ -164,7 +165,6 @@ public class AminoJavaMode extends Mode {
             }
         });
         panel.setDrawDelegate(drawMap.get(panel.getName()));
-        symbols.add(panel);
 
 
 
@@ -202,7 +202,7 @@ public class AminoJavaMode extends Mode {
         listview.setDrawDelegate(drawMap.get(listview.getName()));
         listview.getProperty("width").setDoubleValue(60);
         listview.getProperty("height").setDoubleValue(90);
-        symbols.add(listview);
+
 
 
         DynamicNode scroll = new DynamicNode();
@@ -243,7 +243,6 @@ public class AminoJavaMode extends Mode {
         scroll.getProperty("width").setDoubleValue(60);
         scroll.getProperty("height").setDoubleValue(90);
 
-        symbols.add(scroll);
 
 
         DynamicNode spinner = new DynamicNode();
@@ -257,7 +256,7 @@ public class AminoJavaMode extends Mode {
                 .addProperty(new Property("id", String.class, "foo2"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
-                .addProperty(new Property("active", Boolean.class,Boolean.TRUE)
+                .addProperty(new Property("active", Boolean.class, Boolean.TRUE)
                         .setBindable(true))
         ;
         drawMap.put(spinner.getName(), new DynamicNode.DrawDelegate() {
@@ -273,7 +272,7 @@ public class AminoJavaMode extends Mode {
         spinner.setDrawDelegate(drawMap.get(spinner.getName()));
         spinner.getProperty("width").setDoubleValue(50);
         spinner.getProperty("height").setDoubleValue(50);
-        symbols.add(spinner);
+
 
 
         DynamicNode custom = new DynamicNode();
@@ -285,7 +284,7 @@ public class AminoJavaMode extends Mode {
         custom
                 .addProperty(new Property("class", String.class,"org.joshy.gfx.node.control.ScrollPane"))
                 .addProperty(new Property("id", String.class, "foo2"))
-                .addProperty(new Property("customClass",String.class, "none"))
+                .addProperty(new Property("customClass", String.class, "none"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
         ;
@@ -305,7 +304,6 @@ public class AminoJavaMode extends Mode {
         custom.setDrawDelegate(drawMap.get(custom.getName()));
         custom.getProperty("width").setDoubleValue(90);
         custom.getProperty("height").setDoubleValue(90);
-        symbols.add(custom);
 
         DynamicNode textbox = new DynamicNode();
         textbox.setName("Textbox");
@@ -336,7 +334,13 @@ public class AminoJavaMode extends Mode {
         textbox.setDrawDelegate(drawMap.get(textbox.getName()));
         textbox.getProperty("width").setDoubleValue(80);
         textbox.getProperty("height").setDoubleValue(30);
+
         symbols.add(textbox);
+        symbols.add(spinner);
+        symbols.add(listview);
+        symbols.add(panel);
+        symbols.add(scroll);
+        symbols.add(custom);
 
         DynamicNode serviceBase = new DynamicNode();
         serviceBase.addProperty(new Property("translateX", Double.class, 0).setExported(false))
@@ -484,11 +488,40 @@ public class AminoJavaMode extends Mode {
         mirror.copyPropertiesFrom(serviceBase);
         mirror.setDrawDelegate(servicebaseDrawDelegate);
         mirror.getProperty("translateX").setDoubleValue(-100);
+        //new Property().set
         template.add(mirror);
         //when entering the template, it checks if it has a mirror child. if so it asks the mirror to rebuild itself?
         compoundList.add(template);
-
         symbols.add(compoundList);
+
+
+        doGenerated(symbols, servicebaseDrawDelegate);
+
+    }
+
+    private void doGenerated(TreeNode<SketchNode> symbols, DynamicNode.DrawDelegate base) {
+        FlickrSearch obj = new FlickrSearch();
+        DynamicNode node = BindingUtils.parseAnnotatedPOJO(obj,base);
+        symbols.add(node);
+    }
+
+
+    public static class FlickrSearch {
+
+        @Prop
+        public String query = "london";
+
+        @Prop(visible = false)
+        public ListModel<String> results = new StringListModel();
+
+        @Prop(visible = false)
+        public Boolean active = false;
+
+        @Prop(visible = false)
+        public ActionProp execute;
+
+        @Prop(bindable = false, visible = false)
+        public String clazz = "com.joshondesign.treegui.modes.aminojava.FlickrQuery";
     }
 
 
