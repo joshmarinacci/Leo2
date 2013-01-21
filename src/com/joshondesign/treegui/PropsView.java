@@ -101,7 +101,33 @@ public class PropsView extends GridBox {
 
         for(final Property prop : node.getSortedProperties()) {
             if(!prop.isVisible()) continue;
-            addControl(new Label(prop.getName()));
+
+            //do booleans first. they don't get separate labels
+            if(prop.getType().isAssignableFrom(Boolean.class)) {
+                skip();
+                final Checkbox cb = new Checkbox(prop.getName());
+                EventBus.getSystem().addListener(cb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        prop.setBooleanValue(cb.isSelected());
+                        if(updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                cb.onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        prop.setBooleanValue(cb.isSelected());
+                    }
+                });
+                cb.setSelected(prop.getBooleanValue());
+                addControl(cb);
+                nextRow();
+                continue;
+            }
+
+
+            //all non-booleans get separate labels
+            addControl(new Label(prop.getDisplayName()));
             if(prop.getType().isAssignableFrom(String.class)) {
                 final Textbox tb = new Textbox();
                 tb.setText("" + prop.getStringValue());
@@ -148,24 +174,6 @@ public class PropsView extends GridBox {
                 addControl(tb);
             }
 
-            if(prop.getType().isAssignableFrom(Boolean.class)) {
-                final Checkbox cb = new Checkbox(prop.getName());
-                EventBus.getSystem().addListener(cb, FocusEvent.Lost, new Callback<FocusEvent>() {
-                    public void call(FocusEvent focusEvent) throws Exception {
-                        prop.setBooleanValue(cb.isSelected());
-                        if(updateCallback != null) {
-                            updateCallback.call(null);
-                        }
-                    }
-                });
-                cb.onClicked(new Callback<ActionEvent>() {
-                    public void call(ActionEvent actionEvent) throws Exception {
-                        prop.setBooleanValue(cb.isSelected());
-                    }
-                });
-                cb.setSelected(prop.getBooleanValue());
-                addControl(cb);
-            }
 
             if(prop.getType().isEnum()) {
                 Object[] vals = prop.getType().getEnumConstants();

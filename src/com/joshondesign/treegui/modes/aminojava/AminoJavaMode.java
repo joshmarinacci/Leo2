@@ -219,12 +219,12 @@ public class AminoJavaMode extends Mode {
                 .addProperty(new Property("horizontalVisiblePolicy",
                         ScrollPane.VisiblePolicy.class,
                         ScrollPane.VisiblePolicy.WhenNeeded
-                )
+                ).setDisplayName("Horiz Scroll")
                 )
                 .addProperty(new Property("verticalVisiblePolicy",
                         ScrollPane.VisiblePolicy.class,
                         ScrollPane.VisiblePolicy.WhenNeeded
-                )
+                ).setDisplayName("Vert Scroll")
                 )
         ;
         drawMap.put(scroll.getName(), new DynamicNode.DrawDelegate() {

@@ -13,6 +13,7 @@ public class Property {
     private boolean bindable = false;
     private boolean list;
     private DynamicNode itemPrototype;
+    private String displayName;
 
     public Property(String name, Class type, Object value) {
         this.name = name;
@@ -67,6 +68,7 @@ public class Property {
         p.setBindable(this.isBindable());
         p.setList(this.isList());
         p.setItemPrototype(this.getItemPrototype());
+        p.setDisplayName(this.displayName);
         return p;
     }
 
@@ -173,5 +175,15 @@ public class Property {
 
     public DynamicNode getItemPrototype() {
         return itemPrototype;
+    }
+
+    public Property setDisplayName(String name) {
+        this.displayName = name;
+        return this;
+    }
+
+    public String getDisplayName() {
+        if(displayName != null) return displayName;
+        return getName();
     }
 }
