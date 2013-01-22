@@ -19,21 +19,21 @@ public class TreeNode<C extends TreeNode> {
         return this;
     }
 
-    public void removeAll(List<C> nodes) {
-        _list.removeAll(nodes);
+    public void removeAll(TreeNode<C> nodes) {
+        _list.removeAll(nodes._list);
     }
 
     public int indexOf(C node) {
         return _list.indexOf(node);
     }
 
-    public void addAll(int index, List<C> nodes) {
-        _list.addAll(index,nodes);
+    public void addAll(int index, TreeNode<C> nodes) {
+        _list.addAll(index,nodes._list);
         fireAddEvent(nodes.get(0));
     }
 
-    public void addAll(List<C> nodes) {
-        _list.addAll(nodes);
+    public void addAll(TreeNode<C> nodes) {
+        _list.addAll(nodes._list);
         fireAddEvent(nodes.get(0));
     }
 

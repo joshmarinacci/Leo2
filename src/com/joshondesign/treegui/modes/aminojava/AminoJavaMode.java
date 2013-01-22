@@ -551,7 +551,7 @@ public class AminoJavaMode extends Mode {
     }
 
 
-    private AminoAction groupOnly(final SketchDocument doc, final AminoAction aminoAction) {
+    private static AminoAction groupOnly(final SketchDocument doc, final AminoAction aminoAction) {
         return new AminoAction() {
             @Override
             public CharSequence getDisplayName() {
@@ -565,7 +565,7 @@ public class AminoJavaMode extends Mode {
             }
         };
     }
-    private AminoAction notEmpty(final SketchDocument doc, final AminoAction aminoAction) {
+    private static AminoAction notEmpty(final SketchDocument doc, final AminoAction aminoAction) {
         return new AminoAction() {
             @Override
             public CharSequence getDisplayName() {
@@ -579,7 +579,27 @@ public class AminoJavaMode extends Mode {
             }
         };
     }
-    private double apply(Selection selection, double minX, Accumulate acc) {
+    private static AminoAction named(final String name, final AminoAction action) {
+        return new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return name;
+            }
+
+            @Override
+            public void execute() throws Exception {
+                action.execute();
+            }
+        };
+    }
+
+    private Double apply(Selection selection, Double minX, Accumulate<Double> acc) {
+        for (SketchNode node : selection.children()) {
+            minX = acc.accum(node, minX);
+        }
+        return minX;
+    }
+    private Integer apply(Selection selection, Integer minX, Accumulate<Integer> acc) {
         for (SketchNode node : selection.children()) {
             minX = acc.accum(node, minX);
         }
@@ -588,123 +608,95 @@ public class AminoJavaMode extends Mode {
 
     /* ==== reusable actions ==== */
     private AminoAction AlignLeft(final SketchDocument doc) {
-        return groupOnly(doc, new AminoAction() {
-            @Override
-            public CharSequence getDisplayName() {
-                return "Align Left";
-            }
-
+        return named("Align Left", groupOnly(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
-                double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
+                double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
                         return Math.min(value, node.getInputBounds().getX() + node.getTranslateX());
                     }
                 });
 
-                apply(doc.getSelection(), val, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
+                apply(doc.getSelection(), val, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
                         double x = node.getInputBounds().getX() + node.getTranslateX();
                         node.setTranslateX(node.getTranslateX() + value - x);
                         return value;
                     }
                 });
             }
-        });
+        }));
     }
     private AminoAction AlignRight(final SketchDocument doc) {
-        return groupOnly(doc, new AminoAction() {
-            @Override
-            public CharSequence getDisplayName() {
-                return "Align Right";
-            }
-
+        return named("Align Right", groupOnly(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
-                double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
+                double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
                         return Math.max(value, node.getInputBounds().getX2() + node.getTranslateX());
                     }
                 });
-                apply(doc.getSelection(), val, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
+                apply(doc.getSelection(), val, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
                         double x = node.getInputBounds().getX2() + node.getTranslateX();
                         node.setTranslateX(node.getTranslateX() + value - x);
                         return value;
                     }
                 });
             }
-        });
+        }));
     }
     private AminoAction AlignBottom(final SketchDocument doc) {
-        return groupOnly(doc, new AminoAction() {
-            @Override
-            public CharSequence getDisplayName() {
-                return "Align Bottom";
-            }
-
+        return named("Align Bottom", groupOnly(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
-                double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
+                double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
                         return Math.max(value, node.getInputBounds().getY2() + node.getTranslateY());
                     }
                 });
-                apply(doc.getSelection(), val, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
+                apply(doc.getSelection(), val, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
                         double y = node.getInputBounds().getY2() + node.getTranslateY();
                         node.setTranslateY(node.getTranslateY() + value - y);
                         return value;
                     }
                 });
             }
-        });
+        }));
     }
     private AminoAction AlignTop(final SketchDocument doc) {
-        return groupOnly(doc, new AminoAction() {
-            @Override
-            public CharSequence getDisplayName() {
-                return "Align Top";
-            }
-
+        return named("Align Top", groupOnly(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
-                double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
+                double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
                         return Math.min(value, node.getInputBounds().getY() + node.getTranslateY());
                     }
                 });
-                apply(doc.getSelection(), val, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
+                apply(doc.getSelection(), val, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
                         double y = node.getInputBounds().getY() + node.getTranslateY();
                         node.setTranslateY(node.getTranslateY() + value - y);
                         return value;
                     }
                 });
             }
-        });
+        }));
     }
     private AminoAction LowerNode(final SketchDocument doc) {
-        return notEmpty(doc, new AminoAction() {
-            @Override
-            public CharSequence getDisplayName() {
-                return "Lower Node";
-            }
-
+        return named("Lower Node", notEmpty(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
-                TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
-                List<SketchNode> nodes = new ArrayList<SketchNode>();
-                for (SketchNode node : doc.getSelection().children()) {
-                    nodes.add(node);
-                }
-                int min = Integer.MAX_VALUE;
+                final TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
+                Selection nodes = doc.getSelection();
                 //find the lowest node index
 
-                for (SketchNode node : nodes) {
-                    min = Math.min(model.indexOf(node), min);
-                }
-
+                int min = apply(nodes, Integer.MAX_VALUE, new Accumulate<Integer>() {
+                    public Integer accum(SketchNode node, Integer value) {
+                        return Math.min(model.indexOf(node),value);
+                    }
+                });
                 //if there is room to move down
                 if (min > 0) {
                     SketchNode prevNode = model.get(min - 1);
@@ -716,87 +708,58 @@ public class AminoJavaMode extends Mode {
                     model.addAll(0, nodes);
                 }
             }
-        });
+        }));
     }
     private AminoAction LowerNodeToBottom(final SketchDocument doc) {
-        return notEmpty(doc, new AminoAction() {
-            @Override
-            public CharSequence getDisplayName() {
-                return "Lower Node";
-            }
-
+        return named("Lower Node", notEmpty(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
                 TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
-                List<SketchNode> nodes = new ArrayList<SketchNode>();
-                for (SketchNode node : doc.getSelection().children()) {
-                    nodes.add(node);
-                }
+                Selection nodes = doc.getSelection();
                 //just remove and move all to the bottom
                 model.removeAll(nodes);
-                model.addAll(0,nodes);
+                model.addAll(0, nodes);
             }
-        });
+        }));
     }
     private AminoAction RaiseNode(final SketchDocument doc) {
-        return notEmpty(doc, new AminoAction() {
-            @Override
-            public CharSequence getDisplayName() {
-                return "Raise Node";
-            }
-
+        return named("Raise Node", notEmpty(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
-                TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
-                List<SketchNode> nodes = new ArrayList<SketchNode>();
-                for (SketchNode node : doc.getSelection().children()) {
-                    nodes.add(node);
-                }
+                final TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
 
-                int max = Integer.MIN_VALUE;
-                for(SketchNode node : nodes) {
-                    max = Math.max(max,model.indexOf(node));
-                }
+                Selection nodes = doc.getSelection();
+                int max = apply(nodes,Integer.MIN_VALUE, new Accumulate<Integer>() {
+                    public Integer accum(SketchNode node, Integer value) {
+                        return Math.max(value, model.indexOf(node));
+                    }
+                });
+
                 //if there is room to move up
-                if(max+1 < model.getSize()) {
-                    SketchNode nextNode = model.get(max+1);
+                if (max + 1 < model.getSize()) {
+                    SketchNode nextNode = model.get(max + 1);
                     model.removeAll(nodes);
                     int n = model.indexOf(nextNode);
-                    model.addAll(n+1,nodes);
+                    model.addAll(n + 1, nodes);
                 } else {
                     //just remove and move all to the top
                     model.removeAll(nodes);
                     model.addAll(nodes);
                 }
-
-                int min = Integer.MAX_VALUE;
-                //find the lowest node index
-
-                for (SketchNode node : nodes) {
-                    min = Math.min(model.indexOf(node), min);
-                }
             }
-        });
+        }));
     }
     private AminoAction RaiseNodeToTop(final SketchDocument doc) {
-        return notEmpty(doc, new AminoAction() {
-            @Override
-            public CharSequence getDisplayName() {
-                return "Raise Node To Top";
-            }
-
+        return named("Raise Node To Top", notEmpty(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
                 TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
-                List<SketchNode> nodes = new ArrayList<SketchNode>();
-                for (SketchNode node : doc.getSelection().children()) {
-                    nodes.add(node);
-                }
+                Selection nodes = doc.getSelection();
                 //just remove and move all to the bottom
                 model.removeAll(nodes);
                 model.addAll(nodes);
             }
-        });
+        }));
     }
 
 
@@ -805,6 +768,6 @@ public class AminoJavaMode extends Mode {
 
 
 
-interface Accumulate {
-    public double accum(SketchNode node, double value);
+interface Accumulate<T> {
+    public T accum(SketchNode node, T value);
 }
