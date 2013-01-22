@@ -536,6 +536,15 @@ public class AminoJavaMode extends Mode {
         nodeMenu.addItem("Align Bottom", AlignBottom(doc));
     }
 
+    @Override
+    public List<AminoAction> getContextMenuActions(final SketchDocument doc, Selection selection) {
+        List<AminoAction> list = super.getContextMenuActions(doc, selection);
+        list.add(AlignLeft(doc));
+        list.add(AlignRight(doc));
+        list.add(AlignTop(doc));
+        list.add(AlignBottom(doc));
+        return list;
+    }
 
 
     private AminoAction groupOnly(final SketchDocument doc, final AminoAction aminoAction) {
@@ -552,7 +561,6 @@ public class AminoJavaMode extends Mode {
             }
         };
     }
-
     private double apply(Selection selection, double minX, Accumulate acc) {
         for (SketchNode node : selection.children()) {
             minX = acc.accum(node, minX);
@@ -560,16 +568,7 @@ public class AminoJavaMode extends Mode {
         return minX;
     }
 
-    @Override
-    public List<AminoAction> getContextMenuActions(final SketchDocument doc, Selection selection) {
-        List<AminoAction> list = super.getContextMenuActions(doc, selection);
-        list.add(AlignLeft(doc));
-        list.add(AlignRight(doc));
-        list.add(AlignTop(doc));
-        list.add(AlignBottom(doc));
-        return list;
-    }
-
+    /* ==== reusable actions ==== */
     private AminoAction AlignLeft(final SketchDocument doc) {
         return groupOnly(doc, new AminoAction() {
             @Override
