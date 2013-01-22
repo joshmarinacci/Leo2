@@ -534,6 +534,10 @@ public class AminoJavaMode extends Mode {
         nodeMenu.addItem("Align Right", AlignRight(doc));
         nodeMenu.addItem("Align Top", AlignTop(doc));
         nodeMenu.addItem("Align Bottom", AlignBottom(doc));
+        nodeMenu.addItem("Lower Node", LowerNode(doc));
+        nodeMenu.addItem("Lower Node To Bottom", LowerNodeToBottom(doc));
+        nodeMenu.addItem("Raise Node", RaiseNode(doc));
+        nodeMenu.addItem("Raise Node To Top", RaiseNodeToTop(doc));
     }
 
     @Override
@@ -557,6 +561,20 @@ public class AminoJavaMode extends Mode {
             @Override
             public void execute() throws Exception {
                 if (doc.getSelection().getSize() < 2) return;
+                aminoAction.execute();
+            }
+        };
+    }
+    private AminoAction notEmpty(final SketchDocument doc, final AminoAction aminoAction) {
+        return new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return aminoAction.getDisplayName();
+            }
+
+            @Override
+            public void execute() throws Exception {
+                if (doc.getSelection().getSize() < 1) return;
                 aminoAction.execute();
             }
         };
@@ -666,6 +684,122 @@ public class AminoJavaMode extends Mode {
             }
         });
     }
+    private AminoAction LowerNode(final SketchDocument doc) {
+        return notEmpty(doc, new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return "Lower Node";
+            }
+
+            @Override
+            public void execute() throws Exception {
+                TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
+                List<SketchNode> nodes = new ArrayList<SketchNode>();
+                for (SketchNode node : doc.getSelection().children()) {
+                    nodes.add(node);
+                }
+                int min = Integer.MAX_VALUE;
+                //find the lowest node index
+
+                for (SketchNode node : nodes) {
+                    min = Math.min(model.indexOf(node), min);
+                }
+
+                //if there is room to move down
+                if (min > 0) {
+                    SketchNode prevNode = model.get(min - 1);
+                    model.removeAll(nodes);
+                    model.addAll(model.indexOf(prevNode), nodes);
+                } else {
+                    //just remove and move all to the bottom
+                    model.removeAll(nodes);
+                    model.addAll(0, nodes);
+                }
+            }
+        });
+    }
+    private AminoAction LowerNodeToBottom(final SketchDocument doc) {
+        return notEmpty(doc, new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return "Lower Node";
+            }
+
+            @Override
+            public void execute() throws Exception {
+                TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
+                List<SketchNode> nodes = new ArrayList<SketchNode>();
+                for (SketchNode node : doc.getSelection().children()) {
+                    nodes.add(node);
+                }
+                //just remove and move all to the bottom
+                model.removeAll(nodes);
+                model.addAll(0,nodes);
+            }
+        });
+    }
+    private AminoAction RaiseNode(final SketchDocument doc) {
+        return notEmpty(doc, new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return "Raise Node";
+            }
+
+            @Override
+            public void execute() throws Exception {
+                TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
+                List<SketchNode> nodes = new ArrayList<SketchNode>();
+                for (SketchNode node : doc.getSelection().children()) {
+                    nodes.add(node);
+                }
+
+                int max = Integer.MIN_VALUE;
+                for(SketchNode node : nodes) {
+                    max = Math.max(max,model.indexOf(node));
+                }
+                //if there is room to move up
+                if(max+1 < model.getSize()) {
+                    SketchNode nextNode = model.get(max+1);
+                    model.removeAll(nodes);
+                    int n = model.indexOf(nextNode);
+                    model.addAll(n+1,nodes);
+                } else {
+                    //just remove and move all to the top
+                    model.removeAll(nodes);
+                    model.addAll(nodes);
+                }
+
+                int min = Integer.MAX_VALUE;
+                //find the lowest node index
+
+                for (SketchNode node : nodes) {
+                    min = Math.min(model.indexOf(node), min);
+                }
+            }
+        });
+    }
+    private AminoAction RaiseNodeToTop(final SketchDocument doc) {
+        return notEmpty(doc, new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return "Raise Node To Top";
+            }
+
+            @Override
+            public void execute() throws Exception {
+                TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
+                List<SketchNode> nodes = new ArrayList<SketchNode>();
+                for (SketchNode node : doc.getSelection().children()) {
+                    nodes.add(node);
+                }
+                //just remove and move all to the bottom
+                model.removeAll(nodes);
+                model.addAll(nodes);
+            }
+        });
+    }
+
+
 }
 
 

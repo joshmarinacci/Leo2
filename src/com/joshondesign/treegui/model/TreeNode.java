@@ -19,6 +19,24 @@ public class TreeNode<C extends TreeNode> {
         return this;
     }
 
+    public void removeAll(List<C> nodes) {
+        _list.removeAll(nodes);
+    }
+
+    public int indexOf(C node) {
+        return _list.indexOf(node);
+    }
+
+    public void addAll(int index, List<C> nodes) {
+        _list.addAll(index,nodes);
+        fireAddEvent(nodes.get(0));
+    }
+
+    public void addAll(List<C> nodes) {
+        _list.addAll(nodes);
+        fireAddEvent(nodes.get(0));
+    }
+
     public static interface TreeListener {
         public void added(TreeNode node);
         public void removed(TreeNode node);
