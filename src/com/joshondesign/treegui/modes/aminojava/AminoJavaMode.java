@@ -3,10 +3,7 @@ package com.joshondesign.treegui.modes.aminojava;
 import com.joshondesign.treegui.BindingUtils;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
-import com.joshondesign.treegui.docmodel.SketchDocument;
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.amino.ActionProp;
 import com.joshondesign.treegui.modes.amino.Rect;
@@ -24,7 +21,7 @@ import org.joshy.gfx.node.control.Menu;
 import org.joshy.gfx.node.control.ScrollPane;
 
 public class AminoJavaMode extends Mode {
-    public static Map<String,DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
+    public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
 
     public AminoJavaMode() {
         setId("com.joshondesign.modes.aminojava");
@@ -108,7 +105,7 @@ public class AminoJavaMode extends Mode {
                 boolean b = node.getProperty("selected").getBooleanValue();
 
                 g.setPaint(FlatColor.GRAY);
-                if(b) {
+                if (b) {
                     g.setPaint(FlatColor.BLUE);
                 }
                 g.fillRect(0, 0, w, h);
@@ -167,7 +164,6 @@ public class AminoJavaMode extends Mode {
         panel.setDrawDelegate(drawMap.get(panel.getName()));
 
 
-
         DynamicNode listview = new DynamicNode();
         listview.copyPropertiesFrom(visualBase);
         listview.setName("ListView");
@@ -202,7 +198,6 @@ public class AminoJavaMode extends Mode {
         listview.setDrawDelegate(drawMap.get(listview.getName()));
         listview.getProperty("width").setDoubleValue(60);
         listview.getProperty("height").setDoubleValue(90);
-
 
 
         DynamicNode scroll = new DynamicNode();
@@ -244,7 +239,6 @@ public class AminoJavaMode extends Mode {
         scroll.getProperty("height").setDoubleValue(90);
 
 
-
         DynamicNode spinner = new DynamicNode();
         spinner.copyPropertiesFrom(visualBase);
         spinner.setName("Spinner");
@@ -274,7 +268,6 @@ public class AminoJavaMode extends Mode {
         spinner.getProperty("height").setDoubleValue(50);
 
 
-
         DynamicNode custom = new DynamicNode();
         custom.setName("Custom View");
         custom.copyPropertiesFrom(visualBase);
@@ -282,7 +275,7 @@ public class AminoJavaMode extends Mode {
         custom.setResizable(true);
         custom.setContainer(false);
         custom
-                .addProperty(new Property("class", String.class,"org.joshy.gfx.node.control.ScrollPane"))
+                .addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ScrollPane"))
                 .addProperty(new Property("id", String.class, "foo2"))
                 .addProperty(new Property("customClass", String.class, "none"))
                 .addProperty(new Property("resize", String.class, "any")
@@ -348,7 +341,7 @@ public class AminoJavaMode extends Mode {
                 .addProperty(new Property("width", Double.class, 90).setBindable(false).setExported(false))
                 .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
         ;
-        drawMap.put("servicebase",new DynamicNode.DrawDelegate() {
+        drawMap.put("servicebase", new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = 90;
                 double h = 50;
@@ -385,7 +378,7 @@ public class AminoJavaMode extends Mode {
         action.setVisual(false);
         action.setResizable(false);
         action.copyPropertiesFrom(serviceBase);
-        action.addProperty(new Property("class", String.class,"com.joshondesign.flickr.FlickrQuery"))
+        action.addProperty(new Property("class", String.class, "com.joshondesign.flickr.FlickrQuery"))
                 .addProperty(new Property("execute", ActionProp.class, null).setBindable(true))
         ;
         action.setDrawDelegate(drawMap.get("servicebase"));
@@ -397,7 +390,7 @@ public class AminoJavaMode extends Mode {
         document.setResizable(false);
         document.copyPropertiesFrom(serviceBase);
         document
-                .addProperty(new Property("class", String.class,"com.joshondesign.flickr.FlickrQuery"))
+                .addProperty(new Property("class", String.class, "com.joshondesign.flickr.FlickrQuery"))
                 .addProperty(new Property("pages", String.class, null).setBindable(true))
                 .addProperty(new Property("currentPage", Page.class, null).setBindable(true))
                 .addProperty(new Property("selection", List.class, null).setBindable(true))
@@ -419,13 +412,11 @@ public class AminoJavaMode extends Mode {
                         "com.joshondesign.flickr.FlickrQuery"))
                 .addProperty(new Property("data", List.class, dummyStringListData)
                         .setVisible(true).setBindable(true))
-                .addProperty(new Property("this",DynamicNode.class, null)
+                .addProperty(new Property("this", DynamicNode.class, null)
                         .setVisible(false).setBindable(true))
         ;
         stringList.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(stringList);
-
-
 
 
         DynamicNode alarmList = new DynamicNode();
@@ -449,7 +440,7 @@ public class AminoJavaMode extends Mode {
         alarm.setResizable(false);
         alarm.copyPropertiesFrom(serviceBase);
         alarm.addProperty(new Property("label", String.class, "Alarm Label").setBindable(true));
-        alarm.addProperty(new Property("time",  Double.class,5).setBindable(true));
+        alarm.addProperty(new Property("time", Double.class, 5).setBindable(true));
         alarm.addProperty(new Property("enabled", Boolean.class, false).setBindable(true));
         alarm.setDrawDelegate(servicebaseDrawDelegate);
         dataProp.setItemPrototype(alarm);
@@ -501,7 +492,7 @@ public class AminoJavaMode extends Mode {
 
     private void doGenerated(TreeNode<SketchNode> symbols, DynamicNode.DrawDelegate base) {
         FlickrSearch obj = new FlickrSearch();
-        DynamicNode node = BindingUtils.parseAnnotatedPOJO(obj,base);
+        DynamicNode node = BindingUtils.parseAnnotatedPOJO(obj, base);
         symbols.add(node);
     }
 
@@ -540,24 +531,98 @@ public class AminoJavaMode extends Mode {
     public void modifyNodeMenu(Menu nodeMenu, final SketchDocument doc) {
         super.modifyNodeMenu(nodeMenu, doc);
 
-        nodeMenu.addItem("Align Right", new AminoAction() {
+        nodeMenu.addItem("Align Left", groupOnly(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
-                if(doc.getSelection().getSize() < 2) return;
+                double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        return Math.min(value, node.getInputBounds().getX() + node.getTranslateX());
+                    }
+                });
 
-                double maxX = Double.MIN_VALUE;
-                for(SketchNode node : doc.getSelection().children()) {
-                    double x = node.getInputBounds().getX2() + node.getTranslateX();
-                    maxX = Math.max(x,maxX);
-                }
-                for(SketchNode node : doc.getSelection().children()) {
-                    double x = node.getInputBounds().getX2() + node.getTranslateX();
-                    double dx = maxX-x;
-                    node.setTranslateX(node.getTranslateX()+dx);
-                }
-
+                apply(doc.getSelection(), val, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        double x = node.getInputBounds().getX() + node.getTranslateX();
+                        node.setTranslateX(node.getTranslateX() + value - x);
+                        return value;
+                    }
+                });
             }
-        });
+        }));
+
+        nodeMenu.addItem("Align Right", groupOnly(doc, new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        return Math.max(value, node.getInputBounds().getX2() + node.getTranslateX());
+                    }
+                });
+                apply(doc.getSelection(), val, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        double x = node.getInputBounds().getX2() + node.getTranslateX();
+                        node.setTranslateX(node.getTranslateX() + value - x);
+                        return value;
+                    }
+                });
+            }
+        }));
+        nodeMenu.addItem("Align Top", groupOnly(doc, new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        return Math.min(value, node.getInputBounds().getY() + node.getTranslateY());
+                    }
+                });
+                apply(doc.getSelection(), val, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        double y = node.getInputBounds().getY() + node.getTranslateY();
+                        node.setTranslateY(node.getTranslateY() + value - y);
+                        return value;
+                    }
+                });
+            }
+        }));
+
+        nodeMenu.addItem("Align Bottom", groupOnly(doc, new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        return Math.max(value, node.getInputBounds().getY2() + node.getTranslateY());
+                    }
+                });
+                apply(doc.getSelection(), val, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        double y = node.getInputBounds().getY2() + node.getTranslateY();
+                        node.setTranslateY(node.getTranslateY() + value - y);
+                        return value;
+                    }
+                });
+            }
+        }));
 
     }
+
+    private AminoAction groupOnly(final SketchDocument doc, final AminoAction aminoAction) {
+        return new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                if (doc.getSelection().getSize() < 2) return;
+                aminoAction.execute();
+            }
+        };
+    }
+
+    private double apply(Selection selection, double minX, Accumulate acc) {
+        for (SketchNode node : selection.children()) {
+            minX = acc.accum(node, minX);
+        }
+        return minX;
+    }
+}
+
+interface Accumulate {
+    public double accum(SketchNode node, double value);
 }

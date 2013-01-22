@@ -42,15 +42,33 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
 
     public SketchNode setTranslateY(double translateY) {
         this.translateY = translateY;
+        if(getParent() != null) {
+            getParent().markModified(this);
+        }
         return this;
     }
 
     double translateY;
 
+    /**
+     * Draw the node. This method assumes the surface has already been transformed into the
+     * node's internal coordinate system, ie:  translateX/Y have already be accounted for.
+     * @param g graphics drawing surface
+     */
     public abstract void draw(GFX g);
 
+    /**
+     * Returns true if the point is contained by the node. This method works on the node's
+     * internal coordinate system, ie: translateX/Y have already been subtracted from the point.
+     *
+     */
     public abstract boolean contains(Point2D pt);
 
+    /**
+     * Returns the node's input bounds used for positining the node. The returned bounds are
+     * relative to the node's internal coordinate system. They do not account for the translateX/Y or
+     * other transforms.
+     */
     public abstract Bounds getInputBounds();
 
 
