@@ -4,6 +4,7 @@ import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.leo2.ContextMenu;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.awt.geom.Point2D;
@@ -13,6 +14,7 @@ import java.util.Stack;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
@@ -41,6 +43,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private Bounds baseBounds = new Bounds(-100,-100,600+200,400+200);
     private Bounds totalBounds = new Bounds(-100,-100,600+200,400+200);
     private boolean boundsRecalcEnabled = false;
+    private Mode mode;
 
 
     public void setMasterRoot(final TreeNode<SketchNode> masterRoot) {
@@ -110,7 +113,12 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
                 if(currentTool == null) return;
                 Point2D pt = toEditRootCoords(mouseEvent.getPointInNodeCoords(Canvas.this));
                 if (mouseEvent.getType() == MouseEvent.OpenContextMenu && document.getSelection() != null) {
-                    showBindingMenu(mouseEvent.getPointInNodeCoords(Canvas.this));
+                    if(mouseEvent.isAltPressed()) {
+                        showBindingMenu(mouseEvent.getPointInNodeCoords(Canvas.this));
+                    } else {
+                        showContextMenu(mouseEvent.getPointInNodeCoords(Canvas.this));
+                    }
+                    return;
                 }
 
                 if (mouseEvent.getType() == MouseEvent.MousePressed) {
@@ -139,6 +147,10 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         return masterRoot;
     }
 
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
 
     public static class CanvasMouseEvent {
 
@@ -154,6 +166,13 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
 
+
+    private void showContextMenu(Point2D pointInNodeCoords) {
+        ContextMenu popup = new ContextMenu();
+        List<AminoAction> actions = mode.getContextMenuActions(document, document.getSelection());
+        popup.addActions(actions.toArray(new AminoAction[0]));
+        popup.show(this,pointInNodeCoords);
+    }
 
     void showBindingMenu(Point2D pt) {
 

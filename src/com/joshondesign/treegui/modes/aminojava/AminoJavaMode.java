@@ -530,8 +530,53 @@ public class AminoJavaMode extends Mode {
     @Override
     public void modifyNodeMenu(Menu nodeMenu, final SketchDocument doc) {
         super.modifyNodeMenu(nodeMenu, doc);
+        nodeMenu.addItem("Align Left", AlignLeft(doc));
+        nodeMenu.addItem("Align Right", AlignRight(doc));
+        nodeMenu.addItem("Align Top", AlignTop(doc));
+        nodeMenu.addItem("Align Bottom", AlignBottom(doc));
+    }
 
-        nodeMenu.addItem("Align Left", groupOnly(doc, new AminoAction() {
+
+
+    private AminoAction groupOnly(final SketchDocument doc, final AminoAction aminoAction) {
+        return new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return aminoAction.getDisplayName();
+            }
+
+            @Override
+            public void execute() throws Exception {
+                if (doc.getSelection().getSize() < 2) return;
+                aminoAction.execute();
+            }
+        };
+    }
+
+    private double apply(Selection selection, double minX, Accumulate acc) {
+        for (SketchNode node : selection.children()) {
+            minX = acc.accum(node, minX);
+        }
+        return minX;
+    }
+
+    @Override
+    public List<AminoAction> getContextMenuActions(final SketchDocument doc, Selection selection) {
+        List<AminoAction> list = super.getContextMenuActions(doc, selection);
+        list.add(AlignLeft(doc));
+        list.add(AlignRight(doc));
+        list.add(AlignTop(doc));
+        list.add(AlignBottom(doc));
+        return list;
+    }
+
+    private AminoAction AlignLeft(final SketchDocument doc) {
+        return groupOnly(doc, new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return "Align Left";
+            }
+
             @Override
             public void execute() throws Exception {
                 double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate() {
@@ -548,9 +593,15 @@ public class AminoJavaMode extends Mode {
                     }
                 });
             }
-        }));
+        });
+    }
+    private AminoAction AlignRight(final SketchDocument doc) {
+        return groupOnly(doc, new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return "Align Right";
+            }
 
-        nodeMenu.addItem("Align Right", groupOnly(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
                 double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate() {
@@ -566,26 +617,15 @@ public class AminoJavaMode extends Mode {
                     }
                 });
             }
-        }));
-        nodeMenu.addItem("Align Top", groupOnly(doc, new AminoAction() {
+        });
+    }
+    private AminoAction AlignBottom(final SketchDocument doc) {
+        return groupOnly(doc, new AminoAction() {
             @Override
-            public void execute() throws Exception {
-                double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
-                        return Math.min(value, node.getInputBounds().getY() + node.getTranslateY());
-                    }
-                });
-                apply(doc.getSelection(), val, new Accumulate() {
-                    public double accum(SketchNode node, double value) {
-                        double y = node.getInputBounds().getY() + node.getTranslateY();
-                        node.setTranslateY(node.getTranslateY() + value - y);
-                        return value;
-                    }
-                });
+            public CharSequence getDisplayName() {
+                return "Align Bottom";
             }
-        }));
 
-        nodeMenu.addItem("Align Bottom", groupOnly(doc, new AminoAction() {
             @Override
             public void execute() throws Exception {
                 double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate() {
@@ -601,27 +641,36 @@ public class AminoJavaMode extends Mode {
                     }
                 });
             }
-        }));
-
+        });
     }
+    private AminoAction AlignTop(final SketchDocument doc) {
+        return groupOnly(doc, new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return "Align Top";
+            }
 
-    private AminoAction groupOnly(final SketchDocument doc, final AminoAction aminoAction) {
-        return new AminoAction() {
             @Override
             public void execute() throws Exception {
-                if (doc.getSelection().getSize() < 2) return;
-                aminoAction.execute();
+                double val = apply(doc.getSelection(), Double.MAX_VALUE, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        return Math.min(value, node.getInputBounds().getY() + node.getTranslateY());
+                    }
+                });
+                apply(doc.getSelection(), val, new Accumulate() {
+                    public double accum(SketchNode node, double value) {
+                        double y = node.getInputBounds().getY() + node.getTranslateY();
+                        node.setTranslateY(node.getTranslateY() + value - y);
+                        return value;
+                    }
+                });
             }
-        };
-    }
-
-    private double apply(Selection selection, double minX, Accumulate acc) {
-        for (SketchNode node : selection.children()) {
-            minX = acc.accum(node, minX);
-        }
-        return minX;
+        });
     }
 }
+
+
+
 
 interface Accumulate {
     public double accum(SketchNode node, double value);

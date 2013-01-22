@@ -238,6 +238,8 @@ public class Leo2 {
         Menu nodeMenu = new Menu().setTitle("Node");
         mode.modifyNodeMenu(nodeMenu, doc);
         menubar.add(nodeMenu);
+
+        canvasView.setMode(mode);
     }
 
     private static ListModel asListModel(TreeNode<SketchNode> symbols) {
