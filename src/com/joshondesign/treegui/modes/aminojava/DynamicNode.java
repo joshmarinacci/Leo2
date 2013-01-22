@@ -106,6 +106,12 @@ public class DynamicNode extends SketchNode {
         return null;
     }
 
+    public void markPropertyChanged() {
+        if(getParent() != null) {
+            getParent().markModified(this);
+        }
+    }
+
     public static interface DrawDelegate {
         public void draw(GFX g, DynamicNode node);
     }
@@ -217,6 +223,7 @@ public class DynamicNode extends SketchNode {
 
     public DynamicNode addProperty(Property property) {
         this.properies.put(property.getName(),property);
+        property.setNode(this);
         return this;
     }
 

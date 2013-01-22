@@ -14,6 +14,7 @@ public class Property {
     private boolean list;
     private DynamicNode itemPrototype;
     private String displayName;
+    private DynamicNode node;
 
     public Property(String name, Class type, Object value) {
         this.name = name;
@@ -107,10 +108,18 @@ public class Property {
 
     public void setDoubleValue(double w) {
         this.value = new Double(w);
+        markChanged();
+    }
+
+    private void markChanged() {
+        if(node != null) {
+            node.markPropertyChanged();
+        }
     }
 
     public Property setExportName(String exportName) {
         this.exportName = exportName;
+        markChanged();
         return this;
     }
 
@@ -119,19 +128,23 @@ public class Property {
     }
 
     public void setStringValue(String text) {
+        markChanged();
         this.value = text;
     }
 
     public void setDoubleValue(String text) {
         this.value = Double.parseDouble(text);
+        markChanged();
     }
 
     public void setBooleanValue(boolean selected) {
         this.value = new Boolean(selected);
+        markChanged();
     }
 
     public Property setVisible(boolean visible) {
         this.visible = visible;
+        markChanged();
         return this;
     }
 
@@ -141,10 +154,12 @@ public class Property {
 
     public void setEnumValue(Object o) {
         this.value = o;
+        markChanged();
     }
 
     public void setColorValue(FlatColor value) {
         this.value = value;
+        markChanged();
     }
 
     public Enum getEnumValue() {
@@ -153,6 +168,7 @@ public class Property {
 
     public Property setBindable(boolean bindable) {
         this.bindable = bindable;
+        markChanged();
         return this;
     }
 
@@ -162,6 +178,7 @@ public class Property {
 
     public Property setList(boolean list) {
         this.list = list;
+        markChanged();
         return this;
     }
 
@@ -171,6 +188,7 @@ public class Property {
 
     public void setItemPrototype(DynamicNode itemPrototype) {
         this.itemPrototype = itemPrototype;
+        markChanged();
     }
 
     public DynamicNode getItemPrototype() {
@@ -179,11 +197,21 @@ public class Property {
 
     public Property setDisplayName(String name) {
         this.displayName = name;
+        markChanged();
         return this;
     }
 
     public String getDisplayName() {
         if(displayName != null) return displayName;
         return getName();
+    }
+
+    public void setNode(DynamicNode node) {
+        this.node = node;
+        markChanged();
+    }
+
+    public DynamicNode getNode() {
+        return node;
     }
 }
