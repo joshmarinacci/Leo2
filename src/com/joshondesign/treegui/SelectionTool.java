@@ -173,8 +173,10 @@ public class SelectionTool extends CanvasTool {
         startTimeout();
         double tx = startTX + (pt.getX() - startPoint.getX());
         double ty = startTY + (pt.getY() - startPoint.getY());
-        tx = Math.floor(tx/10)*10;
-        ty = Math.floor(ty/10)*10;
+        if(document.getSnapToGrid()) {
+            tx = Math.floor(tx/10)*10;
+            ty = Math.floor(ty/10)*10;
+        }
         SketchNode node = document.getSelection().get(0);
         if(node instanceof DynamicNode) {
             if(((DynamicNode) node).isPositionLocked()) return;

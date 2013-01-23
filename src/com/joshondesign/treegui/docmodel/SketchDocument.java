@@ -5,13 +5,13 @@ import com.joshondesign.treegui.model.TreeNode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.joshy.gfx.util.u;
 
 public class SketchDocument extends TreeNode<Page> {
     private final Selection selection;
     private File file;
     List<Binding> bindings = new ArrayList<Binding>();
     private Page selectedPage;
+    private boolean snapToGrid = false;
 
     public SketchDocument() {
         selection = new Selection();
@@ -66,5 +66,17 @@ public class SketchDocument extends TreeNode<Page> {
     public void setSelectedPage(Page selectedPage) {
         this.selectedPage = selectedPage;
         markModified(this.selectedPage);
+    }
+
+    public boolean getSnapToGrid() {
+        return snapToGrid;
+    }
+
+    public boolean isSnapToGrid() {
+        return snapToGrid;
+    }
+
+    public void setSnapToGrid(boolean snapToGrid) {
+        this.snapToGrid = snapToGrid;
     }
 }

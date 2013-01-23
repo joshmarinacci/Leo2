@@ -556,6 +556,21 @@ public class AminoJavaMode extends Mode {
     }
 
     @Override
+    public void modifyViewMenu(Menu viewMenu, SketchDocument doc) {
+        super.modifyViewMenu(viewMenu, doc);
+        viewMenu.addItem("Snap to Grid", SnapToGridAction(doc));
+    }
+
+    private AminoAction SnapToGridAction(final SketchDocument doc) {
+        return new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                doc.setSnapToGrid(!doc.getSnapToGrid());
+            }
+        };
+    }
+
+    @Override
     public List<AminoAction> getContextMenuActions(final SketchDocument doc, Selection selection) {
         List<AminoAction> list = super.getContextMenuActions(doc, selection);
         list.add(AlignLeft(doc));
@@ -869,7 +884,6 @@ public class AminoJavaMode extends Mode {
             }
         });
     }
-
     private AminoAction NextPageAction(final SketchDocument doc) {
         return named("Next Page", new AminoAction() {
             @Override
@@ -885,7 +899,6 @@ public class AminoJavaMode extends Mode {
             }
         });
     }
-
     private AminoAction PrevPageAction(final SketchDocument doc) {
         return named("Previous Page", new AminoAction() {
             @Override
@@ -901,7 +914,6 @@ public class AminoJavaMode extends Mode {
             }
         });
     }
-
 
 }
 
