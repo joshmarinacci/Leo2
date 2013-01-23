@@ -5,8 +5,9 @@ import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.leo2.SymbolRenderer;
 import com.joshondesign.treegui.leo2.SymbolsDragHandler;
-import com.joshondesign.treegui.leo2.TreeNodeListModel;
+import com.joshondesign.treegui.model.FilterTreeNode;
 import com.joshondesign.treegui.model.TreeNode;
+import com.joshondesign.treegui.model.TreeNodeListModel;
 import com.joshondesign.treegui.modes.amino.AminoJSMode;
 import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.treegui.modes.sketch.SketchMode;
@@ -158,11 +159,12 @@ public class Leo2 {
 
         //get initial references
         final ListView symbolsView = (ListView) AminoParser.find("symbolsView", root);
+        final Textbox symbolSearch = (Textbox) AminoParser.find("symbolSearch", root);
         final Canvas canvasView = (Canvas) AminoParser.find("canvasView", root);
         final PropsView propsView = (PropsView) AminoParser.find("propsView", root);
 
 
-        if(doc.getFile() != null) {
+        if (doc.getFile() != null) {
             stage.setTitle(doc.getFile().getName());
         }
 
@@ -170,7 +172,14 @@ public class Leo2 {
 
         //setup the symbols view
         final TreeNode<SketchNode> symbols = mode.getSymbols();
-        symbolsView.setModel(asListModel(symbols));
+        final FilterTreeNode filteredTree = new FilterTreeNode(symbols);
+        symbolSearch.onAction(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                symbolSearch.selectAll();
+                filteredTree.setFilter(new SubstringFilter(symbolSearch.getText()));
+            }
+        });
+        symbolsView.setModel(asListModel(filteredTree));
         symbolsView.setRenderer(new SymbolRenderer());
         EventBus.getSystem().addListener(symbolsView, MouseEvent.MouseAll,
                 new SymbolsDragHandler(canvasView, symbolsView, doc));
@@ -264,4 +273,20 @@ public class Leo2 {
         };
     }
 
+    private static class SubstringFilter implements FilterTreeNode.Filter<SketchNode> {
+
+        private final String val;
+
+        public SubstringFilter(String val) {
+            this.val = val;
+        }
+
+        public boolean include(SketchNode node) {
+            if(node instanceof DynamicNode) {
+                DynamicNode d = (DynamicNode) node;
+                if(d.getName().toLowerCase().contains(val)) return true;
+            }
+            return false;
+        }
+    }
 }

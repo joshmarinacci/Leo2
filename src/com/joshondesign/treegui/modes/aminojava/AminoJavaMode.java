@@ -308,6 +308,7 @@ public class AminoJavaMode extends Mode {
                 .addProperty(new Property("class", String.class,
                         "org.joshy.gfx.node.control.Textbox"))
                 .addProperty(new Property("id", String.class, "foo2"))
+                .addProperty(new Property("hintText", CharSequence.class, "hint").setBindable(true))
                 .addProperty(new Property("text", String.class, "a textfield").setBindable(true))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))

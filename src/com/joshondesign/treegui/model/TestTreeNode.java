@@ -158,7 +158,7 @@ public class TestTreeNode {
 
         TreeNode root = new TreeNode();
         root.add(new StringTreeNode("foo"));
-        FilterTreeNode filter = new FilterTreeNode();
+        FilterTreeNode filter = new FilterTreeNode(root);
         assertEquals(filter.getSize(),1);
         root.add(new StringTreeNode("bar"), new StringTreeNode("foobar"));
         assertEquals(filter.getSize(), 3);
