@@ -538,6 +538,8 @@ public class AminoJavaMode extends Mode {
         nodeMenu.addItem("Lower Node To Bottom", LowerNodeToBottom(doc));
         nodeMenu.addItem("Raise Node", RaiseNode(doc));
         nodeMenu.addItem("Raise Node To Top", RaiseNodeToTop(doc));
+        nodeMenu.addItem("Same Width", SameWidth(doc));
+        nodeMenu.addItem("Same Height", SameHeight(doc));
     }
 
     @Override
@@ -729,7 +731,7 @@ public class AminoJavaMode extends Mode {
                 final TreeNode<SketchNode> model = doc.getSelection().get(0).getParent();
 
                 Selection nodes = doc.getSelection();
-                int max = apply(nodes,Integer.MIN_VALUE, new Accumulate<Integer>() {
+                int max = apply(nodes, Integer.MIN_VALUE, new Accumulate<Integer>() {
                     public Integer accum(SketchNode node, Integer value) {
                         return Math.max(value, model.indexOf(node));
                     }
@@ -762,6 +764,51 @@ public class AminoJavaMode extends Mode {
         }));
     }
 
+    private AminoAction SameWidth(final SketchDocument doc) {
+        return named("Same Width", groupOnly(doc, new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                Selection nodes = doc.getSelection();
+                double width = apply(nodes, Double.MIN_VALUE, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
+                        return Math.max(node.getInputBounds().getWidth(), value);
+                    }
+                });
+                apply(nodes, width, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
+                        if(!(node instanceof DynamicNode)) return value;
+                        DynamicNode nd = (DynamicNode) node;
+                        if(!nd.isResizable()) return value;
+                        nd.getProperty("width").setDoubleValue(value);
+                        return value;
+                    }
+                });
+            }
+        }));
+    }
+
+    private AminoAction SameHeight(final SketchDocument doc) {
+        return named("Same Height", groupOnly(doc, new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                Selection nodes = doc.getSelection();
+                double width = apply(nodes, Double.MIN_VALUE, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
+                        return Math.max(node.getInputBounds().getHeight(), value);
+                    }
+                });
+                apply(nodes, width, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
+                        if(!(node instanceof DynamicNode)) return value;
+                        DynamicNode nd = (DynamicNode) node;
+                        if(!nd.isResizable()) return value;
+                        nd.getProperty("height").setDoubleValue(value);
+                        return value;
+                    }
+                });
+            }
+        }));
+    }
 
 }
 
