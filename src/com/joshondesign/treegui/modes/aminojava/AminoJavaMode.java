@@ -532,8 +532,10 @@ public class AminoJavaMode extends Mode {
     public void modifyNodeMenu(Menu nodeMenu, final SketchDocument doc) {
         super.modifyNodeMenu(nodeMenu, doc);
         nodeMenu.addItem("Align Left", AlignLeft(doc));
+        nodeMenu.addItem("Align Center Horizontal", AlignCenterH(doc));
         nodeMenu.addItem("Align Right", AlignRight(doc));
         nodeMenu.addItem("Align Top", AlignTop(doc));
+        nodeMenu.addItem("Align Center Vertical", AlignCenterV(doc));
         nodeMenu.addItem("Align Bottom", AlignBottom(doc));
 
         nodeMenu.addItem("Lower Node To Bottom", "shift CLOSE_BRACKET", LowerNodeToBottom(doc));
@@ -640,6 +642,25 @@ public class AminoJavaMode extends Mode {
             }
         }));
     }
+    private AminoAction AlignCenterH(final SketchDocument doc) {
+        return named("Align Center Horizontal", groupOnly(doc, new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
+                        return Math.max(value, node.getInputBounds().getCenterX() + node.getTranslateX());
+                    }
+                });
+                apply(doc.getSelection(), val, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
+                        double x = node.getInputBounds().getCenterX() + node.getTranslateX();
+                        node.setTranslateX(node.getTranslateX() + value - x);
+                        return value;
+                    }
+                });
+            }
+        }));
+    }
     private AminoAction AlignRight(final SketchDocument doc) {
         return named("Align Right", groupOnly(doc, new AminoAction() {
             @Override
@@ -671,6 +692,25 @@ public class AminoJavaMode extends Mode {
                 apply(doc.getSelection(), val, new Accumulate<Double>() {
                     public Double accum(SketchNode node, Double value) {
                         double y = node.getInputBounds().getY2() + node.getTranslateY();
+                        node.setTranslateY(node.getTranslateY() + value - y);
+                        return value;
+                    }
+                });
+            }
+        }));
+    }
+    private AminoAction AlignCenterV(final SketchDocument doc) {
+        return named("Align Center Vertical", groupOnly(doc, new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                double val = apply(doc.getSelection(), Double.MIN_VALUE, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
+                        return Math.max(value, node.getInputBounds().getCenterY() + node.getTranslateY());
+                    }
+                });
+                apply(doc.getSelection(), val, new Accumulate<Double>() {
+                    public Double accum(SketchNode node, Double value) {
+                        double y = node.getInputBounds().getCenterY() + node.getTranslateY();
                         node.setTranslateY(node.getTranslateY() + value - y);
                         return value;
                     }
