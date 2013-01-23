@@ -219,37 +219,6 @@ public class Leo2 {
 
 
         //set up  the buttons
-        final SketchDocument finalDoc2 = doc;
-        /*
-        ((Button) AminoParser.find("runButton", root)).onClicked(new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                new AminoJavaXMLExport.Test(canvasView, finalDoc2).execute();
-            }
-        });
-        final SketchDocument finalDoc = doc;
-        ((Button) AminoParser.find("openButton", root)).onClicked(new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                new AminoJavaXMLImport(canvasView, finalDoc).execute();
-            }
-        });
-        ((Button) AminoParser.find("saveButton", root)).onClicked(new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                new AminoJavaXMLExport.Save(canvasView, finalDoc).execute();
-            }
-        });
-        ((Button) AminoParser.find("testButton", root)).onClicked(new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-            }
-        });
-        final SketchDocument finalDoc1 = doc;
-        ((Button) AminoParser.find("deleteButton", root)).onClicked(new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                DocumentActions.deleteSelection(finalDoc1);
-            }
-        });
-        */
-
-
         stage.raiseToTop();
 
         Menubar menubar = new Menubar((JFrame) stage.getNativeWindow());
