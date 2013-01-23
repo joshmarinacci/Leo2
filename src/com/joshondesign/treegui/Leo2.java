@@ -204,6 +204,7 @@ public class Leo2 {
 
         //set up  the buttons
         final SketchDocument finalDoc2 = doc;
+        /*
         ((Button) AminoParser.find("runButton", root)).onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
                 new AminoJavaXMLExport.Test(canvasView, finalDoc2).execute();
@@ -230,14 +231,16 @@ public class Leo2 {
                 DocumentActions.deleteSelection(finalDoc1);
             }
         });
+        */
 
 
         stage.raiseToTop();
 
         Menubar menubar = new Menubar((JFrame) stage.getNativeWindow());
         Menu fileMenu = new Menu().setTitle("File");
-        fileMenu.addItem("Open", asAction(new AminoJavaXMLImport(canvasView, finalDoc)));
-        fileMenu.addItem("Save", asAction(new AminoJavaXMLExport.Save(canvasView, finalDoc)));
+        fileMenu.addItem("Open", asAction(new AminoJavaXMLImport(canvasView, doc)));
+        fileMenu.addItem("Save", asAction(new AminoJavaXMLExport.Save(canvasView, doc)));
+        fileMenu.addItem("Run",  asAction(new AminoJavaXMLExport.Test(canvasView, doc)));
         fileMenu.addItem("Quit", asAction(quitHandler));
         menubar.add(fileMenu);
 

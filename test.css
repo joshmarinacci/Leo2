@@ -48,9 +48,9 @@
     height: 12px;
     margin: 0px;
     padding: 0px;
-    border-width: 1px;
+    border-width: 0px;
     border-color: #000000;
-    background-color: #e0e0e0;
+    background-color: #303030;
     border-radius: 0px;
 }
 
@@ -64,31 +64,27 @@
     background-color: #888888;
     border-color: #666666;
     border-radius: 8px;
-    border-width: 1px;
+    border-width: 0px;
     margin: 2px 0px 2px 0px;
 }
 .-class-Scrollbar:vertical::thumb {
     background: linear-gradient(left center, #666666 0%, #666666 100%);
     margin: 1px 2px 3px 2px;
-    prop8: 8px;
 }
 
-
-
 .-class-Scrollbar::track {
-    background-color: #a0a0a0;
-    background: linear-gradient(center top, #999999 0%, #999999 100%);
+    background-color: #303030;
+    background: linear-gradient(center top, #404040 0%, #404040 100%);
     border-color: #000000;
-    border-radius: 12px;
+    border-radius: 10px;
     border-width: 0px;
-    margin: 1px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
     background-color: #a0a0a0;
 }
 
 .-class-Scrollbar:vertical::track {
-    background: linear-gradient(left center, #999999 0%, #999999 100%);
-    margin: 1px 1px 0px 1px;
-    prop8: 9px;
+    background: linear-gradient(left center, #404040 0%, #404040 100%);
+    margin: 0px 0px 0px 0px;
 }
 
 
@@ -136,7 +132,7 @@
 
 .-class-ListView {
     margin: 0px;
-    border-width: 1px;
+    border-width: 0px;
     border-color: #000000;
     background-color:#303030;
 }

@@ -7,98 +7,14 @@
             <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>            </property>
             <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>            </property>
             <property name='class' value='com.joshondesign.treegui.AnchorPanel' type='java.lang.String' exported='true' visible='true' bindable='false'>            </property>
-            <property name='fill' value='ff717171' type='org.joshy.gfx.draw.FlatColor' exported='true' visible='true' bindable='false'>            </property>
-            <property name='height' exportname='prefHeight' value='640.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>            </property>
+            <property name='fill' value='ff303030' type='org.joshy.gfx.draw.FlatColor' exported='true' visible='true' bindable='false'>            </property>
+            <property name='height' exportname='prefHeight' value='590.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>            </property>
             <property name='id' value='arandomid' type='java.lang.String' exported='true' visible='true' bindable='false'>            </property>
             <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>            </property>
             <property name='translateX' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>            </property>
             <property name='translateY' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>            </property>
-            <property name='width' exportname='prefWidth' value='940.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>            </property>
+            <property name='width' exportname='prefWidth' value='930.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>            </property>
             <children>
-                <node id='runButton' class='org.joshy.gfx.node.control.Button' visual='true' resizable='true' container='false' custom='false' name='Button'>
-                    <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='bottom' value='600.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='class' value='org.joshy.gfx.node.control.Button' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='id' value='arandomid' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='right' value='850.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='selected' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='text' value='Run' type='java.lang.CharSequence' exported='true' visible='true' bindable='true'>                    </property>
-                    <property name='translateX' value='10.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='10.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='trigger' value='null' type='com.joshondesign.treegui.modes.aminojava.GuiTest$TriggerType' exported='false' visible='false' bindable='true'>                    </property>
-                    <property name='width' exportname='prefWidth' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='right' type='java.lang.Double' value='850.0'>                    </property>
-                    <property name='bottom' type='java.lang.Double' value='600.0'>                    </property>
-                    <children>                    </children>
-                </node>
-                <node id='openButton' class='org.joshy.gfx.node.control.Button' visual='true' resizable='true' container='false' custom='false' name='Button'>
-                    <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='bottom' value='600.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='class' value='org.joshy.gfx.node.control.Button' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='id' value='arandomid' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='right' value='760.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='selected' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='text' value='Open' type='java.lang.CharSequence' exported='true' visible='true' bindable='true'>                    </property>
-                    <property name='translateX' value='100.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='10.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='trigger' value='null' type='com.joshondesign.treegui.modes.aminojava.GuiTest$TriggerType' exported='false' visible='false' bindable='true'>                    </property>
-                    <property name='width' exportname='prefWidth' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='right' type='java.lang.Double' value='760.0'>                    </property>
-                    <property name='bottom' type='java.lang.Double' value='600.0'>                    </property>
-                    <children>                    </children>
-                </node>
-                <node id='saveButton' class='org.joshy.gfx.node.control.Button' visual='true' resizable='true' container='false' custom='false' name='Button'>
-                    <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='bottom' value='600.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='class' value='org.joshy.gfx.node.control.Button' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='id' value='arandomid' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='right' value='670.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='selected' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='text' value='Save' type='java.lang.CharSequence' exported='true' visible='true' bindable='true'>                    </property>
-                    <property name='translateX' value='190.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='10.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='trigger' value='null' type='com.joshondesign.treegui.modes.aminojava.GuiTest$TriggerType' exported='false' visible='false' bindable='true'>                    </property>
-                    <property name='width' exportname='prefWidth' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='right' type='java.lang.Double' value='670.0'>                    </property>
-                    <property name='bottom' type='java.lang.Double' value='600.0'>                    </property>
-                    <children>                    </children>
-                </node>
-                <node id='testButton' class='org.joshy.gfx.node.control.Button' visual='true' resizable='true' container='false' custom='false' name='Button'>
-                    <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='bottom' value='600.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='class' value='org.joshy.gfx.node.control.Button' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='id' value='arandomid' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='right' value='580.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='selected' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='text' value='Test' type='java.lang.CharSequence' exported='true' visible='true' bindable='true'>                    </property>
-                    <property name='translateX' value='280.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='10.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='trigger' value='null' type='com.joshondesign.treegui.modes.aminojava.GuiTest$TriggerType' exported='false' visible='false' bindable='true'>                    </property>
-                    <property name='width' exportname='prefWidth' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='right' type='java.lang.Double' value='580.0'>                    </property>
-                    <property name='bottom' type='java.lang.Double' value='600.0'>                    </property>
-                    <children>                    </children>
-                </node>
                 <node id='propsView' class='org.joshy.gfx.node.control.ScrollPane' visual='true' resizable='true' container='false' custom='true' name='Custom View' customClass='com.joshondesign.treegui.PropsView'>
                     <property name='anchorBottom' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='anchorLeft' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
@@ -111,8 +27,8 @@
                     <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='right' value='0.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='translateX' value='660.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='50.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='width' exportname='prefWidth' value='280.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='translateY' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='width' exportname='prefWidth' value='270.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='right' type='java.lang.Double' value='0.0'>                    </property>
                     <property name='bottom' type='java.lang.Double' value='0.0'>                    </property>
                     <children>                    </children>
@@ -130,10 +46,10 @@
                     <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='right' value='720.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='translateX' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='translateY' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='verticalVisiblePolicy' enum='true' value='Always' type='org.joshy.gfx.node.control.ScrollPane$VisiblePolicy' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='width' exportname='prefWidth' value='220.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='right' type='java.lang.Double' value='720.0'>                    </property>
+                    <property name='right' type='java.lang.Double' value='710.0'>                    </property>
                     <property name='bottom' type='java.lang.Double' value='0.0'>                    </property>
                     <children>
                         <node id='symbolsView' class='org.joshy.gfx.node.control.ListView' visual='true' resizable='true' container='false' custom='false' name='ListView'>
@@ -169,15 +85,15 @@
                     <property name='bottom' value='0.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='class' value='org.joshy.gfx.node.control.ScrollPane' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='height' exportname='prefHeight' value='590.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='horizontalVisiblePolicy' enum='true' value='WhenNeeded' type='org.joshy.gfx.node.control.ScrollPane$VisiblePolicy' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='horizontalVisiblePolicy' enum='true' value='Always' type='org.joshy.gfx.node.control.ScrollPane$VisiblePolicy' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='id' value='foo2' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='right' value='280.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='translateX' value='220.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='50.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='verticalVisiblePolicy' enum='true' value='WhenNeeded' type='org.joshy.gfx.node.control.ScrollPane$VisiblePolicy' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='translateY' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='verticalVisiblePolicy' enum='true' value='Always' type='org.joshy.gfx.node.control.ScrollPane$VisiblePolicy' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='width' exportname='prefWidth' value='440.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='right' type='java.lang.Double' value='280.0'>                    </property>
+                    <property name='right' type='java.lang.Double' value='270.0'>                    </property>
                     <property name='bottom' type='java.lang.Double' value='0.0'>                    </property>
                     <children>
                         <node id='canvasView' class='org.joshy.gfx.node.control.ScrollPane' visual='true' resizable='true' container='false' custom='true' name='Custom View' customClass='com.joshondesign.treegui.Canvas'>
@@ -200,42 +116,23 @@
                         </node>
                     </children>
                 </node>
-                <node id='deleteButton' class='org.joshy.gfx.node.control.Button' visual='true' resizable='true' container='false' custom='false' name='Button'>
-                    <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorLeft' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorRight' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='bottom' value='600.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='class' value='org.joshy.gfx.node.control.Button' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='id' value='arandomid' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='right' value='10.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
-                    <property name='selected' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='text' value='Delete Selection' type='java.lang.CharSequence' exported='true' visible='true' bindable='true'>                    </property>
-                    <property name='translateX' value='820.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='10.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='trigger' value='null' type='com.joshondesign.treegui.modes.aminojava.GuiTest$TriggerType' exported='false' visible='false' bindable='true'>                    </property>
-                    <property name='width' exportname='prefWidth' value='110.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='right' type='java.lang.Double' value='10.0'>                    </property>
-                    <property name='bottom' type='java.lang.Double' value='600.0'>                    </property>
-                    <children>                    </children>
-                </node>
                 <node id='symbolSearch' class='org.joshy.gfx.node.control.Textbox' visual='true' resizable='true' container='false' custom='false' name='Textbox'>
                     <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='bottom' value='560.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='class' value='org.joshy.gfx.node.control.Textbox' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='hintText' value='Search by name' type='java.lang.CharSequence' exported='true' visible='true' bindable='true'>                    </property>
                     <property name='id' value='foo2' type='java.lang.String' exported='true' visible='true' bindable='false'>                    </property>
                     <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false'>                    </property>
+                    <property name='right' value='720.0' type='java.lang.Double' exported='false' visible='false' bindable='false'>                    </property>
                     <property name='text' value='' type='java.lang.String' exported='true' visible='true' bindable='true'>                    </property>
-                    <property name='translateX' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='translateY' value='50.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='width' exportname='prefWidth' value='220.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
-                    <property name='right' type='java.lang.Double' value='720.0'>                    </property>
+                    <property name='translateX' value='2.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='translateY' value='2.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='width' exportname='prefWidth' value='215.0' type='java.lang.Double' exported='true' visible='true' bindable='false'>                    </property>
+                    <property name='right' type='java.lang.Double' value='710.0'>                    </property>
                     <property name='bottom' type='java.lang.Double' value='560.0'>                    </property>
                     <children>                    </children>
                 </node>

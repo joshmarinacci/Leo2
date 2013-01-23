@@ -34,7 +34,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
 
         removeAll();
         super.reset();
-        setPadding(1);
+        setPadding(5);
         createColumn(90, Align.Right);
         createColumn(130, Align.Fill);
         debug(false);
