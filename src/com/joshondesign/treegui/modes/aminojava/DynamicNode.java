@@ -107,6 +107,7 @@ public class DynamicNode extends SketchNode {
     }
 
     public void markPropertyChanged() {
+        markModified(this);
         if(getParent() != null) {
             getParent().markModified(this);
         }

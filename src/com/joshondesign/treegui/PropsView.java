@@ -13,16 +13,25 @@ import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.util.ArrayListModel;
 
-public class PropsView extends GridBox {
+public class PropsView extends GridBox implements TreeNode.TreeListener {
     private PropFilter filter;
     private Callback<Void> updateCallback;
     private SketchDocument document;
+    private DynamicNode lastObject;
+    private List<Callback> listeners = new ArrayList<Callback>();
 
     public PropsView() {
     }
 
     @Override
     public void reset() {
+        if(lastObject != null) {
+            lastObject.removeListener(this);
+        }
+        if(listeners != null) {
+            listeners.clear();
+        }
+
         removeAll();
         super.reset();
         setPadding(1);
@@ -74,6 +83,8 @@ public class PropsView extends GridBox {
     }
 
     private void setSelectionDynamicNode(final DynamicNode node) {
+        lastObject = node;
+        node.addListener(this);
 
         addControl(new Label("id"));
         final Textbox idtb = new Textbox();
@@ -109,7 +120,7 @@ public class PropsView extends GridBox {
                 EventBus.getSystem().addListener(cb, FocusEvent.Lost, new Callback<FocusEvent>() {
                     public void call(FocusEvent focusEvent) throws Exception {
                         prop.setBooleanValue(cb.isSelected());
-                        if(updateCallback != null) {
+                        if (updateCallback != null) {
                             updateCallback.call(null);
                         }
                     }
@@ -122,6 +133,12 @@ public class PropsView extends GridBox {
                 cb.setSelected(prop.getBooleanValue());
                 addControl(cb);
                 nextRow();
+                final Property property = prop;
+                addListener(new Callback() {
+                    public void call(Object o) throws Exception {
+                        cb.setSelected(property.getBooleanValue());
+                    }
+                });
                 continue;
             }
 
@@ -149,6 +166,12 @@ public class PropsView extends GridBox {
                         }
                     }
                 });
+                final Property property = prop;
+                addListener(new Callback() {
+                    public void call(Object o) throws Exception {
+                        tb.setText("" + property.getStringValue());
+                    }
+                });
                 addControl(tb);
             }
             if(prop.getType().isAssignableFrom(Double.class)) {
@@ -169,6 +192,12 @@ public class PropsView extends GridBox {
                         if (updateCallback != null) {
                             updateCallback.call(null);
                         }
+                    }
+                });
+                final Property property = prop;
+                addListener(new Callback() {
+                    public void call(Object o) throws Exception {
+                        tb.setText("" + property.getDoubleValue());
                     }
                 });
                 addControl(tb);
@@ -214,6 +243,10 @@ public class PropsView extends GridBox {
             }
             nextRow();
         }
+    }
+
+    private void addListener(Callback callback) {
+        this.listeners.add(callback);
     }
 
     private void addColorProperty(final Prop prop, Object object) {
@@ -368,6 +401,26 @@ public class PropsView extends GridBox {
                 setDrawingDirty();
             }
         });
+    }
+
+    public void added(TreeNode node) {
+    }
+
+    public void removed(TreeNode node) {
+    }
+
+    public void modified(TreeNode node) {
+        updateControls();
+    }
+
+    private void updateControls() {
+        for(Callback l : listeners) {
+            try {
+                l.call(null);
+            } catch (Exception e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
     }
 
     public static interface PropFilter {

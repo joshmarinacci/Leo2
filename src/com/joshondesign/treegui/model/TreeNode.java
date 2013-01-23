@@ -61,6 +61,10 @@ public class TreeNode<C extends TreeNode> {
         return this;
     }
 
+    public TreeNode removeListener(TreeListener listener) {
+        this.listeners.remove(listener);
+        return this;
+    }
 
 
     public TreeNode<C> markModified(C child) {
