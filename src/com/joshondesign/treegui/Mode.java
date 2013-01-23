@@ -26,4 +26,16 @@ public class Mode extends TreeNode {
     public List<AminoAction> getContextMenuActions(SketchDocument document, Selection selection) {
         return new ArrayList<AminoAction>();
     }
+
+    public void modifyViewMenu(Menu viewMenu, SketchDocument doc) {
+        //To change body of created methods use File | Settings | File Templates.
+    }
+
+    public void modifyShareMenu(Menu shareMenu, SketchDocument doc) {
+        //To change body of created methods use File | Settings | File Templates.
+    }
+
+    public void modifyDocumentMenu(Menu documentMenu, SketchDocument doc) {
+        //To change body of created methods use File | Settings | File Templates.
+    }
 }

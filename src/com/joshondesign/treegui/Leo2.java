@@ -248,6 +248,18 @@ public class Leo2 {
         mode.modifyNodeMenu(nodeMenu, doc);
         menubar.add(nodeMenu);
 
+        Menu documentMenu = new Menu().setTitle("Document");
+        mode.modifyDocumentMenu(documentMenu, doc);
+        menubar.add(documentMenu);
+
+        Menu viewMenu = new Menu().setTitle("View");
+        mode.modifyViewMenu(viewMenu, doc);
+        menubar.add(viewMenu);
+
+        Menu shareMenu = new Menu().setTitle("Share");
+        mode.modifyShareMenu(shareMenu, doc);
+        menubar.add(shareMenu);
+
         canvasView.setMode(mode);
     }
 
