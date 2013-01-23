@@ -535,10 +535,12 @@ public class AminoJavaMode extends Mode {
         nodeMenu.addItem("Align Right", AlignRight(doc));
         nodeMenu.addItem("Align Top", AlignTop(doc));
         nodeMenu.addItem("Align Bottom", AlignBottom(doc));
-        nodeMenu.addItem("Lower Node", LowerNode(doc));
-        nodeMenu.addItem("Lower Node To Bottom", LowerNodeToBottom(doc));
-        nodeMenu.addItem("Raise Node", RaiseNode(doc));
-        nodeMenu.addItem("Raise Node To Top", RaiseNodeToTop(doc));
+
+        nodeMenu.addItem("Lower Node To Bottom", "shift CLOSE_BRACKET", LowerNodeToBottom(doc));
+        nodeMenu.addItem("Lower Node", "CLOSE_BRACKET", LowerNode(doc));
+        nodeMenu.addItem("Raise Node", "OPEN_BRACKET", RaiseNode(doc));
+        nodeMenu.addItem("Raise Node To Top", "shift OPEN_BRACKET", RaiseNodeToTop(doc));
+
         nodeMenu.addItem("Same Width", SameWidth(doc));
         nodeMenu.addItem("Same Height", SameHeight(doc));
     }
