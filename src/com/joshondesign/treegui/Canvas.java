@@ -6,6 +6,7 @@ import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -312,12 +313,27 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             Bounds sb = binding.getSource().getInputBounds();
             Bounds tb = binding.getTarget().getInputBounds();
             Point2D start = toRootCoords(
-                    new Point2D.Double(sb.getCenterX(), sb.getCenterY()),
+                    new Point2D.Double(sb.getCenterX(), sb.getY2()),
                     binding.getSource());
             Point2D end = toRootCoords(
-                    new Point2D.Double(tb.getCenterX(), tb.getCenterY()),
+                    new Point2D.Double(tb.getCenterX(), tb.getY()),
                     binding.getTarget());
-            gfx.drawLine(start.getX(), start.getY(), end.getX(), end.getY());
+
+            Path2D.Double pth = new Path2D.Double();
+            if(start.getY() > end.getY()) {
+                start = toRootCoords(
+                        new Point2D.Double(sb.getCenterX(), sb.getY()),
+                        binding.getSource());
+                end = toRootCoords(
+                        new Point2D.Double(tb.getCenterX(), tb.getY2()),
+                        binding.getTarget());
+                pth.moveTo(start.getX(),start.getY());
+                pth.curveTo(start.getX(),start.getY()-40,  end.getX(),end.getY()+40, end.getX(),end.getY());
+            } else {
+                pth.moveTo(start.getX(),start.getY());
+                pth.curveTo(start.getX(),start.getY()+40,  end.getX(),end.getY()-40, end.getX(),end.getY());
+            }
+            gfx.drawPath(pth);
         }
     }
 
