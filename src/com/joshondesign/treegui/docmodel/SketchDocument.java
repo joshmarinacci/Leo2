@@ -65,7 +65,6 @@ public class SketchDocument extends TreeNode<Page> {
 
     public void setSelectedPage(Page selectedPage) {
         this.selectedPage = selectedPage;
-        u.p("new selected page = " + this.selectedPage);
         markModified(this.selectedPage);
     }
 }

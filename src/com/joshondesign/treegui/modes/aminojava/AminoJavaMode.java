@@ -547,8 +547,8 @@ public class AminoJavaMode extends Mode {
     public void modifyDocumentMenu(Menu documentMenu, SketchDocument doc) {
         super.modifyDocumentMenu(documentMenu, doc);
         documentMenu.addItem("Add Page", AddPageAction(doc));
-        documentMenu.addItem("Previous Page", PrevPageAction(doc));
-        documentMenu.addItem("Next Page", NextPageAction(doc));
+        documentMenu.addItem("Previous Page", "LEFT", PrevPageAction(doc));
+        documentMenu.addItem("Next Page", "RIGHT", NextPageAction(doc));
     }
 
     @Override
