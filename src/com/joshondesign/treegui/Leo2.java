@@ -1,6 +1,7 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.actions.JAction;
+import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.leo2.SymbolRenderer;
@@ -141,7 +142,7 @@ public class Leo2 {
         doNewDoc(mode, doc);
     }
 
-    private static void doNewDoc(Mode mode, SketchDocument doc) throws Exception {
+    private static void doNewDoc(Mode mode, final SketchDocument doc) throws Exception {
         //init window
 
         File file = new File("resources/main.xml");
@@ -193,10 +194,25 @@ public class Leo2 {
         });
         propsView.setDocument(doc);
 
+        Page selectedPage = doc.getSelectedPage();
 
         //set up the canvas
-        canvasView.setMasterRoot(doc.get(0).get(0));
-        canvasView.setEditRoot(doc.get(0).get(0));
+
+        //listen for selection changes
+        doc.addListener(new TreeNode.TreeListener() {
+            public void added(TreeNode node) {
+            }
+
+            public void removed(TreeNode node) {
+            }
+
+            public void modified(TreeNode node) {
+                canvasView.setMasterRoot(doc.getSelectedPage().get(0));
+                canvasView.setEditRoot(doc.getSelectedPage().get(0));
+            }
+        });
+        canvasView.setMasterRoot(selectedPage.get(0));
+        canvasView.setEditRoot(selectedPage.get(0));
 
         SelectionTool selectionTool = new SelectionTool(canvasView, doc, mode);
         canvasView.setTool(selectionTool);

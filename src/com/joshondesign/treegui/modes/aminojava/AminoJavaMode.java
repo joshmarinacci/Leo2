@@ -544,6 +544,14 @@ public class AminoJavaMode extends Mode {
     }
 
     @Override
+    public void modifyDocumentMenu(Menu documentMenu, SketchDocument doc) {
+        super.modifyDocumentMenu(documentMenu, doc);
+        documentMenu.addItem("Add Page", AddPageAction(doc));
+        documentMenu.addItem("Previous Page", PrevPageAction(doc));
+        documentMenu.addItem("Next Page", NextPageAction(doc));
+    }
+
+    @Override
     public List<AminoAction> getContextMenuActions(final SketchDocument doc, Selection selection) {
         List<AminoAction> list = super.getContextMenuActions(doc, selection);
         list.add(AlignLeft(doc));
@@ -764,7 +772,6 @@ public class AminoJavaMode extends Mode {
             }
         }));
     }
-
     private AminoAction SameWidth(final SketchDocument doc) {
         return named("Same Width", groupOnly(doc, new AminoAction() {
             @Override
@@ -787,7 +794,6 @@ public class AminoJavaMode extends Mode {
             }
         }));
     }
-
     private AminoAction SameHeight(final SketchDocument doc) {
         return named("Same Height", groupOnly(doc, new AminoAction() {
             @Override
@@ -810,6 +816,50 @@ public class AminoJavaMode extends Mode {
             }
         }));
     }
+
+    private AminoAction AddPageAction(final SketchDocument doc) {
+        return named("Add New Page", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                Page page = new Page();
+                page.add(new Layer());
+                doc.add(page);
+            }
+        });
+    }
+
+    private AminoAction NextPageAction(final SketchDocument doc) {
+        return named("Next Page", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                Page page = doc.getSelectedPage();
+                int index = doc.indexOf(page);
+                index++;
+                if(index > doc.getSize()-1) {
+                    index = doc.getSize()-1;
+                }
+                doc.setSelectedPage(doc.get(index));
+                doc.getSelection().clear();
+            }
+        });
+    }
+
+    private AminoAction PrevPageAction(final SketchDocument doc) {
+        return named("Previous Page", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                Page page = doc.getSelectedPage();
+                int index = doc.indexOf(page);
+                index--;
+                if(index < 0) {
+                    index = 0;
+                }
+                doc.setSelectedPage(doc.get(index));
+                doc.getSelection().clear();
+            }
+        });
+    }
+
 
 }
 

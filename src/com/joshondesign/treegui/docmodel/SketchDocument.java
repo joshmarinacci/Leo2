@@ -5,11 +5,13 @@ import com.joshondesign.treegui.model.TreeNode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.joshy.gfx.util.u;
 
 public class SketchDocument extends TreeNode<Page> {
     private final Selection selection;
     private File file;
     List<Binding> bindings = new ArrayList<Binding>();
+    private Page selectedPage;
 
     public SketchDocument() {
         selection = new Selection();
@@ -54,4 +56,16 @@ public class SketchDocument extends TreeNode<Page> {
         return bindings;
     }
 
+    public Page getSelectedPage() {
+        if(selectedPage == null) {
+            selectedPage = get(0);
+        }
+        return selectedPage;
+    }
+
+    public void setSelectedPage(Page selectedPage) {
+        this.selectedPage = selectedPage;
+        u.p("new selected page = " + this.selectedPage);
+        markModified(this.selectedPage);
+    }
 }
