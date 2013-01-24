@@ -173,7 +173,7 @@ public class SelectionTool extends CanvasTool {
         startTimeout();
         double tx = startTX + (pt.getX() - startPoint.getX());
         double ty = startTY + (pt.getY() - startPoint.getY());
-        if(document.getSnapToGrid()) {
+        if(document.isSnapToGrid()) {
             tx = Math.floor(tx/10)*10;
             ty = Math.floor(ty/10)*10;
         }

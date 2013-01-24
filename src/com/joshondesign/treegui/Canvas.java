@@ -464,7 +464,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             if(node instanceof DynamicNode) {
                 DynamicNode dnode = (DynamicNode) node;
                 if(dnode.isResizable()) {
-                    handles.add(new DynamicResizeHandle((DynamicNode) node));
+                    handles.add(new DynamicResizeHandle((DynamicNode) node, document));
                 }
             }
         }

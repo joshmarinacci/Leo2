@@ -1,5 +1,6 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.draw.FlatColor;
@@ -8,9 +9,11 @@ import org.joshy.gfx.event.MouseEvent;
 
 public class DynamicResizeHandle extends Handle {
     private final DynamicNode node;
+    private final SketchDocument doc;
 
-    public DynamicResizeHandle(DynamicNode node) {
+    public DynamicResizeHandle(DynamicNode node, SketchDocument doc) {
         this.node = node;
+        this.doc = doc;
     }
 
     @Override
@@ -30,7 +33,9 @@ public class DynamicResizeHandle extends Handle {
     @Override
     public void drag(MouseEvent mouseEvent, Point2D pt) {
         double w = pt.getX() - node.getTranslateX();
-        w = Math.floor(w/10)*10;
+        if(doc.isSnapToGrid()) {
+            w = Math.floor(w/10)*10;
+        }
         node.getProperty("width").setDoubleValue(w);
 
         String resize = node.getProperty("resize").getStringValue();
@@ -43,7 +48,9 @@ public class DynamicResizeHandle extends Handle {
 
         if(resize.equals("any")) {
             double h = pt.getY()-node.getTranslateY();
-            h = Math.floor(h/10)*10;
+            if(doc.isSnapToGrid()) {
+                h = Math.floor(h/10)*10;
+            }
             node.getProperty("height").setDoubleValue(h);
         }
     }

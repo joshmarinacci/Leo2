@@ -68,10 +68,6 @@ public class SketchDocument extends TreeNode<Page> {
         markModified(this.selectedPage);
     }
 
-    public boolean getSnapToGrid() {
-        return snapToGrid;
-    }
-
     public boolean isSnapToGrid() {
         return snapToGrid;
     }

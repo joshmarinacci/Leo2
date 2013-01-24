@@ -565,7 +565,7 @@ public class AminoJavaMode extends Mode {
         return new AminoAction() {
             @Override
             public void execute() throws Exception {
-                doc.setSnapToGrid(!doc.getSnapToGrid());
+                doc.setSnapToGrid(!doc.isSnapToGrid());
             }
         };
     }
