@@ -85,7 +85,6 @@ public class AminoJavaMode extends Mode {
 
         toggleButton.copyPropertiesFrom(visualBase);
         toggleButton.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Togglebutton"));
-        toggleButton.addProperty(new Property("id", String.class, "arandomid"));
         toggleButton.addProperty(new Property("text", CharSequence.class, "togglebutton").setBindable(true));
         toggleButton.addProperty(new Property("selected", Boolean.class, false));
         toggleButton.addProperty(new Property("resize", String.class, "any")
@@ -125,7 +124,6 @@ public class AminoJavaMode extends Mode {
         label.setVisual(true);
         label.copyPropertiesFrom(visualBase);
         label.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"));
-        label.addProperty(new Property("id", String.class, "arandomid").setExported(true));
         label.addProperty(new Property("resize", String.class, "width").setExported(false));
         label.addProperty(new Property("text", CharSequence.class, "a label").setBindable(true));
         drawMap.put(label.getName(), new DynamicNode.DrawDelegate() {
@@ -147,7 +145,6 @@ public class AminoJavaMode extends Mode {
         panel.addProperty(new Property("class", String.class, "com.joshondesign.treegui.AnchorPanel"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
-                .addProperty(new Property("id", String.class, "arandomid"))
                 .addProperty(new Property("fill", FlatColor.class, FlatColor.PURPLE))
         ;
         panel.setContainer(true);
@@ -170,7 +167,6 @@ public class AminoJavaMode extends Mode {
         listview.setVisual(true);
         listview.setResizable(true);
         listview.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ListView"))
-                .addProperty(new Property("id", String.class, "foo"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
                 .addProperty(new Property("rowHeight", Double.class, 20))
@@ -208,7 +204,6 @@ public class AminoJavaMode extends Mode {
         scroll.setContainer(true);
         scroll.addProperty(new Property("class", String.class,
                 "org.joshy.gfx.node.control.ScrollPane"))
-                .addProperty(new Property("id", String.class, "foo2"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
                 .addProperty(new Property("horizontalVisiblePolicy",
@@ -247,7 +242,6 @@ public class AminoJavaMode extends Mode {
         spinner
                 .addProperty(new Property("class", String.class,
                         "com.joshondesign.treegui.modes.aminojava.Spinner"))
-                .addProperty(new Property("id", String.class, "foo2"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
                 .addProperty(new Property("active", Boolean.class, Boolean.TRUE)
@@ -276,7 +270,6 @@ public class AminoJavaMode extends Mode {
         custom.setContainer(false);
         custom
                 .addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ScrollPane"))
-                .addProperty(new Property("id", String.class, "foo2"))
                 .addProperty(new Property("customClass", String.class, "none"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
@@ -307,7 +300,6 @@ public class AminoJavaMode extends Mode {
         textbox
                 .addProperty(new Property("class", String.class,
                         "org.joshy.gfx.node.control.Textbox"))
-                .addProperty(new Property("id", String.class, "foo2"))
                 .addProperty(new Property("hintText", CharSequence.class, "hint").setBindable(true))
                 .addProperty(new Property("text", String.class, "a textfield").setBindable(true))
                 .addProperty(new Property("resize", String.class, "any")
