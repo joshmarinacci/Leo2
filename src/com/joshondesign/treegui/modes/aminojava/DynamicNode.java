@@ -13,7 +13,6 @@ import org.joshy.gfx.node.Bounds;
 public class DynamicNode extends SketchNode {
     private String name;
     private boolean visual;
-    private boolean resizable = true;
     private Map<String, Property> properies = new HashMap<String, Property>();
     private DrawDelegate drawDelegate;
     private boolean container = false;
@@ -124,7 +123,6 @@ public class DynamicNode extends SketchNode {
             DynamicNode nd = new DynamicNode();
             nd.name = this.name;
             nd.visual = this.visual;
-            nd.resizable = this.resizable;
             nd.drawDelegate = this.drawDelegate;
             nd.custom = this.custom;
             nd.setContainer(this.isContainer());
@@ -143,8 +141,9 @@ public class DynamicNode extends SketchNode {
         return super.duplicate(node);
     }
 
-    public void setName(String name) {
+    public DynamicNode setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getName() {
@@ -214,17 +213,15 @@ public class DynamicNode extends SketchNode {
         return new Bounds(0,0,40,40);
     }
 
-    public void setResizable(boolean rs) {
-        this.resizable = rs;
-    }
-
-    public boolean isResizable() {
-        return this.resizable;
-    }
-
     public DynamicNode addProperty(Property property) {
         this.properies.put(property.getName(),property);
         property.setNode(this);
+        if(property.getName().equals("width")) {
+            setWidth(property.getDoubleValue());
+        }
+        if(property.getName().equals("height")) {
+            setHeight(property.getDoubleValue());
+        }
         return this;
     }
 
@@ -246,5 +243,43 @@ public class DynamicNode extends SketchNode {
     @Override
     public boolean isContainer() {
         return this.container;
+    }
+
+    @Override
+    public SketchNode setWidth(double width) {
+        if(hasProperty("width")) {
+            getProperty("width").setDoubleValue(width);
+        } else {
+            super.setWidth(width);
+        }
+        return this;
+    }
+
+    @Override
+    public SketchNode setHeight(double height) {
+        if(hasProperty("height")) {
+            getProperty("height").setDoubleValue(height);
+        } else {
+            super.setHeight(height);
+        }
+        return this;
+    }
+
+    @Override
+    public double getWidth() {
+        if(hasProperty("width")) {
+            return getProperty("width").getDoubleValue();
+        } else {
+            return super.getWidth();
+        }
+    }
+
+    @Override
+    public double getHeight() {
+        if(hasProperty("height")) {
+            return getProperty("height").getDoubleValue();
+        } else {
+            return super.getHeight();
+        }
     }
 }

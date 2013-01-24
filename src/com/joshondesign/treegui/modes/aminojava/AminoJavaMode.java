@@ -38,21 +38,21 @@ public class AminoJavaMode extends Mode {
         visualBase.addProperty(new Property("width", Double.class, 80)
                 .setExportName("prefWidth"));
         visualBase.addProperty(new Property("height", Double.class, 30)
-                .setExportName("prefHeight"));
-        visualBase.addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false));
-        visualBase.addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false));
-        visualBase.addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false));
-        visualBase.addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false));
+                .setExportName("prefHeight"))
+                .addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false))
+                .addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false))
+                .addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false))
+                .addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false))
+                ;
 
 
-        DynamicNode pushButton = new DynamicNode();
-        pushButton.setName("Button");
+        DynamicNode pushButton = new DynamicNode()
+                .setName("Button");
         pushButton.setResizable(true);
         pushButton.setVisual(true);
 
         pushButton.copyPropertiesFrom(visualBase);
         pushButton.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
-        pushButton.addProperty(new Property("id", String.class, "arandomid"));
         pushButton.addProperty(new Property("text", CharSequence.class, "pushbutton").setBindable(true));
         pushButton.addProperty(new Property("resize", String.class, "any")
                 .setExported(false)
@@ -65,8 +65,8 @@ public class AminoJavaMode extends Mode {
 
         drawMap.put(pushButton.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
+                double w = node.getWidth();
+                double h = node.getHeight();
                 String t = node.getProperty("text").getStringValue();
                 g.setPaint(FlatColor.GRAY);
                 g.fillRect(0, 0, w, h);
