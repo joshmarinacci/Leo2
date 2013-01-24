@@ -167,6 +167,8 @@ public class Leo2 {
 
         if (doc.getFile() != null) {
             stage.setTitle(doc.getFile().getName());
+        } else {
+            stage.setTitle("Untitled Document");
         }
 
         canvasView.setDocument(doc);
