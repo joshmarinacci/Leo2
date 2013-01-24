@@ -21,6 +21,8 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
     private List<Callback> listeners = new ArrayList<Callback>();
 
     public PropsView() {
+        reset();
+        setEmpty();
     }
 
     @Override
@@ -42,7 +44,10 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
 
     public void setSelection(final Object object) {
         reset();
-        if(object == null) return;
+        if(object == null) {
+            setEmpty();
+            return;
+        }
 
         if(object instanceof DynamicNode) {
             setSelectionDynamicNode((DynamicNode)object);
@@ -80,6 +85,10 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                 addListProperty(prop, object);
             }
         }
+    }
+
+    private void setEmpty() {
+        addControl(new Label("nothing selected"));
     }
 
     private void setSelectionDynamicNode(final DynamicNode node) {
@@ -394,6 +403,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
 
             public void removed(TreeNode node) {
                 setDrawingDirty();
+                setSelection(null);
             }
 
             public void modified(TreeNode node) {
