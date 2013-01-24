@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
@@ -262,13 +263,11 @@ public class AminoJavaXMLExport extends JAction {
         }
     }
 
-    public static class Test extends JAction {
-        private final Canvas canvas;
+    public static class Test extends AminoAction {
         private final SketchDocument document;
         Stage demoStage = null;
 
-        public Test(Canvas canvas, SketchDocument document) {
-            this.canvas = canvas;
+        public Test(SketchDocument document) {
             this.document = document;
         }
 
@@ -294,7 +293,7 @@ public class AminoJavaXMLExport extends JAction {
         }
 
         @Override
-        public String getShortName() {
+        public CharSequence getDisplayName() {
             return "Test";
         }
     }

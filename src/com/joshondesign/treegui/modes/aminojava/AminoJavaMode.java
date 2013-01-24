@@ -510,6 +510,11 @@ public class AminoJavaMode extends Mode {
 
 
     @Override
+    public String getName() {
+        return "Amino Java";
+    }
+
+    @Override
     public SketchDocument createEmptyDoc() {
         SketchDocument doc = new SketchDocument();
         Layer layer = new Layer();
@@ -545,6 +550,11 @@ public class AminoJavaMode extends Mode {
         documentMenu.addItem("Add Page", AddPageAction(doc));
         documentMenu.addItem("Previous Page", "LEFT", PrevPageAction(doc));
         documentMenu.addItem("Next Page", "RIGHT", NextPageAction(doc));
+    }
+
+    @Override
+    public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
+        fileMenu.addItem("Run",  new AminoJavaXMLExport.Test(doc));
     }
 
     @Override

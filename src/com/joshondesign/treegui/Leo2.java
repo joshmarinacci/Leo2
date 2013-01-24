@@ -58,6 +58,15 @@ public class Leo2 {
 
             final TreeNode<Mode> modes = initModes();
 
+
+            Button newJSButton = (Button) AminoParser.find("newjsButton", root);
+            newJSButton.onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    doNewDoc(modes.get(0));
+                }
+            });
+
+
             //bind new doc action
             Button newdocButton = (Button) AminoParser.find("newdocButton", root);
             newdocButton.onClicked(new Callback<ActionEvent>() {
@@ -168,7 +177,7 @@ public class Leo2 {
         if (doc.getFile() != null) {
             stage.setTitle(doc.getFile().getName());
         } else {
-            stage.setTitle("Untitled Document");
+            stage.setTitle("Untitled " + mode.getName() + " Document");
         }
 
         canvasView.setDocument(doc);
@@ -227,7 +236,7 @@ public class Leo2 {
         Menu fileMenu = new Menu().setTitle("File");
         fileMenu.addItem("Open", asAction(new AminoJavaXMLImport(canvasView, doc)));
         fileMenu.addItem("Save", asAction(new AminoJavaXMLExport.Save(canvasView, doc)));
-        fileMenu.addItem("Run",  asAction(new AminoJavaXMLExport.Test(canvasView, doc)));
+        mode.modifyFileMenu(fileMenu, doc);
         fileMenu.addItem("Quit", asAction(quitHandler));
         menubar.add(fileMenu);
 

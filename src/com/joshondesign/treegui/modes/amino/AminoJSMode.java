@@ -2,29 +2,18 @@ package com.joshondesign.treegui.modes.amino;
 
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
+import com.joshondesign.treegui.docmodel.Layer;
+import com.joshondesign.treegui.docmodel.Page;
+import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
+import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.node.control.Menu;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/15/13
- * Time: 7:46 PM
- * To change this template use File | Settings | File Templates.
- */
 public class AminoJSMode extends Mode {
     public AminoJSMode() {
         setId("com.joshondesign.modes.aminojs");
         TreeNode<JAction> actions = new TreeNode<JAction>();
-        actions.add(new JAction() {
-            @Override
-            public void execute() {
-            }
-            @Override
-            public String getShortName() {
-                return "Save XML";
-            }
-        });
         add(actions);
 
 
@@ -33,13 +22,13 @@ public class AminoJSMode extends Mode {
         rect.setId("Rect");
         symbols.add(rect);
 
-        PushButton button = new PushButton();
-        button.setId("PushButton");
-        symbols.add(button);
+        PushButton pushButton = new PushButton();
+        pushButton.setId("PushButton");
+        symbols.add(pushButton);
 
-        ToggleButton togg = new ToggleButton();
-        togg.setId("toggle");
-        symbols.add(togg);
+        ToggleButton toggleButton = new ToggleButton();
+        toggleButton.setId("toggle");
+        symbols.add(toggleButton);
 
         CheckButton checkButton = new CheckButton();
         checkButton.setId("check button");
@@ -64,7 +53,7 @@ public class AminoJSMode extends Mode {
 
         //complex controls
 
-        com.joshondesign.treegui.modes.amino.ListView lv = new com.joshondesign.treegui.modes.amino.ListView();
+        ListView lv = new ListView();
         lv.setId("ListView");
         symbols.add(lv);
 
@@ -97,5 +86,26 @@ public class AminoJSMode extends Mode {
 
         add(symbols);
 
+    }
+
+    @Override
+    public String getName() {
+        return "Amino JS";
+    }
+
+    @Override
+    public SketchDocument createEmptyDoc() {
+        SketchDocument doc = new SketchDocument();
+        Layer layer = new Layer();
+        layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
+        Page page = new Page();
+        page.add(layer);
+        doc.add(page);
+        return doc;
+    }
+
+    @Override
+    public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
+        fileMenu.addItem("Export HTML", new HTMLBindingExport(doc));
     }
 }

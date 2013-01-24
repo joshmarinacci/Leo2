@@ -11,6 +11,7 @@ import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.node.control.Menu;
 
 public class SketchMode extends Mode {
 
@@ -67,6 +68,11 @@ public class SketchMode extends Mode {
     }
 
     @Override
+    public String getName() {
+        return "Sketch";
+    }
+
+    @Override
     public SketchDocument createEmptyDoc() {
         SketchDocument doc = new SketchDocument();
         Layer layer = new Layer();
@@ -74,5 +80,10 @@ public class SketchMode extends Mode {
         page.add(layer);
         doc.add(page);
         return doc;
+    }
+
+    @Override
+    public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

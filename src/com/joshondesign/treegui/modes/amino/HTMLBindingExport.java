@@ -1,7 +1,6 @@
 package com.joshondesign.treegui.modes.amino;
 
 import com.joshondesign.treegui.Binding;
-import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
@@ -12,13 +11,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 
-public class HTMLBindingExport extends JAction {
+public class HTMLBindingExport extends AminoAction {
 
     public SketchDocument document;
     public Page page;
+
+    public HTMLBindingExport(SketchDocument document) {
+        this.document = document;
+        this.page = document.get(0);
+    }
 
     @Override
     public void execute() {
@@ -142,8 +147,8 @@ public class HTMLBindingExport extends JAction {
     }
 
     @Override
-    public String getShortName() {
-        return "Export HTML";
+    public CharSequence getDisplayName() {
+        return "Export Webpage";
     }
 
     private class PropWriter {

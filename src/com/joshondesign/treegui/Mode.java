@@ -9,16 +9,15 @@ import java.util.List;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.node.control.Menu;
 
-public class Mode extends TreeNode {
+public abstract class Mode extends TreeNode {
 
+    public abstract String getName();
 
     public TreeNode<SketchNode> getSymbols() {
         return get(1);
     }
 
-    public SketchDocument createEmptyDoc() {
-        return null;
-    }
+    public abstract SketchDocument createEmptyDoc();
 
     public void modifyNodeMenu(Menu nodeMenu, SketchDocument doc) {
     }
@@ -38,4 +37,6 @@ public class Mode extends TreeNode {
     public void modifyDocumentMenu(Menu documentMenu, SketchDocument doc) {
         //To change body of created methods use File | Settings | File Templates.
     }
+
+    public abstract void modifyFileMenu(Menu fileMenu, SketchDocument doc);
 }

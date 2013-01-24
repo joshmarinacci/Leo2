@@ -13,7 +13,7 @@ public class AminoAdapter {
     private static List<String> skipList;
 
     static {
-        String[] skipListArray = {"class","inputBounds","size","constraint","visual","container"};
+        String[] skipListArray = {"class","inputBounds","size","constraint","visual","container","parent","resizable"};
         skipList = Arrays.asList(skipListArray);
     }
     public static String getScriptClass(SketchNode node) {
