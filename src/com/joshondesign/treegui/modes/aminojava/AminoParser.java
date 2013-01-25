@@ -81,6 +81,13 @@ public class AminoParser {
 
     private static void applyBinding(Object src, Object tgt, Elem binding) throws Exception {
         final String tgtProp = binding.attr("targetprop");
+
+        if(binding.attrEquals("sourceprop","toggleGroup")) {
+            Togglegroup grp = (Togglegroup) tgt;
+            grp.add((Button) src);
+            return;
+        }
+
         if(binding.attrEquals("sourcetype","java.lang.String")) {
             setWithSetter(
                     src,binding.attr("sourceprop"),
@@ -243,10 +250,10 @@ public class AminoParser {
                             GrabPanel panel = new GrabPanel();
                             processNodeChildren(panel, xml, objectMap, deferredBindings);
                             List<Control> controls = new ArrayList<Control>();
-                            for(Control c : ((Container)panel.getChildren().get(0)).controlChildren()) {
+                            for (Control c : ((Container) panel.getChildren().get(0)).controlChildren()) {
                                 controls.add(c);
                             }
-                            processDeferredBindings(controls,objectMap,item, deferredBindings);
+                            processDeferredBindings(controls, objectMap, item, deferredBindings);
                             List<Node> children = panel.getChildren();
                             return (Control) children.get(0);
                         } catch (Exception e) {

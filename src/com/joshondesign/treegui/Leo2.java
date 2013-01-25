@@ -18,8 +18,10 @@ import java.io.File;
 import javax.swing.JFrame;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.event.*;
+import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 
 public class Leo2 {
     public static void main(String... args) throws Exception {
@@ -93,6 +95,28 @@ public class Leo2 {
             openButton.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     openDoc(modes.get(1));
+                }
+            });
+
+            Button quicktestButton = (Button) AminoParser.find("quicktestButton", root);
+            quicktestButton.onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    try {
+                        File file = new File("resources/et.xml");
+                        Doc xml = XMLParser.parse(file);
+                        Node node = AminoParser.parsePage(xml.root());
+                        Stage demoStage;
+                        demoStage = Stage.createStage();
+                        demoStage.setWidth(600);
+                        demoStage.setHeight(400);
+                        demoStage.setAlwaysOnTop(true);
+                        node.setTranslateX(0);
+                        node.setTranslateY(0);
+                        demoStage.setContent(node);
+                        demoStage.raiseToTop();
+                    } catch (Exception ex) {
+                        u.p(ex);
+                    }
                 }
             });
 

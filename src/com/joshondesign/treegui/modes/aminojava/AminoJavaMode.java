@@ -95,6 +95,8 @@ public class AminoJavaMode extends Mode {
                 .setVisible(false)
                 .setBindable(true)
         );
+        toggleButton.addProperty(new Property("toggleGroup", Object.class, null)
+                .setVisible(false).setBindable(true));
 
         drawMap.put(toggleButton.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
@@ -187,9 +189,9 @@ public class AminoJavaMode extends Mode {
         });
         DynamicNode popupbutton = BindingUtils.parseAnnotatedPOJO(new PopupMenuButtonWrapper(), drawMap.get("Popupbutton"));
         popupbutton.copyPropertiesFrom(visualBase);
-        popupbutton.addProperty(new Property("model", ListModel.class, ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}))
+        popupbutton.addProperty(new Property("model", ListModel.class,
+                ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}))
                 .setBindable(true).setExported(true).setVisible(true).setList(true));
-
         popupbutton.setName("Popupbutton").setResizable(true).setWidth(80).setHeight(20);
         symbols.add(popupbutton);
 
@@ -524,6 +526,13 @@ public class AminoJavaMode extends Mode {
 
         doGenerated(symbols, servicebaseDrawDelegate);
 
+
+        DynamicNode toggleGroup = BindingUtils.parseAnnotatedPOJO(new ToggleGroupWrapper(), servicebaseDrawDelegate);
+        toggleGroup.copyPropertiesFrom(serviceBase);
+        toggleGroup.setName("Togglegroup");
+        symbols.add(toggleGroup);
+
+
     }
 
     private void doGenerated(TreeNode<SketchNode> symbols, DynamicNode.DrawDelegate base) {
@@ -537,6 +546,7 @@ public class AminoJavaMode extends Mode {
         @Prop public Boolean selected = false;
         @Prop(exported = false, visible = false) public String resize = "horizontal";
         @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Checkbox.class.getName();
+        @Prop(bindable = true, visible = false) public Object toggleGroup = null;
     }
 
     public static class RadiobuttonWrapper {
@@ -544,7 +554,7 @@ public class AminoJavaMode extends Mode {
         @Prop public Boolean selected = false;
         @Prop(exported = false, visible = false) public String resize = "horizontal";
         @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Radiobutton.class.getName();
-
+        @Prop(bindable = true, visible = false) public Object toggleGroup = null;
     }
     public static class PopupMenuButtonWrapper {
         @Prop public Boolean selected = false;
@@ -552,6 +562,12 @@ public class AminoJavaMode extends Mode {
         @Prop public Object  selectedObject = null;
         @Prop(exported = false, visible = false) public String resize = "horizontal";
         @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.PopupMenuButton.class.getName();
+    }
+    public static class ToggleGroupWrapper {
+        @Prop public Integer selectedIndex = 0;
+        @Prop public Object  selectedObject = null;
+        @Prop public Object  object = null;
+        @Prop(visible = false) public String clazz = "org.joshy.gfx.node.control.Togglegroup";
     }
 
     public static class FlickrSearch {
