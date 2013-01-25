@@ -45,6 +45,12 @@ public class Property {
             }
             return ((Double)value).toString();
         }
+        if(type == Integer.class) {
+            if(value instanceof Integer) {
+                return ((Integer)value).toString();
+            }
+            return ((Double)value).toString();
+        }
         if(type == CharSequence.class) {
             return ((CharSequence)value).toString();
         }
@@ -96,6 +102,18 @@ public class Property {
         return 99;
     }
 
+    public int getIntegerValue() {
+        if(type == Integer.class) {
+            if(value instanceof Integer) {
+                return ((Integer)value).intValue();
+            }
+            if(value instanceof Integer) {
+                return ((Integer)value).intValue();
+            }
+        }
+        return 99;
+    }
+
     public String getStringValue() {
         if(type == String.class) {
             return ((String)value);
@@ -122,6 +140,11 @@ public class Property {
         markChanged();
     }
 
+    public void setIntegerValue(int i) {
+        this.value = new Integer(i);
+        markChanged();
+    }
+
     private void markChanged() {
         if(node != null) {
             node.markPropertyChanged();
@@ -145,6 +168,11 @@ public class Property {
 
     public void setDoubleValue(String text) {
         this.value = Double.parseDouble(text);
+        markChanged();
+    }
+
+    public void setIntegerValue(String text) {
+        this.value = Integer.parseInt(text);
         markChanged();
     }
 

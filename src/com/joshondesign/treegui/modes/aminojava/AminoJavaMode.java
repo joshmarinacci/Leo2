@@ -549,6 +549,7 @@ public class AminoJavaMode extends Mode {
     public static class PopupMenuButtonWrapper {
         @Prop public Boolean selected = false;
         @Prop public Integer selectedIndex = 0;
+        @Prop public Object  selectedObject = null;
         @Prop(exported = false, visible = false) public String resize = "horizontal";
         @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.PopupMenuButton.class.getName();
     }

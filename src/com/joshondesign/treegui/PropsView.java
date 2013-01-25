@@ -212,6 +212,34 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                 addControl(tb);
             }
 
+            if(prop.getType().isAssignableFrom(Integer.class)) {
+                final Textbox tb = new Textbox();
+                tb.setText(""+prop.getIntegerValue());
+                tb.setPrefWidth(100);
+                EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        prop.setIntegerValue(tb.getText());
+                        if (updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                tb.onAction(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        prop.setIntegerValue(tb.getText());
+                        if (updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+                final Property property = prop;
+                addListener(new Callback() {
+                    public void call(Object o) throws Exception {
+                        tb.setText("" + property.getIntegerValue());
+                    }
+                });
+                addControl(tb);
+            }
 
             if(prop.getType().isEnum()) {
                 Object[] vals = prop.getType().getEnumConstants();
