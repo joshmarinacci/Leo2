@@ -136,7 +136,6 @@ public class AminoJavaMode extends Mode {
 
         drawMap.put("Checkbox", new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
-                double w = node.getWidth();
                 double h = node.getHeight();
                 String t = node.getProperty("text").getStringValue();
 
@@ -148,13 +147,12 @@ public class AminoJavaMode extends Mode {
             }
         });
         DynamicNode checkbox = BindingUtils.parseAnnotatedPOJO(new CheckboxWrapper(), drawMap.get("Checkbox"));
-        checkbox.setName("Checkbox").setResizable(true).setWidth(80).setHeight(20);
         checkbox.copyPropertiesFrom(visualBase);
+        checkbox.setName("Checkbox").setResizable(true).setWidth(80).setHeight(20);
         symbols.add(checkbox);
 
         drawMap.put("Radiobutton", new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
-                double w = node.getWidth();
                 double h = node.getHeight();
                 String t = node.getProperty("text").getStringValue();
 
@@ -190,7 +188,7 @@ public class AminoJavaMode extends Mode {
         DynamicNode popupbutton = BindingUtils.parseAnnotatedPOJO(new PopupMenuButtonWrapper(), drawMap.get("Popupbutton"));
         popupbutton.copyPropertiesFrom(visualBase);
         popupbutton.addProperty(new Property("model", ListModel.class, ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}))
-                .setBindable(true).setExported(false).setVisible(true).setList(true));
+                .setBindable(true).setExported(true).setVisible(true).setList(true));
 
         popupbutton.setName("Popupbutton").setResizable(true).setWidth(80).setHeight(20);
         symbols.add(popupbutton);

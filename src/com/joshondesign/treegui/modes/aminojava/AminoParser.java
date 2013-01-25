@@ -207,6 +207,15 @@ public class AminoParser {
                     Method method = findSetter(clazz, setter, eprop);
                     method.invoke(node, Double.parseDouble(eprop.attr("value")));
                 }
+                if(eprop.attrEquals("type","java.lang.Boolean")) {
+                    Method method = findSetter(clazz, setter, eprop);
+                    method.invoke(node, Boolean.parseBoolean(eprop.attr("value")));
+                }
+                if(eprop.attrEquals("type","org.joshy.gfx.node.control.ListModel")) {
+                    u.p("doing a list model");
+                    Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
+                    method.invoke(node, ListView.createModel(eprop.attr("value").split(",")));
+                }
                 if(eprop.attrEquals("type","org.joshy.gfx.draw.FlatColor")) {
                     Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
                     method.invoke(node, new FlatColor(eprop.attr("value")));
@@ -331,10 +340,16 @@ public class AminoParser {
     }
 
     private static Method findSetter(Class clazz, String setter, Elem eprop) throws ClassNotFoundException, NoSuchMethodException {
+        Class type = Class.forName(eprop.attr("type"));
         try {
-            Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
+            Method method = clazz.getMethod(setter, type);
             return method;
         } catch (NoSuchMethodException e) {
+
+            //try the primitive versions instead
+            if(type == java.lang.Boolean.class) {
+                return clazz.getMethod(setter, Boolean.TYPE);
+            }
             Method method = clazz.getMethod(setter, Double.TYPE);
             return method;
         }
