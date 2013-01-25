@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojava;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.node.control.ListModel;
 
 public class Property {
 
@@ -53,6 +54,16 @@ public class Property {
         if(type.isEnum()) {
             Object[] vals = type.getEnumConstants();
             return value.toString();
+        }
+        if(type == ListModel.class) {
+            if(value != null && value instanceof ListModel) {
+                ListModel model = (ListModel) value;
+                StringBuffer sb = new StringBuffer();
+                for(int i=0; i<model.size(); i++) {
+                    sb.append(model.get(i)+",");
+                }
+                return sb.toString();
+            }
         }
         return null;
     }
@@ -213,5 +224,13 @@ public class Property {
 
     public DynamicNode getNode() {
         return node;
+    }
+
+    public Object getRawValue() {
+        return value;
+    }
+
+    public void setRawValue(Object rawValue) {
+        this.value = rawValue;
     }
 }

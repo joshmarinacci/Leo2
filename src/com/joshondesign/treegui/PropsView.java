@@ -250,6 +250,31 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                 ta.setPrefHeight(100);
                 addControl(ta);
             }
+
+            if(prop.getType() == ListModel.class) {
+                final Textarea ta = new Textarea();
+                ListModel model = (ListModel) prop.getRawValue();
+                if(model != null) {
+                    StringBuffer sb = new StringBuffer();
+                    for(int i=0; i<model.size(); i++) {
+                        sb.append(model.get(i).toString()+"\n");
+                    }
+                    ta.setText(sb.toString());
+                }
+                ta.setPrefWidth(100);
+                ta.setPrefHeight(100);
+                addControl(ta);
+                EventBus.getSystem().addListener(ta, FocusEvent.Lost, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        String[] strings = ta.getText().split("\n");
+                        ListModel<String> value = ListView.createModel(strings);
+                        prop.setRawValue(value);
+                        if (updateCallback != null) {
+                            updateCallback.call(null);
+                        }
+                    }
+                });
+            }
             nextRow();
         }
     }

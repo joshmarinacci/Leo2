@@ -234,8 +234,8 @@ public class Leo2 {
 
         Menubar menubar = new Menubar((JFrame) stage.getNativeWindow());
         Menu fileMenu = new Menu().setTitle("File");
-        fileMenu.addItem("Open", asAction(new AminoJavaXMLImport(canvasView, doc)));
-        fileMenu.addItem("Save", asAction(new AminoJavaXMLExport.Save(canvasView, doc)));
+        fileMenu.addItem("Open", "O", asAction(new AminoJavaXMLImport(canvasView, doc)));
+        fileMenu.addItem("Save", "S", asAction(new AminoJavaXMLExport.Save(canvasView, doc)));
         mode.modifyFileMenu(fileMenu, doc);
         fileMenu.addItem("Quit", asAction(quitHandler));
         menubar.add(fileMenu);

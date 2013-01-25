@@ -15,7 +15,10 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.AminoAction;
-import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.Menu;
+import org.joshy.gfx.node.control.ScrollPane;
 
 public class AminoJavaMode extends Mode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
@@ -168,6 +171,29 @@ public class AminoJavaMode extends Mode {
         symbols.add(radiobutton);
 
 
+        drawMap.put("Popupbutton", new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getWidth();
+                double h = node.getHeight();
+                Property pmodel  = node.getProperty("model");
+                ListModel model = (ListModel) pmodel.getRawValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                if (model != null && model.size() >= 1) {
+                    String t = model.get(0).toString();
+                    g.drawText(t, Font.DEFAULT, 5, 15);
+                }
+                g.drawRect(0, 0, w, h);
+            }
+        });
+        DynamicNode popupbutton = BindingUtils.parseAnnotatedPOJO(new PopupMenuButtonWrapper(), drawMap.get("Popupbutton"));
+        popupbutton.copyPropertiesFrom(visualBase);
+        popupbutton.addProperty(new Property("model", ListModel.class, ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}))
+                .setBindable(true).setExported(false).setVisible(true).setList(true));
+
+        popupbutton.setName("Popupbutton").setResizable(true).setWidth(80).setHeight(20);
+        symbols.add(popupbutton);
 
         DynamicNode panel = new DynamicNode();
         panel.copyPropertiesFrom(visualBase);
@@ -511,15 +537,22 @@ public class AminoJavaMode extends Mode {
     public static class CheckboxWrapper {
         @Prop public CharSequence text = "checkbox";
         @Prop public Boolean selected = false;
-        @Prop(exported = false) public String resize = "horizontal";
+        @Prop(exported = false, visible = false) public String resize = "horizontal";
         @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Checkbox.class.getName();
     }
 
     public static class RadiobuttonWrapper {
         @Prop public CharSequence text = "radiobutton";
         @Prop public Boolean selected = false;
-        @Prop(exported = false) public String resize = "horizontal";
+        @Prop(exported = false, visible = false) public String resize = "horizontal";
         @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Radiobutton.class.getName();
+
+    }
+    public static class PopupMenuButtonWrapper {
+        @Prop public Boolean selected = false;
+        @Prop public Integer selectedIndex = 0;
+        @Prop(exported = false, visible = false) public String resize = "horizontal";
+        @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.PopupMenuButton.class.getName();
     }
 
     public static class FlickrSearch {
@@ -585,7 +618,7 @@ public class AminoJavaMode extends Mode {
 
     @Override
     public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
-        fileMenu.addItem("Run",  new AminoJavaXMLExport.Test(doc));
+        fileMenu.addItem("Run", "R",  new AminoJavaXMLExport.Test(doc));
     }
 
     @Override
