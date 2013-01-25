@@ -15,10 +15,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.AminoAction;
-import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.ListView;
-import org.joshy.gfx.node.control.Menu;
-import org.joshy.gfx.node.control.ScrollPane;
+import org.joshy.gfx.node.control.*;
 
 public class AminoJavaMode extends Mode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
@@ -119,9 +116,7 @@ public class AminoJavaMode extends Mode {
 
         DynamicNode label = new DynamicNode();
         label.copyPropertiesFrom(visualBase);
-        label.setName("Label");
-        label.setResizable(true);
-        label.setVisual(true);
+        label.setName("Label").setVisual(true).setResizable(true);
         label.copyPropertiesFrom(visualBase);
         label.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"));
         label.addProperty(new Property("resize", String.class, "width").setExported(false));
@@ -134,20 +129,54 @@ public class AminoJavaMode extends Mode {
             }
         });
         label.setDrawDelegate(drawMap.get(label.getName()));
-
         symbols.add(label);
+
+        drawMap.put("Checkbox", new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getWidth();
+                double h = node.getHeight();
+                String t = node.getProperty("text").getStringValue();
+
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, h , h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawText(t, Font.DEFAULT, 5 + h, 15);
+                g.drawRect(0,0, h, h);
+            }
+        });
+        DynamicNode checkbox = BindingUtils.parseAnnotatedPOJO(new CheckboxWrapper(), drawMap.get("Checkbox"));
+        checkbox.setName("Checkbox").setResizable(true).setWidth(80).setHeight(20);
+        checkbox.copyPropertiesFrom(visualBase);
+        symbols.add(checkbox);
+
+        drawMap.put("Radiobutton", new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getWidth();
+                double h = node.getHeight();
+                String t = node.getProperty("text").getStringValue();
+
+                g.setPaint(FlatColor.GRAY);
+                g.fillOval(0, 0, h, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawOval(0, 0, h, h);
+                g.drawText(t, Font.DEFAULT, 5 + h, 15);
+            }
+        });
+        DynamicNode radiobutton = BindingUtils.parseAnnotatedPOJO(new RadiobuttonWrapper(), drawMap.get("Radiobutton"));
+        radiobutton.copyPropertiesFrom(visualBase);
+        radiobutton.setName("Radiobutton").setResizable(true).setWidth(80).setHeight(20);
+        symbols.add(radiobutton);
+
+
 
         DynamicNode panel = new DynamicNode();
         panel.copyPropertiesFrom(visualBase);
-        panel.setName("Panel");
-        panel.setVisual(true);
-        panel.setResizable(true);
+        panel.setContainer(true).setName("Panel").setVisual(true).setResizable(true);
         panel.addProperty(new Property("class", String.class, "com.joshondesign.treegui.AnchorPanel"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
                 .addProperty(new Property("fill", FlatColor.class, FlatColor.PURPLE))
         ;
-        panel.setContainer(true);
         drawMap.put(panel.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
@@ -163,9 +192,7 @@ public class AminoJavaMode extends Mode {
 
         DynamicNode listview = new DynamicNode();
         listview.copyPropertiesFrom(visualBase);
-        listview.setName("ListView");
-        listview.setVisual(true);
-        listview.setResizable(true);
+        listview.setName("ListView").setVisual(true).setResizable(true);
         listview.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ListView"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
@@ -198,10 +225,7 @@ public class AminoJavaMode extends Mode {
 
         DynamicNode scroll = new DynamicNode();
         scroll.copyPropertiesFrom(visualBase);
-        scroll.setName("ScrollPane");
-        scroll.setVisual(true);
-        scroll.setResizable(true);
-        scroll.setContainer(true);
+        scroll.setContainer(true).setName("ScrollPane").setVisual(true).setResizable(true);
         scroll.addProperty(new Property("class", String.class,
                 "org.joshy.gfx.node.control.ScrollPane"))
                 .addProperty(new Property("resize", String.class, "any")
@@ -236,9 +260,7 @@ public class AminoJavaMode extends Mode {
 
         DynamicNode spinner = new DynamicNode();
         spinner.copyPropertiesFrom(visualBase);
-        spinner.setName("Spinner");
-        spinner.setVisual(true);
-        spinner.setResizable(true);
+        spinner.setName("Spinner").setVisual(true).setResizable(true);
         spinner
                 .addProperty(new Property("class", String.class,
                         "com.joshondesign.treegui.modes.aminojava.Spinner"))
@@ -265,16 +287,13 @@ public class AminoJavaMode extends Mode {
         DynamicNode custom = new DynamicNode();
         custom.setName("Custom View");
         custom.copyPropertiesFrom(visualBase);
-        custom.setVisual(true);
-        custom.setResizable(true);
-        custom.setContainer(false);
+        custom.setCustom(true).setContainer(true).setVisual(true).setResizable(true);
         custom
                 .addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ScrollPane"))
                 .addProperty(new Property("customClass", String.class, "none"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
         ;
-        custom.setCustom(true);
         drawMap.put(custom.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getProperty("width").getDoubleValue();
@@ -489,11 +508,23 @@ public class AminoJavaMode extends Mode {
         symbols.add(node);
     }
 
+    public static class CheckboxWrapper {
+        @Prop public CharSequence text = "checkbox";
+        @Prop public Boolean selected = false;
+        @Prop(exported = false) public String resize = "horizontal";
+        @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Checkbox.class.getName();
+    }
+
+    public static class RadiobuttonWrapper {
+        @Prop public CharSequence text = "radiobutton";
+        @Prop public Boolean selected = false;
+        @Prop(exported = false) public String resize = "horizontal";
+        @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Radiobutton.class.getName();
+    }
 
     public static class FlickrSearch {
 
-        @Prop
-        public String query = "london";
+        @Prop public String query = "london";
 
         @Prop(visible = false)
         public ListModel<String> results = new StringListModel();

@@ -14,4 +14,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Prop {
     boolean bindable() default true;
     boolean visible() default true;
+    boolean exported() default true;
 }

@@ -32,8 +32,9 @@ public class DynamicNode extends SketchNode {
         return properies.get(width);
     }
 
-    public void setContainer(boolean container) {
+    public DynamicNode setContainer(boolean container) {
         this.container = container;
+        return this;
     }
 
     public void copyPropertiesFrom(DynamicNode parent) {
@@ -42,8 +43,9 @@ public class DynamicNode extends SketchNode {
         }
     }
 
-    public void setCustom(boolean custom) {
+    public DynamicNode setCustom(boolean custom) {
         this.custom = custom;
+        return this;
     }
 
     public boolean isCustom() {
@@ -150,8 +152,9 @@ public class DynamicNode extends SketchNode {
         return name;
     }
 
-    public void setVisual(boolean visual) {
+    public DynamicNode setVisual(boolean visual) {
         this.visual = visual;
+        return this;
     }
 
     public boolean isVisual() {
@@ -195,7 +198,7 @@ public class DynamicNode extends SketchNode {
         return getInputBounds().contains(MathUtils.transform(pt,-getTranslateX(),-getTranslateY()));
     }
 
-    boolean hasProperty(String name) {
+    public boolean hasProperty(String name) {
         return this.properies.containsKey(name);
     }
     @Override

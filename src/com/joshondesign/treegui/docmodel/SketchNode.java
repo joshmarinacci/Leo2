@@ -134,8 +134,9 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
         return height;
     }
 
-    public void setResizable(boolean rs) {
+    public SketchNode setResizable(boolean rs) {
         this.resizable = rs;
+        return this;
     }
 
     public boolean isResizable() {

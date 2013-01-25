@@ -36,9 +36,13 @@ public class DynamicResizeHandle extends Handle {
         if(doc.isSnapToGrid()) {
             w = Math.floor(w/10)*10;
         }
-        node.getProperty("width").setDoubleValue(w);
+        node.setWidth(w);
+        //node.getProperty("width").setDoubleValue(w);
 
-        String resize = node.getProperty("resize").getStringValue();
+        String resize = "any";
+        if(node.hasProperty("resize")) {
+            resize = node.getProperty("resize").getStringValue();
+        }
         if(mouseEvent.isShiftPressed()) {
             if(resize.equals("any")) {
                 node.getProperty("height").setDoubleValue(node.getProperty("width").getDoubleValue());

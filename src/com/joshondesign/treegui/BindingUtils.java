@@ -115,6 +115,7 @@ public class BindingUtils {
 
                     p.setBindable(prop.bindable());
                     p.setVisible(prop.visible());
+                    p.setExported(prop.exported());
                     node.addProperty(p);
                 }
             }
