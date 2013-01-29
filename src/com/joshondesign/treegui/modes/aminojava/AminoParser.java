@@ -43,6 +43,7 @@ public class AminoParser {
             final Object src = objectMap.get(binding.attr("sourceid"));
             final Object tgt = objectMap.get(binding.attr("targetid"));
             final String tgtProp = binding.attr("targetprop");
+            u.p("working on binding: " + src + " to " + tgt + " : " + tgtProp);
 
             //applyBinding(binding);
 
@@ -79,7 +80,7 @@ public class AminoParser {
         return last;
     }
 
-    private static void applyBinding(Object src, Object tgt, Elem binding) throws Exception {
+    private static void applyBinding(Object src, final Object tgt, Elem binding) throws Exception {
         final String tgtProp = binding.attr("targetprop");
 
         if(binding.attrEquals("sourceprop","toggleGroup")) {
@@ -105,6 +106,21 @@ public class AminoParser {
                     src, binding.attr("sourceprop"),
                     tgt, tgtProp, binding.attr("targettype"));
             return;
+        }
+
+        //convert integer to string
+        if(binding.attrEquals("sourcetype", "java.lang.Integer") && binding.attrEquals("targettype","java.lang.String")) {
+            u.p("must coerce an integer to a string");
+            if(src.getClass() == ListView.class && binding.attrEquals("sourceprop","selectedIndex")) {
+                u.p("binding to selection of a list. must set up event handlers");
+                EventBus.getSystem().addListener(src, SelectionEvent.Changed, new Callback<SelectionEvent>() {
+                    public void call(SelectionEvent selectionEvent) throws Exception {
+                        u.p("selection changed");
+                        PropUtils.findSetter(tgt,tgtProp).invoke(tgt, ""+selectionEvent.getView().getSelectedIndex());
+                    }
+                });
+            } else {
+            }
         }
     }
 

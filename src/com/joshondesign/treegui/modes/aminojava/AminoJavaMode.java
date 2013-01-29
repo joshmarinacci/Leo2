@@ -229,6 +229,8 @@ public class AminoJavaMode extends Mode {
                         .setBindable(true).setExported(false).setVisible(false))
                 .addProperty(new Property("orientation",
                         ListView.Orientation.class, ListView.Orientation.Vertical))
+                .addProperty(new Property("selectedItem", Object.class, null).setBindable(true))
+                .addProperty(new Property("selectedIndex", Integer.class, 0).setBindable(true))
         ;
         drawMap.put(listview.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
