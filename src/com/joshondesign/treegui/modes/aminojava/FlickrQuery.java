@@ -8,9 +8,9 @@ import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.u;
 
 public class FlickrQuery {
-    private String query;
+    @Prop(bindable = true) public String query;
     private ArrayListModel<String> results = new ArrayListModel<String>();
-    private boolean active;
+    @Prop(bindable = true) public boolean active = false;
 
 
     public FlickrQuery() {

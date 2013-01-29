@@ -393,24 +393,19 @@ public class AminoJavaMode extends Mode {
             }
         });
 
-        DynamicNode flickrQuery = new DynamicNode();
-        flickrQuery.setName("Flickr Search");
-        flickrQuery.setVisual(false);
-        flickrQuery.setResizable(false);
+
+        DynamicNode.DrawDelegate servicebaseDrawDelegate = drawMap.get("servicebase");
+        DynamicNode flickrQuery = BindingUtils.parseAnnotatedPOJO(new FlickrQuery(), servicebaseDrawDelegate);
+        flickrQuery.setVisual(false).setResizable(false);
         flickrQuery.copyPropertiesFrom(serviceBase);
         flickrQuery
                 .addProperty(new Property("class", String.class,
                         "com.joshondesign.treegui.modes.aminojava.FlickrQuery"))
                 .addProperty(new Property("execute", ActionProp.class, null)
                         .setBindable(true).setVisible(false))
-                .addProperty(new Property("query", String.class, "london")
-                        .setBindable(true).setVisible(true))
                 .addProperty(new Property("results", ListModel.class, null)
                         .setBindable(true).setVisible(false))
-                .addProperty(new Property("active", Boolean.class, Boolean.TRUE)
-                        .setBindable(true))
         ;
-        flickrQuery.setDrawDelegate(drawMap.get("servicebase"));
         symbols.add(flickrQuery);
 
         DynamicNode action = new DynamicNode();
@@ -468,7 +463,6 @@ public class AminoJavaMode extends Mode {
         data2.add("foo");
         data2.add("bar");
         data2.add("baz");
-        DynamicNode.DrawDelegate servicebaseDrawDelegate = drawMap.get("servicebase");
 
         Property dataProp = new Property("data", ListModel.class, data2);
         dataProp.setVisible(false);
@@ -521,6 +515,9 @@ public class AminoJavaMode extends Mode {
         compoundList.add(template);
         symbols.add(compoundList);
 
+
+        //listview.add((DynamicNode)mirror.duplicate(null));
+        //listview.setContainer(true);
 
         doGenerated(symbols, servicebaseDrawDelegate);
 
