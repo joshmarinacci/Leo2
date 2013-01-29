@@ -88,8 +88,9 @@ public class BindingUtils {
 
 
     public static DynamicNode parseAnnotatedPOJO(Object obj, DynamicNode.DrawDelegate base) {
+        u.p("processing: " + obj.getClass().getSimpleName());
         DynamicNode node = new DynamicNode();
-        node.setName("FlickrQuery");
+        node.setName(obj.getClass().getSimpleName());
         node.setResizable(false);
         node.setDrawDelegate(base);
         node.addProperty(new Property("translateX", Double.class, 0).setExported(false))
@@ -98,7 +99,7 @@ public class BindingUtils {
                 .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
         ;
         try {
-            for(Field field :obj.getClass().getFields()) {
+            for(Field field :obj.getClass().getDeclaredFields()) {
                 for(Annotation an : field.getAnnotations()) {
                     //u.p("  ann " + an);
                 }

@@ -474,15 +474,11 @@ public class AminoJavaMode extends Mode {
         dataProp.setVisible(false);
         dataProp.setBindable(true);
         dataProp.setList(true);
-        DynamicNode alarm = new DynamicNode();
-        alarm.setName("Alarm");
+
+        DynamicNode alarm = BindingUtils.parseAnnotatedPOJO(new Alarm(), servicebaseDrawDelegate);
         alarm.setVisual(false);
         alarm.setResizable(false);
         alarm.copyPropertiesFrom(serviceBase);
-        alarm.addProperty(new Property("label", String.class, "Alarm Label").setBindable(true));
-        alarm.addProperty(new Property("time", Double.class, 5).setBindable(true));
-        alarm.addProperty(new Property("enabled", Boolean.class, false).setBindable(true));
-        alarm.setDrawDelegate(servicebaseDrawDelegate);
         dataProp.setItemPrototype(alarm);
         alarmList.addProperty(new Property("class", String.class,
                 "com.joshondesign.treegui.modes.aminojava.AlarmList"))

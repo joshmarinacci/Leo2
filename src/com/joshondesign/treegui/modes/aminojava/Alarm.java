@@ -8,9 +8,12 @@ package com.joshondesign.treegui.modes.aminojava;
  * To change this template use File | Settings | File Templates.
  */
 public class Alarm {
-    private String label;
-    private int time;
-    private boolean repeat;
+    @Prop(bindable = true)
+    public String label;
+    @Prop(bindable = true)
+    public int time;
+    @Prop(bindable = true)
+    public boolean repeat;
 
     public Alarm() {
         setLabel("Label");
