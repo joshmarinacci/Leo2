@@ -576,24 +576,6 @@ public class AminoJavaMode extends Mode {
         @Prop(visible = false) public String clazz = "org.joshy.gfx.node.control.Togglegroup";
     }
 
-    public static class FlickrSearch {
-
-        @Prop public String query = "london";
-
-        @Prop(visible = false)
-        public ListModel<String> results = new StringListModel();
-
-        @Prop(visible = false)
-        public Boolean active = false;
-
-        @Prop(visible = false)
-        public ActionProp execute;
-
-        @Prop(bindable = false, visible = false)
-        public String clazz = "com.joshondesign.treegui.modes.aminojava.FlickrQuery";
-    }
-
-
     @Override
     public String getName() {
         return "Amino Java";
