@@ -207,7 +207,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             popup2.setVisible(true);
         }
         if(node instanceof DynamicNode) {
-            BindingUtils.populateWithTargetPropertiesDynamic(popup2, (DynamicNode)node, currentBinding, this, document);
+            BindingUtils.populateWithTargetPropertiesDynamic(popup2, (DynamicNode) node, currentBinding, this, document);
         }
         Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
         popup2.setTranslateX(pt.getX() + this.getTranslateX());
@@ -307,29 +307,28 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             gfx.setPaint(FlatColor.BLACK);
             Bounds sb = binding.getSource().getInputBounds();
             Bounds tb = binding.getTarget().getInputBounds();
-            Point2D start = toRootCoords(
-                    new Point2D.Double(sb.getCenterX(), sb.getY2()),
-                    binding.getSource());
-            Point2D end = toRootCoords(
-                    new Point2D.Double(tb.getCenterX(), tb.getY()),
-                    binding.getTarget());
+
+            //bottom center of start
+            Point2D start = toRootCoords(pt(sb.getCenterX(), sb.getY2()), binding.getSource());
+            //top center of end
+            Point2D end =   toRootCoords(pt(tb.getCenterX(), tb.getY()),  binding.getTarget());
+
+            double offy = 40;
+            if(start.getY() > end.getY()) {
+                offy = -40;
+                start = toRootCoords(pt(sb.getCenterX(), sb.getY()),  binding.getSource());
+                end =   toRootCoords(pt(tb.getCenterX(), tb.getY2()), binding.getTarget());
+            }
 
             Path2D.Double pth = new Path2D.Double();
-            if(start.getY() > end.getY()) {
-                start = toRootCoords(
-                        new Point2D.Double(sb.getCenterX(), sb.getY()),
-                        binding.getSource());
-                end = toRootCoords(
-                        new Point2D.Double(tb.getCenterX(), tb.getY2()),
-                        binding.getTarget());
-                pth.moveTo(start.getX(),start.getY());
-                pth.curveTo(start.getX(),start.getY()-40,  end.getX(),end.getY()+40, end.getX(),end.getY());
-            } else {
-                pth.moveTo(start.getX(),start.getY());
-                pth.curveTo(start.getX(),start.getY()+40,  end.getX(),end.getY()-40, end.getX(),end.getY());
-            }
+            pth.moveTo(start.getX(),start.getY());
+            pth.curveTo(start.getX(),start.getY()+offy,  end.getX(),end.getY()-offy, end.getX(),end.getY());
             gfx.drawPath(pth);
         }
+    }
+
+    private Point2D pt(double x, double y) {
+        return new Point2D.Double(x,y);
     }
 
     private Point2D toRootCoords(Point2D start, SketchNode source) {

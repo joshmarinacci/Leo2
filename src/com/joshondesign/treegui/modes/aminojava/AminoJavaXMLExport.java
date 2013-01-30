@@ -283,6 +283,13 @@ public class AminoJavaXMLExport extends JAction {
         public void execute() {
             try {
                 File file = document.getFile();
+                if(file == null) {
+                    file = File.createTempFile("blah","xml");
+                }
+                //save the file
+                exportToXML(new PrintWriter(new FileOutputStream(file)), document.get(0), document);
+                //now reload it
+
                 Doc xml = XMLParser.parse(file);
                 Node node = AminoParser.parsePage(xml.root());
                 if(demoStage == null) {
