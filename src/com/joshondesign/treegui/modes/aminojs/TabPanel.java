@@ -2,6 +2,7 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +10,8 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
 public class TabPanel extends ResizableRectNode {
-    private List<Object> data;
+    @Prop
+    public List<Object> listModel;
 
     public TabPanel() {
         List<Object> obs = new ArrayList<Object>();
@@ -31,11 +33,11 @@ public class TabPanel extends ResizableRectNode {
     }
 
     public void setListModel(List<Object> data) {
-        this.data = data;
+        this.listModel = data;
     }
 
     public List<Object> getListModel() {
-        return data;
+        return listModel;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,8 @@ import org.joshy.gfx.node.Bounds;
  * To change this template use File | Settings | File Templates.
  */
 public class ControlListModel extends SketchNode {
-    private List<Object> data;
+    @Prop
+    public List<Object> data;
 
     public ControlListModel() {
         data = new ArrayList<Object>();

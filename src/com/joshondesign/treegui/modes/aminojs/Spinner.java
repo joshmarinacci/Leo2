@@ -2,6 +2,7 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
@@ -14,8 +15,8 @@ import org.joshy.gfx.draw.GFX;
  */
 public class Spinner extends ResizableRectNode {
 
-    private boolean visible;
-    private boolean active;
+    @Prop public boolean visible;
+    @Prop public boolean active;
 
     public Spinner() {
         setWidth(50);

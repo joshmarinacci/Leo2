@@ -3,6 +3,7 @@ package com.joshondesign.treegui.modes.aminojs;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.aminojava.GuiTest;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import java.util.Arrays;
 import java.util.List;
 import org.joshy.gfx.draw.FlatColor;
@@ -10,7 +11,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
 public class ListView extends ResizableRectNode {
-    private List<String> data;
+    @Prop public List<String> data;
 
     public ListView() {
         setWidth(70);

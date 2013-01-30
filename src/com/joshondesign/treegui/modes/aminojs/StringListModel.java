@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,8 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
 public class StringListModel extends SketchNode {
-    private List<String> data;
+    @Prop
+    public List<String> data;
 
     public StringListModel() {
         data = new ArrayList<String>();

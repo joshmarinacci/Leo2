@@ -2,6 +2,7 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -14,7 +15,9 @@ import org.joshy.gfx.draw.GFX;
  * To change this template use File | Settings | File Templates.
  */
 public class Textbox extends ResizableRectNode {
-    private String text;
+
+    @Prop
+    public String text;
 
     public Textbox() {
         setWidth(80);

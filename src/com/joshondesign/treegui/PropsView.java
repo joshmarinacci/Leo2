@@ -127,7 +127,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
             if(!prop.isVisible()) continue;
 
             //do booleans first. they don't get separate labels
-            if(prop.getType().isAssignableFrom(Boolean.class)) {
+            if(prop.getType().isAssignableFrom(Boolean.class) || prop.getType() == Boolean.TYPE) {
                 skip();
                 final Checkbox cb = new Checkbox(prop.getName());
                 EventBus.getSystem().addListener(cb, FocusEvent.Lost, new Callback<FocusEvent>() {
