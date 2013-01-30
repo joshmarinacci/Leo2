@@ -3,7 +3,6 @@ package com.joshondesign.treegui;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.amino.ActionProp;
-import com.joshondesign.treegui.modes.amino.AminoAdapter;
 import com.joshondesign.treegui.modes.amino.TriggerProp;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Prop;
@@ -13,29 +12,49 @@ import java.lang.reflect.Field;
 import org.joshy.gfx.util.u;
 
 public class BindingUtils {
-    public static void populateWithBindablePropertiesRegular(BindingBox popup, SketchNode node, Canvas canvas, SketchDocument doc) {
-        for(final String prop : AminoAdapter.getProps(node).keySet()) {
-            if("id".equals(prop)) continue; //skip the ID property
 
-            final Binding sourceBinding = findSourceBinding(node, prop, doc);
-            final Binding targetBinding = findTargetBinding(node, prop, doc);
-            popup.addProperty(canvas, doc, node, prop, sourceBinding, targetBinding, true, true);
-        }
-    }
     public static void populateWithBindablePropertiesDynamic(BindingBox popup, DynamicNode node, Canvas canvas, SketchDocument doc) {
         for(Property prop : node.getSortedProperties()) {
             if(!prop.isBindable()) continue;
             String name = prop.getName();
+
+            if(prop.isCompound()) {
+                u.p("a compound prop. exploding");
+                Property master = node.getProperty(prop.getMasterProperty());
+                u.p("master = " + master.getName());
+                u.p("value = " + master.getRawValue());
+                Binding binding = findTargetBinding(node, master.getName(), doc);
+                u.p("current binding = " + binding);
+                if(binding == null) continue;
+                Property srcProp = binding.getSource().getProperty(binding.getSourceProperty().getName());
+                u.p("src prop = " + srcProp);
+                if(srcProp.isList()) {
+                    u.p("master is bound to a list prop. we can get the prototype");
+                    DynamicNode proto = srcProp.getItemPrototype();
+                    u.p("proto = " + proto);
+                    for(Property p2 :proto.getSortedProperties()) {
+                        u.p("p2 = " + p2.getName());
+                        if(p2.isBindable()) {
+                            Property px = new Property(p2.getName(),p2.getType(),p2.getRawValue());
+                            px.setProxy(true);
+                            px.setMasterProperty(prop.getName());
+                            popup.addProperty(canvas, doc, node, px, null, null, true, true);
+                        }
+                    }
+                    continue;
+                }
+            }
+
             final Binding sourceBinding = findSourceBinding(node, name, doc);
             final Binding targetBinding = findTargetBinding(node, name, doc);
-            popup.addProperty(canvas, doc, node, name, sourceBinding, targetBinding,  true, true);
+            popup.addProperty(canvas, doc, node, prop, sourceBinding, targetBinding,  true, true);
         }
     }
 
-    private static Binding findTargetBinding(SketchNode selection, String prop, SketchDocument doc) {
+    private static Binding findTargetBinding(DynamicNode selection, String prop, SketchDocument doc) {
         for(Binding binding : doc.getBindings()) {
             if(binding.getTarget() == selection) {
-                if(binding.getTargetProperty().equals(prop)) {
+                if(binding.getTargetProperty().getName().equals(prop)) {
                     return binding;
                 }
             }
@@ -46,28 +65,12 @@ public class BindingUtils {
     private static Binding findSourceBinding(SketchNode selection, String prop, SketchDocument doc) {
         for(Binding binding : doc.getBindings()) {
             if(binding.getSource() == selection) {
-                if(binding.getSourceProperty().equals(prop)) {
+                if(binding.getSourceProperty().getName().equals(prop)) {
                     return binding;
                 }
             }
         }
         return null;
-    }
-
-    public static void populateWithTargetPropertiesRegular(BindingBox popup2, SketchNode node, Binding currentBinding, Canvas canvas, SketchDocument doc) {
-        for(final String prop : AminoAdapter.getProps(node).keySet()) {
-            if(prop.equals("id")) continue;
-            final Binding sourceBinding = findSourceBinding(node, prop, doc);
-            final Binding targetBinding = findTargetBinding(node, prop, doc);
-            boolean canUse = true;
-            if(currentBinding.getSourceType() == TriggerProp.class) {
-                if(PropUtils.getPropertyType(node,prop) != ActionProp.class) {
-                    canUse = false;
-                }
-            }
-            popup2.addProperty(canvas, doc, node, prop, sourceBinding, targetBinding, false, canUse);
-        }
-
     }
 
     public static void populateWithTargetPropertiesDynamic(BindingBox popup2, DynamicNode node, Binding currentBinding, Canvas canvas, SketchDocument doc) {
@@ -77,18 +80,18 @@ public class BindingUtils {
             final Binding sourceBinding = findSourceBinding(node, name, doc);
             final Binding targetBinding = findTargetBinding(node, name, doc);
             boolean canUse = true;
-            if(currentBinding.getSourceType() == TriggerProp.class) {
+            if(currentBinding.getSourceProperty().getType() == TriggerProp.class) {
                 if(prop.getType() != ActionProp.class) {
                     canUse = false;
                 }
             }
-            popup2.addProperty(canvas, doc, node, name, sourceBinding, targetBinding,  false, canUse);
+            popup2.addProperty(canvas, doc, node, prop, sourceBinding, targetBinding,  false, canUse);
         }
     }
 
 
     public static DynamicNode parseAnnotatedPOJO(Object obj, DynamicNode.DrawDelegate base) {
-        u.p("processing: " + obj.getClass().getSimpleName());
+        //u.p("processing: " + obj.getClass().getSimpleName());
         DynamicNode node = new DynamicNode();
         node.setName(obj.getClass().getSimpleName());
         node.setResizable(false);
@@ -106,8 +109,8 @@ public class BindingUtils {
 
                 if(field.isAnnotationPresent(Prop.class)) {
                     Prop prop = field.getAnnotation(Prop.class);
-                    u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
-                    u.p("  bindable = " + prop.bindable());
+//                    u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
+//                    u.p("  bindable = " + prop.bindable());
                     String name = field.getName();
                     if(name.equals("clazz")) {
                         name = "class";

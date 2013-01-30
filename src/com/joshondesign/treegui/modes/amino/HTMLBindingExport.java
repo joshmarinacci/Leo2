@@ -70,7 +70,7 @@ public class HTMLBindingExport extends AminoAction {
 
     private void exportBinding(PrintWriter out, Binding binding) {
         if(AminoAdapter.shouldExportAsSetter(binding)) {
-            String prop = binding.getTargetProperty();
+            String prop = binding.getTargetProperty().getName();
             out.println(
                     binding.getTarget().getId() +
                             ".set" + prop.substring(0,1).toUpperCase()

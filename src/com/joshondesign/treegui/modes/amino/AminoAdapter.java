@@ -77,12 +77,12 @@ public class AminoAdapter {
     }
 
     public static boolean isDataModel(Binding binding) {
-        if(binding.getSource() instanceof StringListModel) {
-            return true;
-        }
-        if(binding.getSource() instanceof ControlListModel) {
-            return true;
-        }
+//        if(binding.getSource() instanceof StringListModel) {
+//            return true;
+//        }
+//        if(binding.getSource() instanceof ControlListModel) {
+//            return true;
+//        }
         return false;
     }
 
@@ -119,27 +119,27 @@ public class AminoAdapter {
     }
 
     public static boolean shouldExportAsSetter(Binding binding) {
-        if(binding.getSource() instanceof StringListModel) return true;
-        if(binding.getSource() instanceof ControlListModel) return true;
-        if(binding.getSource() instanceof FlickrQuery) {
-            if(binding.getSourceProperty().equals("results")) return true;
-        }
+//        if(binding.getSource() instanceof StringListModel) return true;
+//        if(binding.getSource() instanceof ControlListModel) return true;
+//        if(binding.getSource() instanceof FlickrQuery) {
+//            if(binding.getSourceProperty().equals("results")) return true;
+//        }
         return false;
     }
 
     public static boolean shouldExportAsTrigger(Binding binding) {
-        if(binding.getSource() instanceof PushButton) {
-            if(binding.getSourceProperty().equals("trigger")) {
-                return true;
-            }
-        }
+//        if(binding.getSource() instanceof PushButton) {
+//            if(binding.getSourceProperty().equals("trigger")) {
+//                return true;
+//            }
+//        }
 
         return false;
     }
 
     public static boolean shouldExportAsAdder(Binding binding) {
-        if(binding.getTarget() instanceof StringListModel) return true;
-        if(binding.getTarget() instanceof ControlListModel) return true;
+//        if(binding.getTarget() instanceof StringListModel) return true;
+//        if(binding.getTarget() instanceof ControlListModel) return true;
         return false;
     }
 

@@ -102,7 +102,7 @@ public class Leo2 {
             quicktestButton.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     try {
-                        File file = new File("resources/et.xml");
+                        File file = new File("tx.xml");
                         Doc xml = XMLParser.parse(file);
                         Node node = AminoParser.parsePage(xml.root());
                         Stage demoStage;

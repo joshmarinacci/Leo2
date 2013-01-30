@@ -2,6 +2,8 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminojava.Property;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -22,8 +24,8 @@ public class BindingBox extends GridBox {
     }
 
 
-    public void addProperty(final Canvas canvas, final SketchDocument doc, final SketchNode node,
-                            final String prop,
+    public void addProperty(final Canvas canvas, final SketchDocument doc, final DynamicNode node,
+                            final Property prop,
                             final Binding sourceBinding, Binding targetBinding, boolean isSource, boolean canUse) {
         //HFlexBox row = new HFlexBox();
         BindingStateButton targetButton = new BindingStateButton();
@@ -42,7 +44,11 @@ public class BindingBox extends GridBox {
 
         addControl(targetButton);
         Font fnt = Font.name(Font.DEFAULT.getName()).weight(Font.Weight.Bold).size(Font.DEFAULT.getSize()).resolve();
-        addControl(new Label(prop).setFont(fnt).setColor(FlatColor.hsb(0, 0, 0.9)));
+        if(prop.isCompound()) {
+            addControl(new Label("_: "+prop).setFont(fnt).setColor(FlatColor.hsb(0, 0, 0.9)));
+        } else {
+            addControl(new Label(prop.getName()).setFont(fnt).setColor(FlatColor.hsb(0, 0, 0.9)));
+        }
         addControl(sourceButton);
         nextRow();
         this.setPrefHeight(this.getPrefHeight()+20);

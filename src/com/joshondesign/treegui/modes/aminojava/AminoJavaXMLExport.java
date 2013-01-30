@@ -91,18 +91,20 @@ public class AminoJavaXMLExport extends JAction {
         //bindings
         xml.start("bindings");
         for(Binding binding : document.getBindings()) {
+            u.p("exporting: " + binding.toString());
             xml.start("binding");
             xml.attr("sourceid", binding.getSource().getId());
-            xml.attr("sourceprop", binding.getSourceProperty());
-            xml.attr("sourcetype",binding.getSourceType().getName());
+            Property src = binding.getSourceProperty();
+            xml.attr("sourceprop", src.getName());
+            xml.attr("sourcevirtual",Boolean.toString(src.isProxy()));
+            if(src.isProxy()) {
+                xml.attr("sourcemaster",src.getMasterProperty());
+            }
             xml.attr("targetid",binding.getTarget().getId());
-            xml.attr("targetprop",binding.getTargetProperty());
-            xml.attr("targettype",binding.getTargetType().getName());
-            if(binding.getSource() instanceof DynamicNode) {
-                DynamicNode nd = (DynamicNode) binding.getSource();
-                if(nd.isMirror()) {
-                    xml.attr("mirror","true");
-                }
+            xml.attr("targetprop",binding.getTargetProperty().getName());
+            DynamicNode nd = binding.getSource();
+            if(nd.isMirror()) {
+                xml.attr("mirror","true");
             }
             xml.end();
         }
@@ -135,6 +137,9 @@ public class AminoJavaXMLExport extends JAction {
                 xml.attr("exported",Boolean.toString(prop.isExported()));
                 xml.attr("visible", Boolean.toString(prop.isVisible()));
                 xml.attr("bindable", Boolean.toString(prop.isBindable()));
+                xml.attr("compound",Boolean.toString(prop.isCompound()));
+                xml.attr("list",Boolean.toString(prop.isList()));
+                xml.attr("masterprop",""+prop.getMasterProperty());
                 if(prop.getExportName() != null) {
                     xml.attr("exportname", prop.getExportName());
                 }
@@ -176,6 +181,9 @@ public class AminoJavaXMLExport extends JAction {
             xml.attr("exported",Boolean.toString(prop.isExported()));
             xml.attr("visible", Boolean.toString(prop.isVisible()));
             xml.attr("bindable", Boolean.toString(prop.isBindable()));
+            xml.attr("compound",Boolean.toString(prop.isCompound()));
+            xml.attr("list",Boolean.toString(prop.isList()));
+            xml.attr("masterprop",""+prop.getMasterProperty());
             xml.end();
         }
 

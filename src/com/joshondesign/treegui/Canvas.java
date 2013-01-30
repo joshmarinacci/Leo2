@@ -178,7 +178,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     void showBindingMenu(Point2D pt) {
 
         currentBinding = new Binding();
-        currentBinding.setSource(document.getSelection().get(0));
+        currentBinding.setSource((DynamicNode) document.getSelection().get(0));
 
         if(popup == null) {
             popup = new BindingBox();
@@ -191,8 +191,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         SketchNode node = document.getSelection().get(0);
         if(node instanceof DynamicNode) {
             BindingUtils.populateWithBindablePropertiesDynamic(popup, (DynamicNode) node, this, document);
-        } else {
-            BindingUtils.populateWithBindablePropertiesRegular(popup, node, this, document);
         }
         popup.setTranslateX(pt.getX() + this.getTranslateX());
         popup.setTranslateY(pt.getY() + this.getTranslateY());
@@ -210,9 +208,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         }
         if(node instanceof DynamicNode) {
             BindingUtils.populateWithTargetPropertiesDynamic(popup2, (DynamicNode)node, currentBinding, this, document);
-        } else {
-            BindingUtils.populateWithTargetPropertiesRegular(popup2, node, currentBinding, this, document);
-
         }
         Point2D pt = mouseEvent.getPointInNodeCoords(Canvas.this);
         popup2.setTranslateX(pt.getX() + this.getTranslateX());

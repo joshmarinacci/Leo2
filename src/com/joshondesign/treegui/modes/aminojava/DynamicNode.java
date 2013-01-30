@@ -88,12 +88,14 @@ public class DynamicNode extends SketchNode {
         Binding binding = findBindingForTarget(document.getBindings(),par,tprop);
         if(binding == null) return;
         DynamicNode source = ((DynamicNode)binding.getSource());
+        /*
         DynamicNode proto = source.getProperty(binding.getSourceProperty()).getItemPrototype();
         for(Property prop : proto.getProperties()) {
             if(prop.isBindable()) {
                 addProperty(prop.duplicate());
             }
         }
+        */
     }
 
     private Binding findBindingForTarget(List<Binding> bindings, DynamicNode par, Property tprop) {

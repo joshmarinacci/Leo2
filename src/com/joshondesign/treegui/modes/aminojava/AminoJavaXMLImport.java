@@ -78,11 +78,28 @@ public class AminoJavaXMLImport extends JAction {
     }
 
     private static Binding processBinding(Elem elem, Map<String, SketchNode> ids) {
+        u.p("restoring: " + elem.attr("sourceprop") + " => " + elem.attr("targetprop"));
+        u.p("virtual = " + elem.attr("sourcevirtual"));
         Binding binding = new Binding();
-        binding.setSource(ids.get(elem.attr("sourceid")));
-        binding.setSourceProperty(elem.attr("sourceprop"));
-        binding.setTarget(ids.get(elem.attr("targetid")));
-        binding.setTargetProperty(elem.attr("targetprop"));
+        DynamicNode srcObj = (DynamicNode) ids.get(elem.attr("sourceid"));
+        binding.setSource(srcObj);
+        DynamicNode tgtObj = (DynamicNode) ids.get(elem.attr("targetid"));
+        binding.setTarget(tgtObj);
+        binding.setSourceProperty(srcObj.getProperty(elem.attr("sourceprop")));
+        binding.setTargetProperty(tgtObj.getProperty(elem.attr("targetprop")));
+        u.p("source set to : "+ binding.getSourceProperty());
+        u.p("target set to : " + binding.getTargetProperty());
+
+        if(elem.attrEquals("sourcevirtual","true")) {
+            String virtualSrc = elem.attr("sourceprop");
+            String masterSrc = elem.attr("sourcemaster");
+
+            //create the new proxy prop to map these. identical to what was created manually the first time.
+            Property px = new Property(virtualSrc,Object.class,null);
+            px.setProxy(true);
+            px.setMasterProperty(masterSrc);
+            binding.setSourceProperty(px);
+        }
         return binding;
     }
 
@@ -135,6 +152,10 @@ public class AminoJavaXMLImport extends JAction {
             }
             property.setVisible(prop.attrEquals("visible","true"));
             property.setBindable(prop.attrEquals("bindable","true"));
+            property.setCompound(prop.attrEquals("compound","true"));
+            if(prop.hasAttr("masterprop")) {
+                property.setMasterProperty(prop.attr("masterprop"));
+            }
             node.addProperty(property);
         }
         u.p("restored node " + node.getName());

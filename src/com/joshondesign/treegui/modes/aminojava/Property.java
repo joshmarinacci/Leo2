@@ -16,6 +16,9 @@ public class Property {
     private DynamicNode itemPrototype;
     private String displayName;
     private DynamicNode node;
+    private boolean compound = false;
+    private String masterProperty = null;
+    private boolean proxy;
 
     public Property(String name, Class type, Object value) {
         this.name = name;
@@ -87,6 +90,8 @@ public class Property {
         p.setList(this.isList());
         p.setItemPrototype(this.getItemPrototype());
         p.setDisplayName(this.displayName);
+        p.setCompound(this.isCompound());
+        p.setMasterProperty(this.getMasterProperty());
         return p;
     }
 
@@ -260,5 +265,33 @@ public class Property {
 
     public void setRawValue(Object rawValue) {
         this.value = rawValue;
+    }
+
+    public void setCompound(boolean compound) {
+        this.compound = compound;
+    }
+
+    public boolean isCompound() {
+        return compound;
+    }
+
+    public void setMasterProperty(String masterProperty) {
+        this.masterProperty = masterProperty;
+    }
+
+    public String getMasterProperty() {
+        return masterProperty;
+    }
+
+    public String toString() {
+        return "prop: " + getName();
+    }
+
+    public void setProxy(boolean proxy) {
+        this.proxy = proxy;
+    }
+
+    public boolean isProxy() {
+        return proxy;
     }
 }

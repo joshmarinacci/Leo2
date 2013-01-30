@@ -1,42 +1,43 @@
 package com.joshondesign.treegui;
 
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminojava.Property;
 
 public class Binding {
-    private SketchNode source;
-    private String sourceProperty;
-    private SketchNode target;
-    private String targetProperty;
+    private DynamicNode source;
+    private Property sourceProperty;
+    private DynamicNode target;
+    private Property targetProperty;
 
-    public void setSource(SketchNode source) {
+    public void setSource(DynamicNode source) {
         this.source = source;
     }
 
-    public SketchNode getSource() {
+    public DynamicNode getSource() {
         return source;
     }
 
-    public void setSourceProperty(String sourceProperty) {
+    public void setSourceProperty(Property sourceProperty) {
         this.sourceProperty = sourceProperty;
     }
 
-    public String getSourceProperty() {
+    public Property getSourceProperty() {
         return sourceProperty;
     }
 
-    public void setTarget(SketchNode target) {
+    public void setTarget(DynamicNode target) {
         this.target = target;
     }
 
-    public SketchNode getTarget() {
+    public DynamicNode getTarget() {
         return target;
     }
 
-    public void setTargetProperty(String targetProperty) {
+    public void setTargetProperty(Property targetProperty) {
         this.targetProperty = targetProperty;
     }
 
-    public String getTargetProperty() {
+    public Property getTargetProperty() {
         return targetProperty;
     }
 
@@ -48,14 +49,5 @@ public class Binding {
                 ", target=" + target +
                 ", targetProperty='" + targetProperty + '\'' +
                 '}';
-    }
-
-    public Class getSourceType() {
-        return PropUtils.getPropertyType(source, sourceProperty);
-    }
-
-    public Class getTargetType() {
-        return PropUtils.getPropertyType(target, targetProperty);
-
     }
 }

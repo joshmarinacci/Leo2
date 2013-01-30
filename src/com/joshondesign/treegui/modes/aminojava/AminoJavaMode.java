@@ -229,7 +229,7 @@ public class AminoJavaMode extends Mode {
                         .setBindable(true).setExported(false).setVisible(false))
                 .addProperty(new Property("orientation",
                         ListView.Orientation.class, ListView.Orientation.Vertical))
-                .addProperty(new Property("selectedItem", Object.class, null).setBindable(true))
+                //.addProperty(new Property("selectedItem", Object.class, null).setBindable(true))
                 .addProperty(new Property("selectedIndex", Integer.class, 0).setBindable(true))
         ;
         drawMap.put(listview.getName(), new DynamicNode.DrawDelegate() {
@@ -249,6 +249,11 @@ public class AminoJavaMode extends Mode {
         listview.setDrawDelegate(drawMap.get(listview.getName()));
         listview.getProperty("width").setDoubleValue(60);
         listview.getProperty("height").setDoubleValue(90);
+        Property subProp = new Property("selectedObject",Object.class,null);
+        subProp.setBindable(true);
+        subProp.setCompound(true);
+        subProp.setMasterProperty("model");
+        listview.addProperty(subProp);
 
 
         DynamicNode scroll = new DynamicNode();
@@ -459,11 +464,14 @@ public class AminoJavaMode extends Mode {
         alarmList.setVisual(false);
         alarmList.setResizable(false);
         alarmList.copyPropertiesFrom(serviceBase);
+        alarmList.addProperty(new Property("class", String.class,
+                "com.joshondesign.treegui.modes.aminojava.AlarmList"));
+        alarmList.setDrawDelegate(servicebaseDrawDelegate);
+
         List<String> data2 = new ArrayList<String>();
         data2.add("foo");
         data2.add("bar");
         data2.add("baz");
-
         Property dataProp = new Property("data", ListModel.class, data2);
         dataProp.setVisible(false);
         dataProp.setBindable(true);
@@ -474,11 +482,7 @@ public class AminoJavaMode extends Mode {
         alarm.setResizable(false);
         alarm.copyPropertiesFrom(serviceBase);
         dataProp.setItemPrototype(alarm);
-        alarmList.addProperty(new Property("class", String.class,
-                "com.joshondesign.treegui.modes.aminojava.AlarmList"))
-                .addProperty(dataProp)
-        ;
-        alarmList.setDrawDelegate(servicebaseDrawDelegate);
+        alarmList.addProperty(dataProp);
         symbols.add(alarmList);
 
         DynamicNode compoundList = new DynamicNode();
