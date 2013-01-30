@@ -96,12 +96,11 @@ public class AminoParser {
             String srcmaster = binding.attr("sourcemaster");
 
             //list view selection
-            if(srcmaster.equals("selectedObject") && src instanceof ListView) {
-                final ListView listview = (ListView)src;
+            if(srcmaster.equals("selectedObject") && src instanceof SelectableControl) {
+                final SelectableControl control = (SelectableControl)src;
                 EventBus.getSystem().addListener(src,SelectionEvent.Changed, new Callback<SelectionEvent>(){
                     public void call(SelectionEvent selectionEvent) throws Exception {
-                        int index = listview.getSelectedIndex();
-                        Object value = listview.getModel().get(index);
+                        Object value = control.getSelectedItem();
                         setWithSetter(value, srcprop, tgt, tgtprop);
                     }
                 });
@@ -143,11 +142,10 @@ public class AminoParser {
         //convert integer to string
         if(binding.attrEquals("sourcetype", "java.lang.Integer") && binding.attrEquals("targettype","java.lang.String")) {
             u.p("must coerce an integer to a string");
-            if(src.getClass() == ListView.class && binding.attrEquals("sourceprop","selectedIndex")) {
+            if(src instanceof SelectableControl && binding.attrEquals("sourceprop","selectedIndex")) {
                 u.p("binding to selection of a list. must set up event handlers");
                 EventBus.getSystem().addListener(src, SelectionEvent.Changed, new Callback<SelectionEvent>() {
                     public void call(SelectionEvent selectionEvent) throws Exception {
-                        u.p("selection changed");
                         PropUtils.findSetter(tgt,tgtProp).invoke(tgt, ""+selectionEvent.getView().getSelectedIndex());
                     }
                 });

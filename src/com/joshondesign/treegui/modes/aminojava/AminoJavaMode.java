@@ -193,7 +193,13 @@ public class AminoJavaMode extends Mode {
                 ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}))
                 .setBindable(true).setExported(true).setVisible(true).setList(true));
         popupbutton.setName("Popupbutton").setResizable(true).setWidth(80).setHeight(20);
+        Property popupSelected = new Property("selectedObject",Object.class,null);
+        popupSelected.setBindable(true);
+        popupSelected.setCompound(true);
+        popupSelected.setMasterProperty("model");
+        popupbutton.addProperty(popupSelected);
         symbols.add(popupbutton);
+
 
         DynamicNode panel = new DynamicNode();
         panel.copyPropertiesFrom(visualBase);
@@ -201,7 +207,7 @@ public class AminoJavaMode extends Mode {
         panel.addProperty(new Property("class", String.class, "com.joshondesign.treegui.AnchorPanel"))
                 .addProperty(new Property("resize", String.class, "any")
                         .setExported(false).setVisible(false))
-                .addProperty(new Property("fill", FlatColor.class, FlatColor.PURPLE))
+                .addProperty(new Property("fill", FlatColor.class, FlatColor.GRAY))
         ;
         drawMap.put(panel.getName(), new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
@@ -557,10 +563,9 @@ public class AminoJavaMode extends Mode {
     }
     public static class PopupMenuButtonWrapper {
         @Prop public Boolean selected = false;
-        @Prop public Integer selectedIndex = 0;
-        @Prop public Object  selectedObject = null;
+        @Prop(bindable = true) public Integer selectedIndex = 0;
         @Prop(exported = false, visible = false) public String resize = "horizontal";
-        @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.PopupMenuButton.class.getName();
+        @Prop(visible = false, bindable = false) public String clazz = org.joshy.gfx.node.control.PopupMenuButton.class.getName();
     }
     public static class ToggleGroupWrapper {
         @Prop public Integer selectedIndex = 0;
