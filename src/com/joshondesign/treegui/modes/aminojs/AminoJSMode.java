@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes.aminojs;
 
+import com.joshondesign.treegui.BindingUtils;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
@@ -7,10 +8,18 @@ import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminojava.Property;
+import java.util.HashMap;
+import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.Menu;
 
 public class AminoJSMode extends Mode {
+    public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
+
     public AminoJSMode() {
         setId("com.joshondesign.modes.aminojs");
         TreeNode<JAction> actions = new TreeNode<JAction>();
@@ -23,22 +32,73 @@ public class AminoJSMode extends Mode {
         symbols.add(rect);
 
 
-        PushButton pushButton = new PushButton();
-        pushButton.setId("PushButton");
-        symbols.add(pushButton);
+        DynamicNode visualBase = new DynamicNode();
+        visualBase.addProperty(new Property("translateX", Double.class, 0));
+        visualBase.addProperty(new Property("translateY", Double.class, 0));
+        visualBase.addProperty(new Property("width", Double.class, 80))
+                .addProperty(new Property("height", Double.class, 30))
+                .addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false))
+                .addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false))
+                .addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false))
+                .addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false))
+        ;
+
+        drawMap.put("PushButton", new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getWidth();
+                double h = node.getHeight();
+                String t = node.getProperty("text").getStringValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawText(t, Font.DEFAULT, 5, 15);
+                g.drawRect(0, 0, w, h);
+            }
+        });
+
+        drawMap.put("CheckButton", new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getWidth();
+                double h = node.getHeight();
+                String t = node.getProperty("text").getStringValue();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, h, h);
+                g.setPaint(FlatColor.BLACK);
+                g.drawText(t, Font.DEFAULT, 5 + h, 15);
+                g.drawRect(0,0,h,h);
+            }
+        });
+
+        symbols.add(BindingUtils
+                .parseAnnotatedPOJO(new PushButton(), drawMap.get("PushButton"))
+                .copyPropertiesFrom(visualBase));
+
+        symbols.add(BindingUtils
+                .parseAnnotatedPOJO(new ToggleButton(), drawMap.get("PushButton"))
+                .setDrawDelegate(drawMap.get("PushButton"))
+                .copyPropertiesFrom(visualBase));
+
+        symbols.add(BindingUtils
+                .parseAnnotatedPOJO(new CheckButton(), drawMap.get("CheckButton"))
+                .copyPropertiesFrom(visualBase));
+
+
+        drawMap.put("Slider", new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getWidth();
+                double h = node.getHeight();
+                g.setPaint(FlatColor.GRAY);
+                g.fillRect(0, 0, w, h);
+                g.setPaint(FlatColor.BLACK);
+                g.fillRect(0, 0, h, h);
+            }
+        });
+
+        symbols.add(BindingUtils
+                .parseAnnotatedPOJO(new Slider(), drawMap.get("Slider"))
+                .copyPropertiesFrom(visualBase));
+
         /*
-        ToggleButton toggleButton = new ToggleButton();
-        toggleButton.setId("toggle");
-        symbols.add(toggleButton);
-
-        CheckButton checkButton = new CheckButton();
-        checkButton.setId("check button");
-        symbols.add(checkButton);
-
-        com.joshondesign.treegui.modes.aminojs.Slider slider = new Slider();
-        slider.setId("Slider");
-        symbols.add(slider);
-
         Image image = new Image();
         image.setId("image");
         symbols.add(image);

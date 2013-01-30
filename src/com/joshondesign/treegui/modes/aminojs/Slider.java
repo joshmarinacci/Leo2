@@ -2,13 +2,15 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
 public class Slider extends ResizableRectNode {
-    private double minValue;
-    private double maxValue;
-    private double value;
+
+    @Prop public Double minValue;
+    @Prop public double maxValue;
+    @Prop public double value;
 
     public Slider() {
         setWidth(70);

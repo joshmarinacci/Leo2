@@ -2,12 +2,11 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
-import com.joshondesign.treegui.modes.aminojs.ActionProp;
-import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Prop;
 import com.joshondesign.treegui.modes.aminojava.Property;
-import java.lang.annotation.Annotation;
+import com.joshondesign.treegui.modes.aminojs.ActionProp;
+import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import java.lang.reflect.Field;
 import org.joshy.gfx.util.u;
 
@@ -91,7 +90,7 @@ public class BindingUtils {
 
 
     public static DynamicNode parseAnnotatedPOJO(Object obj, DynamicNode.DrawDelegate base) {
-        //u.p("processing: " + obj.getClass().getSimpleName());
+        u.p("processing: " + obj.getClass().getSimpleName());
         DynamicNode node = new DynamicNode();
         node.setName(obj.getClass().getSimpleName());
         node.setResizable(false);
@@ -102,33 +101,37 @@ public class BindingUtils {
                 .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
         ;
         try {
-            for(Field field :obj.getClass().getDeclaredFields()) {
-                for(Annotation an : field.getAnnotations()) {
-                    //u.p("  ann " + an);
-                }
-
-                if(field.isAnnotationPresent(Prop.class)) {
-                    Prop prop = field.getAnnotation(Prop.class);
-//                    u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
-//                    u.p("  bindable = " + prop.bindable());
-                    String name = field.getName();
-                    if(name.equals("clazz")) {
-                        name = "class";
-                    }
-                    Property p = new Property(name, field.getType(), field.get(obj));
-
-                    p.setBindable(prop.bindable());
-                    p.setVisible(prop.visible());
-                    p.setExported(prop.exported());
-                    node.addProperty(p);
-                }
-            }
+            parseFields(obj.getClass().getFields(), obj, node);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         return node;
 
+    }
+
+    private static void parseFields(Field[] fields, Object obj, DynamicNode node) throws IllegalAccessException {
+        for(Field field : fields) {
+//            for(Annotation an : field.getAnnotations()) {
+                //u.p("  ann " + an);
+//            }
+
+            if(field.isAnnotationPresent(Prop.class)) {
+                Prop prop = field.getAnnotation(Prop.class);
+                u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
+//                    u.p("  bindable = " + prop.bindable());
+                String name = field.getName();
+                if(name.equals("clazz")) {
+                    name = "class";
+                }
+                Property p = new Property(name, field.getType(), field.get(obj));
+
+                p.setBindable(prop.bindable());
+                p.setVisible(prop.visible());
+                p.setExported(prop.exported());
+                node.addProperty(p);
+            }
+        }
     }
 
     public static Binding createBinding(DynamicNode source, String sname,

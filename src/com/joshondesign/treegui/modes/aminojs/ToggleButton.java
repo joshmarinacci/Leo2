@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +11,8 @@ import com.joshondesign.treegui.docmodel.SketchNode;
  * To change this template use File | Settings | File Templates.
  */
 public class ToggleButton extends PushButton {
-    private boolean selected;
+    @Prop
+    public Boolean selected;
 
     public ToggleButton() {
         setText("toggle button");

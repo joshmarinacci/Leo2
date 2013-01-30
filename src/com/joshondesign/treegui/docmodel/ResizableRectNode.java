@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.docmodel;
 
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.node.Bounds;
 
@@ -21,7 +22,8 @@ public abstract class ResizableRectNode extends SketchNode {
         this.constraint = constraint;
     }
 
-    private ResizeConstraint constraint;
+
+    @Prop(visible = false) public ResizeConstraint constraint;
 
     @Override
     public boolean contains(Point2D pt) {

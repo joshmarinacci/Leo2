@@ -24,8 +24,9 @@ public class DynamicNode extends SketchNode {
     public DynamicNode() {
     }
 
-    public void setDrawDelegate(DrawDelegate drawDelegate) {
+    public DynamicNode setDrawDelegate(DrawDelegate drawDelegate) {
         this.drawDelegate = drawDelegate;
+        return this;
     }
 
     public Property getProperty(String width) {
@@ -37,10 +38,11 @@ public class DynamicNode extends SketchNode {
         return this;
     }
 
-    public void copyPropertiesFrom(DynamicNode parent) {
+    public DynamicNode copyPropertiesFrom(DynamicNode parent) {
         for(Property prop : parent.getProperties()) {
             addProperty(prop.duplicate());
         }
+        return this;
     }
 
     public DynamicNode setCustom(boolean custom) {
