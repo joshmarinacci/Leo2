@@ -19,17 +19,23 @@ import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.util.u;
 
 public class AminoParser {
-    public static Node parsePage(Elem root) throws Exception {
+
+    private static class Context {
         Map<String, Object> objectMap = new HashMap<String, Object>();
         List<Elem> deferredBindings = new ArrayList<Elem>();
         List<Elem> virtualBindings  = new ArrayList<Elem>();
+        Map<String, Map<String, Elem>> propMap = new HashMap<String, Map<String, Elem>>();
+    }
+
+    public static Node parsePage(Elem root) throws Exception {
+        Context ctx = new Context();
 
         Node last = null;
         for(Elem vis : root.xpath("nodes/node")) {
-            Object obj = processNode(vis, objectMap, deferredBindings, virtualBindings);
+            Object obj = processNode(vis, ctx);
             if(obj instanceof Node && vis.attrEquals("visual","true")) {
                 last = (Node) obj;
-                processNodeChildren(last,vis,objectMap, deferredBindings, virtualBindings);
+                processNodeChildren(last,vis, ctx);
             }
             u.p("last node is set to: " + last);
         }
@@ -37,23 +43,26 @@ public class AminoParser {
         for(final Elem binding : root.xpath("bindings/binding")) {
             if(binding.attrEquals("mirror","true")) {
                 u.p("it's a mirror binding. deferring");
-                deferredBindings.add(binding);
+                ctx.deferredBindings.add(binding);
                 continue;
             }
 
             if(binding.attrEquals("sourcevirtual","true")) {
-                virtualBindings.add(binding);
+                ctx.virtualBindings.add(binding);
                 continue;
             }
 
-            final Object src = objectMap.get(binding.attr("sourceid"));
-            final Object tgt = objectMap.get(binding.attr("targetid"));
+            final String srcId = binding.attr("sourceid");
+            final Object src = ctx.objectMap.get(srcId);
+            final String srcProp = binding.attr("sourceprop");
+            final Object tgt = ctx.objectMap.get(binding.attr("targetid"));
             final String tgtProp = binding.attr("targetprop");
-            u.p("working on binding: " + src + " to " + tgt + " : " + tgtProp);
+            //u.p("working on binding: " + src + ":" + srcProp + " to " + tgt + " : " + tgtProp);
 
             //applyBinding(binding);
 
-            if(binding.attrEquals("sourcetype", GuiTest.TriggerType.class.getName())) {
+            final Elem propElem = ctx.propMap.get(srcId).get(srcProp);
+            if(propElem.attr("type").equals(GuiTest.TriggerType.class.getName())) {
                 EventBus.getSystem().addListener(src, ActionEvent.Action, new Callback<Event>() {
                     public void call(Event event) throws Exception {
                         tgt.getClass().getMethod(tgtProp).invoke(tgt);
@@ -70,7 +79,6 @@ public class AminoParser {
                 continue;
             }
             if(binding.attrEquals("sourcetype","java.lang.Boolean")) {
-                u.p("doing a boolean bind");
                 EventBus.getSystem().addListener(src, ChangedEvent.BooleanChanged, new Callback<ChangedEvent>() {
                     public void call(ChangedEvent changedEvent) throws Exception {
                         setWithSetter(src, binding.attr("sourceprop"), tgt, tgtProp);
@@ -82,15 +90,15 @@ public class AminoParser {
         }
 
 
-        processVirtualBindings(virtualBindings, objectMap);
+        processVirtualBindings(ctx);
         return last;
     }
 
 
-    private static void processVirtualBindings(List<Elem> virtualBindings, Map<String,Object> objectMap) throws Exception {
-        for(Elem binding : virtualBindings) {
-            Object src = objectMap.get(binding.attr("sourceid"));
-            final Object tgt = objectMap.get(binding.attr("targetid"));
+    private static void processVirtualBindings(Context ctx) throws Exception {
+        for(Elem binding : ctx.virtualBindings) {
+            Object src = ctx.objectMap.get(binding.attr("sourceid"));
+            final Object tgt = ctx.objectMap.get(binding.attr("targetid"));
             final String srcprop = binding.attr("sourceprop");
             final String tgtprop = binding.attr("targetprop");
             String srcmaster = binding.attr("sourcemaster");
@@ -185,19 +193,20 @@ public class AminoParser {
         throw new Exception("Don't know how to coerce " + startClass + " to " + endClass);
     }
 
-    private static Object processNode(Elem vis, Map<String, Object> objectMap, List<Elem> deferredBindings, List<Elem> virtualBindings) throws IllegalAccessException, InstantiationException, ClassNotFoundException, XPathExpressionException {
-        String classname = vis.attr("class");
-
-        if(vis.attrEquals("custom","true")) {
-            classname = vis.attr("customClass");
-        }
-
-        if(vis.attrEquals("mirror","true")) {
+    private static Object processNode(Elem elem, Context ctx) throws Exception {
+        //skip mirrors for now
+        if(elem.attrEquals("mirror","true")) {
             u.p("loading up a mirror. we don't really need to do this. skip it");
             return null;
         }
-        Class clazz = null;
 
+        //determine the right class
+        String classname = elem.attr("class");
+        if(elem.attrEquals("custom","true")) {
+            classname = elem.attr("customClass");
+        }
+
+        Class clazz = null;
         try {
             clazz  = Class.forName(classname);
         } catch (ClassNotFoundException clfn) {
@@ -207,26 +216,24 @@ public class AminoParser {
         }
 
         Object obj = clazz.newInstance();
-        objectMap.put(vis.attr("id"),obj);
+        ctx.objectMap.put(elem.attr("id"),obj);
 
         try {
-            initObject(obj, vis, objectMap, deferredBindings, virtualBindings);
+            initObject(obj, elem, ctx);
         } catch (Exception ex) {
             u.p("problem with class: " + classname);
             u.p(ex);
         }
 
         if(obj instanceof Control) {
-            ((Control)obj).setId(vis.attr("id"));
+            ((Control)obj).setId(elem.attr("id"));
         }
         return obj;
     }
 
-    private static void processNodeChildren(Node root, Elem elem, Map<String, Object> objectMap,
-                                            List<Elem> deferredBindings, List<Elem> virtualBindings
-    ) throws XPathExpressionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+    private static void processNodeChildren(Node root, Elem elem, Context ctx) throws Exception {
         for(Elem vis : elem.xpath("children/node")) {
-            Object obj = processNode(vis, objectMap, deferredBindings, virtualBindings);
+            Object obj = processNode(vis, ctx);
             if(obj instanceof Node) {
                 Node child = (Node) obj;
                 if(root instanceof Container) {
@@ -246,16 +253,13 @@ public class AminoParser {
                     ((ScrollPane)root).setContent(child);
                 }
 
-                processNodeChildren(child, vis, objectMap, deferredBindings, virtualBindings);
+                processNodeChildren(child, vis, ctx);
             }
         }
     }
 
 
-    private static void initObject(Object node, final Elem xml, final Map<String, Object> objectMap,
-                                   final List<Elem> deferredBindings,
-                                   final List<Elem> virtualBindings
-    ) throws XPathExpressionException {
+    private static void initObject(Object node, final Elem xml, final Context ctx) throws XPathExpressionException {
         List<String> skipList = new ArrayList<String>();
         skipList.add("anchorLeft");
         skipList.add("anchorRight");
@@ -264,13 +268,17 @@ public class AminoParser {
         skipList.add("right");
         skipList.add("bottom");
 
+        String id = xml.attr("id");
+        ctx.propMap.put(id, new HashMap<String, Elem>());
         Class clazz = node.getClass();
         for(Elem eprop : xml.xpath("property")) {
-            if(skipList.contains(eprop.attr("name"))) continue;
-            if(eprop.attrEquals("exported", Boolean.FALSE.toString())) continue;
-            if(eprop.attrEquals("name", "class")) continue;
-
             String name = eprop.attr("name");
+
+            ctx.propMap.get(id).put(name,eprop);
+            if(skipList.contains(name)) continue;
+            if(eprop.attrEquals("exported", Boolean.FALSE.toString())) continue;
+            if(name.equals("class")) continue;
+
             if(eprop.hasAttr("exportname")) {
                 name = eprop.attr("exportname");
             }
@@ -325,12 +333,12 @@ public class AminoParser {
 
                         try {
                             GrabPanel panel = new GrabPanel();
-                            processNodeChildren(panel, xml, objectMap, deferredBindings, virtualBindings);
+                            processNodeChildren(panel, xml, ctx);
                             List<Control> controls = new ArrayList<Control>();
                             for (Control c : ((Container) panel.getChildren().get(0)).controlChildren()) {
                                 controls.add(c);
                             }
-                            processDeferredBindings(controls, objectMap, item, deferredBindings);
+                            processDeferredBindings(controls, item, ctx);
                             List<Node> children = panel.getChildren();
                             return (Control) children.get(0);
                         } catch (Exception e) {
@@ -344,12 +352,12 @@ public class AminoParser {
 
     }
 
-    private static void processDeferredBindings(List<Control> nodes, Map<String, Object> objectMap, Object dataItem, List<Elem> deferredBindings) {
+    private static void processDeferredBindings(List<Control> nodes, Object dataItem, Context ctx) {
         u.p("----------");
         u.p("doing a deferred binding");
         for(Control node : nodes) {
             String targetID = null;
-            for(Map.Entry<String,Object> entry : objectMap.entrySet()) {
+            for(Map.Entry<String,Object> entry : ctx.objectMap.entrySet()) {
                 if(entry.getValue() == node) {
                     u.p("found the id: " + entry.getKey() + " for node " + node);
                     targetID = entry.getKey();
@@ -358,7 +366,7 @@ public class AminoParser {
 
             u.p("target = " + targetID + " " + node);
             if(targetID == null) return;
-            for(Elem binding : deferredBindings) {
+            for(Elem binding : ctx.deferredBindings) {
                 if(binding.attrEquals("targetid",targetID)) {
                     u.p("found matching binding");
                     u.p("binding = " + binding.attr("sourceprop") + " => " + binding.attr("targetprop"));

@@ -9,13 +9,13 @@ import org.joshy.gfx.util.u;
 
 public class FlickrQuery {
     @Prop(bindable = true) public String query;
-    private ArrayListModel<String> results = new ArrayListModel<String>();
-    @Prop(bindable = true) public boolean active = false;
+    private ArrayListModel<Photo> results = new ArrayListModel<Photo>();
+    @Prop(bindable = true) public Boolean active = false;
 
 
     public FlickrQuery() {
         setQuery("london");
-        results.add("foo");
+        results.add(new Photo("london", "foo.png"));
         setActive(false);
     }
 
@@ -27,11 +27,11 @@ public class FlickrQuery {
         return query;
     }
 
-    public ListModel getResults() {
+    public ListModel<Photo> getResults() {
         return results;
     }
 
-    public void setResults(ListModel results) {
+    public void setResults(ListModel<Photo> results) {
         //this.results = results;
     }
 
@@ -39,14 +39,14 @@ public class FlickrQuery {
         u.p("flickr query starting");
         setActive(true);
         results.clear();
-        results.add(getQuery() + " one");
-        results.add(getQuery() + " two");
+        results.add(new Photo(getQuery() + " one", "foo.png"));
+        results.add(new Photo(getQuery() + " two", "foo.png"));
         BackgroundTask<String, String> task = new BackgroundTask<String, String>() {
             @Override
             protected String onWork(String s) {
                 try {
                     u.p("flickr query sleeping");
-                    Thread.sleep(5000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -55,8 +55,8 @@ public class FlickrQuery {
 
             @Override
             protected void onEnd(String result) {
-                results.add(getQuery() + " three");
-                results.add(getQuery() + " four");
+                results.add(new Photo(getQuery() + " three", "foo.png"));
+                results.add(new Photo(getQuery() + " four", "foo.png"));
                 setActive(false);
                 u.p("flickr query ending");
             }
@@ -72,4 +72,31 @@ public class FlickrQuery {
     public boolean isActive() {
         return active;
     }
+
+    public static class Photo {
+        @Prop (bindable = true) public String title;
+        @Prop (bindable = true) public String url;
+
+        public Photo(String title, String url) {
+            this.title = title;
+            this.url = url;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+    }
+
 }

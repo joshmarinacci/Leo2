@@ -130,4 +130,14 @@ public class BindingUtils {
         return node;
 
     }
+
+    public static Binding createBinding(DynamicNode source, String sname,
+                                        DynamicNode target, String tname) {
+        Binding binding = new Binding();
+        binding.setSource(source);
+        binding.setSourceProperty(source.getProperty(sname));
+        binding.setTarget(target);
+        binding.setTargetProperty(target.getProperty(tname));
+        return binding;
+    }
 }

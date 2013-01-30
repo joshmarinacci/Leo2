@@ -230,9 +230,10 @@ public class Property {
         return list;
     }
 
-    public void setItemPrototype(DynamicNode itemPrototype) {
+    public Property setItemPrototype(DynamicNode itemPrototype) {
         this.itemPrototype = itemPrototype;
         markChanged();
+        return this;
     }
 
     public DynamicNode getItemPrototype() {

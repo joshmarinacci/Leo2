@@ -405,19 +405,32 @@ public class AminoJavaMode extends Mode {
         });
 
 
+
         DynamicNode.DrawDelegate servicebaseDrawDelegate = drawMap.get("servicebase");
+
+        //flickr query
         DynamicNode flickrQuery = BindingUtils.parseAnnotatedPOJO(new FlickrQuery(), servicebaseDrawDelegate);
-        flickrQuery.setVisual(false).setResizable(false);
+        flickrQuery.setVisual(false);
         flickrQuery.copyPropertiesFrom(serviceBase);
         flickrQuery
                 .addProperty(new Property("class", String.class,
                         "com.joshondesign.treegui.modes.aminojava.FlickrQuery"))
                 .addProperty(new Property("execute", ActionProp.class, null)
                         .setBindable(true).setVisible(false))
-                .addProperty(new Property("results", ListModel.class, null)
-                        .setBindable(true).setVisible(false))
         ;
+
+        DynamicNode photo = BindingUtils.parseAnnotatedPOJO(new FlickrQuery.Photo("a","b"), servicebaseDrawDelegate);
+        photo.setVisual(false);
+        photo.copyPropertiesFrom(serviceBase);
+
+        Property dp = new Property("results", ListModel.class, null)
+                .setVisible(false).setBindable(true).setList(true)
+                .setItemPrototype(photo)
+                ;
+        flickrQuery.addProperty(dp);
         symbols.add(flickrQuery);
+
+
 
         DynamicNode action = new DynamicNode();
         action.setName("action");
@@ -526,12 +539,6 @@ public class AminoJavaMode extends Mode {
         symbols.add(compoundList);
 
 
-        //listview.add((DynamicNode)mirror.duplicate(null));
-        //listview.setContainer(true);
-
-        doGenerated(symbols, servicebaseDrawDelegate);
-
-
         DynamicNode toggleGroup = BindingUtils.parseAnnotatedPOJO(new ToggleGroupWrapper(), servicebaseDrawDelegate);
         toggleGroup.copyPropertiesFrom(serviceBase);
         toggleGroup.setName("Togglegroup");
@@ -540,11 +547,6 @@ public class AminoJavaMode extends Mode {
 
     }
 
-    private void doGenerated(TreeNode<SketchNode> symbols, DynamicNode.DrawDelegate base) {
-        FlickrSearch obj = new FlickrSearch();
-        DynamicNode node = BindingUtils.parseAnnotatedPOJO(obj, base);
-        symbols.add(node);
-    }
 
     public static class CheckboxWrapper {
         @Prop public CharSequence text = "checkbox";

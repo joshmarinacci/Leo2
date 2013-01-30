@@ -1,5 +1,7 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.Binding;
+import com.joshondesign.treegui.BindingUtils;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
@@ -12,14 +14,24 @@ import org.joshy.gfx.util.u;
 public class IOTest {
     public static  void main(String ... args) throws Exception {
         AminoJavaMode mode = new AminoJavaMode();
-        DynamicNode master = findSymbol(mode,"ListView");
 
         SketchDocument doc = new SketchDocument();
         Layer layer = new Layer();
-        layer.add(master.duplicate(null));
         Page page = new Page();
         page.add(layer);
         doc.add(page);
+
+        DynamicNode listViewMaster = findSymbol(mode,"ListView");
+        layer.add(listViewMaster.duplicate(null));
+        DynamicNode buttonMaster = findSymbol(mode,"Button");
+        DynamicNode buttonMasterDupe = (DynamicNode) buttonMaster.duplicate(null);
+        layer.add(buttonMasterDupe);
+
+        DynamicNode flickrMaster = findSymbol(mode,"FlickrQuery");
+        DynamicNode flickrMasterDupe = (DynamicNode) flickrMaster.duplicate(null);
+        layer.add(flickrMasterDupe);
+        Binding binding = BindingUtils.createBinding(buttonMasterDupe,"trigger",flickrMasterDupe,"execute");
+        doc.getBindings().add(binding);
 
         File file = File.createTempFile("foo","xml");
         AminoJavaXMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
@@ -38,19 +50,23 @@ public class IOTest {
         assertEquals(subProp.isCompound(),true);
         assertEquals(subProp.getMasterProperty(),"model");
 
+        DynamicNode button = (DynamicNode) doc2.get(0).get(0).get(1);
+        assertEquals(button.getSize(),0);
+        assertEquals(button.getProperty("trigger").getType(),GuiTest.TriggerType.class);
 
-        /*
-                Property subProp = new Property("selectedObject",Object.class,null);
-        subProp.setBindable(true);
-        subProp.setCompound(true);
-        subProp.setMasterProperty("model");
-
-         */
+        assertEquals(doc2.getBindings().size(),1);
+        Binding bind = doc2.getBindings().get(0);
+        assertEquals(bind.getSource(), button);
+        assertEquals(bind.getSourceProperty().getName(),"trigger");
+        assertEquals(bind.getSourceProperty().getType(),GuiTest.TriggerType.class);
 
 
     }
 
     private static void assertEquals(boolean a, boolean b) throws Exception {
+        if(a != b) throw new Exception();
+    }
+    private static void assertEquals(Object a, Object b) throws Exception {
         if(a != b) throw new Exception();
     }
     private static void assertEquals(int a, int b) throws Exception {
