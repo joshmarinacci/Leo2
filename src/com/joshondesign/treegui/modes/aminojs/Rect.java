@@ -1,4 +1,4 @@
-package com.joshondesign.treegui.modes.amino;
+package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;

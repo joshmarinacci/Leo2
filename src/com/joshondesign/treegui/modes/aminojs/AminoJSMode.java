@@ -1,4 +1,4 @@
-package com.joshondesign.treegui.modes.amino;
+package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
@@ -22,10 +22,11 @@ public class AminoJSMode extends Mode {
         rect.setId("Rect");
         symbols.add(rect);
 
+
         PushButton pushButton = new PushButton();
         pushButton.setId("PushButton");
         symbols.add(pushButton);
-
+        /*
         ToggleButton toggleButton = new ToggleButton();
         toggleButton.setId("toggle");
         symbols.add(toggleButton);
@@ -34,7 +35,7 @@ public class AminoJSMode extends Mode {
         checkButton.setId("check button");
         symbols.add(checkButton);
 
-        com.joshondesign.treegui.modes.amino.Slider slider = new Slider();
+        com.joshondesign.treegui.modes.aminojs.Slider slider = new Slider();
         slider.setId("Slider");
         symbols.add(slider);
 
@@ -83,7 +84,7 @@ public class AminoJSMode extends Mode {
         fq.setId("FlickrQuery");
         symbols.add(fq);
 
-
+        */
         add(symbols);
 
     }

@@ -1,4 +1,4 @@
-package com.joshondesign.treegui.modes.amino;
+package com.joshondesign.treegui.modes.aminojs;
 
 /**
  * Created with IntelliJ IDEA.

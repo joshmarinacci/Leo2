@@ -9,7 +9,7 @@ import com.joshondesign.treegui.leo2.SymbolsDragHandler;
 import com.joshondesign.treegui.model.FilterTreeNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListModel;
-import com.joshondesign.treegui.modes.amino.AminoJSMode;
+import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
 import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.treegui.modes.sketch.SketchMode;
 import com.joshondesign.xml.Doc;

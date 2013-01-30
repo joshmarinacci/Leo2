@@ -2,8 +2,8 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
-import com.joshondesign.treegui.modes.amino.ActionProp;
-import com.joshondesign.treegui.modes.amino.TriggerProp;
+import com.joshondesign.treegui.modes.aminojs.ActionProp;
+import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Prop;
 import com.joshondesign.treegui.modes.aminojava.Property;
