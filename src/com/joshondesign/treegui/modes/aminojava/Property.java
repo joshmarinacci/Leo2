@@ -96,7 +96,7 @@ public class Property {
     }
 
     public double getDoubleValue() {
-        if(type == Double.class) {
+        if(type == Double.class || type == Double.TYPE) {
             if(value instanceof Double) {
                 return ((Double)value).doubleValue();
             }
@@ -104,11 +104,11 @@ public class Property {
                 return ((Integer)value).doubleValue();
             }
         }
-        return 99;
+        return -9999;
     }
 
     public int getIntegerValue() {
-        if(type == Integer.class) {
+        if(type == Integer.class || type == Integer.TYPE) {
             if(value instanceof Integer) {
                 return ((Integer)value).intValue();
             }
@@ -116,7 +116,7 @@ public class Property {
                 return ((Integer)value).intValue();
             }
         }
-        return 99;
+        return -9999;
     }
 
     public String getStringValue() {
@@ -130,7 +130,7 @@ public class Property {
     }
 
     public boolean getBooleanValue() {
-        if(type == Boolean.class) {
+        if(type == Boolean.class || type == Boolean.TYPE) {
             return ((Boolean)value);
         }
         return false;
@@ -140,13 +140,13 @@ public class Property {
         return (FlatColor) value;
     }
 
-    public void setDoubleValue(double w) {
-        this.value = new Double(w);
+    public void setDoubleValue(double value) {
+        this.value = new Double(value);
         markChanged();
     }
 
-    public void setIntegerValue(int i) {
-        this.value = new Integer(i);
+    public void setIntegerValue(int value) {
+        this.value = new Integer(value);
         markChanged();
     }
 

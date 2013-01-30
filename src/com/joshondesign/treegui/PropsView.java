@@ -51,9 +51,13 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
 
         if(object instanceof DynamicNode) {
             setSelectionDynamicNode((DynamicNode)object);
-            return;
+        } else {
+            setSelectionPlainNode(object);
         }
 
+    }
+
+    private void setSelectionPlainNode(Object object) {
         List<Prop> props = findGetters(object);
         Collections.sort(props, new Comparator<Prop>() {
             public int compare(Prop a, Prop b) {
@@ -183,7 +187,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                 });
                 addControl(tb);
             }
-            if(prop.getType().isAssignableFrom(Double.class)) {
+            if(prop.getType().isAssignableFrom(Double.class) || prop.getType() == Double.TYPE) {
                 final Textbox tb = new Textbox();
                 tb.setText(""+prop.getDoubleValue());
                 tb.setPrefWidth(100);
@@ -212,7 +216,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                 addControl(tb);
             }
 
-            if(prop.getType().isAssignableFrom(Integer.class)) {
+            if(prop.getType().isAssignableFrom(Integer.class) || prop.getType() == Integer.TYPE) {
                 final Textbox tb = new Textbox();
                 tb.setText(""+prop.getIntegerValue());
                 tb.setPrefWidth(100);
