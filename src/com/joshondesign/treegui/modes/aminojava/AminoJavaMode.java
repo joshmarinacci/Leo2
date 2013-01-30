@@ -384,12 +384,12 @@ public class AminoJavaMode extends Mode {
         serviceBase.addProperty(new Property("translateX", Double.class, 0).setExported(false))
                 .addProperty(new Property("translateY", Double.class, 0).setExported(false))
                 .addProperty(new Property("width", Double.class, 90).setBindable(false).setExported(false))
-                .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
+                .addProperty(new Property("height", Double.class, 30).setBindable(false).setExported(false))
         ;
         drawMap.put("servicebase", new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
-                double w = 90;
-                double h = 50;
+                double w = node.getWidth();
+                double h = node.getHeight();
                 g.setPaint(FlatColor.YELLOW);
                 g.fillRoundRect(0, 0, w, h, 10, 10);
                 g.setPaint(FlatColor.BLACK);
