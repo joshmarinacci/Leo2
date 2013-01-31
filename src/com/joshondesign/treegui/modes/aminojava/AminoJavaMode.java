@@ -4,6 +4,7 @@ import com.joshondesign.treegui.BindingUtils;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.*;
+import com.joshondesign.treegui.model.Prop;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import java.util.ArrayList;
@@ -549,7 +550,8 @@ public class AminoJavaMode extends Mode {
 
 
     public static class CheckboxWrapper {
-        @Prop public CharSequence text = "checkbox";
+        @Prop
+        public CharSequence text = "checkbox";
         @Prop public Boolean selected = false;
         @Prop(exported = false, visible = false) public String resize = "horizontal";
         @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Checkbox.class.getName();

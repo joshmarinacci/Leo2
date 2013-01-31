@@ -6,6 +6,7 @@ import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -61,6 +62,19 @@ public class IOTest {
         assertEquals(bind.getSourceProperty().getType(),GuiTest.TriggerType.class);
 
 
+
+        testJSExport();
+    }
+
+    private static void testJSExport() throws Exception {
+        AminoJSMode mode = new AminoJSMode();
+        SketchDocument doc = mode.createEmptyDoc();
+        File file = File.createTempFile("foo","xml");
+        AminoJavaXMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
+        u.p("exported to : " + file.getAbsolutePath());
+
+        SketchDocument doc2 = AminoJavaXMLImport.read(file);
+        u.p("doc 2. child count =  " + doc2.getSize());
     }
 
     private static void assertEquals(boolean a, boolean b) throws Exception {

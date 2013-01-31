@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.model.Prop;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;

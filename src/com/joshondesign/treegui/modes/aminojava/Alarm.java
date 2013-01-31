@@ -1,5 +1,7 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.model.Prop;
+
 /**
  * Created with IntelliJ IDEA.
  * User: josh

@@ -1,7 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
-import com.joshondesign.treegui.modes.aminojava.Prop;
+import com.joshondesign.treegui.model.Prop;
 
 /**
  * Created with IntelliJ IDEA.

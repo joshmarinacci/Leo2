@@ -1,4 +1,4 @@
-package com.joshondesign.treegui.modes.aminojava;
+package com.joshondesign.treegui.model;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

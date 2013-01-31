@@ -2,7 +2,7 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
-import com.joshondesign.treegui.modes.aminojava.Prop;
+import com.joshondesign.treegui.model.Prop;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

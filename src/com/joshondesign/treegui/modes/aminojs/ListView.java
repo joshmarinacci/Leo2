@@ -1,8 +1,8 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
-import com.joshondesign.treegui.modes.aminojava.Metadata;
-import com.joshondesign.treegui.modes.aminojava.Prop;
+import com.joshondesign.treegui.model.Metadata;
+import com.joshondesign.treegui.model.Prop;
 import java.util.Arrays;
 import java.util.List;
 import org.joshy.gfx.draw.GFX;
