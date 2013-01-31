@@ -1,6 +1,8 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Metadata;
+import com.joshondesign.treegui.modes.aminojava.Prop;
 import java.awt.geom.Point2D;
 import java.util.List;
 import org.joshy.gfx.draw.FlatColor;
@@ -8,6 +10,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
+@Metadata
 public class FlickrQuery extends SketchNode {
     private boolean active;
 
@@ -40,7 +43,7 @@ public class FlickrQuery extends SketchNode {
         return new Bounds(0,0,80,80);
     }
 
-
+    @Prop
     public String getQuery() {
         return query;
     }
@@ -51,6 +54,7 @@ public class FlickrQuery extends SketchNode {
 
     private String query = "";
 
+    @Prop
     public List<Object> getResults() {
         return results;
     }
@@ -61,6 +65,7 @@ public class FlickrQuery extends SketchNode {
 
     List<Object> results;
 
+    @Prop(visible = false)
     public ActionProp getExecute() {
         return new ActionProp();
     }
@@ -78,6 +83,7 @@ public class FlickrQuery extends SketchNode {
         this.active = active;
     }
 
+    @Prop
     public boolean isActive() {
         return active;
     }

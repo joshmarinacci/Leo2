@@ -3,12 +3,15 @@ package com.joshondesign.treegui;
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Metadata;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Prop;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.joshy.gfx.util.u;
 
 public class BindingUtils {
@@ -103,6 +106,8 @@ public class BindingUtils {
         ;
         try {
             parseFields(obj.getClass().getFields(), obj, node);
+            parseMethods(obj.getClass().getMethods(), obj, node);
+            parseClassInfo(obj.getClass(), obj, node);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -128,12 +133,45 @@ public class BindingUtils {
                 if(resize == ResizableRectNode.ResizeConstraint.PreserveAspectOnly) {
                     resizeProp.setStringValue("aspect");
                 }
+                if(resize == ResizableRectNode.ResizeConstraint.None) {
+                    resizeProp.setStringValue("none");
+                    node.setResizable(false);
+                }
                 node.addProperty(resizeProp);
             }
         }
 
         return node;
 
+    }
+
+    private static void parseClassInfo(Class aClass, Object obj, DynamicNode node) {
+        if(aClass.isAnnotationPresent(Metadata.class)) {
+            u.p("annotated!");
+            Metadata info = (Metadata) aClass.getAnnotation(Metadata.class);
+            node.setVisual(info.visual());
+            if(!info.exportClass().trim().equals("")) {
+                node.addProperty(new Property("class", String.class, info.exportClass()));
+            }
+        }
+    }
+
+    private static void parseMethods(Method[] methods, Object obj, DynamicNode node) throws InvocationTargetException, IllegalAccessException {
+        for(Method method : methods) {
+            if(method.isAnnotationPresent(Prop.class)) {
+                Prop prop = method.getAnnotation(Prop.class);
+                String name = method.getName();
+                if(name.startsWith("get")) {
+                    name = name.substring(3,4).toLowerCase() + name.substring(4);
+                }
+                u.p("method = " + method.getName() + " type = " + method.getReturnType());
+                Property p = new Property(name, method.getReturnType(), method.invoke(obj));
+                p.setBindable(prop.bindable());
+                p.setVisible(prop.visible());
+                p.setExported(prop.exported());
+                node.addProperty(p);
+            }
+        }
     }
 
     private static void parseFields(Field[] fields, Object obj, DynamicNode node) throws IllegalAccessException {
@@ -144,7 +182,7 @@ public class BindingUtils {
 
             if(field.isAnnotationPresent(Prop.class)) {
                 Prop prop = field.getAnnotation(Prop.class);
-                u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
+                //u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
 //                    u.p("  bindable = " + prop.bindable());
                 String name = field.getName();
                 if(name.equals("clazz")) {

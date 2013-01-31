@@ -11,7 +11,7 @@ public abstract class ResizableRectNode extends SketchNode {
     }
 
     public static enum ResizeConstraint {
-        Any, VerticalOnly, HorizontalOnly, PreserveAspectOnly
+        Any, VerticalOnly, HorizontalOnly, None, PreserveAspectOnly
     }
 
     public ResizeConstraint getConstraint() {
@@ -23,7 +23,7 @@ public abstract class ResizableRectNode extends SketchNode {
     }
 
 
-    @Prop(visible = false) public ResizeConstraint constraint;
+    @Prop(visible = false, bindable = false) public ResizeConstraint constraint;
 
     @Override
     public boolean contains(Point2D pt) {

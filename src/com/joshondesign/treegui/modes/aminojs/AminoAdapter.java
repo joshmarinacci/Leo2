@@ -25,10 +25,19 @@ public class AminoAdapter {
 //        if(node instanceof Image) return "ImageView";
         u.p("node = " + node);
         for(Property prop : node.getProperties()){
-            //u.p("   " + prop.getName() + " " + prop.getRawValue());
+            u.p("   " + prop.getName() + " " + prop.getRawValue());
         }
-        Class clazz = (Class) node.getProperty("class").getRawValue();
-        return clazz.getSimpleName();
+        if(!node.hasProperty("class")) {
+            u.p("warning. missing a class on a node " + node.getName());
+        }
+        Object val = node.getProperty("class").getRawValue();
+        if(val instanceof Class) {
+            return ((Class)val).getSimpleName();
+        }
+        if(val instanceof String) {
+            return (String) val;
+        }
+        return null;
     }
 
     public static Map<String,Object> getProps(SketchNode node) {
@@ -106,10 +115,14 @@ public class AminoAdapter {
         return false;
     }
 
-    public static boolean shouldExportProperty(SketchNode node, String name) {
+    public static boolean shouldExportProperty(SketchNode node, Property prop) {
+        if(!prop.isExported()) return false;
+        String name = prop.getName();
         if("class".equals(name)) return false;
         if("this".equals(name)) return false;
         if("constraint".equals(name)) return false;
+        if("resize".equals(name)) return false;
+        if("trigger".equals(name)) return false;
         if(node instanceof FlickrQuery) {
             if("execute".equals(name)) return false;
             if("results".equals(name)) return false;
@@ -119,10 +132,6 @@ public class AminoAdapter {
         if(node instanceof ControlListModel) {
             if("this".equals(name)) return false;
             if(name.startsWith("item")) return false;
-        }
-
-        if(node instanceof PushButton) {
-            if("trigger".equals(name)) return false;
         }
 
         return true;

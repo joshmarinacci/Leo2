@@ -119,7 +119,7 @@ public class HTMLBindingExport extends AminoAction {
         w.indent();
         for(Property prop : node.getProperties()) {
             u.p("writing: " + prop.getName() + " " + prop.getRawValue());
-            if(!AminoAdapter.shouldExportProperty(node,prop.getName())) continue;
+            if(!AminoAdapter.shouldExportProperty(node,prop)) continue;
             String key = prop.getName();
             if(key.equals("translateX")) key = "x";
             if(key.equals("translateY")) key = "y";

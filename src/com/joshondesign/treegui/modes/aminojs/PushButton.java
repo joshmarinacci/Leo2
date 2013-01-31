@@ -2,11 +2,13 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Metadata;
 import com.joshondesign.treegui.modes.aminojava.Prop;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
+@Metadata(exportClass = "PushButton")
 public class PushButton extends ResizableRectNode {
 
     @Prop
@@ -18,7 +20,7 @@ public class PushButton extends ResizableRectNode {
         setWidth(70);
         setHeight(20);
         setText("a button");
-        setConstraint(ResizeConstraint.HorizontalOnly);
+        setConstraint(ResizeConstraint.None);
     }
 
     @Override
