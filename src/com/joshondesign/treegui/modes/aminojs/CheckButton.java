@@ -1,14 +1,17 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Metadata;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
+@Metadata(visual = true, exportClass = "CheckButton")
 public class CheckButton extends ToggleButton {
     public CheckButton() {
         setText("check button");
         setWidth(100);
+        setHeight(30);
     }
 
     @Override

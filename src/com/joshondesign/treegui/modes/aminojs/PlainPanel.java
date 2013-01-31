@@ -12,6 +12,10 @@ public class PlainPanel extends ResizableRectNode {
     @Prop
     public String title;
 
+    @Prop public double translateX = 0;
+    @Prop public double width = 100;
+    @Prop public double height = 100;
+
     @Prop
     public Class clazz = PlainPanel.class;
 

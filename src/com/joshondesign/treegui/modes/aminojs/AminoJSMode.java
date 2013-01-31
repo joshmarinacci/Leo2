@@ -233,6 +233,6 @@ public class AminoJSMode extends Mode {
 
     @Override
     public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
-        fileMenu.addItem("Export HTML", new HTMLBindingExport(doc));
+        fileMenu.addItem("Export HTML", "E", new HTMLBindingExport(doc));
     }
 }
