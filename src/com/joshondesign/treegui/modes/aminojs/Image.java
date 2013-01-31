@@ -2,17 +2,12 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.Metadata;
 import com.joshondesign.treegui.modes.aminojava.Prop;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/8/13
- * Time: 10:18 AM
- * To change this template use File | Settings | File Templates.
- */
+@Metadata(visual = true, exportClass = "ImageView")
 public class Image extends ResizableRectNode {
     @Prop public String src;
 

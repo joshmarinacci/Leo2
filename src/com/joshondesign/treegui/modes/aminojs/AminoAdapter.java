@@ -103,12 +103,13 @@ public class AminoAdapter {
         return false;
     }
 
-    public static boolean useSetup(SketchNode node) {
+    public static boolean useSetup(DynamicNode node) {
+        if(node.getName().equals("Image")) return false;
         if(node.isVisual()) return true;
         return false;
     }
 
-    public static boolean shouldExportProperty(SketchNode node, Property prop) {
+    public static boolean shouldExportProperty(DynamicNode node, Property prop) {
         if(!prop.isExported()) return false;
         String name = prop.getName();
         if("class".equals(name)) return false;
@@ -116,6 +117,12 @@ public class AminoAdapter {
         if("constraint".equals(name)) return false;
         if("resize".equals(name)) return false;
         if("trigger".equals(name)) return false;
+
+        if(node.getName().equals("Image")) {
+            if("width".equals(name)) return false;
+            if("height".equals(name)) return false;
+        }
+        /*
         if(node instanceof FlickrQuery) {
             if("execute".equals(name)) return false;
             if("results".equals(name)) return false;
@@ -126,7 +133,7 @@ public class AminoAdapter {
             if("this".equals(name)) return false;
             if(name.startsWith("item")) return false;
         }
-
+    */
         return true;
     }
 

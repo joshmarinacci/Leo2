@@ -43,7 +43,7 @@ public class HTMLBindingExport extends AminoAction {
                     if(node.isVisual() && AminoAdapter.shouldAddToScene(node, document.getBindings())) {
                         w.p("root.add(" + node.getId() + ");");
                     }
-                    if(AminoAdapter.useSetup(node)) {
+                    if(AminoAdapter.useSetup(dnode)) {
                         w.p(node.getId()+".setup(root);");
                     }
                 }
@@ -96,6 +96,22 @@ public class HTMLBindingExport extends AminoAction {
                 out.println("    "+binding.getTarget().getId()+".execute();");
             out.println("});");
             return;
+        }
+
+        if(binding.getSource().getName().equals("ListView")) {
+            if(binding.getSourceProperty().isProxy()) {
+                u.p("it's a proxy! " + binding.getSourceProperty().getName());
+                u.p("master = " + binding.getSourceProperty().getMasterProperty());
+                String n = binding.getTargetProperty().getName();
+                String setterName = "set"+n.substring(0,1).toUpperCase()+n.substring(1);
+                out.println(
+                    binding.getSource().getId()+".listen(function(e){\n"
+                    +"  var val = e.getSelectedObject()."+binding.getSourceProperty().getName()+";\n"
+                    +"  "+binding.getTarget().getId()+"."+setterName+"(val);\n"
+                    +"});\n"
+                );
+                return;
+            }
         }
 
         out.println(

@@ -162,6 +162,7 @@ public class AminoJSMode extends Mode {
         Property subProp = new Property("selectedObject",Object.class,null);
         subProp.setBindable(true);
         subProp.setCompound(true);
+        subProp.setExported(false);
         subProp.setMasterProperty("data");
         listview.addProperty(subProp);
 
