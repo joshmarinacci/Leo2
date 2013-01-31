@@ -1,6 +1,7 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.actions.JAction;
+import com.joshondesign.treegui.actions.XMLImport;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
@@ -9,8 +10,8 @@ import com.joshondesign.treegui.leo2.SymbolsDragHandler;
 import com.joshondesign.treegui.model.FilterTreeNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListModel;
-import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
 import com.joshondesign.treegui.modes.aminojava.*;
+import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
 import com.joshondesign.treegui.modes.sketch.SketchMode;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
@@ -170,7 +171,7 @@ public class Leo2 {
     private static void doNewDoc(Mode mode, File docFile) throws Exception {
         //init doc
         SketchDocument doc = null;
-        doc = AminoJavaXMLImport.read(docFile);
+        doc = XMLImport.read(docFile);
         doc.setFile(docFile);
         doNewDoc(mode, doc);
     }

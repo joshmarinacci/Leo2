@@ -2,6 +2,8 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.BindingUtils;
+import com.joshondesign.treegui.actions.XMLExport;
+import com.joshondesign.treegui.actions.XMLImport;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
@@ -14,6 +16,11 @@ import org.joshy.gfx.util.u;
 
 public class IOTest {
     public static  void main(String ... args) throws Exception {
+        testJavaExport();
+        testJSExport();
+    }
+
+    private static void testJavaExport() throws Exception {
         AminoJavaMode mode = new AminoJavaMode();
 
         SketchDocument doc = new SketchDocument();
@@ -31,14 +38,14 @@ public class IOTest {
         DynamicNode flickrMaster = findSymbol(mode,"FlickrQuery");
         DynamicNode flickrMasterDupe = (DynamicNode) flickrMaster.duplicate(null);
         layer.add(flickrMasterDupe);
-        Binding binding = BindingUtils.createBinding(buttonMasterDupe,"trigger",flickrMasterDupe,"execute");
+        Binding binding = BindingUtils.createBinding(buttonMasterDupe, "trigger", flickrMasterDupe, "execute");
         doc.getBindings().add(binding);
 
         File file = File.createTempFile("foo","xml");
-        AminoJavaXMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
+        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
         u.p("exported to : " + file.getAbsolutePath());
 
-        SketchDocument doc2 = AminoJavaXMLImport.read(file);
+        SketchDocument doc2 = XMLImport.read(file);
         u.p("doc 2 ");
 
         assertEquals(doc2.getSize(), 1);
@@ -60,20 +67,16 @@ public class IOTest {
         assertEquals(bind.getSource(), button);
         assertEquals(bind.getSourceProperty().getName(),"trigger");
         assertEquals(bind.getSourceProperty().getType(),GuiTest.TriggerType.class);
-
-
-
-        testJSExport();
     }
 
     private static void testJSExport() throws Exception {
         AminoJSMode mode = new AminoJSMode();
         SketchDocument doc = mode.createEmptyDoc();
         File file = File.createTempFile("foo","xml");
-        AminoJavaXMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
+        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
         u.p("exported to : " + file.getAbsolutePath());
 
-        SketchDocument doc2 = AminoJavaXMLImport.read(file);
+        SketchDocument doc2 = XMLImport.read(file);
         u.p("doc 2. child count =  " + doc2.getSize());
     }
 
