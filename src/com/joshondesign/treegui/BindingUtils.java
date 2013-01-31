@@ -1,5 +1,6 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
@@ -104,6 +105,31 @@ public class BindingUtils {
             parseFields(obj.getClass().getFields(), obj, node);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+
+        if(node.hasProperty("constraint")) {
+            Property con = node.getProperty("constraint");
+            if(con.getType() == ResizableRectNode.ResizeConstraint.class) {
+                node.setResizable(true);
+                ResizableRectNode.ResizeConstraint resize = (ResizableRectNode.ResizeConstraint) con.getEnumValue();
+                Property resizeProp = new Property("resize", String.class, "any")
+                        .setExported(false)
+                        .setVisible(false);
+
+                if(resize == ResizableRectNode.ResizeConstraint.Any) {
+                    resizeProp.setStringValue("any");
+                }
+                if(resize == ResizableRectNode.ResizeConstraint.HorizontalOnly) {
+                    resizeProp.setStringValue("horz");
+                }
+                if(resize == ResizableRectNode.ResizeConstraint.VerticalOnly) {
+                    resizeProp.setStringValue("vert");
+                }
+                if(resize == ResizableRectNode.ResizeConstraint.PreserveAspectOnly) {
+                    resizeProp.setStringValue("aspect");
+                }
+                node.addProperty(resizeProp);
+            }
         }
 
         return node;

@@ -167,8 +167,8 @@ public class Property {
     }
 
     public void setStringValue(String text) {
-        markChanged();
         this.value = text;
+        markChanged();
     }
 
     public void setDoubleValue(String text) {
