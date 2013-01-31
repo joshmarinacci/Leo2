@@ -10,6 +10,9 @@ public class PlainPanel extends ResizableRectNode {
     @Prop
     public String title;
 
+    @Prop
+    public Class clazz = PlainPanel.class;
+
     public PlainPanel() {
         setTitle("A Panel");
     }

@@ -6,7 +6,6 @@ import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
-import com.joshondesign.treegui.modes.aminojs.Rect;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -585,7 +584,7 @@ public class AminoJavaMode extends Mode {
     public SketchDocument createEmptyDoc() {
         SketchDocument doc = new SketchDocument();
         Layer layer = new Layer();
-        layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
+        layer.add(findSymbol("Panel").duplicate(null));
         Page page = new Page();
         page.add(layer);
         doc.add(page);

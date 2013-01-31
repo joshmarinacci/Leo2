@@ -4,6 +4,7 @@ import com.joshondesign.treegui.docmodel.Selection;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.util.ArrayList;
 import java.util.List;
 import org.joshy.gfx.event.AminoAction;
@@ -39,4 +40,17 @@ public abstract class Mode extends TreeNode {
     }
 
     public abstract void modifyFileMenu(Menu fileMenu, SketchDocument doc);
+
+    protected DynamicNode findSymbol(String name) {
+        for(SketchNode node : getSymbols().children()) {
+            if(node instanceof DynamicNode) {
+                DynamicNode nd = (DynamicNode) node;
+                if(nd.getName().equals(name)) {
+                    return nd;
+                }
+            }
+        }
+        return null;
+    }
+
 }

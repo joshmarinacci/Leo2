@@ -5,6 +5,8 @@ import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminojava.Property;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -38,7 +40,8 @@ public class HTMLBindingExport extends AminoAction {
                 w.p("//layer");
                 w.indent();
                 for(SketchNode node : layer.children()) {
-                    exportNode(w, node, true);
+                    DynamicNode dnode = (DynamicNode) node;
+                    exportNode(w, dnode, true);
                     if(node.isVisual() && AminoAdapter.shouldAddToScene(node, document.getBindings())) {
                         w.p("root.add(" + node.getId() + ");");
                     }
@@ -105,27 +108,27 @@ public class HTMLBindingExport extends AminoAction {
                         "binder.start();\n");
     }
 
-    private void exportNode(PropWriter w, SketchNode node, boolean includeVar) {
+    private void exportNode(PropWriter w, DynamicNode node, boolean includeVar) {
         u.p("doing node: " + node);
 
         if(includeVar) {
-        w.newObj(node.getId(), AminoAdapter.getScriptClass(node));
+            w.newObj(node.getId(), AminoAdapter.getScriptClass(node));
         } else {
             w.newObj(AminoAdapter.getScriptClass(node));
         }
         w.indent();
-        for(Map.Entry<String,Object> props : AminoAdapter.getProps(node).entrySet()) {
-            u.p("writing: " + props.getKey() + " " + props.getValue());
-            if(!AminoAdapter.shouldExportProperty(node,props.getKey())) continue;
-            String key = props.getKey();
+        for(Property prop : node.getProperties()) {
+            u.p("writing: " + prop.getName() + " " + prop.getRawValue());
+            if(!AminoAdapter.shouldExportProperty(node,prop.getName())) continue;
+            String key = prop.getName();
             if(key.equals("translateX")) key = "x";
             if(key.equals("translateY")) key = "y";
-            w.prop(key,props.getValue());
+            w.prop(key,prop.getRawValue());
         }
 
         for(SketchNode child : node.children()) {
             w.p(".add(");
-            exportNode(w, child, false);
+            exportNode(w, (DynamicNode) child, false);
             w.p(")");
         }
         if(includeVar) {

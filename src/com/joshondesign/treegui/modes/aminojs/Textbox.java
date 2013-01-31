@@ -7,17 +7,10 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/8/13
- * Time: 10:18 AM
- * To change this template use File | Settings | File Templates.
- */
 public class Textbox extends ResizableRectNode {
 
-    @Prop
-    public String text;
+    @Prop public String text;
+    @Prop public Class clazz = Textbox.class;
 
     public Textbox() {
         setWidth(80);

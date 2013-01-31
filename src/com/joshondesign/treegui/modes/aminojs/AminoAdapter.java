@@ -2,6 +2,8 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminojava.Property;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,11 +18,17 @@ public class AminoAdapter {
         String[] skipListArray = {"class","inputBounds","size","constraint","visual","container","parent","resizable"};
         skipList = Arrays.asList(skipListArray);
     }
-    public static String getScriptClass(SketchNode node) {
-        if(node instanceof StringListModel) return "ListModel";
-        if(node instanceof ControlListModel) return "ListModel";
-        if(node instanceof Image) return "ImageView";
-        return node.getClass().getSimpleName();
+    public static String getScriptClass(DynamicNode node) {
+
+//        if(node instanceof StringListModel) return "ListModel";
+//        if(node instanceof ControlListModel) return "ListModel";
+//        if(node instanceof Image) return "ImageView";
+        u.p("node = " + node);
+        for(Property prop : node.getProperties()){
+            //u.p("   " + prop.getName() + " " + prop.getRawValue());
+        }
+        Class clazz = (Class) node.getProperty("class").getRawValue();
+        return clazz.getSimpleName();
     }
 
     public static Map<String,Object> getProps(SketchNode node) {
@@ -99,7 +107,9 @@ public class AminoAdapter {
     }
 
     public static boolean shouldExportProperty(SketchNode node, String name) {
+        if("class".equals(name)) return false;
         if("this".equals(name)) return false;
+        if("constraint".equals(name)) return false;
         if(node instanceof FlickrQuery) {
             if("execute".equals(name)) return false;
             if("results".equals(name)) return false;

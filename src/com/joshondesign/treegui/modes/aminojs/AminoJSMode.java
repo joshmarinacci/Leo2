@@ -38,10 +38,10 @@ public class AminoJSMode extends Mode {
         visualBase.addProperty(new Property("translateY", Double.class, 0));
         visualBase.addProperty(new Property("width", Double.class, 80))
                 .addProperty(new Property("height", Double.class, 30))
-                .addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false))
-                .addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false))
-                .addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false))
-                .addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false))
+//                .addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false))
+//                .addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false))
+//                .addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false))
+//                .addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false))
         ;
 
         drawMap.put("PushButton", new DynamicNode.DrawDelegate() {
@@ -72,6 +72,7 @@ public class AminoJSMode extends Mode {
 
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new PushButton(), drawMap.get("PushButton"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
 
         symbols.add(BindingUtils
@@ -145,19 +146,24 @@ public class AminoJSMode extends Mode {
 
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new Slider(), drawMap.get("Slider"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
 
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new Image(), drawMap.get("Image"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new Textbox(), drawMap.get("TextBox"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new Label(), drawMap.get("Label"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new ListView(), drawMap.get("ListView"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
 
 
@@ -195,24 +201,30 @@ public class AminoJSMode extends Mode {
 
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new PlainPanel(), drawMap.get("PlainPanel"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
 
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new TabPanel(), drawMap.get("PlainPanel"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
 
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new StringListModel(), drawMap.get("PlainPanel"))
+                .setVisual(false)
                 .copyPropertiesFrom(visualBase));
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new ControlListModel(), drawMap.get("TabPanel"))
+                .setVisual(false)
                 .copyPropertiesFrom(visualBase));
 
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new Spinner(), drawMap.get("Spinner"))
+                .setVisual(true)
                 .copyPropertiesFrom(visualBase));
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new FlickrQuery(), drawMap.get("FlickrQuery"))
+                .setVisual(false)
                 .copyPropertiesFrom(visualBase));
         add(symbols);
 
@@ -227,7 +239,7 @@ public class AminoJSMode extends Mode {
     public SketchDocument createEmptyDoc() {
         SketchDocument doc = new SketchDocument();
         Layer layer = new Layer();
-        layer.add(new Rect().setFill(FlatColor.GREEN).setWidth(50).setHeight(50));
+        layer.add(findSymbol("PlainPanel").duplicate(null));
         Page page = new Page();
         page.add(layer);
         doc.add(page);
