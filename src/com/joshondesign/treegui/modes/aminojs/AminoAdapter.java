@@ -104,14 +104,7 @@ public class AminoAdapter {
     }
 
     public static boolean useSetup(SketchNode node) {
-        if(node instanceof Slider) return true;
-        if(node instanceof TabPanel) return true;
-        if(node instanceof PlainPanel) return true;
-        if(node instanceof ToggleButton) return true;
-        if(node instanceof CheckButton) return true;
-        if(node instanceof PushButton) return true;
-        if(node instanceof Textbox) return true;
-        if(node instanceof Spinner) return true;
+        if(node.isVisual()) return true;
         return false;
     }
 
@@ -138,6 +131,11 @@ public class AminoAdapter {
     }
 
     public static boolean shouldExportAsSetter(Binding binding) {
+        if(binding.getSource().getName().equals("FlickrQuery")) {
+            if(binding.getSourceProperty().getName().equals("results")) {
+                return true;
+            }
+        }
 //        if(binding.getSource() instanceof StringListModel) return true;
 //        if(binding.getSource() instanceof ControlListModel) return true;
 //        if(binding.getSource() instanceof FlickrQuery) {
@@ -147,12 +145,7 @@ public class AminoAdapter {
     }
 
     public static boolean shouldExportAsTrigger(Binding binding) {
-//        if(binding.getSource() instanceof PushButton) {
-//            if(binding.getSourceProperty().equals("trigger")) {
-//                return true;
-//            }
-//        }
-
+        if(binding.getSourceProperty().getType() == TriggerProp.class) return true;
         return false;
     }
 

@@ -9,10 +9,7 @@ import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.util.OSUtil;
@@ -103,15 +100,16 @@ public class HTMLBindingExport extends AminoAction {
 
         out.println(
                 "var binder = new Binder()"
-                        +".set("+binding.getSource().getId()+",'"+binding.getSourceProperty()+"',"
-                        +binding.getTarget().getId()+",'"+binding.getTargetProperty()+"');\n" +
+                        +".set("+binding.getSource().getId()+",'"+binding.getSourceProperty().getName()+"',"
+                        +binding.getTarget().getId()+",'"+binding.getTargetProperty().getName()+"');\n" +
                         "engine.addAnim(binder);\n"+
                         "binder.start();\n");
     }
 
     private void exportNode(PropWriter w, DynamicNode node, boolean includeVar) {
-        //u.p("doing node: " + node);
+        u.p("doing node: " + node);
         String[] visualOnlyProps = new String[]{"x","y","width","height"};
+        List<String> resizeOnlyProps = Arrays.asList("width", "height");
 
         if(includeVar) {
             w.newObj(node.getId(), AminoAdapter.getScriptClass(node));
@@ -121,11 +119,20 @@ public class HTMLBindingExport extends AminoAction {
         w.indent();
         for(Property prop : node.getProperties()) {
             if(!AminoAdapter.shouldExportProperty(node,prop)) continue;
-            //u.p("writing: " + prop.getName() + " " + prop.getRawValue() + " exported = " + prop.isExported());
+            u.p("writing: " + prop.getName() + " " + prop.getRawValue() + " exported = " + prop.isExported());
             String key = prop.getName();
             if(key.equals("translateX")) key = "x";
             if(key.equals("translateY")) key = "y";
             if(!node.isVisual() && Arrays.asList(visualOnlyProps).contains(key)) continue;
+            if(node.isResizable()){
+                String resize = node.getProperty("resize").getStringValue();
+                if(!"any".equals(resize)) {
+                    if(resizeOnlyProps.contains(key)) continue;
+                }
+            }
+            if(!node.isResizable()) {
+                if(resizeOnlyProps.contains(key)) continue;
+            }
             w.prop(key, prop.getRawValue());
         }
 
