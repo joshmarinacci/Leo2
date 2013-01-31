@@ -10,6 +10,7 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +29,6 @@ public class AminoJSMode extends Mode {
 
 
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
-        Rect rect = new Rect();
-        rect.setId("Rect");
-        symbols.add(rect);
 
 
         DynamicNode visualBase = new DynamicNode();
@@ -132,9 +130,13 @@ public class AminoJSMode extends Mode {
                 g.setPaint(FlatColor.BLACK);
 
                 List<String> data = (List<String>) node.getProperty("data").getRawValue();
-
-                for(int i=0; i<data.size(); i++) {
-                    g.drawText(data.get(i), Font.DEFAULT, 5, i*20+20);
+                if(data == null) {
+                    data = Arrays.asList("dummy", "dummy", "dummy");
+                }
+                if(data != null) {
+                    for(int i=0; i<data.size(); i++) {
+                        g.drawText(data.get(i), Font.DEFAULT, 5, i*20+20);
+                    }
                 }
 
                 g.drawRect(0, 0, w, h);
@@ -245,6 +247,7 @@ public class AminoJSMode extends Mode {
     @Override
     public SketchDocument createEmptyDoc() {
         SketchDocument doc = new SketchDocument();
+        doc.setModeId(this.getId());
         Layer layer = new Layer();
         layer.add(findSymbol("PlainPanel").duplicate(null));
         Page page = new Page();
@@ -256,5 +259,10 @@ public class AminoJSMode extends Mode {
     @Override
     public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
         fileMenu.addItem("Export HTML", "E", new HTMLBindingExport(doc));
+    }
+
+    @Override
+    public Map<String,DynamicNode.DrawDelegate> getDrawMap() {
+        return drawMap;
     }
 }

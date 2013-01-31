@@ -9,6 +9,7 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
+import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.Menu;
@@ -85,5 +86,10 @@ public class SketchMode extends Mode {
     @Override
     public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Map<String, DynamicNode.DrawDelegate> getDrawMap() {
+        return null;
     }
 }

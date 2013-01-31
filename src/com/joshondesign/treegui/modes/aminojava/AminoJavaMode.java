@@ -627,6 +627,11 @@ public class AminoJavaMode extends Mode {
     }
 
     @Override
+    public Map<String, DynamicNode.DrawDelegate> getDrawMap() {
+        return drawMap;
+    }
+
+    @Override
     public void modifyViewMenu(Menu viewMenu, SketchDocument doc) {
         super.modifyViewMenu(viewMenu, doc);
         viewMenu.addItem("Snap to Grid", SnapToGridAction(doc));

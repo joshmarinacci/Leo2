@@ -7,6 +7,7 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.node.control.Menu;
 
@@ -53,4 +54,5 @@ public abstract class Mode extends TreeNode {
         return null;
     }
 
+    public abstract Map<String, DynamicNode.DrawDelegate> getDrawMap();
 }

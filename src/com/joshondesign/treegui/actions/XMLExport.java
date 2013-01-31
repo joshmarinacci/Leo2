@@ -19,6 +19,7 @@ public class XMLExport {
         XMLWriter xml = new XMLWriter(printWriter, new URI(""));
         xml.header();
         xml.start("page");
+        xml.attr("mode",document.getModeId());
         // render non-visual nodes first
 
         xml.start("nodes");

@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.actions;
 
 import com.joshondesign.treegui.Binding;
+import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
@@ -8,6 +9,7 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.aminojava.AminoJavaMode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
+import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -30,13 +32,20 @@ public class XMLImport {
     }
     public static Page processPage(Elem root, SketchDocument doc) throws XPathExpressionException, ClassNotFoundException {
         Page page = new Page();
+        u.p("mode id = " + root.attr("mode"));
+        Mode mode = null;
+        if(root.attrEquals("mode","com.joshondesign.modes.aminojs")) {
+            mode = new AminoJSMode();
+        } else {
+            mode = new AminoJavaMode();
+        }
 
         Layer layer = new Layer();
         page.add(layer);
 
         Map<String, SketchNode> ids = new HashMap<String, SketchNode>();
         for(Elem vis : root.xpath("nodes/node")) {
-            DynamicNode node = processNode(vis,ids);
+            DynamicNode node = processNode(vis,ids, mode.getDrawMap());
             layer.add(node);
         }
         //bind them together
@@ -74,7 +83,7 @@ public class XMLImport {
         return binding;
     }
 
-    private static DynamicNode processNode(Elem xml, Map<String, SketchNode> ids) throws XPathExpressionException, ClassNotFoundException {
+    private static DynamicNode processNode(Elem xml, Map<String, SketchNode> ids, Map<String, DynamicNode.DrawDelegate> drawMap) throws XPathExpressionException, ClassNotFoundException {
         DynamicNode node = new DynamicNode();
         node.setName(xml.attr("name"));
         node.addProperty(new Property("class", String.class, xml.attr("class")));
@@ -89,7 +98,17 @@ public class XMLImport {
         ids.put(node.getId(),node);
         for(Elem prop : xml.xpath("property")) {
             Object val = null;
-            Class type = Class.forName(prop.attr("type"));
+            Class type = null;
+            if(prop.attrEquals("type","boolean")) {
+                type = Boolean.TYPE;
+            }
+            if(prop.attrEquals("type","int")) {
+                type = Integer.TYPE;
+            }
+
+            if(type == null) {
+                type = Class.forName(prop.attr("type"));
+            }
             String sval = prop.attr("value");
             if(type == Double.class) {
                 val = (Double)Double.parseDouble(sval);
@@ -135,13 +154,9 @@ public class XMLImport {
         }
 
 
-        node.setDrawDelegate(AminoJavaMode.drawMap.get(node.getName()));
-        if(!node.isVisual()) {
-            node.setDrawDelegate(AminoJavaMode.drawMap.get("servicebase"));
-
-        }
+        node.setDrawDelegate(drawMap.get(node.getName()));
         for(Elem echild : xml.xpath("children/node")) {
-            node.add(processNode(echild, ids));
+            node.add(processNode(echild, ids, drawMap));
         }
         return node;
     }

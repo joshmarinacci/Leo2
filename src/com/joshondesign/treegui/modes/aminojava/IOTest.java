@@ -2,6 +2,7 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.BindingUtils;
+import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.XMLExport;
 import com.joshondesign.treegui.actions.XMLImport;
 import com.joshondesign.treegui.docmodel.Layer;
@@ -72,12 +73,20 @@ public class IOTest {
     private static void testJSExport() throws Exception {
         AminoJSMode mode = new AminoJSMode();
         SketchDocument doc = mode.createEmptyDoc();
+
+        DynamicNode flickrMaster = findSymbol(mode,"FlickrQuery");
+        DynamicNode buttonMaster = findSymbol(mode,"PushButton");
+        Layer layer = doc.get(0).get(0);
+        layer.add(flickrMaster.duplicate(null));
+        layer.add(buttonMaster.duplicate(null));
+
         File file = File.createTempFile("foo","xml");
         XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
         u.p("exported to : " + file.getAbsolutePath());
 
         SketchDocument doc2 = XMLImport.read(file);
         u.p("doc 2. child count =  " + doc2.getSize());
+        DynamicNode listView = (DynamicNode) doc2.get(0).get(0).get(0);
     }
 
     private static void assertEquals(boolean a, boolean b) throws Exception {
@@ -96,7 +105,7 @@ public class IOTest {
         if(!a.equals(b)) throw new Exception();
     }
 
-    private static DynamicNode findSymbol(AminoJavaMode mode, String name) {
+    private static DynamicNode findSymbol(Mode mode, String name) {
         for(SketchNode node : mode.getSymbols().children()) {
             DynamicNode nd = (DynamicNode) node;
             if(nd.getName().equals(name)) {

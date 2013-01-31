@@ -12,6 +12,7 @@ public class SketchDocument extends TreeNode<Page> {
     List<Binding> bindings = new ArrayList<Binding>();
     private Page selectedPage;
     private boolean snapToGrid = false;
+    private String modeId;
 
     public SketchDocument() {
         selection = new Selection();
@@ -74,5 +75,13 @@ public class SketchDocument extends TreeNode<Page> {
 
     public void setSnapToGrid(boolean snapToGrid) {
         this.snapToGrid = snapToGrid;
+    }
+
+    public void setModeId(String modeId) {
+        this.modeId = modeId;
+    }
+
+    public String getModeId() {
+        return modeId;
     }
 }
