@@ -10,7 +10,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
-@Metadata
+@Metadata(visual = false, exportClass = "FlickrQuery")
 public class FlickrQuery extends SketchNode {
     private boolean active;
 
@@ -54,7 +54,7 @@ public class FlickrQuery extends SketchNode {
 
     private String query = "";
 
-    @Prop
+    @Prop(exported = false, visible = false)
     public List<Object> getResults() {
         return results;
     }
@@ -65,7 +65,7 @@ public class FlickrQuery extends SketchNode {
 
     List<Object> results;
 
-    @Prop(visible = false)
+    @Prop(visible = false, exported = false)
     public ActionProp getExecute() {
         return new ActionProp();
     }

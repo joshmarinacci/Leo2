@@ -34,10 +34,11 @@ public class AminoJSMode extends Mode {
 
 
         DynamicNode visualBase = new DynamicNode();
-        visualBase.addProperty(new Property("translateX", Double.class, 0));
-        visualBase.addProperty(new Property("translateY", Double.class, 0));
-        //visualBase.addProperty(new Property("width", Double.class, 80))
-        //        .addProperty(new Property("height", Double.class, 30))
+        visualBase
+                .addProperty(new Property("translateX", Double.class, 0))
+                .addProperty(new Property("translateY", Double.class, 0))
+                .addProperty(new Property("width", Double.class, 80))
+                .addProperty(new Property("height", Double.class, 30))
         ;
 
         drawMap.put("PushButton", new DynamicNode.DrawDelegate() {

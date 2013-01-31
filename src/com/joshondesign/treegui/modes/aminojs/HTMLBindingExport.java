@@ -9,6 +9,7 @@ import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import java.io.*;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,7 +110,8 @@ public class HTMLBindingExport extends AminoAction {
     }
 
     private void exportNode(PropWriter w, DynamicNode node, boolean includeVar) {
-        u.p("doing node: " + node);
+        //u.p("doing node: " + node);
+        String[] visualOnlyProps = new String[]{"x","y","width","height"};
 
         if(includeVar) {
             w.newObj(node.getId(), AminoAdapter.getScriptClass(node));
@@ -118,12 +120,13 @@ public class HTMLBindingExport extends AminoAction {
         }
         w.indent();
         for(Property prop : node.getProperties()) {
-            u.p("writing: " + prop.getName() + " " + prop.getRawValue());
             if(!AminoAdapter.shouldExportProperty(node,prop)) continue;
+            //u.p("writing: " + prop.getName() + " " + prop.getRawValue() + " exported = " + prop.isExported());
             String key = prop.getName();
             if(key.equals("translateX")) key = "x";
             if(key.equals("translateY")) key = "y";
-            w.prop(key,prop.getRawValue());
+            if(!node.isVisual() && Arrays.asList(visualOnlyProps).contains(key)) continue;
+            w.prop(key, prop.getRawValue());
         }
 
         for(SketchNode child : node.children()) {

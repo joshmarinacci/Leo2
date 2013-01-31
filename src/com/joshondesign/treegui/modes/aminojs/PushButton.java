@@ -10,7 +10,6 @@ import org.joshy.gfx.draw.GFX;
 
 @Metadata(exportClass = "PushButton")
 public class PushButton extends ResizableRectNode {
-
     @Prop
     public String text;
     @Prop(visible = false)
@@ -37,7 +36,7 @@ public class PushButton extends ResizableRectNode {
         if(node == null) {
             node = new PushButton();
         }
-        return super.duplicate(node);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.duplicate(node);
     }
 
     public void setText(String text) {

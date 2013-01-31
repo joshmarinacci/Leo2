@@ -99,8 +99,9 @@ public class BindingUtils {
         node.setName(obj.getClass().getSimpleName());
         node.setResizable(false);
         node.setDrawDelegate(base);
-        node.addProperty(new Property("translateX", Double.class, 0).setExported(false))
-                .addProperty(new Property("translateY", Double.class, 0).setExported(false))
+        node
+                //.addProperty(new Property("translateX", Double.class, 0).setExported(false))
+                //.addProperty(new Property("translateY", Double.class, 0).setExported(false))
                 .addProperty(new Property("width", Double.class, 90).setBindable(false).setExported(false))
                 .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
         ;
@@ -161,6 +162,9 @@ public class BindingUtils {
             if(method.isAnnotationPresent(Prop.class)) {
                 Prop prop = method.getAnnotation(Prop.class);
                 String name = method.getName();
+                if(name.startsWith("is")) {
+                    name = name.substring(2,3).toLowerCase() + name.substring(3);
+                }
                 if(name.startsWith("get")) {
                     name = name.substring(3,4).toLowerCase() + name.substring(4);
                 }
