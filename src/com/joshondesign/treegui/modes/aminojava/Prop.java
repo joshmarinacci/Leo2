@@ -15,4 +15,5 @@ public @interface Prop {
     boolean bindable() default true;
     boolean visible() default true;
     boolean exported() default true;
+    boolean list() default false;
 }

@@ -54,7 +54,7 @@ public class FlickrQuery extends SketchNode {
 
     private String query = "";
 
-    @Prop(exported = false, visible = false)
+    @Prop(exported = false, visible = false, list = true)
     public List<Object> getResults() {
         return results;
     }

@@ -255,6 +255,7 @@ public class AminoJavaMode extends Mode {
         listview.getProperty("width").setDoubleValue(60);
         listview.getProperty("height").setDoubleValue(90);
         Property subProp = new Property("selectedObject",Object.class,null);
+        subProp.setExported(false);
         subProp.setBindable(true);
         subProp.setCompound(true);
         subProp.setMasterProperty("model");

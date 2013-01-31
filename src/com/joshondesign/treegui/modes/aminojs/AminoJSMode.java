@@ -154,9 +154,19 @@ public class AminoJSMode extends Mode {
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new Label(), drawMap.get("Label"))
                 .copyPropertiesFrom(visualBase));
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new ListView(), drawMap.get("ListView"))
-                .copyPropertiesFrom(visualBase));
+
+        DynamicNode listview = BindingUtils
+                .parseAnnotatedPOJO(new ListView(), drawMap.get("ListView"));
+        listview.copyPropertiesFrom(visualBase);
+
+        Property subProp = new Property("selectedObject",Object.class,null);
+        subProp.setBindable(true);
+        subProp.setCompound(true);
+        subProp.setMasterProperty("data");
+        listview.addProperty(subProp);
+
+        symbols.add(listview);
+
 
 
 
@@ -165,7 +175,7 @@ public class AminoJSMode extends Mode {
                 double w = node.getWidth();
                 double h = node.getHeight();
                 g.setPaint(FlatColor.GRAY);
-                g.fillRect(0,0,w,h);
+                g.fillRect(0, 0, w, h);
                 g.setPaint(FlatColor.BLACK);
                 g.drawRect(0,0,w,h);
             }
@@ -176,7 +186,7 @@ public class AminoJSMode extends Mode {
                 double w = node.getWidth();
                 double h = node.getHeight();
                 g.setPaint(FlatColor.BLACK);
-                g.drawOval(10,10,w-20,h-20);
+                g.drawOval(10, 10, w - 20, h - 20);
             }
         });
         drawMap.put("FlickrQuery", new DynamicNode.DrawDelegate() {
@@ -209,9 +219,19 @@ public class AminoJSMode extends Mode {
         symbols.add(BindingUtils
                 .parseAnnotatedPOJO(new Spinner(), drawMap.get("Spinner"))
                 .copyPropertiesFrom(visualBase));
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new FlickrQuery(), drawMap.get("FlickrQuery"))
-                .copyPropertiesFrom(visualBase));
+
+
+        DynamicNode photo = BindingUtils.parseAnnotatedPOJO(new com.joshondesign.treegui.modes.aminojava.FlickrQuery.Photo("a","b"), null);
+        photo.setVisual(false);
+        //photo.copyPropertiesFrom(serviceBase);
+
+        DynamicNode flickr =  BindingUtils
+                .parseAnnotatedPOJO(new FlickrQuery(), drawMap.get("FlickrQuery"));
+        flickr.copyPropertiesFrom(visualBase);
+        flickr.getProperty("results").setList(true).setItemPrototype(photo);
+        symbols.add(flickr);
+
+
         add(symbols);
 
     }

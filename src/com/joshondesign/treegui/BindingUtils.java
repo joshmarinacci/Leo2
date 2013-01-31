@@ -23,6 +23,9 @@ public class BindingUtils {
 
             if(prop.isCompound()) {
                 u.p("a compound prop. exploding");
+                if(!node.hasProperty(prop.getMasterProperty())) {
+                    u.p("WARNING: master property " + prop.getMasterProperty() + " is missing!");
+                }
                 Property master = node.getProperty(prop.getMasterProperty());
                 u.p("master = " + master.getName());
                 u.p("value = " + master.getRawValue());
