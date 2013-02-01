@@ -6,10 +6,10 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
 public abstract class SketchNode extends TreeNode<SketchNode> {
-    protected boolean resizable = false;
     private TreeNode parent;
     private double width = 100;
     private double height = 100;
+    private Resize resize;
 
     protected SketchNode() {
         setId("id" + (int) Math.floor(Math.random() * 1000000));
@@ -83,7 +83,7 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
             node.setTranslateY(getTranslateY());
             node.setWidth(getWidth());
             node.setHeight(getHeight());
-            node.setResizable(isResizable());
+            node.setResize(getResize());
         }
         return node;
     }
@@ -134,12 +134,12 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
         return height;
     }
 
-    public SketchNode setResizable(boolean rs) {
-        this.resizable = rs;
+    public SketchNode setResize(Resize resize) {
+        this.resize = resize;
         return this;
     }
 
-    public boolean isResizable() {
-        return this.resizable;
+    public Resize getResize() {
+        return resize;
     }
 }

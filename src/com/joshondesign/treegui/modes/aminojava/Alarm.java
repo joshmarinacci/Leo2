@@ -1,14 +1,9 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/16/13
- * Time: 3:25 PM
- * To change this template use File | Settings | File Templates.
- */
+@Metadata(visual = false, name = "Alarm")
 public class Alarm {
     @Prop(bindable = true)
     public String label;

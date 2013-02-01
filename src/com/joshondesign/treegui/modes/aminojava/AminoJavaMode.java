@@ -4,13 +4,12 @@ import com.joshondesign.treegui.BindingUtils;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.*;
+import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.joshondesign.treegui.modes.aminojs.TriggerProp;
+import java.util.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -23,559 +22,430 @@ import org.joshy.gfx.node.control.ScrollPane;
 public class AminoJavaMode extends Mode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
 
+
+    @Metadata(name ="PushButton", exportClass = "org.joshy.gfx.node.control.Button")
+    public static class PushbuttonProxy {
+        @Prop(bindable = true)
+        public CharSequence text = "push button";
+
+        @Prop(exported = false, bindable = true, visible = false)
+        public TriggerProp trigger;
+    }
+
+     DynamicNode.DrawDelegate pushButtonDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getWidth();
+            double h = node.getHeight();
+            String t = node.getProperty("text").getStringValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawText(t, Font.DEFAULT, 5, 15);
+            g.drawRect(0, 0, w, h);
+        }
+    };
+
+
+    @Metadata(name = "ToggleButton", exportClass = "org.joshy.gfx.node.control.Togglebutton")
+    public static class TogglebuttonProxy extends PushbuttonProxy {
+        public TogglebuttonProxy() {
+            text = "toggle button";
+        }
+
+        @Prop
+        public boolean selected = false;
+
+        @Prop(visible = false, bindable = true)
+        public Object toggleGroup = null;
+    }
+
+    private final DynamicNode.DrawDelegate toggleButtonDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            String t = node.getProperty("text").getStringValue();
+            boolean b = node.getProperty("selected").getBooleanValue();
+
+            g.setPaint(FlatColor.GRAY);
+            if (b) {
+                g.setPaint(FlatColor.BLUE);
+            }
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawText(t, Font.DEFAULT, 5, 15);
+            g.drawRect(0, 0, w, h);
+        }
+    };
+
+    @Metadata(name ="Label", exportClass = "org.joshy.gfx.node.control.Label")
+    public static class LabelProxy {
+        @Prop(bindable = true)
+        public CharSequence text = "a label";
+
+        @Prop(exported = false, bindable = true, visible = false)
+        public TriggerProp trigger;
+    }
+
+    private final DynamicNode.DrawDelegate labelDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            String t = node.getProperty("text").getStringValue();
+            g.setPaint(FlatColor.BLACK);
+            g.drawText(t, Font.DEFAULT, 5, 15);
+        }
+    };
+
+
+    @Metadata(name = "Checkbox", exportClass = "org.joshy.gfx.node.control.Checkbox")
+    public static class CheckboxProxy extends TogglebuttonProxy {
+        public CheckboxProxy() {
+            text = "checkbox";
+        }
+    }
+
+    private final DynamicNode.DrawDelegate checkboxDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double h = node.getHeight();
+            String t = node.getProperty("text").getStringValue();
+
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, h , h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawText(t, Font.DEFAULT, 5 + h, 15);
+            g.drawRect(0,0, h, h);
+        }
+    };
+
+    @Metadata(name = "Panel", container = true,
+            exportClass = "com.joshondesign.treegui.AnchorPanel")
+    public static class PanelProxy {
+        @Prop public FlatColor fill = FlatColor.GRAY;
+    }
+
+
+    private final DynamicNode.DrawDelegate panelDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRect(0, 0, w, h);
+        }
+    };
+
+
+
+    @Metadata(name = "ListView", exportClass = "org.joshy.gfx.node.control.ListView")
+    public static class ListViewProxy {
+        @Prop double rowheight = 20;
+        @Prop double columnWidth = 100;
+        @Prop(visible = false) ListView.ItemRenderer renderer = null;
+        @Prop(bindable = true, exported = false) ListModel model = null;
+        @Prop  public ListView.Orientation orientation = ListView.Orientation.Vertical;
+        @Prop(bindable = true) int selectedIndex = 0;
+        @Prop(bindable = true) Object selectedItem = null;
+    }
+
+    private final DynamicNode.DrawDelegate listviewDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRect(0, 0, w, h);
+            //lines
+            for (int i = 0; i < 5; i++) {
+                g.drawRect(0, i * 15, w, 15);
+            }
+        }
+    };
+
+
+    @Metadata(name = "ScrollPane", container = true,
+            exportClass = "org.joshy.gfx.node.control.ScrollPane")
+    public static class ScrollPaneProxy {
+        @Prop ScrollPane.VisiblePolicy horizontalVisiblePolicy =
+                ScrollPane.VisiblePolicy.WhenNeeded;
+        @Prop ScrollPane.VisiblePolicy verticalVisiblePolicy =
+                ScrollPane.VisiblePolicy.WhenNeeded;
+    }
+
+    private final DynamicNode.DrawDelegate scrollDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRect(0, 0, w, h);
+            g.drawRect(0, h - 10, w, 10);
+            g.drawRect(w - 10, 0, 10, h);
+        }
+    };
+
+
+    @Metadata(name = "Spinner", exportClass = "com.joshondesign.treegui.modes.aminojava.Spinner")
+    public static class SpinnerProxy {
+        @Prop(bindable = true) public boolean active = false;
+    }
+    private final DynamicNode.DrawDelegate spinnerDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillOval(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawOval(0, 0, w, h);
+        }
+    };
+
+    @Metadata(name = "CustomView", exportClass = "org.joshy.gfx.node.control.ScrollPane")
+    public static class CustomViewProxy {
+        @Prop public String customClass = "none";
+    }
+
+    private final DynamicNode.DrawDelegate customDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRect(0, 0, w, h);
+            g.drawLine(0, 0, w, h);
+            g.drawLine(0, h, w, 0);
+        }
+    };
+
+    @Metadata(name = "Textbox", exportClass = "org.joshy.gfx.node.control.Textbox")
+    public static class TextboxProxy {
+        @Prop(bindable = true) public CharSequence hintText = "hint";
+        @Prop(bindable = true) public String text = "text box";
+    }
+
+    private final DynamicNode.DrawDelegate textboxDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            String t = node.getProperty("text").getStringValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRect(0, 0, w, h);
+            g.drawText(t, Font.DEFAULT, 5, 15);
+        }
+    };
+
+
+    @Metadata(name = "Radiobutton", exportClass = "org.joshy.gfx.node.control.Radiobutton")
+    public static class RadiobuttonProxy extends TogglebuttonProxy {
+        public RadiobuttonProxy() {
+            this.text = "radiobutton";
+        }
+    }
+
+    private final DynamicNode.DrawDelegate radiobuttonDelegate =  new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double h = node.getHeight();
+            String t = node.getProperty("text").getStringValue();
+
+            g.setPaint(FlatColor.GRAY);
+            g.fillOval(0, 0, h, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawOval(0, 0, h, h);
+            g.drawText(t, Font.DEFAULT, 5 + h, 15);
+        }
+    };
+
+
+    @Metadata(name = "PopupMenuButton", exportClass = "org.joshy.gfx.node.control.PopupMenuButton")
+    public static class PopupMenuButtonProxy {
+        @Prop public Boolean selected = false;
+        @Prop(bindable = true) public Integer selectedIndex = 0;
+    }
+
+    private final DynamicNode.DrawDelegate popupbuttonDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getWidth();
+            double h = node.getHeight();
+            Property pmodel  = node.getProperty("model");
+            ListModel model = (ListModel) pmodel.getRawValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            if (model != null && model.size() >= 1) {
+                String t = model.get(0).toString();
+                g.drawText(t, Font.DEFAULT, 5, 15);
+            }
+            g.drawRect(0, 0, w, h);
+        }
+    };
+
+
+    @Metadata(name = "ToggleGroup", exportClass = "org.joshy.gfx.node.control.Togglegroup")
+    public static class ToggleGroupProxy {
+        @Prop public Integer selectedIndex = 0;
+        @Prop public Object  selectedObject = null;
+    }
+
+
+    @Metadata(name = "StringList", visual = false, exportClass = "com.joshondesign.flickr.FlickrQuery" , resize = Resize.None)
+    public static class StringList {
+        @Prop(bindable = true, visible = true)
+        public List data = Arrays.asList(new String[]{"foo","bar","baz"});
+    }
+
+    @Metadata(name = "CompoundList", exportClass = "org.joshy.gfx.node.control.CompoundListView", resize = Resize.Any, container = true)
+    public static class CompoundListProxy {
+        @Prop public double rowHeight = 30;
+        @Prop(bindable = true, exported = false, visible = false)
+        public ListModel model = null;
+    }
+
+
+    @Metadata(name = "ServiceBase", resize = Resize.None)
+    public static class ServiceBase {
+        @Prop(exported = false) public double translateX = 0;
+        @Prop(exported = false) public double translateY = 0;
+        @Prop(exported = false) public double width = 90;
+        @Prop(exported = false) public double height = 30;
+    }
+
+    private final DynamicNode.DrawDelegate servicebaseDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getWidth();
+            double h = node.getHeight();
+            g.setPaint(FlatColor.YELLOW);
+            g.fillRoundRect(0, 0, w, h, 10, 10);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(0, 0, w, h, 10, 10);
+            g.drawText(node.getName(), Font.DEFAULT, 5, 15);
+        }
+    };
+
     public AminoJavaMode() {
         setId("com.joshondesign.modes.aminojava");
 
-        TreeNode<JAction> javaactions = new TreeNode<JAction>();
-        add(javaactions);
+        add(new TreeNode<JAction>());
 
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
         add(symbols);
 
         DynamicNode visualBase = new DynamicNode();
-        visualBase.addProperty(new Property("translateX", Double.class, 0));
-        visualBase.addProperty(new Property("translateY", Double.class, 0));
-        visualBase.addProperty(new Property("width", Double.class, 80)
-                .setExportName("prefWidth"));
-        visualBase.addProperty(new Property("height", Double.class, 30)
-                .setExportName("prefHeight"))
-                .addProperty(new Property("anchorLeft", Boolean.class, true).setBindable(false))
-                .addProperty(new Property("anchorRight", Boolean.class, false).setBindable(false))
-                .addProperty(new Property("anchorTop", Boolean.class, true).setBindable(false))
-                .addProperty(new Property("anchorBottom", Boolean.class, false).setBindable(false))
+        visualBase
+                .addProperty(new Property("translateX", Double.class, 0))
+                .addProperty(new Property("translateY", Double.class, 0))
+                .addProperty(new Property("width", Double.class, 80)
+                    .setExportName("prefWidth"))
+                .addProperty(new Property("height", Double.class, 30)
+                        .setExportName("prefHeight"))
+                .addProperty(new Property("anchorLeft", Boolean.class, true)
+                    .setBindable(false))
+                .addProperty(new Property("anchorRight", Boolean.class, false)
+                    .setBindable(false))
+                .addProperty(new Property("anchorTop", Boolean.class, true)
+                    .setBindable(false))
+                .addProperty(new Property("anchorBottom", Boolean.class, false)
+                    .setBindable(false))
                 ;
 
 
-        DynamicNode pushButton = new DynamicNode()
-                .setName("Button");
-        pushButton.setResizable(true);
-        pushButton.setVisual(true);
+        drawMap.put("PushButton", pushButtonDelegate);
+        symbols.add(parse(new PushbuttonProxy(), pushButtonDelegate, visualBase));
+        drawMap.put("ToggleButton", toggleButtonDelegate);
+        symbols.add(parse(new TogglebuttonProxy(), toggleButtonDelegate, visualBase));
+        drawMap.put("Label", labelDelegate);
+        symbols.add(parse(new LabelProxy(), labelDelegate,visualBase));
+        drawMap.put("Checkbox", checkboxDelegate);
+        symbols.add(parse(new CheckboxProxy(), checkboxDelegate, visualBase));
+        drawMap.put("Radiobutton", radiobuttonDelegate);
+        symbols.add(parse(new RadiobuttonProxy(), radiobuttonDelegate, visualBase));
 
-        pushButton.copyPropertiesFrom(visualBase);
-        pushButton.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
-        pushButton.addProperty(new Property("text", CharSequence.class, "pushbutton").setBindable(true));
-        pushButton.addProperty(new Property("resize", String.class, "any")
-                .setExported(false)
-                .setVisible(false));
-        pushButton.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
-                .setExported(false)
-                .setVisible(false)
-                .setBindable(true)
-        );
-
-        drawMap.put(pushButton.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getWidth();
-                double h = node.getHeight();
-                String t = node.getProperty("text").getStringValue();
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawText(t, Font.DEFAULT, 5, 15);
-                g.drawRect(0, 0, w, h);
-            }
-        });
-        pushButton.setDrawDelegate(drawMap.get(pushButton.getName()));
-        symbols.add(pushButton);
-
-        DynamicNode toggleButton = new DynamicNode();
-        toggleButton.setName("Togglebutton");
-        toggleButton.setResizable(true);
-        toggleButton.setVisual(true);
-
-        toggleButton.copyPropertiesFrom(visualBase);
-        toggleButton.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Togglebutton"));
-        toggleButton.addProperty(new Property("text", CharSequence.class, "togglebutton").setBindable(true));
-        toggleButton.addProperty(new Property("selected", Boolean.class, false));
-        toggleButton.addProperty(new Property("resize", String.class, "any")
-                .setExported(false)
-                .setVisible(false));
-        toggleButton.addProperty(new Property("trigger", GuiTest.TriggerType.class, 0)
-                .setExported(false)
-                .setVisible(false)
-                .setBindable(true)
-        );
-        toggleButton.addProperty(new Property("toggleGroup", Object.class, null)
-                .setVisible(false).setBindable(true));
-
-        drawMap.put(toggleButton.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
-                String t = node.getProperty("text").getStringValue();
-                boolean b = node.getProperty("selected").getBooleanValue();
-
-                g.setPaint(FlatColor.GRAY);
-                if (b) {
-                    g.setPaint(FlatColor.BLUE);
-                }
-                g.fillRect(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawText(t, Font.DEFAULT, 5, 15);
-                g.drawRect(0, 0, w, h);
-            }
-        });
-        toggleButton.setDrawDelegate(drawMap.get(toggleButton.getName()));
-        symbols.add(toggleButton);
-
-
-        DynamicNode label = new DynamicNode();
-        label.copyPropertiesFrom(visualBase);
-        label.setName("Label").setVisual(true).setResizable(true);
-        label.copyPropertiesFrom(visualBase);
-        label.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Label"));
-        label.addProperty(new Property("resize", String.class, "width").setExported(false));
-        label.addProperty(new Property("text", CharSequence.class, "a label").setBindable(true));
-        drawMap.put(label.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                String t = node.getProperty("text").getStringValue();
-                g.setPaint(FlatColor.BLACK);
-                g.drawText(t, Font.DEFAULT, 5, 15);
-            }
-        });
-        label.setDrawDelegate(drawMap.get(label.getName()));
-        symbols.add(label);
-
-        drawMap.put("Checkbox", new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double h = node.getHeight();
-                String t = node.getProperty("text").getStringValue();
-
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0, 0, h , h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawText(t, Font.DEFAULT, 5 + h, 15);
-                g.drawRect(0,0, h, h);
-            }
-        });
-        DynamicNode checkbox = BindingUtils.parseAnnotatedPOJO(new CheckboxWrapper(), drawMap.get("Checkbox"));
-        checkbox.copyPropertiesFrom(visualBase);
-        checkbox.setName("Checkbox").setResizable(true).setWidth(80).setHeight(20);
-        symbols.add(checkbox);
-
-        drawMap.put("Radiobutton", new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double h = node.getHeight();
-                String t = node.getProperty("text").getStringValue();
-
-                g.setPaint(FlatColor.GRAY);
-                g.fillOval(0, 0, h, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawOval(0, 0, h, h);
-                g.drawText(t, Font.DEFAULT, 5 + h, 15);
-            }
-        });
-        DynamicNode radiobutton = BindingUtils.parseAnnotatedPOJO(new RadiobuttonWrapper(), drawMap.get("Radiobutton"));
-        radiobutton.copyPropertiesFrom(visualBase);
-        radiobutton.setName("Radiobutton").setResizable(true).setWidth(80).setHeight(20);
-        symbols.add(radiobutton);
-
-
-        drawMap.put("Popupbutton", new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getWidth();
-                double h = node.getHeight();
-                Property pmodel  = node.getProperty("model");
-                ListModel model = (ListModel) pmodel.getRawValue();
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                if (model != null && model.size() >= 1) {
-                    String t = model.get(0).toString();
-                    g.drawText(t, Font.DEFAULT, 5, 15);
-                }
-                g.drawRect(0, 0, w, h);
-            }
-        });
-        DynamicNode popupbutton = BindingUtils.parseAnnotatedPOJO(new PopupMenuButtonWrapper(), drawMap.get("Popupbutton"));
-        popupbutton.copyPropertiesFrom(visualBase);
-        popupbutton.addProperty(new Property("model", ListModel.class,
-                ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}))
-                .setBindable(true).setExported(true).setVisible(true).setList(true));
-        popupbutton.setName("Popupbutton").setResizable(true).setWidth(80).setHeight(20);
         Property popupSelected = new Property("selectedObject",Object.class,null);
         popupSelected.setBindable(true);
         popupSelected.setCompound(true);
         popupSelected.setMasterProperty("model");
-        popupbutton.addProperty(popupSelected);
-        symbols.add(popupbutton);
+        drawMap.put("Popupbutton", popupbuttonDelegate);
 
+        symbols.add(parse(new PopupMenuButtonProxy(), popupbuttonDelegate,visualBase)
+                .addProperty(new Property("model", ListModel.class,
+                        ListView.createModel(new String[]{"Ethernet", "WiFi", "Bluetooth", "FireWire", "USB hack"}))
+                        .setBindable(true).setExported(true).setVisible(true).setList(true))
+                .addProperty(popupSelected)
+        );
 
-        DynamicNode panel = new DynamicNode();
-        panel.copyPropertiesFrom(visualBase);
-        panel.setContainer(true).setName("Panel").setVisual(true).setResizable(true);
-        panel.addProperty(new Property("class", String.class, "com.joshondesign.treegui.AnchorPanel"))
-                .addProperty(new Property("resize", String.class, "any")
-                        .setExported(false).setVisible(false))
-                .addProperty(new Property("fill", FlatColor.class, FlatColor.GRAY))
-        ;
-        drawMap.put(panel.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawRect(0, 0, w, h);
-            }
-        });
-        panel.setDrawDelegate(drawMap.get(panel.getName()));
+        drawMap.put("Panel", panelDelegate);
+        symbols.add(parse(new PanelProxy(), panelDelegate, visualBase));
 
-
-        DynamicNode listview = new DynamicNode();
-        listview.copyPropertiesFrom(visualBase);
-        listview.setName("ListView").setVisual(true).setResizable(true);
-        listview.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ListView"))
-                .addProperty(new Property("resize", String.class, "any")
-                        .setExported(false).setVisible(false))
-                .addProperty(new Property("rowHeight", Double.class, 20))
-                .addProperty(new Property("columnWidth", Double.class, 100))
-                .addProperty(new Property("renderer", ListView.ItemRenderer.class, "none"))
-                .addProperty(new Property("model", ListModel.class, null)
-                        .setBindable(true).setExported(false).setVisible(false))
-                .addProperty(new Property("orientation",
-                        ListView.Orientation.class, ListView.Orientation.Vertical))
-                //.addProperty(new Property("selectedItem", Object.class, null).setBindable(true))
-                .addProperty(new Property("selectedIndex", Integer.class, 0).setBindable(true))
-        ;
-        drawMap.put(listview.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawRect(0, 0, w, h);
-                //lines
-                for (int i = 0; i < 5; i++) {
-                    g.drawRect(0, i * 15, w, 15);
-                }
-            }
-        });
-        listview.setDrawDelegate(drawMap.get(listview.getName()));
-        listview.getProperty("width").setDoubleValue(60);
-        listview.getProperty("height").setDoubleValue(90);
+        drawMap.put("ListView", listviewDelegate);
+        DynamicNode lv = parse(new ListViewProxy(), listviewDelegate, visualBase);
         Property subProp = new Property("selectedObject",Object.class,null);
         subProp.setExported(false);
         subProp.setBindable(true);
         subProp.setCompound(true);
         subProp.setMasterProperty("model");
-        listview.addProperty(subProp);
+        lv.addProperty(subProp);
+        symbols.add(lv);
 
 
-        DynamicNode scroll = new DynamicNode();
-        scroll.copyPropertiesFrom(visualBase);
-        scroll.setContainer(true).setName("ScrollPane").setVisual(true).setResizable(true);
-        scroll.addProperty(new Property("class", String.class,
-                "org.joshy.gfx.node.control.ScrollPane"))
-                .addProperty(new Property("resize", String.class, "any")
-                        .setExported(false).setVisible(false))
-                .addProperty(new Property("horizontalVisiblePolicy",
-                        ScrollPane.VisiblePolicy.class,
-                        ScrollPane.VisiblePolicy.WhenNeeded
-                ).setDisplayName("Horiz Scroll")
-                )
-                .addProperty(new Property("verticalVisiblePolicy",
-                        ScrollPane.VisiblePolicy.class,
-                        ScrollPane.VisiblePolicy.WhenNeeded
-                ).setDisplayName("Vert Scroll")
-                )
-        ;
-        drawMap.put(scroll.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawRect(0, 0, w, h);
-                g.drawRect(0, h - 10, w, 10);
-                g.drawRect(w - 10, 0, 10, h);
-            }
-        });
-        scroll.setDrawDelegate(drawMap.get(scroll.getName()));
-        scroll.getProperty("width").setDoubleValue(60);
-        scroll.getProperty("height").setDoubleValue(90);
+        drawMap.put("Scroll", scrollDelegate);
+        symbols.add(parse(new ScrollPaneProxy(), scrollDelegate, visualBase));
 
+        drawMap.put("Spinner", spinnerDelegate);
+        symbols.add(parse(new SpinnerProxy(), spinnerDelegate, visualBase));
 
-        DynamicNode spinner = new DynamicNode();
-        spinner.copyPropertiesFrom(visualBase);
-        spinner.setName("Spinner").setVisual(true).setResizable(true);
-        spinner
-                .addProperty(new Property("class", String.class,
-                        "com.joshondesign.treegui.modes.aminojava.Spinner"))
-                .addProperty(new Property("resize", String.class, "any")
-                        .setExported(false).setVisible(false))
-                .addProperty(new Property("active", Boolean.class, Boolean.TRUE)
-                        .setBindable(true))
-        ;
-        drawMap.put(spinner.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
-                g.setPaint(FlatColor.GRAY);
-                g.fillOval(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawOval(0, 0, w, h);
-            }
-        });
-        spinner.setDrawDelegate(drawMap.get(spinner.getName()));
-        spinner.getProperty("width").setDoubleValue(50);
-        spinner.getProperty("height").setDoubleValue(50);
+        drawMap.put("Custom", customDelegate);
+        symbols.add(parse(new CustomViewProxy(), customDelegate, visualBase));
 
+        drawMap.put("Textbox", textboxDelegate);
+        symbols.add(parse(new TextboxProxy(), textboxDelegate, visualBase));
 
-        DynamicNode custom = new DynamicNode();
-        custom.setName("Custom View");
-        custom.copyPropertiesFrom(visualBase);
-        custom.setCustom(true).setContainer(true).setVisual(true).setResizable(true);
-        custom
-                .addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.ScrollPane"))
-                .addProperty(new Property("customClass", String.class, "none"))
-                .addProperty(new Property("resize", String.class, "any")
-                        .setExported(false).setVisible(false))
-        ;
-        drawMap.put(custom.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawRect(0, 0, w, h);
-                g.drawLine(0, 0, w, h);
-                g.drawLine(0, h, w, 0);
-            }
-        });
-        custom.setDrawDelegate(drawMap.get(custom.getName()));
-        custom.getProperty("width").setDoubleValue(90);
-        custom.getProperty("height").setDoubleValue(90);
-
-        DynamicNode textbox = new DynamicNode();
-        textbox.setName("Textbox");
-        textbox.copyPropertiesFrom(visualBase);
-        textbox.setVisual(true);
-        textbox.setResizable(true);
-        textbox.setContainer(false);
-        textbox
-                .addProperty(new Property("class", String.class,
-                        "org.joshy.gfx.node.control.Textbox"))
-                .addProperty(new Property("hintText", CharSequence.class, "hint").setBindable(true))
-                .addProperty(new Property("text", String.class, "a textfield").setBindable(true))
-                .addProperty(new Property("resize", String.class, "any")
-                        .setExported(false).setVisible(false))
-        ;
-        drawMap.put(textbox.getName(), new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getProperty("width").getDoubleValue();
-                double h = node.getProperty("height").getDoubleValue();
-                String t = node.getProperty("text").getStringValue();
-                g.setPaint(FlatColor.GRAY);
-                g.fillRect(0, 0, w, h);
-                g.setPaint(FlatColor.BLACK);
-                g.drawRect(0, 0, w, h);
-                g.drawText(t, Font.DEFAULT, 5, 15);
-            }
-        });
-        textbox.setDrawDelegate(drawMap.get(textbox.getName()));
-        textbox.getProperty("width").setDoubleValue(80);
-        textbox.getProperty("height").setDoubleValue(30);
-
-        symbols.add(textbox);
-        symbols.add(spinner);
-        symbols.add(listview);
-        symbols.add(panel);
-        symbols.add(scroll);
-        symbols.add(custom);
-
-        DynamicNode serviceBase = new DynamicNode();
-        serviceBase.addProperty(new Property("translateX", Double.class, 0).setExported(false))
-                .addProperty(new Property("translateY", Double.class, 0).setExported(false))
-                .addProperty(new Property("width", Double.class, 90).setBindable(false).setExported(false))
-                .addProperty(new Property("height", Double.class, 30).setBindable(false).setExported(false))
-        ;
-        drawMap.put("servicebase", new DynamicNode.DrawDelegate() {
-            public void draw(GFX g, DynamicNode node) {
-                double w = node.getWidth();
-                double h = node.getHeight();
-                g.setPaint(FlatColor.YELLOW);
-                g.fillRoundRect(0, 0, w, h, 10, 10);
-                g.setPaint(FlatColor.BLACK);
-                g.drawRoundRect(0, 0, w, h, 10, 10);
-                g.drawText(node.getName(), Font.DEFAULT, 5, 15);
-            }
-        });
-
-
-
-        DynamicNode.DrawDelegate servicebaseDrawDelegate = drawMap.get("servicebase");
+        drawMap.put("servicebase", servicebaseDelegate);
+        DynamicNode serviceBase = parse(new ServiceBase(), servicebaseDelegate, null);
 
         //flickr query
-        DynamicNode flickrQuery = BindingUtils.parseAnnotatedPOJO(new FlickrQuery(), servicebaseDrawDelegate);
-        flickrQuery.setVisual(false);
-        flickrQuery.copyPropertiesFrom(serviceBase);
-        flickrQuery
-                .addProperty(new Property("class", String.class,
-                        "com.joshondesign.treegui.modes.aminojava.FlickrQuery"))
-                .addProperty(new Property("execute", ActionProp.class, null)
+        DynamicNode photo = parse(new FlickrQuery.Photo("a","b"), servicebaseDelegate, serviceBase);
+        DynamicNode flickrQuery = parse(new FlickrQuery(), servicebaseDelegate, serviceBase);
+        flickrQuery.addProperty(new Property("execute", ActionProp.class, null)
                         .setBindable(true).setVisible(false))
-        ;
-
-        DynamicNode photo = BindingUtils.parseAnnotatedPOJO(new FlickrQuery.Photo("a","b"), servicebaseDrawDelegate);
-        photo.setVisual(false);
-        photo.copyPropertiesFrom(serviceBase);
-
-        Property dp = new Property("results", ListModel.class, null)
-                .setVisible(false).setBindable(true).setList(true)
-                .setItemPrototype(photo)
+                    .addProperty(new Property("results", ListModel.class, null)
+                            .setVisible(false).setBindable(true).setList(true)
+                            .setItemPrototype(photo))
                 ;
-        flickrQuery.addProperty(dp);
         symbols.add(flickrQuery);
 
+        symbols.add(parse(new StringList(), servicebaseDelegate, serviceBase));
 
-
-        DynamicNode action = new DynamicNode();
-        action.setName("action");
-        action.setVisual(false);
-        action.setResizable(false);
-        action.copyPropertiesFrom(serviceBase);
-        action.addProperty(new Property("class", String.class, "com.joshondesign.flickr.FlickrQuery"))
-                .addProperty(new Property("execute", ActionProp.class, null).setBindable(true))
-        ;
-        action.setDrawDelegate(drawMap.get("servicebase"));
-        symbols.add(action);
-
-        DynamicNode document = new DynamicNode();
-        document.setName("Document");
-        document.setVisual(false);
-        document.setResizable(false);
-        document.copyPropertiesFrom(serviceBase);
-        document
-                .addProperty(new Property("class", String.class, "com.joshondesign.flickr.FlickrQuery"))
-                .addProperty(new Property("pages", String.class, null).setBindable(true))
-                .addProperty(new Property("currentPage", Page.class, null).setBindable(true))
-                .addProperty(new Property("selection", List.class, null).setBindable(true))
-        ;
-        document.setDrawDelegate(drawMap.get("servicebase"));
-        symbols.add(document);
-
-        DynamicNode stringList = new DynamicNode();
-        stringList.setName("String List");
-        stringList.setVisual(false);
-        stringList.setResizable(false);
-        stringList.copyPropertiesFrom(serviceBase);
-        List<String> dummyStringListData = new ArrayList<String>();
-        dummyStringListData.add("foo");
-        dummyStringListData.add("bar");
-        dummyStringListData.add("baz");
-        stringList
-                .addProperty(new Property("class", String.class,
-                        "com.joshondesign.flickr.FlickrQuery"))
-                .addProperty(new Property("data", List.class, dummyStringListData)
-                        .setVisible(true).setBindable(true))
-                .addProperty(new Property("this", DynamicNode.class, null)
-                        .setVisible(false).setBindable(true))
-        ;
-        stringList.setDrawDelegate(drawMap.get("servicebase"));
-        symbols.add(stringList);
-
-
-        DynamicNode alarmList = new DynamicNode();
-        alarmList.setName("Alarm List");
-        alarmList.setVisual(false);
-        alarmList.setResizable(false);
-        alarmList.copyPropertiesFrom(serviceBase);
-        alarmList.addProperty(new Property("class", String.class,
-                "com.joshondesign.treegui.modes.aminojava.AlarmList"));
-        alarmList.setDrawDelegate(servicebaseDrawDelegate);
-
-        List<String> data2 = new ArrayList<String>();
-        data2.add("foo");
-        data2.add("bar");
-        data2.add("baz");
-        Property dataProp = new Property("data", ListModel.class, data2);
-        dataProp.setVisible(false);
-        dataProp.setBindable(true);
-        dataProp.setList(true);
-
-        DynamicNode alarm = BindingUtils.parseAnnotatedPOJO(new Alarm(), servicebaseDrawDelegate);
-        alarm.setVisual(false);
-        alarm.setResizable(false);
-        alarm.copyPropertiesFrom(serviceBase);
-        dataProp.setItemPrototype(alarm);
-        alarmList.addProperty(dataProp);
+        DynamicNode alarmList = parse(new AlarmList(), servicebaseDelegate, serviceBase);
+        DynamicNode alarm = parse(new Alarm(), servicebaseDelegate, serviceBase);
+        alarmList.getProperty("data").setItemPrototype(alarm);
         symbols.add(alarmList);
 
-        DynamicNode compoundList = new DynamicNode();
-        compoundList.setName("Compound List");
-        compoundList.copyPropertiesFrom(visualBase);
-        compoundList.setVisual(true);
-        compoundList.setResizable(true);
-        compoundList.setContainer(true);
-        compoundList
-                .addProperty(new Property("class", String.class,
-                        "org.joshy.gfx.node.control.CompoundListView"))
-                .addProperty(new Property("resize", String.class, "any")
-                        .setExported(false).setVisible(false))
-                .addProperty(new Property("rowHeight", Double.class, 30))
-                .addProperty(new Property("model", ListModel.class, null)
-                        .setBindable(true).setExported(false).setVisible(false).setList(true))
-        ;
-        compoundList.setDrawDelegate(drawMap.get(listview.getName()));
-        compoundList.getProperty("width").setDoubleValue(80);
-        compoundList.getProperty("height").setDoubleValue(80);
-        DynamicNode template = (DynamicNode) panel.duplicate(null);
+        DynamicNode compoundList = parse( new CompoundListProxy(), listviewDelegate, visualBase);
+        DynamicNode template = parse(new PanelProxy(), panelDelegate, visualBase);
         template.setPositionLocked(true);
         DynamicNode mirror = new DynamicNode();
         mirror.setMirror(true);
-        mirror.setResizable(false);
+        mirror.setResize(Resize.None);
         mirror.setName("Mirror");
         mirror.setMirrorTarget("model");
         mirror.copyPropertiesFrom(serviceBase);
-        mirror.setDrawDelegate(servicebaseDrawDelegate);
+        mirror.setDrawDelegate(servicebaseDelegate);
         mirror.getProperty("translateX").setDoubleValue(-100);
-        //new Property().set
         template.add(mirror);
-        //when entering the template, it checks if it has a mirror child. if so it asks the mirror to rebuild itself?
         compoundList.add(template);
         symbols.add(compoundList);
 
-
-        DynamicNode toggleGroup = BindingUtils.parseAnnotatedPOJO(new ToggleGroupWrapper(), servicebaseDrawDelegate);
-        toggleGroup.copyPropertiesFrom(serviceBase);
-        toggleGroup.setName("Togglegroup");
-        symbols.add(toggleGroup);
-
-
+        symbols.add(parse(new ToggleGroupProxy(), servicebaseDelegate, serviceBase));
     }
 
-
-    public static class CheckboxWrapper {
-        @Prop
-        public CharSequence text = "checkbox";
-        @Prop public Boolean selected = false;
-        @Prop(exported = false, visible = false) public String resize = "horizontal";
-        @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Checkbox.class.getName();
-        @Prop(bindable = true, visible = false) public Object toggleGroup = null;
-    }
-
-    public static class RadiobuttonWrapper {
-        @Prop public CharSequence text = "radiobutton";
-        @Prop public Boolean selected = false;
-        @Prop(exported = false, visible = false) public String resize = "horizontal";
-        @Prop(visible = false) public String clazz = org.joshy.gfx.node.control.Radiobutton.class.getName();
-        @Prop(bindable = true, visible = false) public Object toggleGroup = null;
-    }
-    public static class PopupMenuButtonWrapper {
-        @Prop public Boolean selected = false;
-        @Prop(bindable = true) public Integer selectedIndex = 0;
-        @Prop(exported = false, visible = false) public String resize = "horizontal";
-        @Prop(visible = false, bindable = false) public String clazz = org.joshy.gfx.node.control.PopupMenuButton.class.getName();
-    }
-    public static class ToggleGroupWrapper {
-        @Prop public Integer selectedIndex = 0;
-        @Prop public Object  selectedObject = null;
-        @Prop public Object  object = null;
-        @Prop(visible = false) public String clazz = "org.joshy.gfx.node.control.Togglegroup";
+    private static DynamicNode parse(Object o, DynamicNode.DrawDelegate del, DynamicNode base) {
+        DynamicNode nd = BindingUtils.parseAnnotatedPOJO(o, del);
+        if(base != null) {
+            nd.copyPropertiesFrom(base);
+        }
+        return nd;
     }
 
     @Override
@@ -919,7 +789,7 @@ public class AminoJavaMode extends Mode {
                     public Double accum(SketchNode node, Double value) {
                         if(!(node instanceof DynamicNode)) return value;
                         DynamicNode nd = (DynamicNode) node;
-                        if(!nd.isResizable()) return value;
+                        if(nd.getResize() == Resize.None) return value;
                         nd.getProperty("width").setDoubleValue(value);
                         return value;
                     }
@@ -941,7 +811,7 @@ public class AminoJavaMode extends Mode {
                     public Double accum(SketchNode node, Double value) {
                         if(!(node instanceof DynamicNode)) return value;
                         DynamicNode nd = (DynamicNode) node;
-                        if(!nd.isResizable()) return value;
+                        if(nd.getResize() == Resize.None) return value;
                         nd.getProperty("height").setDoubleValue(value);
                         return value;
                     }

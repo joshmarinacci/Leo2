@@ -1,10 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.Binding;
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
-import com.joshondesign.treegui.docmodel.SketchDocument;
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import java.io.*;
@@ -140,13 +137,7 @@ public class HTMLBindingExport extends AminoAction {
             if(key.equals("translateX")) key = "x";
             if(key.equals("translateY")) key = "y";
             if(!node.isVisual() && Arrays.asList(visualOnlyProps).contains(key)) continue;
-            if(node.isResizable()){
-                String resize = node.getProperty("resize").getStringValue();
-                if(!"any".equals(resize)) {
-                    if(resizeOnlyProps.contains(key)) continue;
-                }
-            }
-            if(!node.isResizable()) {
+            if(node.getResize() == Resize.Any) {
                 if(resizeOnlyProps.contains(key)) continue;
             }
             w.prop(key, prop.getRawValue());

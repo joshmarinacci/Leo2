@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.Resize;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
@@ -16,7 +17,7 @@ public class Spinner extends ResizableRectNode {
     public Spinner() {
         setWidth(50);
         setHeight(50);
-        setConstraint(ResizeConstraint.PreserveAspectOnly);
+        setConstraint(Resize.PreserveAspectOnly);
         setVisible(true);
         setActive(false);
     }

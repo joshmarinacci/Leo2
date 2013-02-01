@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.Resize;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
@@ -18,7 +19,7 @@ public class Textbox extends ResizableRectNode {
         setWidth(80);
         setHeight(20);
         setText("a text box");
-        setConstraint(ResizeConstraint.HorizontalOnly);
+        setConstraint(Resize.HorizontalOnly);
     }
 
     @Override

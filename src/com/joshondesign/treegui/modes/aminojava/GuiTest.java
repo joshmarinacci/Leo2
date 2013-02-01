@@ -1,5 +1,7 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.docmodel.Resize;
+import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import com.joshondesign.xml.XMLWriter;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -12,7 +14,7 @@ public class GuiTest {
     public static void main(String... args) throws Exception {
         DynamicNode button = new DynamicNode();
         button.setName("Button");
-        button.setResizable(true);
+        button.setResize(Resize.Any);
         button.setVisual(true);
 
         button.addProperty(new Property("class", String.class, "org.joshy.gfx.node.control.Button"));
@@ -23,7 +25,7 @@ public class GuiTest {
         button.addProperty(new Property("height", Double.class, 50));
         button.addProperty(new Property("text", String.class, "a button"));
         button.addProperty(new Property("selected", Boolean.class, false));
-        button.addProperty(new Property("trigger", TriggerType.class, 0).setExported(false));
+        button.addProperty(new Property("trigger", TriggerProp.class, 0).setExported(false));
 
         DynamicNode flickr = new DynamicNode();
         flickr.setName("FlickrQuery");
@@ -62,7 +64,6 @@ public class GuiTest {
     }
     public static class ActionType {}
     public static class ListType {}
-    public static class TriggerType {}
 }
 
 

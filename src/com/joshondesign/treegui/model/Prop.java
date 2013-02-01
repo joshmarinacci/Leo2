@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Prop {
-    boolean bindable() default true;
+    boolean bindable() default false;
     boolean visible() default true;
     boolean exported() default true;
     boolean list() default false;

@@ -7,23 +7,19 @@ import org.joshy.gfx.node.Bounds;
 public abstract class ResizableRectNode extends SketchNode {
 
     protected ResizableRectNode() {
-        setConstraint(ResizeConstraint.Any);
+        setConstraint(Resize.Any);
     }
 
-    public static enum ResizeConstraint {
-        Any, VerticalOnly, HorizontalOnly, None, PreserveAspectOnly
-    }
-
-    public ResizeConstraint getConstraint() {
+    public Resize getConstraint() {
         return constraint;
     }
 
-    public void setConstraint(ResizeConstraint constraint) {
+    public void setConstraint(Resize constraint) {
         this.constraint = constraint;
     }
 
 
-    @Prop(visible = false, bindable = false) public ResizeConstraint constraint;
+    @Prop(visible = false, bindable = false) public Resize constraint;
 
     @Override
     public boolean contains(Point2D pt) {

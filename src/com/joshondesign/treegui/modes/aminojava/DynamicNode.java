@@ -2,6 +2,7 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.MathUtils;
+import com.joshondesign.treegui.docmodel.Resize;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import java.awt.geom.Point2D;
@@ -207,7 +208,7 @@ public class DynamicNode extends SketchNode {
     }
     @Override
     public Bounds getInputBounds() {
-        if(isResizable()) {
+        if(getResize() == Resize.Any) {
             double w = getProperty("width").getDoubleValue();
             double h = getProperty("height").getDoubleValue();
             return new Bounds(0,0,w,h);

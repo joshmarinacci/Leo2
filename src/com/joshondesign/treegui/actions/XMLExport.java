@@ -106,7 +106,7 @@ public class XMLExport {
                 .attr("id", node.getId())
                 .attr("class", node.getProperty("class").encode())
                 .attr("visual", Boolean.toString(node.isVisual()))
-                .attr("resizable", Boolean.toString(node.isResizable()))
+                .attr("resize", node.getResize().name())
                 .attr("container", Boolean.toString(node.isContainer()))
                 .attr("custom", Boolean.toString(node.isCustom()))
                 .attr("name", node.getName())

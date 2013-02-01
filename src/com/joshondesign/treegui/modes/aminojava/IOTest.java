@@ -10,6 +10,7 @@ import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
+import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -61,13 +62,13 @@ public class IOTest {
 
         DynamicNode button = (DynamicNode) doc2.get(0).get(0).get(1);
         assertEquals(button.getSize(),0);
-        assertEquals(button.getProperty("trigger").getType(),GuiTest.TriggerType.class);
+        assertEquals(button.getProperty("trigger").getType(), TriggerProp.class);
 
         assertEquals(doc2.getBindings().size(),1);
         Binding bind = doc2.getBindings().get(0);
         assertEquals(bind.getSource(), button);
         assertEquals(bind.getSourceProperty().getName(),"trigger");
-        assertEquals(bind.getSourceProperty().getType(),GuiTest.TriggerType.class);
+        assertEquals(bind.getSourceProperty().getType(),TriggerProp.class);
     }
 
     private static void testJSExport() throws Exception {

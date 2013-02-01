@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.Resize;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.Prop;
 import org.joshy.gfx.draw.FlatColor;
@@ -18,7 +19,7 @@ public class Slider extends ResizableRectNode {
         setMinValue(0);
         setMaxValue(100);
         setValue(50);
-        setConstraint(ResizeConstraint.HorizontalOnly);
+        setConstraint(Resize.HorizontalOnly);
     }
 
 

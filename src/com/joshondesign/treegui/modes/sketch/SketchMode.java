@@ -2,10 +2,7 @@ package com.joshondesign.treegui.modes.sketch;
 
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
-import com.joshondesign.treegui.docmodel.SketchDocument;
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
@@ -35,7 +32,7 @@ public class SketchMode extends Mode {
 
         DynamicNode rect = new DynamicNode();
         rect.setName("Rectangle");
-        rect.setResizable(true);
+        rect.setResize(Resize.Any);
         rect.setVisual(true);
         rect.copyPropertiesFrom(resizeBase);
         rect.addProperty(new Property("resize", String.class, "any"));
@@ -50,7 +47,7 @@ public class SketchMode extends Mode {
 
         DynamicNode oval = new DynamicNode();
         oval.setName("Oval");
-        oval.setResizable(true);
+        oval.setResize(Resize.Any);
         oval.setVisual(true);
         oval.copyPropertiesFrom(resizeBase);
         oval.addProperty(new Property("resize", String.class, "any"));

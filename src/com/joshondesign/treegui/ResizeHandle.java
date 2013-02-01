@@ -1,6 +1,7 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.Resize;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -36,7 +37,7 @@ public class ResizeHandle extends Handle {
     public void drag(MouseEvent mouseEvent, Point2D pt) {
         node.setWidth(pt.getX()-node.getTranslateX());
         if(mouseEvent.isShiftPressed()) {
-            if(node.getConstraint() == ResizableRectNode.ResizeConstraint.Any) {
+            if(node.getConstraint() == Resize.Any) {
                 node.setHeight(node.getWidth());
             }
             return;

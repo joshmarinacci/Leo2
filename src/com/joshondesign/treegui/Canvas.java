@@ -1,9 +1,6 @@
 package com.joshondesign.treegui;
 
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.ResizableRectNode;
-import com.joshondesign.treegui.docmodel.SketchDocument;
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.awt.geom.Path2D;
@@ -457,7 +454,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             }
             if(node instanceof DynamicNode) {
                 DynamicNode dnode = (DynamicNode) node;
-                if(dnode.isResizable()) {
+                if(dnode.getResize() == Resize.Any) {
                     handles.add(new DynamicResizeHandle((DynamicNode) node, document));
                 }
             }

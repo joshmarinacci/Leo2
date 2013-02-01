@@ -1,6 +1,6 @@
 package com.joshondesign.treegui;
 
-import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.Resize;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.Metadata;
@@ -100,7 +100,7 @@ public class BindingUtils {
         u.p("processing: " + obj.getClass().getSimpleName());
         DynamicNode node = new DynamicNode();
         node.setName(obj.getClass().getSimpleName());
-        node.setResizable(false);
+        node.setResize(Resize.Any);
         node.setDrawDelegate(base);
         node
                 //.addProperty(new Property("translateX", Double.class, 0).setExported(false))
@@ -115,36 +115,6 @@ public class BindingUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        if(node.hasProperty("constraint")) {
-            Property con = node.getProperty("constraint");
-            if(con.getType() == ResizableRectNode.ResizeConstraint.class) {
-                node.setResizable(true);
-                ResizableRectNode.ResizeConstraint resize = (ResizableRectNode.ResizeConstraint) con.getEnumValue();
-                Property resizeProp = new Property("resize", String.class, "any")
-                        .setExported(false)
-                        .setVisible(false);
-
-                if(resize == ResizableRectNode.ResizeConstraint.Any) {
-                    resizeProp.setStringValue("any");
-                }
-                if(resize == ResizableRectNode.ResizeConstraint.HorizontalOnly) {
-                    resizeProp.setStringValue("horz");
-                }
-                if(resize == ResizableRectNode.ResizeConstraint.VerticalOnly) {
-                    resizeProp.setStringValue("vert");
-                }
-                if(resize == ResizableRectNode.ResizeConstraint.PreserveAspectOnly) {
-                    resizeProp.setStringValue("aspect");
-                }
-                if(resize == ResizableRectNode.ResizeConstraint.None) {
-                    resizeProp.setStringValue("none");
-                    node.setResizable(false);
-                }
-                node.addProperty(resizeProp);
-            }
-        }
-
         return node;
 
     }
@@ -154,9 +124,12 @@ public class BindingUtils {
             u.p("annotated!");
             Metadata info = (Metadata) aClass.getAnnotation(Metadata.class);
             node.setVisual(info.visual());
+            node.setResize(info.resize());
+            node.setContainer(info.container());
             if(!info.exportClass().trim().equals("")) {
                 node.addProperty(new Property("class", String.class, info.exportClass()));
             }
+            node.setName(info.name());
         }
     }
 

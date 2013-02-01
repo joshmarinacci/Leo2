@@ -2,10 +2,7 @@ package com.joshondesign.treegui.actions;
 
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.Mode;
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
-import com.joshondesign.treegui.docmodel.SketchDocument;
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.AminoJavaMode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
@@ -89,7 +86,7 @@ public class XMLImport {
         node.addProperty(new Property("class", String.class, xml.attr("class")));
         node.setVisual(xml.attrEquals("visual", "true"));
         node.setContainer(xml.attrEquals("container", "true"));
-        node.setResizable(xml.attrEquals("resizable", "true"));
+        node.setResize(Resize.valueOf(xml.attr("resize")));
         node.setCustom(xml.attrEquals("custom", "true"));
         if(node.isCustom()) {
             node.addProperty(new Property("customClass",String.class,xml.attr("customClass")));

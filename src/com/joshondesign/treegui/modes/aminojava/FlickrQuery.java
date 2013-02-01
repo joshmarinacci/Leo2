@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes.aminojava;
 
+import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.ChangedEvent;
@@ -8,6 +9,8 @@ import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.u;
 
+@Metadata(name = "FlickrQuery", visual = false,
+        exportClass = "com.joshondesign.treegui.modes.aminojava.FlickrQuery")
 public class FlickrQuery {
     @Prop(bindable = true) public String query;
     private ArrayListModel<Photo> results = new ArrayListModel<Photo>();
@@ -74,6 +77,7 @@ public class FlickrQuery {
         return active;
     }
 
+    @Metadata(visual = false)
     public static class Photo {
         @Prop (bindable = true) public String title;
         @Prop (bindable = true) public String url;

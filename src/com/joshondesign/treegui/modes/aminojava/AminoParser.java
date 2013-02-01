@@ -2,6 +2,7 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.AnchorPanel;
 import com.joshondesign.treegui.PropUtils;
+import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import com.joshondesign.xml.Elem;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -57,12 +58,13 @@ public class AminoParser {
             final String srcProp = binding.attr("sourceprop");
             final Object tgt = ctx.objectMap.get(binding.attr("targetid"));
             final String tgtProp = binding.attr("targetprop");
-            //u.p("working on binding: " + src + ":" + srcProp + " to " + tgt + " : " + tgtProp);
+            u.p("working on binding: " + src + ":" + srcProp + " to " + tgt + " : " + tgtProp);
 
             //applyBinding(binding);
 
             final Elem propElem = ctx.propMap.get(srcId).get(srcProp);
-            if(propElem.attr("type").equals(GuiTest.TriggerType.class.getName())) {
+            u.p("prop elem type = " + propElem.attr("type"));
+            if(propElem.attr("type").equals(TriggerProp.class.getName())) {
                 EventBus.getSystem().addListener(src, ActionEvent.Action, new Callback<Event>() {
                     public void call(Event event) throws Exception {
                         tgt.getClass().getMethod(tgtProp).invoke(tgt);

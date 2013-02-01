@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
+import com.joshondesign.treegui.docmodel.Resize;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
@@ -19,7 +20,7 @@ public class PushButton extends ResizableRectNode {
         setWidth(70);
         setHeight(20);
         setText("a button");
-        setConstraint(ResizeConstraint.None);
+        setConstraint(Resize.None);
     }
 
     @Override
