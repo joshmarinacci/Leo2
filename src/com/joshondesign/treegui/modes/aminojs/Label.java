@@ -1,14 +1,14 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.Resize;
+import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
+@Metadata(resize= Resize.None)
 public class Label extends ResizableRectNode {
-    @Prop public String text = "Label";
+    @Prop(bindable = true ) public String text = "Label";
 
     public Label() {
         setWidth(70);
@@ -17,23 +17,5 @@ public class Label extends ResizableRectNode {
 
     @Override
     public void draw(GFX g) {
-        g.setPaint(FlatColor.BLACK);
-        g.drawText(getText(), Font.DEFAULT, 5, 15);
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    @Override
-    public SketchNode duplicate(SketchNode node) {
-        if(node == null) {
-            node = new Label();
-        }
-        return super.duplicate(node);
     }
 }

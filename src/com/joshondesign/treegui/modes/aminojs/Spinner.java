@@ -2,55 +2,22 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.Resize;
-import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
-@Metadata(visual = true, exportClass = "Spinner")
+@Metadata(exportClass = "Spinner", resize = Resize.PreserveAspectOnly)
 public class Spinner extends ResizableRectNode {
 
-    @Prop public boolean visible;
-    @Prop public boolean active;
+    @Prop public boolean visible = true;
+    @Prop(bindable = true) public boolean active = false;
 
     public Spinner() {
         setWidth(50);
         setHeight(50);
-        setConstraint(Resize.PreserveAspectOnly);
-        setVisible(true);
-        setActive(false);
     }
 
     @Override
     public void draw(GFX g) {
-        g.setPaint(FlatColor.BLACK);
-        g.drawRect(10,10,getWidth()-20,getHeight()-20);
     }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-
-    @Override
-    public SketchNode duplicate(SketchNode node) {
-        if(node == null) {
-            node = new Spinner();
-        }
-        return super.duplicate(node);
-    }
-
 }

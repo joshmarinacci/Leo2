@@ -97,14 +97,11 @@ public class BindingUtils {
 
 
     public static DynamicNode parseAnnotatedPOJO(Object obj, DynamicNode.DrawDelegate base) {
-        u.p("processing: " + obj.getClass().getSimpleName());
         DynamicNode node = new DynamicNode();
         node.setName(obj.getClass().getSimpleName());
         node.setResize(Resize.Any);
         node.setDrawDelegate(base);
         node
-                //.addProperty(new Property("translateX", Double.class, 0).setExported(false))
-                //.addProperty(new Property("translateY", Double.class, 0).setExported(false))
                 .addProperty(new Property("width", Double.class, 90).setBindable(false).setExported(false))
                 .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
         ;
@@ -121,15 +118,19 @@ public class BindingUtils {
 
     private static void parseClassInfo(Class aClass, Object obj, DynamicNode node) {
         if(aClass.isAnnotationPresent(Metadata.class)) {
-            u.p("annotated!");
             Metadata info = (Metadata) aClass.getAnnotation(Metadata.class);
             node.setVisual(info.visual());
             node.setResize(info.resize());
             node.setContainer(info.container());
             if(!info.exportClass().trim().equals("")) {
                 node.addProperty(new Property("class", String.class, info.exportClass()));
+            } else {
+                node.addProperty(new Property("class", Class.class, aClass));
             }
             node.setName(info.name());
+            if(info.name().equals("unnamed")) {
+                node.setName(aClass.getSimpleName());
+            }
         }
     }
 
@@ -149,6 +150,9 @@ public class BindingUtils {
                 p.setBindable(prop.bindable());
                 p.setVisible(prop.visible());
                 p.setExported(prop.exported());
+                p.setCompound(prop.compound());
+                p.setList(prop.list());
+                p.setMasterProperty(prop.master());
                 node.addProperty(p);
             }
         }
@@ -173,6 +177,9 @@ public class BindingUtils {
                 p.setBindable(prop.bindable());
                 p.setVisible(prop.visible());
                 p.setExported(prop.exported());
+                p.setCompound(prop.compound());
+                p.setList(prop.list());
+                p.setMasterProperty(prop.master());
                 node.addProperty(p);
             }
         }

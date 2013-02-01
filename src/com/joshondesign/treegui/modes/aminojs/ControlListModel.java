@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -10,13 +11,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josh
- * Date: 1/9/13
- * Time: 9:02 PM
- * To change this template use File | Settings | File Templates.
- */
+@Metadata
 public class ControlListModel extends SketchNode {
     @Prop
     public List<Object> data;

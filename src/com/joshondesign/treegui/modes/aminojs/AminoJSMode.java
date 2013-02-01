@@ -24,12 +24,9 @@ public class AminoJSMode extends Mode {
 
     public AminoJSMode() {
         setId("com.joshondesign.modes.aminojs");
-        TreeNode<JAction> actions = new TreeNode<JAction>();
-        add(actions);
-
+        add(new TreeNode<JAction>());
 
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
-
 
         DynamicNode visualBase = new DynamicNode();
         visualBase
@@ -65,19 +62,9 @@ public class AminoJSMode extends Mode {
             }
         });
 
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new PushButton(), drawMap.get("PushButton"))
-                .setVisual(true)
-                .copyPropertiesFrom(visualBase));
-
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new ToggleButton(), drawMap.get("PushButton"))
-                .setDrawDelegate(drawMap.get("PushButton"))
-                .copyPropertiesFrom(visualBase));
-
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new CheckButton(), drawMap.get("CheckButton"))
-                .copyPropertiesFrom(visualBase));
+        symbols.add(parse(new PushButton(), drawMap.get("PushButton"), visualBase));
+        symbols.add(parse(new ToggleButton(), drawMap.get("PushButton"),visualBase));
+        symbols.add(parse(new CheckButton(), drawMap.get("CheckButton"),visualBase));
 
 
         drawMap.put("Slider", new DynamicNode.DrawDelegate() {
@@ -143,35 +130,11 @@ public class AminoJSMode extends Mode {
             }
         });
 
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new Slider(), drawMap.get("Slider"))
-                .copyPropertiesFrom(visualBase));
-
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new Image(), drawMap.get("Image"))
-                .copyPropertiesFrom(visualBase));
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new Textbox(), drawMap.get("TextBox"))
-                .copyPropertiesFrom(visualBase));
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new Label(), drawMap.get("Label"))
-                .copyPropertiesFrom(visualBase));
-
-        DynamicNode listview = BindingUtils
-                .parseAnnotatedPOJO(new ListView(), drawMap.get("ListView"));
-        listview.copyPropertiesFrom(visualBase);
-
-        Property subProp = new Property("selectedObject",Object.class,null);
-        subProp.setBindable(true);
-        subProp.setCompound(true);
-        subProp.setExported(false);
-        subProp.setMasterProperty("data");
-        listview.addProperty(subProp);
-
-        symbols.add(listview);
-
-
-
+        symbols.add(parse(new Slider(), drawMap.get("Slider"), visualBase));
+        symbols.add(parse(new Image(), drawMap.get("Image"), visualBase));
+        symbols.add(parse(new Textbox(), drawMap.get("TextBox"), visualBase));
+        symbols.add(parse(new Label(), drawMap.get("Label"), visualBase));
+        symbols.add(parse(new ListView(), drawMap.get("ListView"), visualBase));
 
         drawMap.put("PlainPanel", new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
@@ -204,36 +167,15 @@ public class AminoJSMode extends Mode {
             }
         });
 
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new PlainPanel(), drawMap.get("PlainPanel"))
-                .copyPropertiesFrom(visualBase));
-
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new TabPanel(), drawMap.get("PlainPanel"))
-                .copyPropertiesFrom(visualBase));
-
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new StringListModel(), drawMap.get("PlainPanel"))
-                .copyPropertiesFrom(visualBase));
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new ControlListModel(), drawMap.get("TabPanel"))
-                .copyPropertiesFrom(visualBase));
-
-        symbols.add(BindingUtils
-                .parseAnnotatedPOJO(new Spinner(), drawMap.get("Spinner"))
-                .copyPropertiesFrom(visualBase));
-
-
-        DynamicNode photo = BindingUtils.parseAnnotatedPOJO(new com.joshondesign.treegui.modes.aminojava.FlickrQuery.Photo("a","b"), null);
-        photo.setVisual(false);
-        //photo.copyPropertiesFrom(serviceBase);
-
-        DynamicNode flickr =  BindingUtils
-                .parseAnnotatedPOJO(new FlickrQuery(), drawMap.get("FlickrQuery"));
-        flickr.copyPropertiesFrom(visualBase);
+        symbols.add(parse(new PlainPanel(), drawMap.get("PlainPanel"), visualBase));
+        symbols.add(parse(new TabPanel(), drawMap.get("PlainPanel"), visualBase));
+        symbols.add(parse(new Spinner(), drawMap.get("Spinner"), visualBase));
+        symbols.add(parse(new StringListModel(), drawMap.get("FlickrQuery"), visualBase));
+        symbols.add(parse(new ControlListModel(), drawMap.get("FlickrQuery"), visualBase));
+        DynamicNode photo = parse(new FlickrQuery.Photo("a","b"), drawMap.get("FlickrQuery"), visualBase);
+        DynamicNode flickr =  parse(new FlickrQuery(), drawMap.get("FlickrQuery"), visualBase);
         flickr.getProperty("results").setList(true).setItemPrototype(photo);
         symbols.add(flickr);
-
 
         add(symbols);
 
@@ -264,5 +206,13 @@ public class AminoJSMode extends Mode {
     @Override
     public Map<String,DynamicNode.DrawDelegate> getDrawMap() {
         return drawMap;
+    }
+
+    private static DynamicNode parse(Object o, DynamicNode.DrawDelegate del, DynamicNode base) {
+        DynamicNode nd = BindingUtils.parseAnnotatedPOJO(o, del);
+        if(base != null) {
+            nd.copyPropertiesFrom(base);
+        }
+        return nd;
     }
 }

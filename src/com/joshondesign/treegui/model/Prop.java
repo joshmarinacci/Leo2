@@ -16,4 +16,6 @@ public @interface Prop {
     boolean visible() default true;
     boolean exported() default true;
     boolean list() default false;
+    boolean compound() default false;
+    String master() default "";
 }

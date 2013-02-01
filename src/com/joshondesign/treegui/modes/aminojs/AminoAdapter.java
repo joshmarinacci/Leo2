@@ -23,7 +23,7 @@ public class AminoAdapter {
 //        if(node instanceof StringListModel) return "ListModel";
 //        if(node instanceof ControlListModel) return "ListModel";
 //        if(node instanceof Image) return "ImageView";
-        u.p("node = " + node);
+        u.p("node = " + node.getName());
         for(Property prop : node.getProperties()){
             u.p("   " + prop.getName() + " " + prop.getRawValue());
         }
@@ -69,20 +69,6 @@ public class AminoAdapter {
                     if(name.equals("translateX")) continue;
                     if(name.equals("translateY")) continue;
                 }
-                if(node instanceof StringListModel) {
-                    if(name.equals("this")) continue;
-                    if(name.equals("x")) continue;
-                    if(name.equals("y")) continue;
-                }
-                if(node instanceof Image) {
-                    if(name.equals("width")) continue;
-                    if(name.equals("height")) continue;
-                }
-                if(node instanceof FlickrQuery) {
-                    //if(name.equals("results")) continue;
-                    //if(name.equals("query")) continue;
-                }
-
                 Object value = m.invoke(node);
                 props.put(name,value);
             } catch (Throwable e) {

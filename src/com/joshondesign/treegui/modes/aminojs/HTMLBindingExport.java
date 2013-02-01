@@ -137,9 +137,8 @@ public class HTMLBindingExport extends AminoAction {
             if(key.equals("translateX")) key = "x";
             if(key.equals("translateY")) key = "y";
             if(!node.isVisual() && Arrays.asList(visualOnlyProps).contains(key)) continue;
-            if(node.getResize() == Resize.Any) {
-                if(resizeOnlyProps.contains(key)) continue;
-            }
+            if(key.equals("width") && !canResizeHorizontal(node)) continue;
+            if(key.equals("height") && !canResizeVertical(node)) continue;
             w.prop(key, prop.getRawValue());
         }
 
@@ -152,6 +151,18 @@ public class HTMLBindingExport extends AminoAction {
             w.p(";");
         }
         w.outdent();
+    }
+
+    private boolean canResizeVertical(DynamicNode node) {
+        if(node.getResize() == Resize.Any) return true;
+        if(node.getResize() == Resize.VerticalOnly) return true;
+        return false;
+    }
+
+    private boolean canResizeHorizontal(DynamicNode node) {
+        if(node.getResize() == Resize.Any) return true;
+        if(node.getResize() == Resize.HorizontalOnly) return true;
+        return false;
     }
 
     private void applyTemplate(File in, File out, Map<String, String> subs) {
