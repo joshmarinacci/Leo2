@@ -4,11 +4,12 @@ import com.joshondesign.treegui.docmodel.Resize;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.Metadata;
-import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.model.Prop;
+import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -106,6 +107,7 @@ public class BindingUtils {
                 .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
         ;
         try {
+            u.p("doing " + node.getName());
             parseFields(obj.getClass().getFields(), obj, node);
             parseMethods(obj.getClass().getMethods(), obj, node);
             parseClassInfo(obj.getClass(), obj, node);
@@ -160,14 +162,14 @@ public class BindingUtils {
 
     private static void parseFields(Field[] fields, Object obj, DynamicNode node) throws IllegalAccessException {
         for(Field field : fields) {
-//            for(Annotation an : field.getAnnotations()) {
-                //u.p("  ann " + an);
-//            }
+            for(Annotation an : field.getAnnotations()) {
+                u.p("  ann " + an);
+            }
 
             if(field.isAnnotationPresent(Prop.class)) {
                 Prop prop = field.getAnnotation(Prop.class);
-                //u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
-//                    u.p("  bindable = " + prop.bindable());
+                u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
+                    u.p("  bindable = " + prop.bindable());
                 String name = field.getName();
                 if(name.equals("clazz")) {
                     name = "class";

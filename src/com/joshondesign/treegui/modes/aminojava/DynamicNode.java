@@ -119,6 +119,10 @@ public class DynamicNode extends SketchNode {
         }
     }
 
+    public void removeProperty(String name) {
+        this.properies.remove(name);
+    }
+
     public static interface DrawDelegate {
         public void draw(GFX g, DynamicNode node);
     }

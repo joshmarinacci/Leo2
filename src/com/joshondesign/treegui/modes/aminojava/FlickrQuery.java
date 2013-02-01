@@ -12,9 +12,10 @@ import org.joshy.gfx.util.u;
 @Metadata(name = "FlickrQuery", visual = false,
         exportClass = "com.joshondesign.treegui.modes.aminojava.FlickrQuery")
 public class FlickrQuery {
+
     @Prop(bindable = true) public String query;
     private ArrayListModel<Photo> results = new ArrayListModel<Photo>();
-    @Prop(bindable = true) public Boolean active = false;
+    private boolean active = false;
 
 
     public FlickrQuery() {
@@ -73,6 +74,7 @@ public class FlickrQuery {
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.BooleanChanged, active,this));
     }
 
+    @Prop(bindable = true)
     public boolean isActive() {
         return active;
     }
@@ -83,8 +85,25 @@ public class FlickrQuery {
         @Prop (bindable = true) public String url;
 
         public Photo(String title, String url) {
+            this.setTitle(title);
+            this.setUrl(url);
+        }
+
+
+        public void setTitle(String title) {
             this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setUrl(String url) {
             this.url = url;
+        }
+
+        public String getUrl() {
+            return url;
         }
     }
 

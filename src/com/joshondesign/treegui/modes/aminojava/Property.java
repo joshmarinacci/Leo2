@@ -2,6 +2,7 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.util.u;
 
 public class Property {
 
@@ -74,6 +75,10 @@ public class Property {
                 return sb.toString();
             }
         }
+        if(type == Class.class) {
+            return ((Class)value).getName();
+        }
+        u.p("WARNING: returning null for the encoding of property " + getName());
         return null;
     }
 

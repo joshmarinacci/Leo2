@@ -18,6 +18,7 @@ import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.control.Menu;
 import org.joshy.gfx.node.control.ScrollPane;
+import org.joshy.gfx.util.u;
 
 public class AminoJavaMode extends Mode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
@@ -81,9 +82,6 @@ public class AminoJavaMode extends Mode {
     public static class LabelProxy {
         @Prop(bindable = true)
         public CharSequence text = "a label";
-
-        @Prop(exported = false, bindable = true, visible = false)
-        public TriggerProp trigger;
     }
 
     private final DynamicNode.DrawDelegate labelDelegate = new DynamicNode.DrawDelegate() {
@@ -137,13 +135,14 @@ public class AminoJavaMode extends Mode {
 
     @Metadata(name = "ListView", exportClass = "org.joshy.gfx.node.control.ListView")
     public static class ListViewProxy {
-        @Prop double rowheight = 20;
-        @Prop double columnWidth = 100;
-        @Prop(visible = false) ListView.ItemRenderer renderer = null;
-        @Prop(bindable = true, exported = false) ListModel model = null;
+        @Prop public double rowheight = 20;
+        @Prop public double columnWidth = 100;
+        @Prop(visible = false) public ListView.ItemRenderer renderer = null;
+        @Prop(bindable = true, exported = false) public ListModel model = null;
         @Prop  public ListView.Orientation orientation = ListView.Orientation.Vertical;
-        @Prop(bindable = true) int selectedIndex = 0;
-        @Prop(bindable = true) Object selectedItem = null;
+        @Prop(bindable = true) public int selectedIndex = 0;
+        @Prop(bindable = true, compound = true, exported = false, master = "model", visible = false)
+        public Object selectedObject = null;
     }
 
     private final DynamicNode.DrawDelegate listviewDelegate = new DynamicNode.DrawDelegate() {
@@ -290,7 +289,7 @@ public class AminoJavaMode extends Mode {
     }
 
 
-    @Metadata(name = "StringList", visual = false, exportClass = "com.joshondesign.flickr.FlickrQuery" , resize = Resize.None)
+    @Metadata(name = "StringList", visual = false, exportClass = "com.joshondesign.madeupstringlist" , resize = Resize.None)
     public static class StringList {
         @Prop(bindable = true, visible = true)
         public List data = Arrays.asList(new String[]{"foo","bar","baz"});
@@ -380,13 +379,17 @@ public class AminoJavaMode extends Mode {
 
         drawMap.put("ListView", listviewDelegate);
         DynamicNode lv = parse(new ListViewProxy(), listviewDelegate, visualBase);
-        Property subProp = new Property("selectedObject",Object.class,null);
-        subProp.setExported(false);
-        subProp.setBindable(true);
-        subProp.setCompound(true);
-        subProp.setMasterProperty("model");
-        lv.addProperty(subProp);
+//        Property subProp = new Property("selectedObject",Object.class,null);
+//        subProp.setExported(false);
+//        subProp.setBindable(true);
+//        subProp.setCompound(true);
+//        subProp.setMasterProperty("model");
+        //lv.addProperty(subProp);
         symbols.add(lv);
+        u.p("listview props = ");
+        for(Property prop : lv.getProperties()) {
+            u.p("   " + prop.getName() + " " + prop.getType().getSimpleName() + " " + prop.getRawValue());
+        }
 
 
         drawMap.put("Scroll", scrollDelegate);
@@ -403,14 +406,15 @@ public class AminoJavaMode extends Mode {
 
         drawMap.put("servicebase", servicebaseDelegate);
         DynamicNode serviceBase = parse(new ServiceBase(), servicebaseDelegate, null);
+        serviceBase.removeProperty("class");
 
         //flickr query
         DynamicNode photo = parse(new FlickrQuery.Photo("a","b"), servicebaseDelegate, serviceBase);
         DynamicNode flickrQuery = parse(new FlickrQuery(), servicebaseDelegate, serviceBase);
         flickrQuery.addProperty(new Property("execute", ActionProp.class, null)
-                        .setBindable(true).setVisible(false))
+                .setBindable(true).setVisible(false).setExported(false))
                     .addProperty(new Property("results", ListModel.class, null)
-                            .setVisible(false).setBindable(true).setList(true)
+                            .setVisible(false).setBindable(true).setList(true).setExported(false)
                             .setItemPrototype(photo))
                 ;
         symbols.add(flickrQuery);

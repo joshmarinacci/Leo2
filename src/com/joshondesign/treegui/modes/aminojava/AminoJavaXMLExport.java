@@ -129,6 +129,7 @@ public class AminoJavaXMLExport extends JAction {
                 if(file == null) {
                     file = File.createTempFile("blah","xml");
                 }
+                u.p("saving to the file: " + file.getAbsolutePath());
                 //save the file
                 XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), document.get(0), document);
                 //now reload it
