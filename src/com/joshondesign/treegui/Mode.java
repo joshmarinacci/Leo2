@@ -16,7 +16,7 @@ public abstract class Mode extends TreeNode {
     public abstract String getName();
 
     public TreeNode<SketchNode> getSymbols() {
-        return get(1);
+        return getById("symbols");
     }
 
     public abstract SketchDocument createEmptyDoc();

@@ -138,4 +138,11 @@ public class TreeNode<C extends TreeNode> {
         return _list;
     }
 
+    protected C getById(String id) {
+        for(C c : children()){
+            if(c.getId() != null && c.getId().equals(id)) return c;
+        }
+        return null;
+    }
+
 }

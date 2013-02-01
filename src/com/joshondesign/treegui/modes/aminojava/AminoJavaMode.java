@@ -331,6 +331,7 @@ public class AminoJavaMode extends Mode {
         add(new TreeNode<JAction>());
 
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
+        symbols.setId("symbols");
         add(symbols);
 
         DynamicNode visualBase = new DynamicNode();

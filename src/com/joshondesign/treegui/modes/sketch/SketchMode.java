@@ -21,6 +21,7 @@ public class SketchMode extends Mode {
         add(javaactions);
 
         TreeNode<SketchNode> symbols = new TreeNode<SketchNode>();
+        symbols.setId("symbols");
         add(symbols);
 
 
