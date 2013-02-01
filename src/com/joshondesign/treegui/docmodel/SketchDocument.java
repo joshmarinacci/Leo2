@@ -7,16 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SketchDocument extends TreeNode<Page> {
-    private final Selection selection;
-    private File file;
-    List<Binding> bindings = new ArrayList<Binding>();
+    private Selection selection = new Selection();
+    private File file = null;
+    private List<Binding> bindings = new ArrayList<Binding>();
     private Page selectedPage;
     private boolean snapToGrid = false;
     private String modeId;
+    private File exportFile = null;
 
     public SketchDocument() {
-        selection = new Selection();
-        file = null;
     }
 
     public Selection getSelection() {
@@ -83,5 +82,13 @@ public class SketchDocument extends TreeNode<Page> {
 
     public String getModeId() {
         return modeId;
+    }
+
+    public File getExportFile() {
+        return exportFile;
+    }
+
+    public void setExportFile(File exportFile) {
+        this.exportFile = exportFile;
     }
 }

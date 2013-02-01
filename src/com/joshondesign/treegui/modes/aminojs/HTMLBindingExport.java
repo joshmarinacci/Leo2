@@ -4,9 +4,14 @@ import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.util.OSUtil;
@@ -16,15 +21,44 @@ public class HTMLBindingExport extends AminoAction {
 
     public SketchDocument document;
     public Page page;
+    private final boolean useRandomFile;
 
-    public HTMLBindingExport(SketchDocument document) {
+    public HTMLBindingExport(SketchDocument document, boolean useRandomFile) {
         this.document = document;
         this.page = document.get(0);
+        this.useRandomFile = useRandomFile;
     }
 
     @Override
     public void execute() {
         try {
+            File dir = new File("/Users/josh/projects/Leo/t2");
+            File html = new File(dir, "foo.html");
+            File templatedir = new File("/Users/josh/projects/Leo/t2");
+            if(useRandomFile) {
+
+            } else {
+
+                //get a file to write to
+                if(document.getExportFile() != null) {
+                    html = document.getExportFile();
+                    dir = html.getParentFile();
+                } else {
+                    java.awt.FileDialog fd = new java.awt.FileDialog((Frame) null);
+                    fd.setMode(FileDialog.SAVE);
+                    fd.setVisible(true);
+                    if(fd.getFile() == null) {
+                        return;
+                    }
+                    String filename = fd.getFile();
+                    if(!filename.toLowerCase().endsWith(".html")) {
+                        filename += ".html";
+                    }
+                    html = new File(fd.getDirectory(),filename);
+                    dir = html.getParentFile();
+                }
+            }
+
             //File file = File.createTempFile("foo",".html");
             //file.deleteOnExit();
             StringWriter treeContent = new StringWriter();
@@ -43,6 +77,7 @@ public class HTMLBindingExport extends AminoAction {
                     if(AminoAdapter.useSetup(dnode)) {
                         setupContent.append(node.getId() + ".setup(root);\n");
                     }
+                    doExtensions(setupContent, dnode);
                 }
                 treeWriter.outdent();
             }
@@ -54,20 +89,39 @@ public class HTMLBindingExport extends AminoAction {
             treeOut.close();
             setupContent.close();
 
-            File dir = new File("/Users/josh/projects/Leo/t2");
             Map<String,String> subs = new HashMap<String,String>();
             subs.put("tree",treeContent.toString());
             subs.put("setup", setupContent.toString());
 
-            File html = new File(dir, "foo.html");
             if(!html.exists()) {
-                applyTemplate( new File(dir,"foo_template.html"), html, subs);
+                applyTemplate( new File(templatedir,"foo_template.html"), html, subs);
             }
             File js = new File(dir,"generated.js");
-            applyTemplate( new File(dir, "generated_template.js"), js, subs);
-            OSUtil.openBrowser("http://localhost/~josh/projects/Leo/t2/foo.html");
+            applyTemplate( new File(templatedir, "generated_template.js"), js, subs);
+            copyFile(new File(templatedir, "amino.js"), new File(dir, "amino.js"));
+            copyFile(new File(templatedir, "jquery.js"), new File(dir, "jquery.js"));
+            copyFile(new File(templatedir,"controls.js"), new File(dir,"controls.js"));
+
+
+            File trimfile = new File("/Users/josh/");
+            String partialPath = dir.getAbsolutePath().substring((int)trimfile.getAbsolutePath().length());
+            OSUtil.openBrowser("http://localhost/~josh/"+partialPath+"/"+html.getName());
+
+            document.setExportFile(html);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void copyFile(File infile, File outfile) throws IOException {
+        u.streamToFile(new FileInputStream(infile),outfile);
+    }
+
+    private void doExtensions(StringWriter setupContent, DynamicNode dnode) {
+        if(dnode.hasProperty("draggable")) {
+            if(dnode.getProperty("draggable").getBooleanValue()) {
+                setupContent.append("setupDraggable("+dnode.getId()+",root);\n");
+            }
         }
     }
 
@@ -144,6 +198,7 @@ public class HTMLBindingExport extends AminoAction {
             if(!node.isVisual() && Arrays.asList(visualOnlyProps).contains(key)) continue;
             if(key.equals("width") && !canResizeHorizontal(node)) continue;
             if(key.equals("height") && !canResizeVertical(node)) continue;
+            if(key.equals("draggable")) continue;
             w.prop(key, prop.getRawValue());
         }
 
