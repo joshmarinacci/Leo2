@@ -401,12 +401,11 @@ public class AminoJavaMode extends Mode {
         //flickr query
         DynamicNode photo = parse(new FlickrQuery.Photo("a","b"), servicebaseDelegate, serviceBase);
         DynamicNode flickrQuery = parse(new FlickrQuery(), servicebaseDelegate, serviceBase);
-        flickrQuery.addProperty(new Property("execute", ActionProp.class, null)
+        flickrQuery
+                .addProperty(new Property("execute", ActionProp.class, null)
                 .setBindable(true).setVisible(false).setExported(false))
-                    .addProperty(new Property("results", ListModel.class, null)
-                            .setVisible(false).setBindable(true).setList(true).setExported(false)
-                            .setItemPrototype(photo))
                 ;
+        flickrQuery.getProperty("results").setItemPrototype(photo);
         symbols.add(flickrQuery);
 
         symbols.add(parse(new StringList(), servicebaseDelegate, serviceBase));

@@ -9,11 +9,10 @@ import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.u;
 
-@Metadata(name = "FlickrQuery", visual = false,
-        exportClass = "com.joshondesign.treegui.modes.aminojava.FlickrQuery")
+@Metadata(name = "FlickrQuery", visual = false)
 public class FlickrQuery {
 
-    @Prop(bindable = true) public String query;
+    private String query;
     private ArrayListModel<Photo> results = new ArrayListModel<Photo>();
     private boolean active = false;
 
@@ -28,10 +27,12 @@ public class FlickrQuery {
         this.query = query;
     }
 
+    @Prop(bindable = true)
     public String getQuery() {
         return query;
     }
 
+    @Prop(bindable = true, visible = false, list = true, exported = false)
     public ListModel<Photo> getResults() {
         return results;
     }
