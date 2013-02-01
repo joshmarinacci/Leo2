@@ -18,4 +18,6 @@ public class Image extends ResizableRectNode {
     @Override
     public void draw(GFX g) {
     }
+
+    @Prop public boolean draggable = false;
 }

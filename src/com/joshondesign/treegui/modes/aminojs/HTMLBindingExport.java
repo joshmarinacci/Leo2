@@ -27,39 +27,44 @@ public class HTMLBindingExport extends AminoAction {
         try {
             //File file = File.createTempFile("foo",".html");
             //file.deleteOnExit();
-            StringWriter content = new StringWriter();
-            PrintWriter out = new PrintWriter(content);
-
-            PropWriter w = new PropWriter(out);
+            StringWriter treeContent = new StringWriter();
+            PrintWriter treeOut = new PrintWriter(treeContent);
+            PropWriter treeWriter = new PropWriter(treeOut);
+            StringWriter setupContent = new StringWriter();
             for(Layer layer : page.children()) {
-                w.p("//layer");
-                w.indent();
+                treeWriter.p("//layer");
+                treeWriter.indent();
                 for(SketchNode node : layer.children()) {
                     DynamicNode dnode = (DynamicNode) node;
-                    exportNode(w, dnode, true);
+                    exportNode(treeWriter, dnode, true);
                     if(node.isVisual() && AminoAdapter.shouldAddToScene(node, document.getBindings())) {
-                        w.p("root.add(" + node.getId() + ");");
+                        setupContent.append("root.add(" + node.getId() + ");\n");
                     }
                     if(AminoAdapter.useSetup(dnode)) {
-                        w.p(node.getId()+".setup(root);");
+                        setupContent.append(node.getId() + ".setup(root);\n");
                     }
                 }
-                w.outdent();
+                treeWriter.outdent();
             }
 
             for(Binding binding : document.getBindings()) {
-                exportBinding(out,binding);
+                exportBinding(new PrintWriter(setupContent),binding);
             }
 
-            out.close();
-            u.p("output = " + content.toString());
+            treeOut.close();
+            setupContent.close();
+
             File dir = new File("/Users/josh/projects/Leo/t2");
             Map<String,String> subs = new HashMap<String,String>();
-            subs.put("content",content.toString());
-            applyTemplate(
-                    new File(dir,"foo_template.html"),
-                    new File(dir,"foo.html"),
-                    subs);
+            subs.put("tree",treeContent.toString());
+            subs.put("setup", setupContent.toString());
+
+            File html = new File(dir, "foo.html");
+            if(!html.exists()) {
+                applyTemplate( new File(dir,"foo_template.html"), html, subs);
+            }
+            File js = new File(dir,"generated.js");
+            applyTemplate( new File(dir, "generated_template.js"), js, subs);
             OSUtil.openBrowser("http://localhost/~josh/projects/Leo/t2/foo.html");
         } catch (Exception e) {
             e.printStackTrace();
