@@ -379,18 +379,7 @@ public class AminoJavaMode extends Mode {
 
         drawMap.put("ListView", listviewDelegate);
         DynamicNode lv = parse(new ListViewProxy(), listviewDelegate, visualBase);
-//        Property subProp = new Property("selectedObject",Object.class,null);
-//        subProp.setExported(false);
-//        subProp.setBindable(true);
-//        subProp.setCompound(true);
-//        subProp.setMasterProperty("model");
-        //lv.addProperty(subProp);
         symbols.add(lv);
-        u.p("listview props = ");
-        for(Property prop : lv.getProperties()) {
-            u.p("   " + prop.getName() + " " + prop.getType().getSimpleName() + " " + prop.getRawValue());
-        }
-
 
         drawMap.put("Scroll", scrollDelegate);
         symbols.add(parse(new ScrollPaneProxy(), scrollDelegate, visualBase));
