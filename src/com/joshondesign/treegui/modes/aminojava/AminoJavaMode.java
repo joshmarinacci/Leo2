@@ -9,7 +9,10 @@ import com.joshondesign.treegui.model.Prop;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -18,7 +21,6 @@ import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.control.Menu;
 import org.joshy.gfx.node.control.ScrollPane;
-import org.joshy.gfx.util.u;
 
 public class AminoJavaMode extends Mode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
@@ -378,8 +380,7 @@ public class AminoJavaMode extends Mode {
         symbols.add(parse(new PanelProxy(), panelDelegate, visualBase));
 
         drawMap.put("ListView", listviewDelegate);
-        DynamicNode lv = parse(new ListViewProxy(), listviewDelegate, visualBase);
-        symbols.add(lv);
+        symbols.add(parse(new ListViewProxy(), listviewDelegate, visualBase));
 
         drawMap.put("Scroll", scrollDelegate);
         symbols.add(parse(new ScrollPaneProxy(), scrollDelegate, visualBase));
