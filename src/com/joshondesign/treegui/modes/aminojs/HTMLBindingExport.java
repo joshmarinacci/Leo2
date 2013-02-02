@@ -34,7 +34,7 @@ public class HTMLBindingExport extends AminoAction {
         try {
             File dir = new File("/Users/josh/projects/Leo/t2");
             File html = new File(dir, "foo.html");
-            File templatedir = new File("/Users/josh/projects/Leo/t2");
+            File templatedir = new File("resources/");
             if(useRandomFile) {
 
             } else {
@@ -94,7 +94,7 @@ public class HTMLBindingExport extends AminoAction {
             subs.put("setup", setupContent.toString());
 
             if(!html.exists()) {
-                applyTemplate( new File(templatedir,"foo_template.html"), html, subs);
+                applyTemplate( new File(templatedir,"index_template.html"), html, subs);
             }
             File js = new File(dir,"generated.js");
             applyTemplate( new File(templatedir, "generated_template.js"), js, subs);
