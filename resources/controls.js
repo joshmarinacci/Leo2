@@ -298,11 +298,22 @@ function Slider() {
         ctx.fillStyle = "#ccc";
         ctx.fillRect(this.x,this.y,this.w,this.h);
         
+        var v = this.valueToPoint(this.value);
         ctx.fillStyle = "#aaf";
-        ctx.fillRect(this.x+this.value,this.y,this.h,this.h);
+        ctx.fillRect(this.x,this.y,v,this.h);
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
         ctx.strokeRect(this.x,this.y,this.w,this.h);
+        
+    }
+    
+    this.valueToPoint = function(v) {
+        return (this.value-this.minValue) * (this.w / (this.maxValue-this.minValue));
+    }
+        
+    
+    this.pointToValue = function(p) {
+        return p * (this.maxValue-this.minValue)/this.w + this.minValue;
     }
     
     var self = this;
@@ -310,7 +321,7 @@ function Slider() {
         root.onPress(this,function() {
         });
         root.onDrag(this,function(e) {
-            self.setValue(e.point.x-self.getX());
+            self.setValue(self.pointToValue(e.point.x-self.getX()));
         });
         return this;
     }
