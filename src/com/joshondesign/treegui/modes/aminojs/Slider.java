@@ -7,7 +7,7 @@ import com.joshondesign.treegui.model.Prop;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
-@Metadata(resize = Resize.HorizontalOnly)
+@Metadata(name = "Slider", exportClass="Slider", resize = Resize.HorizontalOnly)
 public class Slider extends ResizableRectNode {
 
     @Prop public Double minValue = 0.0;

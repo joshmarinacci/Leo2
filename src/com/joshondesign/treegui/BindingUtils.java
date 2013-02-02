@@ -9,7 +9,6 @@ import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -107,7 +106,6 @@ public class BindingUtils {
                 .addProperty(new Property("height", Double.class, 50).setBindable(false).setExported(false))
         ;
         try {
-            u.p("doing " + node.getName());
             parseFields(obj.getClass().getFields(), obj, node);
             parseMethods(obj.getClass().getMethods(), obj, node);
             parseClassInfo(obj.getClass(), obj, node);
@@ -127,7 +125,7 @@ public class BindingUtils {
             if(!info.exportClass().trim().equals("")) {
                 node.addProperty(new Property("class", String.class, info.exportClass()));
             } else {
-                node.addProperty(new Property("class", Class.class, aClass));
+                node.addProperty(new Property("class", String.class, aClass.getName()));
             }
             node.setName(info.name());
             if(info.name().equals("unnamed")) {
@@ -147,7 +145,6 @@ public class BindingUtils {
                 if(name.startsWith("get")) {
                     name = name.substring(3,4).toLowerCase() + name.substring(4);
                 }
-                u.p("method = " + method.getName() + " type = " + method.getReturnType());
                 Property p = new Property(name, method.getReturnType(), method.invoke(obj));
                 p.setBindable(prop.bindable());
                 p.setVisible(prop.visible());
@@ -162,14 +159,10 @@ public class BindingUtils {
 
     private static void parseFields(Field[] fields, Object obj, DynamicNode node) throws IllegalAccessException {
         for(Field field : fields) {
-            for(Annotation an : field.getAnnotations()) {
-                u.p("  ann " + an);
-            }
-
             if(field.isAnnotationPresent(Prop.class)) {
                 Prop prop = field.getAnnotation(Prop.class);
-                u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
-                    u.p("  bindable = " + prop.bindable());
+//                u.p("field = " + field.getName() + " type = " + field.getType() + " value = " + field.get(obj));
+//                    u.p("  bindable = " + prop.bindable());
                 String name = field.getName();
                 if(name.equals("clazz")) {
                     name = "class";

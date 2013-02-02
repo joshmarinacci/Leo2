@@ -43,11 +43,19 @@ public class Property {
     public String encode() {
         if(type == String.class) return (String)value;
         if(type == Boolean.class) return ((Boolean)value).toString();
+        if(type == Boolean.TYPE) {
+            if(value == null) return Boolean.toString(false);
+            return ((Boolean)value).toString();
+        }
         if(type == Double.class) {
             if(value instanceof Integer) {
                 return ((Integer)value).toString();
             }
             return ((Double)value).toString();
+        }
+        if(type == Double.TYPE) {
+            if(value == null) return ""+0;
+            return Double.toString((Double)value);
         }
         if(type == Integer.class) {
             if(value instanceof Integer) {
@@ -75,7 +83,7 @@ public class Property {
                 return sb.toString();
             }
         }
-        if(type == Class.class) {
+        if(type == Class.class && value != null) {
             return ((Class)value).getName();
         }
         u.p("WARNING: returning null for the encoding of property " + getName());
@@ -289,8 +297,24 @@ public class Property {
         return masterProperty;
     }
 
+    @Override
     public String toString() {
-        return "prop: " + getName();
+        return "Property{" +
+                "name='" + name + '\'' +
+                ", type=" + type +
+                ", value=" + value +
+                ", exported=" + exported +
+                ", exportName='" + exportName + '\'' +
+                ", visible=" + visible +
+                ", bindable=" + bindable +
+                ", list=" + list +
+                ", itemPrototype=" + itemPrototype +
+                ", displayName='" + displayName + '\'' +
+                ", node=" + node +
+                ", compound=" + compound +
+                ", masterProperty='" + masterProperty + '\'' +
+                ", proxy=" + proxy +
+                '}';
     }
 
     public void setProxy(boolean proxy) {

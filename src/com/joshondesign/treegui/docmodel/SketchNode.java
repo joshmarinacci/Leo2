@@ -9,7 +9,7 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
     private TreeNode parent;
     private double width = 100;
     private double height = 100;
-    private Resize resize;
+    private Resize resize = Resize.None;
 
     protected SketchNode() {
         setId("id" + (int) Math.floor(Math.random() * 1000000));

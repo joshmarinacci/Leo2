@@ -86,7 +86,9 @@ public class XMLImport {
         node.addProperty(new Property("class", String.class, xml.attr("class")));
         node.setVisual(xml.attrEquals("visual", "true"));
         node.setContainer(xml.attrEquals("container", "true"));
-        node.setResize(Resize.valueOf(xml.attr("resize")));
+        if(xml.hasAttr("resize")) {
+            node.setResize(Resize.valueOf(xml.attr("resize")));
+        }
         node.setCustom(xml.attrEquals("custom", "true"));
         if(node.isCustom()) {
             node.addProperty(new Property("customClass",String.class,xml.attr("customClass")));
@@ -102,15 +104,21 @@ public class XMLImport {
             if(prop.attrEquals("type","int")) {
                 type = Integer.TYPE;
             }
+            if(prop.attrEquals("type","double")) {
+                type = Double.TYPE;
+            }
 
             if(type == null) {
                 type = Class.forName(prop.attr("type"));
             }
             String sval = prop.attr("value");
-            if(type == Double.class) {
+            if(type == Double.class || type == Double.TYPE) {
                 val = (Double)Double.parseDouble(sval);
             }
-            if(type == Boolean.class) {
+            if(type == Integer.class || type == Integer.TYPE) {
+                val = (Integer)Integer.parseInt(sval);
+            }
+            if(type == Boolean.class || type == Boolean.TYPE) {
                 val = (Boolean)Boolean.parseBoolean(sval);
             }
             if(type == String.class) {

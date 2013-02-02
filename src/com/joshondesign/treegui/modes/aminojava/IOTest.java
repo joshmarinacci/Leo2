@@ -33,7 +33,7 @@ public class IOTest {
 
         DynamicNode listViewMaster = findSymbol(mode,"ListView");
         layer.add(listViewMaster.duplicate(null));
-        DynamicNode buttonMaster = findSymbol(mode,"Button");
+        DynamicNode buttonMaster = findSymbol(mode,"PushButton");
         DynamicNode buttonMasterDupe = (DynamicNode) buttonMaster.duplicate(null);
         layer.add(buttonMasterDupe);
 
@@ -45,15 +45,14 @@ public class IOTest {
 
         File file = File.createTempFile("foo","xml");
         XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
-        u.p("exported to : " + file.getAbsolutePath());
+        u.p("exported to : \n" + file.getAbsolutePath());
 
         SketchDocument doc2 = XMLImport.read(file);
-        u.p("doc 2 ");
 
         assertEquals(doc2.getSize(), 1);
         DynamicNode listView = (DynamicNode) doc2.get(0).get(0).get(0);
         assertEquals(listView.getSize(),0);
-        assertEquals(listView.getProperty("width").getDoubleValue(),60.0);
+        //assertEquals(listView.getProperty("width").getDoubleValue(),60.0);
 
         Property subProp = listView.getProperty("selectedObject");
         assertEquals(subProp.isBindable(),true);
@@ -69,6 +68,15 @@ public class IOTest {
         assertEquals(bind.getSource(), button);
         assertEquals(bind.getSourceProperty().getName(),"trigger");
         assertEquals(bind.getSourceProperty().getType(),TriggerProp.class);
+        assertEquals(listView.getProperty("class").getName(),"class");
+        assertEquals(listView.getProperty("class").getStringValue(),("org.joshy.gfx.node.control.ListView"));
+
+        File file2 = File.createTempFile("foo","xml");
+        u.p("exporting to \n" + file2.getAbsolutePath());
+        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file2)), doc2.get(0), doc2);
+        SketchDocument doc3 = XMLImport.read(file2);
+        DynamicNode lv3 = (DynamicNode) doc2.get(0).get(0).get(0);
+        assertEquals(lv3.getSize(), 0);
     }
 
     private static void testJSExport() throws Exception {
@@ -77,17 +85,50 @@ public class IOTest {
 
         DynamicNode flickrMaster = findSymbol(mode,"FlickrQuery");
         DynamicNode buttonMaster = findSymbol(mode,"PushButton");
+        DynamicNode sliderMaster = findSymbol(mode,"Slider");
+        DynamicNode panelMaster = findSymbol(mode, "PlainPanel");
         Layer layer = doc.get(0).get(0);
         layer.add(flickrMaster.duplicate(null));
         layer.add(buttonMaster.duplicate(null));
+
+        DynamicNode sliderOrig = (DynamicNode) sliderMaster.duplicate(null);
+        sliderOrig.getProperty("minValue").setDoubleValue(45.6);
+        sliderOrig.getProperty("maxValue").setDoubleValue(46.6);
+
+        layer.add(sliderOrig);
+        layer.add(findSymbol(mode, "Label").duplicate(null));
+        layer.add(panelMaster.duplicate(null));
 
         File file = File.createTempFile("foo","xml");
         XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
         u.p("exported to : " + file.getAbsolutePath());
 
         SketchDocument doc2 = XMLImport.read(file);
-        u.p("doc 2. child count =  " + doc2.getSize());
-        DynamicNode listView = (DynamicNode) doc2.get(0).get(0).get(0);
+        DynamicNode buttonLoaded = (DynamicNode) doc2.get(0).get(0).get(3);
+
+        File file2 = File.createTempFile("foo","xml");
+        u.p("exporting to \n" + file2.getAbsolutePath());
+        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file2)), doc2.get(0), doc2);
+        SketchDocument doc3 = XMLImport.read(file2);
+
+
+        //test that the panel's class property is restored
+        DynamicNode panelLoaded = (DynamicNode) doc3.get(0).get(0).get(5);
+        assertNotNull(panelLoaded.getProperty("class").getRawValue());
+
+
+
+        DynamicNode sliderLoaded = (DynamicNode) doc3.get(0).get(0).get(3);
+        assertNotNull(sliderLoaded.getProperty("class").getRawValue());
+        assertEquals(sliderLoaded.getProperty("minValue").getDoubleValue(),45.6);
+        assertEquals(sliderLoaded.getProperty("maxValue").getDoubleValue(),46.6);
+
+
+        DynamicNode labelLoaded = (DynamicNode) doc3.get(0).get(0).get(4);
+    }
+
+    private static void assertNotNull(Object object) throws Exception {
+        if(object == null) throw new Exception();
     }
 
     private static void assertEquals(boolean a, boolean b) throws Exception {

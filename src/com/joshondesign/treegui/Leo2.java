@@ -95,7 +95,7 @@ public class Leo2 {
             Button openButton = (Button) AminoParser.find("openButton", root);
             openButton.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
-                    openDoc(modes.get(1));
+                    openDoc(modes.get(0));
                 }
             });
 

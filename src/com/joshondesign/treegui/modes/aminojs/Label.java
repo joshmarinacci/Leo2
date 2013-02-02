@@ -6,7 +6,7 @@ import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
 import org.joshy.gfx.draw.GFX;
 
-@Metadata(resize= Resize.None)
+@Metadata(resize= Resize.None, exportClass = "Label")
 public class Label extends ResizableRectNode {
     @Prop(bindable = true ) public String text = "Label";
 

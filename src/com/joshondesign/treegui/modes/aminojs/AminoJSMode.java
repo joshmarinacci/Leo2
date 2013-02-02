@@ -171,8 +171,8 @@ public class AminoJSMode extends Mode {
         symbols.add(parse(new PlainPanel(), drawMap.get("PlainPanel"), visualBase));
         symbols.add(parse(new TabPanel(), drawMap.get("PlainPanel"), visualBase));
         symbols.add(parse(new Spinner(), drawMap.get("Spinner"), visualBase));
-        symbols.add(parse(new StringListModel(), drawMap.get("FlickrQuery"), visualBase));
-        symbols.add(parse(new ControlListModel(), drawMap.get("FlickrQuery"), visualBase));
+        //symbols.add(parse(new StringListModel(), drawMap.get("FlickrQuery"), visualBase));
+        //symbols.add(parse(new ControlListModel(), drawMap.get("FlickrQuery"), visualBase));
         DynamicNode photo = parse(new FlickrQuery.Photo("a","b"), drawMap.get("FlickrQuery"), visualBase);
         DynamicNode flickr =  parse(new FlickrQuery(), drawMap.get("FlickrQuery"), visualBase);
         flickr.getProperty("results").setList(true).setItemPrototype(photo);
