@@ -9,6 +9,7 @@ import org.joshy.gfx.draw.GFX;
 @Metadata(resize= Resize.None, exportClass = "Label")
 public class Label extends ResizableRectNode {
     @Prop(bindable = true ) public String text = "Label";
+    @Prop public double fontsize = 12.0;
 
     public Label() {
         setWidth(70);

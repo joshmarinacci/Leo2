@@ -5,7 +5,7 @@ import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
 import org.joshy.gfx.draw.GFX;
 
-@Metadata(visual = true, name = "PlainPanel", container = true)
+@Metadata(visual = true, name = "PlainPanel", container = true, exportClass = "PlainPanel")
 public class PlainPanel extends ResizableRectNode {
     @Prop
     public String title = "title";

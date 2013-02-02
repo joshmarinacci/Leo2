@@ -176,6 +176,14 @@ function Label() {
     this.typename = "Label";
     this.layoutDone = false;    
     
+    this.fontsize = 12;
+    this.setFontsize = function(fs) {
+        this.fontsize = fs;
+        this.layoutDone = false;
+        this.setDirty();
+        return this;
+    }
+    
     this.text;
     this.setText = function(str) {
         this.text = str;
@@ -189,7 +197,7 @@ function Label() {
     }
     
     this.paint = function(ctx) {
-        ctx.font = "15px sans-serif";
+        ctx.font = this.fontsize+"pt sans-serif";
         if(!this.layoutDone) this.doLayout(ctx);
         ctx.fillStyle = "#ccc";
 //        ctx.fillRect(this.x,this.y,this.w,this.h);

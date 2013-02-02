@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.draw.FontBuilder;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.Menu;
 
@@ -104,9 +105,11 @@ public class AminoJSMode extends Mode {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getWidth();
                 double h = node.getHeight();
-                String t = node.getProperty("text").getStringValue();
+                String text = node.getProperty("text").getStringValue();
+                double size = node.getProperty("fontsize").getDoubleValue();
                 g.setPaint(FlatColor.BLACK);
-                g.drawText(t, Font.DEFAULT, 5, 15);
+                Font font = new FontBuilder(Font.DEFAULT.getName()).size((float)size).resolve();
+                g.drawText(text, font, 5, 15);
             }
         });
         drawMap.put("ListView", new DynamicNode.DrawDelegate() {
