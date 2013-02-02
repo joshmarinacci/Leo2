@@ -109,7 +109,7 @@ public class AminoJSMode extends Mode {
                 double size = node.getProperty("fontsize").getDoubleValue();
                 g.setPaint(FlatColor.BLACK);
                 Font font = new FontBuilder(Font.DEFAULT.getName()).size((float)size).resolve();
-                g.drawText(text, font, 5, 15);
+                g.drawText(text, font, 5, h-5);
             }
         });
         drawMap.put("ListView", new DynamicNode.DrawDelegate() {

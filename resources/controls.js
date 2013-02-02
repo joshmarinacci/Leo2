@@ -176,13 +176,25 @@ function Label() {
     this.typename = "Label";
     this.layoutDone = false;    
     
-    this.fontsize = 12;
+    this.fontsize = 10;
     this.setFontsize = function(fs) {
         this.fontsize = fs;
         this.layoutDone = false;
         this.setDirty();
         return this;
     }
+    this.w = 60;
+    this.setWidth = function(width) {
+        this.w = width;
+        this.setDirty();
+        return this;
+    }
+    this.h = 20;
+	this.setHeight = function(height) {
+	    this.h = height;
+	    this.setDirty();
+	    return this;
+	};
     
     this.text;
     this.setText = function(str) {
@@ -198,14 +210,14 @@ function Label() {
     
     this.paint = function(ctx) {
         ctx.font = this.fontsize+"pt sans-serif";
-        if(!this.layoutDone) this.doLayout(ctx);
+        //if(!this.layoutDone) this.doLayout(ctx);
         ctx.fillStyle = "#ccc";
 //        ctx.fillRect(this.x,this.y,this.w,this.h);
         ctx.fillStyle = "black";
         ctx.fillText(this.text,this.x+5,this.y+this.h-5);
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
-  //      ctx.strokeRect(this.x,this.y,this.w,this.h);
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
     }
     
     this.setup = function(root) {
