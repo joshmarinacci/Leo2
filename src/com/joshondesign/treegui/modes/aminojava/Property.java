@@ -63,6 +63,10 @@ public class Property {
             }
             return ((Double)value).toString();
         }
+        if(type == Integer.TYPE) {
+            if(value == null) return ""+0;
+            return Integer.toString((Integer)value);
+        }
         if(type == CharSequence.class) {
             return ((CharSequence)value).toString();
         }
@@ -86,7 +90,7 @@ public class Property {
         if(type == Class.class && value != null) {
             return ((Class)value).getName();
         }
-        u.p("WARNING: returning null for the encoding of property " + getName());
+        u.p("WARNING: returning null for the encoding of property " + getName() + " with type " + getType());
         return null;
     }
 
