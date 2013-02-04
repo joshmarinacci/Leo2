@@ -1,8 +1,6 @@
 package com.joshondesign.treegui.tools;
 
-import com.joshondesign.treegui.docmodel.SketchDocument;
-import com.joshondesign.treegui.docmodel.SketchNode;
-import com.joshondesign.treegui.docmodel.Units;
+import com.joshondesign.treegui.docmodel.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -220,5 +218,74 @@ public class SnappingManager {
             }
         });
 
+
+
+        //look for other nodes with similar X positions
+        vSnappers.add(new VSnapper() {
+            double getPoint(SketchDocument doc, SketchNode node) {
+                return 0;
+            }
+
+            public boolean canSnap(Point2D pt, SketchDocument doc, SketchNode node) {
+                if(node.getParent() instanceof Layer) {
+                    for(SketchNode nd : ((Layer) node.getParent()).children()) {
+                        if(nd == node) continue;
+                        double x = nd.getTranslateX();
+                        if(Math.abs(x-pt.getX()) < THRESH) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            public double snap(Point2D pt, SketchDocument doc, SketchNode node) {
+                if(node.getParent() instanceof Layer) {
+                    for(SketchNode nd : ((Layer) node.getParent()).children()) {
+                        if(nd == node) continue;
+                        double x = nd.getTranslateX();
+                        if(Math.abs(x-pt.getX()) < THRESH) {
+                            node.setTranslateX(x);
+                            return x;
+                        }
+                    }
+                }
+                return 0;
+            }
+        });
+
+        //look for other nodes with similar Y positions
+        hSnappers.add(new HSnapper() {
+            double getPoint(SketchDocument doc, SketchNode node) {
+                return 0;
+            }
+
+            public boolean canSnap(Point2D pt, SketchDocument doc, SketchNode node) {
+                if(node.getParent() instanceof Layer) {
+                    for(SketchNode nd : ((Layer) node.getParent()).children()) {
+                        if(nd == node) continue;
+                        double y = nd.getTranslateY();
+                        if(Math.abs(y-pt.getY()) < THRESH) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            public double snap(Point2D pt, SketchDocument doc, SketchNode node) {
+                if(node.getParent() instanceof Layer) {
+                    for(SketchNode nd : ((Layer) node.getParent()).children()) {
+                        if(nd == node) continue;
+                        double y = nd.getTranslateY();
+                        if(Math.abs(y-pt.getY()) < THRESH) {
+                            node.setTranslateY(y);
+                            return y;
+                        }
+                    }
+                }
+                return 0;
+            }
+        });
     }
 }
