@@ -13,6 +13,7 @@ import com.joshondesign.treegui.model.TreeNodeListModel;
 import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
 import com.joshondesign.treegui.modes.sketch.SketchMode;
+import com.joshondesign.treegui.tools.SelectionTool;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;

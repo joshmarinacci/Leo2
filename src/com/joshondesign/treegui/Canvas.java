@@ -3,6 +3,7 @@ package com.joshondesign.treegui;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.tools.SelectionTool;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -157,8 +158,8 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     public static class CanvasMouseEvent {
 
-        final Point2D pt;
-        final MouseEvent mouseEvent;
+        public final Point2D pt;
+        public final MouseEvent mouseEvent;
         public Canvas canvas;
 
         public CanvasMouseEvent(Canvas canvas, Point2D pt, MouseEvent mouseEvent) {
@@ -407,7 +408,7 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
 
-    SketchNode findNode(Point2D pt) {
+    public SketchNode findNode(Point2D pt) {
         for(SketchNode n : this.editRoot.reverseChildren()) {
             if(n.contains(pt)) return n;
         }

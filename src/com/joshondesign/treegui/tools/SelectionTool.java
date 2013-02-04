@@ -1,5 +1,9 @@
-package com.joshondesign.treegui;
+package com.joshondesign.treegui.tools;
 
+import com.joshondesign.treegui.Canvas;
+import com.joshondesign.treegui.CanvasTool;
+import com.joshondesign.treegui.Handle;
+import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
@@ -33,6 +37,11 @@ public class SelectionTool extends CanvasTool {
     private long lastMove;
     private Thread timerThread;
     private boolean timerGoing = false;
+    private final SnappingManager snappingmanager;
+    private SnappingManager.Snapper currentVSnapper;
+    private double currentVPoint;
+    private SnappingManager.Snapper currentHSnapper;
+    private double currentHPoint;
 
     public SelectionTool(final Canvas canvas, final SketchDocument document, Mode mode) {
         this.canvas = canvas;
@@ -56,6 +65,7 @@ public class SelectionTool extends CanvasTool {
                 }
             }
         });
+        snappingmanager = new SnappingManager();
     }
 
     @Override
@@ -169,20 +179,47 @@ public class SelectionTool extends CanvasTool {
     }
 
     private void continueDragGesture(Point2D pt) {
+        currentVSnapper = null;
+        currentHSnapper = null;
         if(document.getSelection().getSize() < 1) return;
         startTimeout();
         double tx = startTX + (pt.getX() - startPoint.getX());
         double ty = startTY + (pt.getY() - startPoint.getY());
-        if(document.isSnapToGrid()) {
-            tx = Math.floor(tx/10)*10;
-            ty = Math.floor(ty/10)*10;
+
+        //don't move locked nodes
+        SketchNode target = document.getSelection().get(0);
+        if(target instanceof DynamicNode) {
+            if(((DynamicNode) target).isPositionLocked()) return;
         }
-        SketchNode node = document.getSelection().get(0);
-        if(node instanceof DynamicNode) {
-            if(((DynamicNode) node).isPositionLocked()) return;
+
+        //check all of the snappers first
+        Point2D pt2 = new Point2D.Double(tx,ty);
+        boolean vSnapped = false;
+        for(SnappingManager.Snapper snapper : snappingmanager.getVSnappers()) {
+            if(snapper.canSnap(pt2,document,target)) {
+                currentVPoint = snapper.snap(pt2,document,target);
+                vSnapped = true;
+                currentVSnapper = snapper;
+                break;
+            }
         }
-        node.setTranslateX(tx);
-        node.setTranslateY(ty);
+
+        boolean hSnapped = false;
+        for(SnappingManager.Snapper snapper : snappingmanager.getHSnappers()) {
+            if(snapper.canSnap(pt2,document,target)) {
+                currentHPoint = snapper.snap(pt2,document,target);
+                hSnapped = true;
+                currentHSnapper = snapper;
+                break;
+            }
+        }
+
+        if(!vSnapped) {
+            target.setTranslateX(tx);
+        }
+        if(!hSnapped) {
+            target.setTranslateY(ty);
+        }
         canvas.redraw();
     }
 
@@ -249,6 +286,8 @@ public class SelectionTool extends CanvasTool {
     private void endDragGesture(Point2D pt) {
         stopTimeout();
         moving = false;
+        currentVSnapper = null;
+        currentHSnapper = null;
         canvas.redraw();
     }
 
@@ -266,6 +305,13 @@ public class SelectionTool extends CanvasTool {
             gfx.setPaint(FlatColor.BLACK);
             gfx.drawText(tx + ", " + ty, Font.DEFAULT, 5, 15);
             gfx.translate(-tx - bounds.getX2() - 10, -ty - bounds.getCenterY() + 25 / 2);
+        }
+
+        if(currentVSnapper != null) {
+            currentVSnapper.drawSnap(gfx, currentVPoint);
+        }
+        if(currentHSnapper != null) {
+            currentHSnapper.drawSnap(gfx, currentHPoint);
         }
     }
 }
