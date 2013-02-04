@@ -1,12 +1,11 @@
 package com.joshondesign.treegui.actions;
 
 import com.joshondesign.treegui.Binding;
+import com.joshondesign.treegui.Leo2;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.docmodel.*;
-import com.joshondesign.treegui.modes.aminojava.AminoJavaMode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
-import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -15,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.util.u;
 
 public class XMLImport {
@@ -29,13 +30,8 @@ public class XMLImport {
     }
     public static Page processPage(Elem root, SketchDocument doc) throws XPathExpressionException, ClassNotFoundException {
         Page page = new Page();
-        u.p("mode id = " + root.attr("mode"));
-        Mode mode = null;
-        if(root.attrEquals("mode","com.joshondesign.modes.aminojs")) {
-            mode = new AminoJSMode();
-        } else {
-            mode = new AminoJavaMode();
-        }
+        Mode mode = Leo2.modeMap.get(root.attr("mode"));
+        doc.setModeId(mode.getId());
 
         Layer layer = new Layer();
         page.add(layer);
@@ -130,6 +126,13 @@ public class XMLImport {
             if(type == FlatColor.class) {
                 val = new FlatColor(sval);
             }
+
+            if(type == ListModel.class) {
+                String[] strings = sval.split(",");
+                val = ListView.createModel(strings);
+                u.p("converting string : " + sval + " to a list model");
+            }
+
             if(prop.attrEquals("enum","true")) {
                 val = Enum.valueOf(type, sval);
             }
@@ -139,6 +142,10 @@ public class XMLImport {
             }
             if(name.equals("prefHeight")) {
                 name = "height";
+            }
+
+            if(val == null) {
+                u.p("WARNING: couldn't restore value for property: " + name);
             }
             Property property = new Property(name, type, val);
             property.setExported(prop.attrEquals("exported","true"));
@@ -159,6 +166,9 @@ public class XMLImport {
         }
 
 
+        if(drawMap.get(node.getName()) == null) {
+            u.p("WARNING:  couldn't find draw delegate for " + node.getName());
+        }
         node.setDrawDelegate(drawMap.get(node.getName()));
         for(Elem echild : xml.xpath("children/node")) {
             node.add(processNode(echild, ids, drawMap));

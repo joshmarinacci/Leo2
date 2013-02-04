@@ -115,24 +115,6 @@ public class AminoJavaMode extends Mode {
         }
     };
 
-    @Metadata(name = "Panel", container = true,
-            exportClass = "com.joshondesign.treegui.AnchorPanel")
-    public static class PanelProxy {
-        @Prop public FlatColor fill = FlatColor.GRAY;
-    }
-
-
-    private final DynamicNode.DrawDelegate panelDelegate = new DynamicNode.DrawDelegate() {
-        public void draw(GFX g, DynamicNode node) {
-            double w = node.getProperty("width").getDoubleValue();
-            double h = node.getProperty("height").getDoubleValue();
-            g.setPaint(FlatColor.GRAY);
-            g.fillRect(0, 0, w, h);
-            g.setPaint(FlatColor.BLACK);
-            g.drawRect(0, 0, w, h);
-        }
-    };
-
 
 
     @Metadata(name = "ListView", exportClass = "org.joshy.gfx.node.control.ListView")
@@ -368,7 +350,7 @@ public class AminoJavaMode extends Mode {
         popupSelected.setBindable(true);
         popupSelected.setCompound(true);
         popupSelected.setMasterProperty("model");
-        drawMap.put("Popupbutton", popupbuttonDelegate);
+        drawMap.put("PopupMenuButton", popupbuttonDelegate);
 
         symbols.add(parse(new PopupMenuButtonProxy(), popupbuttonDelegate,visualBase)
                 .addProperty(new Property("model", ListModel.class,
@@ -377,8 +359,8 @@ public class AminoJavaMode extends Mode {
                 .addProperty(popupSelected)
         );
 
-        drawMap.put("Panel", panelDelegate);
-        symbols.add(parse(new PanelProxy(), panelDelegate, visualBase));
+        drawMap.put("Panel", Defs.panelDelegate);
+        symbols.add(parse(new Defs.PanelProxy(), Defs.panelDelegate, visualBase));
 
         drawMap.put("ListView", listviewDelegate);
         symbols.add(parse(new ListViewProxy(), listviewDelegate, visualBase));
@@ -417,7 +399,7 @@ public class AminoJavaMode extends Mode {
         symbols.add(alarmList);
 
         DynamicNode compoundList = parse( new CompoundListProxy(), listviewDelegate, visualBase);
-        DynamicNode template = parse(new PanelProxy(), panelDelegate, visualBase);
+        DynamicNode template = parse(new Defs.PanelProxy(), Defs.panelDelegate, visualBase);
         template.setPositionLocked(true);
         DynamicNode mirror = new DynamicNode();
         mirror.setMirror(true);
@@ -450,6 +432,7 @@ public class AminoJavaMode extends Mode {
     @Override
     public SketchDocument createEmptyDoc() {
         SketchDocument doc = new SketchDocument();
+        doc.setModeId(this.getId());
         Layer layer = new Layer();
         layer.add(findSymbol("Panel").duplicate(null));
         Page page = new Page();

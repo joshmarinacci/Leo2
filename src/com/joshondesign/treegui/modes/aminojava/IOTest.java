@@ -2,11 +2,11 @@ package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.BindingUtils;
+import com.joshondesign.treegui.Leo2;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.XMLExport;
 import com.joshondesign.treegui.actions.XMLImport;
 import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
@@ -18,6 +18,7 @@ import org.joshy.gfx.util.u;
 
 public class IOTest {
     public static  void main(String ... args) throws Exception {
+        Leo2.initModes();
         testJavaExport();
         testJSExport();
     }
@@ -25,12 +26,9 @@ public class IOTest {
     private static void testJavaExport() throws Exception {
         AminoJavaMode mode = new AminoJavaMode();
 
-        SketchDocument doc = new SketchDocument();
-        Layer layer = new Layer();
-        Page page = new Page();
-        page.add(layer);
-        doc.add(page);
-
+        SketchDocument doc = mode.createEmptyDoc();
+        Layer layer = doc.get(0).get(0);
+        layer.clear();
         DynamicNode listViewMaster = findSymbol(mode,"ListView");
         layer.add(listViewMaster.duplicate(null));
         DynamicNode buttonMaster = findSymbol(mode,"PushButton");

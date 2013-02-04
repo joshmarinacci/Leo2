@@ -16,6 +16,8 @@ import com.joshondesign.treegui.modes.sketch.SketchMode;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JFrame;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.event.*;
@@ -42,6 +44,7 @@ public class Leo2 {
         }
     };
 
+    public static Map<String, Mode> modeMap;
     private static void init() {
         try {
             //load up the new doc page
@@ -95,7 +98,7 @@ public class Leo2 {
             Button openButton = (Button) AminoParser.find("openButton", root);
             openButton.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
-                    openDoc(modes.get(0));
+                    openDoc();
                 }
             });
 
@@ -150,13 +153,20 @@ public class Leo2 {
         modes.add(new AminoJSMode());
         modes.add(new AminoJavaMode());
         modes.add(new SketchMode());
+
+        modeMap = new HashMap<String, Mode>();
+        for(Mode mode : modes.children()) {
+            modeMap.put(mode.getId(),mode);
+        }
+
         return modes;
     }
 
-    private static void openDoc(final Mode mode) {
+    private static void openDoc() {
         AminoJavaXMLImport.Open open = new AminoJavaXMLImport.Open();
         open.onOpened(new Callback<SketchDocument>() {
             public void call(SketchDocument document) throws Exception {
+                Mode mode = modeMap.get(document.getModeId());
                 doNewDoc(mode, document);
             }
         });
