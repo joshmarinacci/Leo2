@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
@@ -276,7 +277,7 @@ public class AminoParser {
         for(Elem eprop : xml.xpath("property")) {
             String name = eprop.attr("name");
 
-            ctx.propMap.get(id).put(name,eprop);
+            ctx.propMap.get(id).put(name, eprop);
             if(skipList.contains(name)) continue;
             if(eprop.attrEquals("exported", Boolean.FALSE.toString())) continue;
             if(name.equals("class")) continue;
@@ -289,6 +290,15 @@ public class AminoParser {
 
             //String value = eprop.attr("value");
             try {
+
+                //special case for font of a label
+                if(name.equals("fontSize") && node instanceof Label) {
+                    double size = Double.parseDouble(eprop.attr("value"));
+                    Font font = Font.name(Font.DEFAULT.getName()).size((float) size).resolve();
+                    Method method = clazz.getMethod("setFont", Font.class);
+                    method.invoke(node, font);
+                }
+
                 if(eprop.attrEquals("type","java.lang.String")) {
                     Method method = clazz.getMethod(setter, Class.forName(eprop.attr("type")));
                     method.invoke(node, eprop.attr("value"));

@@ -83,19 +83,6 @@ public class AminoJavaMode extends Mode {
         }
     };
 
-    @Metadata(name ="Label", exportClass = "org.joshy.gfx.node.control.Label")
-    public static class LabelProxy {
-        @Prop(bindable = true)
-        public CharSequence text = "a label";
-    }
-
-    private final DynamicNode.DrawDelegate labelDelegate = new DynamicNode.DrawDelegate() {
-        public void draw(GFX g, DynamicNode node) {
-            String t = node.getProperty("text").getStringValue();
-            g.setPaint(FlatColor.BLACK);
-            g.drawText(t, Font.DEFAULT, 5, 15);
-        }
-    };
 
 
     @Metadata(name = "Checkbox", exportClass = "org.joshy.gfx.node.control.Checkbox")
@@ -342,8 +329,8 @@ public class AminoJavaMode extends Mode {
         symbols.add(parse(new PushbuttonProxy(), pushButtonDelegate, visualBase));
         drawMap.put("ToggleButton", toggleButtonDelegate);
         symbols.add(parse(new TogglebuttonProxy(), toggleButtonDelegate, visualBase));
-        drawMap.put("Label", labelDelegate);
-        symbols.add(parse(new LabelProxy(), labelDelegate,visualBase));
+        drawMap.put("Label", Defs.labelDelegate);
+        symbols.add(parse(new Defs.LabelProxy(), Defs.labelDelegate,visualBase));
         drawMap.put("Checkbox", checkboxDelegate);
         symbols.add(parse(new CheckboxProxy(), checkboxDelegate, visualBase));
         drawMap.put("Radiobutton", radiobuttonDelegate);

@@ -267,6 +267,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
 
             if(prop.getType() == FlatColor.class) {
                 final SwatchColorPicker cp = new SwatchColorPicker();
+                cp.setColumnCount(16);
                 cp.onColorSelected(new Callback<ChangedEvent>() {
                     public void call(ChangedEvent changedEvent) throws Exception {
                         prop.setColorValue((FlatColor) changedEvent.getValue());
