@@ -1,6 +1,7 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
@@ -452,32 +453,37 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
 
     public void setDocument(SketchDocument document) {
         this.document = document;
-        document.getSelection().addListener(new TreeNode.TreeListener() {
-            public void added(TreeNode node) {
+        document.getSelection().addListener(new TreeNode.TreeListener<SketchNode>() {
+            public void added(SketchNode node) {
                 setSelection(node);
                 setDrawingDirty();
             }
 
-            public void removed(TreeNode node) {
+            public void removed(SketchNode node) {
                 setDrawingDirty();
                 setSelection(null);
             }
 
-            public void modified(TreeNode node) {
+            public void modified(SketchNode node) {
                 setSelection(node);
+                setDrawingDirty();
+            }
+            public void selfModified(TreeNode self) {
                 setDrawingDirty();
             }
         });
     }
 
-    public void added(TreeNode node) {
+    public void added(Object node) {
     }
 
-    public void removed(TreeNode node) {
+    public void removed(Object node) {
     }
 
-    public void modified(TreeNode node) {
-        updateControls();
+    public void modified(Object node) {
+    }
+
+    public void selfModified(TreeNode self) {
     }
 
     private void updateControls() {

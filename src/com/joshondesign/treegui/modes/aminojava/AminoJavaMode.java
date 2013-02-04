@@ -9,6 +9,9 @@ import com.joshondesign.treegui.model.Prop;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
+import com.joshondesign.xml.Doc;
+import com.joshondesign.xml.XMLParser;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +19,11 @@ import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.AminoAction;
-import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.ListView;
-import org.joshy.gfx.node.control.Menu;
-import org.joshy.gfx.node.control.ScrollPane;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.stage.Stage;
 
 public class AminoJavaMode extends Mode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
@@ -463,6 +466,7 @@ public class AminoJavaMode extends Mode {
     @Override
     public void modifyDocumentMenu(Menu documentMenu, SketchDocument doc) {
         super.modifyDocumentMenu(documentMenu, doc);
+        documentMenu.addItem("Document Settings", EditDocumentSettingsAction(doc));
         documentMenu.addItem("Add Page", AddPageAction(doc));
         documentMenu.addItem("Previous Page", "LEFT", PrevPageAction(doc));
         documentMenu.addItem("Next Page", "RIGHT", NextPageAction(doc));
@@ -834,6 +838,51 @@ public class AminoJavaMode extends Mode {
                 }
                 doc.setSelectedPage(doc.get(index));
                 doc.getSelection().clear();
+            }
+        });
+    }
+
+    private AminoAction EditDocumentSettingsAction(final SketchDocument doc) {
+        return named("Edit Document Settings", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                final Stage stage = Stage.createStage();
+
+                Doc xml = XMLParser.parse(new File("resources/docsettings.xml"));
+                Control root = (Control) AminoParser.parsePage(xml.root());
+
+
+                final PopupMenuButton<Size> popup = (PopupMenuButton) AminoParser.find("sizeBox", root);
+                Size[] sizes =  new Size[]{ new Size(320,480,Units.Pixels), new Size(1024,768,Units.Pixels)};
+                popup.setModel(ListView.createModel(sizes));
+                popup.setTextRenderer(new ListView.TextRenderer<Size>() {
+                    public String toString(SelectableControl selectableControl, Size size, int i) {
+                        return size.getWidth(Units.Pixels) + " x " + size.getHeight(Units.Pixels) + " px";
+                    }
+                });
+
+                Button cancelButton = (Button) AminoParser.find("cancelButton", root);
+                cancelButton.onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        stage.hide();
+                    }
+                });
+
+                Button doneButton = (Button) AminoParser.find("doneButton", root);
+                doneButton.onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        stage.hide();
+                        doc.setMasterSize(popup.getSelectedItem());
+                    }
+                });
+
+
+                double w = root.getPrefWidth();
+                double h = root.getPrefHeight();
+                stage.setWidth(w);
+                stage.setHeight(h+20);
+                stage.setContent(root);
+
             }
         });
     }

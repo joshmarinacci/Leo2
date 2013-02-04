@@ -10,7 +10,7 @@ public class TreeNodeListModel implements ListModel<TreeNode> {
 
     public TreeNodeListModel(TreeNode<SketchNode> symbols) {
         this.symbols = symbols;
-        this.symbols.addListener(new TreeNode.TreeListener() {
+        this.symbols.addListener(new TreeNode.TreeListener<TreeNode>() {
             public void added(TreeNode node) {
                 fireUpdate();
             }
@@ -20,6 +20,10 @@ public class TreeNodeListModel implements ListModel<TreeNode> {
             }
 
             public void modified(TreeNode node) {
+                fireUpdate();
+            }
+
+            public void selfModified(TreeNode self) {
                 fireUpdate();
             }
         });

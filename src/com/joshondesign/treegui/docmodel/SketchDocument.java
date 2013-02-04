@@ -14,8 +14,10 @@ public class SketchDocument extends TreeNode<Page> {
     private boolean snapToGrid = false;
     private String modeId;
     private File exportFile = null;
+    private Size masterSize;
 
     public SketchDocument() {
+        setMasterSize(new Size(640, 480, Units.Pixels));
     }
 
     public Selection getSelection() {
@@ -90,5 +92,14 @@ public class SketchDocument extends TreeNode<Page> {
 
     public void setExportFile(File exportFile) {
         this.exportFile = exportFile;
+    }
+
+    public void setMasterSize(Size masterSize) {
+        this.masterSize = masterSize;
+        this.markSelfModified();
+    }
+
+    public Size getMasterSize() {
+        return masterSize;
     }
 }

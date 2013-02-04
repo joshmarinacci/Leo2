@@ -245,7 +245,7 @@ public class Leo2 {
         //set up the canvas
 
         //listen for selection changes
-        doc.addListener(new TreeNode.TreeListener() {
+        doc.addListener(new TreeNode.TreeListener<TreeNode>() {
             public void added(TreeNode node) {
             }
 
@@ -255,6 +255,10 @@ public class Leo2 {
             public void modified(TreeNode node) {
                 canvasView.setMasterRoot(doc.getSelectedPage().get(0));
                 canvasView.setEditRoot(doc.getSelectedPage().get(0));
+            }
+
+            public void selfModified(TreeNode self) {
+                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
         canvasView.setMasterRoot(selectedPage.get(0));

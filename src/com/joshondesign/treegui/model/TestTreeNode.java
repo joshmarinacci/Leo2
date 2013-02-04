@@ -121,7 +121,7 @@ public class TestTreeNode {
         final int[] addCounter1 = {0};
         final int[] removeCounter1 = {0};
         final int[] modifyCounter1 = {0};
-        n7.addListener(new TreeNode.TreeListener() {
+        n7.addListener(new TreeNode.TreeListener<TreeNode>() {
             public void added(TreeNode node) {
                 addCounter1[0]++;
             }
@@ -132,6 +132,10 @@ public class TestTreeNode {
 
             public void modified(TreeNode node) {
                 modifyCounter1[0]++;
+            }
+
+            public void selfModified(TreeNode self) {
+                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
 

@@ -37,7 +37,6 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     private double scrollY;
     private CanvasTool currentTool;
     private Bounds maxBounds;
-    private Bounds docBounds = new Bounds(0,0,600,400);
     private Bounds baseBounds = new Bounds(-100,-100,600+200,400+200);
     private Bounds totalBounds = new Bounds(-100,-100,600+200,400+200);
     private boolean boundsRecalcEnabled = false;
@@ -46,16 +45,22 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     public void setMasterRoot(final TreeNode<SketchNode> masterRoot) {
         this.masterRoot = masterRoot;
-        masterRoot.addListener(new TreeNode.TreeListener() {
-            public void added(TreeNode node) {
+        masterRoot.addListener(new TreeNode.TreeListener<SketchNode>() {
+            public void added(SketchNode node) {
                 setDrawingDirty();
             }
 
-            public void removed(TreeNode node) {
+            public void removed(SketchNode node) {
                 setDrawingDirty();
             }
 
-            public void modified(TreeNode node) {
+            public void modified(SketchNode node) {
+                setDrawingDirty();
+                if(!boundsRecalcEnabled) return;
+                recalcBounds();
+            }
+
+            public void selfModified(TreeNode self) {
                 setDrawingDirty();
                 if(!boundsRecalcEnabled) return;
                 recalcBounds();
@@ -240,7 +245,9 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         double dy = scrollY-totalBounds.getY();
         gfx.translate(dx,dy);
 
-        drawDocumentBounds(gfx, masterRoot);
+        Size size = document.getMasterSize();
+        Bounds docBounds = new Bounds(0,0,size.getWidth(Units.Pixels), size.getHeight(Units.Pixels));
+        drawDocumentBounds(gfx, masterRoot, docBounds);
         drawMasterRoot(gfx, masterRoot);
         drawBindings(gfx);
         drawSelectionOverlay(gfx);
@@ -273,12 +280,12 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         gfx.translate(-pt.getX(),-pt.getY());
     }
 
-    private void drawDocumentBounds(GFX gfx, TreeNode<SketchNode> masterRoot) {
+    private void drawDocumentBounds(GFX gfx, TreeNode<SketchNode> masterRoot, Bounds docBounds) {
         gfx.setPaint(FlatColor.WHITE);
         gfx.fillRect(0,0,docBounds.getWidth(), docBounds.getHeight());
         if(masterRoot instanceof Layer) {
             gfx.setPaint(FlatColor.GRAY);
-            gfx.drawRect(0,0,600,400);
+            gfx.drawRect(0,0,docBounds.getWidth(), docBounds.getHeight());
         }
     }
 
@@ -535,15 +542,27 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     public void setDocument(SketchDocument document) {
         this.document = document;
         document.getSelection().addListener(new TreeNode.TreeListener() {
-            public void added(TreeNode node) {
+            public void added(Object node) {
                 redraw();
             }
 
-            public void removed(TreeNode node) {
+            public void removed(Object node) {
                 redraw();
             }
 
-            public void modified(TreeNode node) {
+            public void modified(Object node) {
+                redraw();
+            }
+
+            public void selfModified(TreeNode self) {
+                redraw();
+            }
+        });
+        document.addListener(new TreeNode.TreeListener<Page>() {
+            public void added(Page node) {       }
+            public void removed(Page node) {     }
+            public void modified(Page node) {    }
+            public void selfModified(TreeNode self) {
                 redraw();
             }
         });

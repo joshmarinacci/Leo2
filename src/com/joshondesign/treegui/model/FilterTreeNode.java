@@ -7,13 +7,13 @@ public class FilterTreeNode<C extends TreeNode> extends TreeNode {
     public FilterTreeNode(TreeNode<C> data) {
         this.realData = data;
         this.realData.addListener(new TreeListener() {
-            public void added(TreeNode node) {
+            public void added(Object node) {
             }
-
-            public void removed(TreeNode node) {
+            public void removed(Object node) {
             }
-
-            public void modified(TreeNode node) {
+            public void modified(Object node) {
+            }
+            public void selfModified(TreeNode self) {
             }
         });
         applyFilter();

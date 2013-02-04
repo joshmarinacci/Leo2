@@ -37,10 +37,11 @@ public class TreeNode<C extends TreeNode> {
         fireAddEvent(nodes.get(0));
     }
 
-    public static interface TreeListener {
-        public void added(TreeNode node);
-        public void removed(TreeNode node);
-        public void modified(TreeNode node);
+    public static interface TreeListener<C> {
+        public void added(C node);
+        public void removed(C node);
+        public void modified(C node);
+        public void selfModified(TreeNode self);
     }
 
 
@@ -72,6 +73,11 @@ public class TreeNode<C extends TreeNode> {
         return this;
     }
 
+    public TreeNode<C> markSelfModified() {
+        fireSelfModifyEvent();
+        return this;
+    }
+
     public TreeNode<C> add(C... nodes) {
         for(C n : nodes) {
             _list.add(n);
@@ -97,6 +103,12 @@ public class TreeNode<C extends TreeNode> {
             l.modified(child);
         }
     }
+    private void fireSelfModifyEvent() {
+        for(TreeListener l : listeners) {
+            l.selfModified(this);
+        }
+    }
+
 
     public int getSize() {
         return _list.size();
