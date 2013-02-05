@@ -323,22 +323,42 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
     }
 
     private Path2D.Double calculateBindingPath(Bounds sb, Bounds tb, Binding binding) {
+        Path2D.Double pth = new Path2D.Double();
+
         //bottom center of start
-        Point2D start = toRootCoords(pt(sb.getCenterX(), sb.getY2()), binding.getSource());
+        Point2D start = toRootCoords(pt(sb.getX(), sb.getY()), binding.getSource());
+        Point2D end =   toRootCoords(pt(tb.getX(), tb.getY()), binding.getTarget());
+
+        Bounds a = new Bounds(start.getX(),start.getY(), sb.getWidth(), sb.getHeight());
+        Bounds b = new Bounds(end.getX(),end.getY(),tb.getWidth(), tb.getHeight());
         //top center of end
-        Point2D end =   toRootCoords(pt(tb.getCenterX(), tb.getY()),  binding.getTarget());
 
         double offy = 60;
-        if(start.getY() > end.getY()) {
-            offy = offy*-1;
-            start = toRootCoords(pt(sb.getCenterX(), sb.getY()),  binding.getSource());
-            end =   toRootCoords(pt(tb.getCenterX(), tb.getY2()), binding.getTarget());
+
+
+        if(a.getY() > b.getY2()) {
+            Bounds c = a;
+            a = b;
+            b = c;
         }
 
-        Path2D.Double pth = new Path2D.Double();
-        pth.moveTo(start.getX(),start.getY());
-        pth.curveTo(start.getX(),start.getY()+offy,  end.getX(),end.getY()-offy, end.getX(),end.getY());
-        return pth;
+        if(b.getX() - a.getX2() > b.getY() - a.getY2()) {
+            pth.moveTo(a.getX2(),a.getCenterY());
+            pth.curveTo(
+                    a.getX2()+offy,a.getCenterY(),
+                    b.getX()-offy,b.getCenterY(),
+                    b.getX(),b.getCenterY()
+            );
+            return pth;
+        } else {
+            //swap
+            pth.moveTo(a.getCenterX(), a.getY2());
+            pth.curveTo(a.getCenterX(), a.getY2()+offy,
+                    b.getCenterX(),b.getY()-offy,
+                    b.getCenterX(),b.getY()
+                    );
+            return pth;
+        }
     }
 
     private Point2D pt(double x, double y) {
