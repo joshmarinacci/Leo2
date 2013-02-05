@@ -309,27 +309,36 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
 
     private void drawBindings(GFX gfx) {
         for(Binding binding : document.getBindings()) {
-            gfx.setPaint(FlatColor.BLACK);
             Bounds sb = binding.getSource().getInputBounds();
             Bounds tb = binding.getTarget().getInputBounds();
-
-            //bottom center of start
-            Point2D start = toRootCoords(pt(sb.getCenterX(), sb.getY2()), binding.getSource());
-            //top center of end
-            Point2D end =   toRootCoords(pt(tb.getCenterX(), tb.getY()),  binding.getTarget());
-
-            double offy = 40;
-            if(start.getY() > end.getY()) {
-                offy = -40;
-                start = toRootCoords(pt(sb.getCenterX(), sb.getY()),  binding.getSource());
-                end =   toRootCoords(pt(tb.getCenterX(), tb.getY2()), binding.getTarget());
-            }
-
-            Path2D.Double pth = new Path2D.Double();
-            pth.moveTo(start.getX(),start.getY());
-            pth.curveTo(start.getX(),start.getY()+offy,  end.getX(),end.getY()-offy, end.getX(),end.getY());
+            Path2D.Double pth = calculateBindingPath(sb,tb, binding);
+            gfx.setPaint(FlatColor.BLACK);
+            gfx.setStrokeWidth(4);
             gfx.drawPath(pth);
+            gfx.setPaint(FlatColor.GRAY);
+            gfx.setStrokeWidth(2);
+            gfx.drawPath(pth);
+            gfx.setStrokeWidth(1);
         }
+    }
+
+    private Path2D.Double calculateBindingPath(Bounds sb, Bounds tb, Binding binding) {
+        //bottom center of start
+        Point2D start = toRootCoords(pt(sb.getCenterX(), sb.getY2()), binding.getSource());
+        //top center of end
+        Point2D end =   toRootCoords(pt(tb.getCenterX(), tb.getY()),  binding.getTarget());
+
+        double offy = 60;
+        if(start.getY() > end.getY()) {
+            offy = offy*-1;
+            start = toRootCoords(pt(sb.getCenterX(), sb.getY()),  binding.getSource());
+            end =   toRootCoords(pt(tb.getCenterX(), tb.getY2()), binding.getTarget());
+        }
+
+        Path2D.Double pth = new Path2D.Double();
+        pth.moveTo(start.getX(),start.getY());
+        pth.curveTo(start.getX(),start.getY()+offy,  end.getX(),end.getY()-offy, end.getX(),end.getY());
+        return pth;
     }
 
     private Point2D pt(double x, double y) {
