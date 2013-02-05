@@ -7,10 +7,10 @@ import org.joshy.gfx.node.Bounds;
 
 public class MathUtils {
     public static Bounds unionBounds(TreeNode<SketchNode> root) {
-        double minx = Double.MAX_VALUE;
-        double miny = Double.MAX_VALUE;
-        double maxx = Double.MIN_VALUE;
-        double maxy = Double.MIN_VALUE;
+        double minx = Double.POSITIVE_INFINITY;
+        double miny = Double.POSITIVE_INFINITY;
+        double maxx = Double.NEGATIVE_INFINITY;
+        double maxy = Double.NEGATIVE_INFINITY;
         for(SketchNode child : root.children()) {
             Bounds bounds = child.getInputBounds();
             bounds = transform(bounds,child.getTranslateX(),child.getTranslateY());
