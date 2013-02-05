@@ -12,10 +12,7 @@ import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -448,6 +445,7 @@ public class AminoJavaMode extends Mode {
 
         nodeMenu.addItem("Same Width", SameWidth(doc));
         nodeMenu.addItem("Same Height", SameHeight(doc));
+        nodeMenu.addItem("Distribute", DistributeNodes(doc));
     }
 
     @Override
@@ -873,6 +871,86 @@ public class AminoJavaMode extends Mode {
             }
         });
     }
+
+
+    private AminoAction DistributeNodes(final SketchDocument doc) {
+        return named("Distribute", groupOnly(doc, new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                if(doc.getSelection().getSize() < 2) return;
+
+                List<SketchNode> nodes = new ArrayList<SketchNode>();
+                doXParts(nodes);
+                doYParts(nodes);
+
+            }
+
+            private void doYParts(List<SketchNode> nodes) {
+                double miny = Double.POSITIVE_INFINITY;
+                double maxy = Double.NEGATIVE_INFINITY;
+                double totalHeight = 0;
+                for(SketchNode node : doc.getSelection().children()) { {
+                    double y = node.getTranslateY() + node.getInputBounds().getY();
+                    if(y < miny) miny = y;
+                    double y2 = node.getTranslateY() + node.getInputBounds().getY2();
+                    if(y2 > maxy) maxy = y2;
+                    totalHeight += node.getInputBounds().getHeight();
+                }}
+
+                Collections.sort(nodes, new Comparator<SketchNode>() {
+                    public int compare(SketchNode o1, SketchNode o2) {
+                        if((o1.getInputBounds().getY() + o1.getTranslateY()) < (o2.getInputBounds().getY() + o2.getTranslateY())) {
+                            return -1;
+                        }
+                        return 1;
+                    }
+                });
+
+                double extraY = maxy - miny - totalHeight;
+                double extraPerY = extraY/(doc.getSelection().getSize()-1);
+                double y = miny;
+
+                for(SketchNode node :  doc.getSelection().children()) {
+                    node.setTranslateY(y);
+                    y += node.getInputBounds().getHeight();
+                    y += extraPerY;
+                }
+            }
+
+            private void doXParts(List<SketchNode> nodes) {
+                double minx = Double.POSITIVE_INFINITY;
+                double maxx = Double.NEGATIVE_INFINITY;
+                double totalWidth = 0;
+                for(SketchNode node : doc.getSelection().children()) { {
+                    nodes.add(node);
+                    double x = node.getTranslateX() + node.getInputBounds().getX();
+                    if(x < minx) minx = x;
+                    double x2 = node.getTranslateX() + node.getInputBounds().getX2();
+                    if(x2 > maxx) maxx = x2;
+                    totalWidth += node.getInputBounds().getWidth();
+                }}
+
+                Collections.sort(nodes, new Comparator<SketchNode>() {
+                    public int compare(SketchNode o1, SketchNode o2) {
+                        if((o1.getInputBounds().getX() + o1.getTranslateX()) < (o2.getInputBounds().getX() + o2.getTranslateX())) {
+                            return -1;
+                        }
+                        return 1;
+                    }
+                });
+
+                double extraX = maxx - minx - totalWidth;
+                double extraPerX = extraX/(doc.getSelection().getSize()-1);
+                double x = minx;
+                for(SketchNode node :  doc.getSelection().children()) {
+                    node.setTranslateX(x);
+                    x += node.getInputBounds().getWidth();
+                    x += extraPerX;
+                }
+            }
+        }));
+    }
+
 
 }
 
