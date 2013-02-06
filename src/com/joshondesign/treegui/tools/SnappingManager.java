@@ -1,6 +1,9 @@
 package com.joshondesign.treegui.tools;
 
-import com.joshondesign.treegui.docmodel.*;
+import com.joshondesign.treegui.docmodel.Layer;
+import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.Units;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +39,6 @@ public class SnappingManager {
         }
     }
 
-    public abstract class HSnapper implements Snapper {
-        abstract double getPoint(SketchDocument doc, SketchNode node);
-        public void drawSnap(GFX gfx, double pt) {
-            gfx.setPaint(FlatColor.GREEN);
-            gfx.drawLine(-300, pt, 1000, pt);
-        }
-    }
 
     private static final double THRESH = 5;
     public SnappingManager() {
@@ -115,47 +111,23 @@ public class SnappingManager {
                 return 0;
             }
         });
-        //snap to the left doc margin
+        //left doc margin
         vSnappers.add(new LeftSnapper() {
             public double getPoint(SketchDocument doc, SketchNode node) {
                 return DOC_MARGIN;
             }
         });
 
-        //snap to the right doc bounds
+        //right doc bounds
         vSnappers.add(new RightSnapper() {
             public double getPoint(SketchDocument doc, SketchNode node) {
                 return doc.getMasterSize().getWidth(Units.Pixels);
             }
         });
+        //right doc margin
         vSnappers.add(new RightSnapper() {
             public double getPoint(SketchDocument doc, SketchNode node) {
                 return doc.getMasterSize().getWidth(Units.Pixels) - DOC_MARGIN;
-            }
-        });
-
-        //doc top bound
-        hSnappers.add(new TopSnapper() {
-            public double getPoint(SketchDocument doc, SketchNode node) {
-                return 0;
-            }
-        });
-        //doc top doc margin
-        hSnappers.add(new TopSnapper() {
-            public double getPoint(SketchDocument doc, SketchNode node) {
-                return DOC_MARGIN;
-            }
-        });
-
-        //doc bottom bound
-        hSnappers.add(new BottomSnapper() {
-            public double getPoint(SketchDocument doc, SketchNode node) {
-                return doc.getMasterSize().getHeight(Units.Pixels);
-            }
-        });
-        hSnappers.add(new BottomSnapper() {
-            public double getPoint(SketchDocument doc, SketchNode node) {
-                return doc.getMasterSize().getHeight(Units.Pixels) - DOC_MARGIN;
             }
         });
 
@@ -200,25 +172,6 @@ public class SnappingManager {
                 return ((SketchNode) node.getParent()).getWidth() - PARENT_MARGIN;
             }
         });
-
-        //bottom edge of parent;
-        hSnappers.add(new BottomSnapper() {
-            @Override
-            double getPoint(SketchDocument doc, SketchNode node) {
-                if(!(node.getParent() instanceof SketchNode)) return 0;
-                return ((SketchNode) node.getParent()).getHeight();
-            }
-        });
-        //bottom margin of parent;
-        hSnappers.add(new BottomSnapper() {
-            @Override
-            double getPoint(SketchDocument doc, SketchNode node) {
-                if(!(node.getParent() instanceof SketchNode)) return 0;
-                return ((SketchNode) node.getParent()).getHeight() - PARENT_MARGIN;
-            }
-        });
-
-
 
         //look for other nodes with similar X positions
         vSnappers.add(new VSnapper() {
@@ -287,5 +240,158 @@ public class SnappingManager {
                 return 0;
             }
         });
+
+
+
+        //center of doc bounds vertically
+        vSnappers.add(new VSnapper() {
+            @Override
+            double getPoint(SketchDocument doc, SketchNode node) {
+                return doc.getMasterSize().getWidth(Units.Pixels)/2;
+            }
+
+            public boolean canSnap(Point2D pt, SketchDocument doc, SketchNode node) {
+                double x2 = pt.getX() + node.getInputBounds().getCenterX();
+                double w = getPoint(doc, node);
+                return Math.abs(x2 - w) < THRESH;
+            }
+
+            public double snap(Point2D pt, SketchDocument doc, SketchNode node) {
+                double x = pt.getX();
+                double x2 = node.getInputBounds().getCenterX();
+                double w = getPoint(doc, node);
+                if(Math.abs(x + x2 - w) < THRESH) {
+                    node.setTranslateX(w - x2);
+                }
+                return w;
+            }
+        });
+
+
+
+
+        //top bounds
+        hSnappers.add(buildit(
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) {
+                        return node.getInputBounds().getY();
+                    }
+                },
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) {
+                        return 0;
+                    }
+                }));
+        //top margin
+        hSnappers.add(buildit(
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) {
+                        return node.getInputBounds().getY();
+                    }
+                },
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) {
+                        return DOC_MARGIN;
+                    }
+                }));
+        //doc center horizontally
+        hSnappers.add(buildit(
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) { return node.getInputBounds().getCenterY(); }
+                },
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) { return doc.getMasterSize().getHeight(Units.Pixels)/2;
+                    }
+                }));
+        //bottom doc bounds
+        hSnappers.add(buildit(
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) {
+                        return node.getInputBounds().getY2();
+                    }
+                },
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) {
+                        return doc.getMasterSize().getHeight(Units.Pixels);
+                    }
+                }));
+        //bottom doc margin
+        hSnappers.add(buildit(
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) {
+                        return node.getInputBounds().getY2();
+                    }
+                },
+                new Takeit() {
+                    public double take(SketchDocument doc, SketchNode node) { return doc.getMasterSize().getHeight(Units.Pixels)-DOC_MARGIN;
+                    }
+                }));
+
+
+        //bottom edge of parent;
+        hSnappers.add(new BottomSnapper() {
+            @Override
+            double getPoint(SketchDocument doc, SketchNode node) {
+                if(!(node.getParent() instanceof SketchNode)) return 0;
+                return ((SketchNode) node.getParent()).getHeight();
+            }
+        });
+        //bottom margin of parent;
+        hSnappers.add(new BottomSnapper() {
+            @Override
+            double getPoint(SketchDocument doc, SketchNode node) {
+                if(!(node.getParent() instanceof SketchNode)) return 0;
+                return ((SketchNode) node.getParent()).getHeight() - PARENT_MARGIN;
+            }
+        });
+
+
+
+    }
+
+    abstract static class ZHSnapper extends HSnapper {
+        public abstract double getPart(SketchDocument doc, SketchNode node);
+
+        public boolean canSnap(Point2D pt, SketchDocument doc, SketchNode node) {
+            double v1 = pt.getY();
+            double vx = getPart(doc, node);
+            double v2 = getPoint(doc, node);
+            return Math.abs(v1+vx-v2) < THRESH;
+        }
+
+        public double snap(Point2D pt, SketchDocument doc, SketchNode node) {
+            double v1 = pt.getY();
+            double vx = getPart(doc, node);
+            double v2 = getPoint(doc, node);
+            if(Math.abs(v1+vx-v2) < THRESH) {
+                node.setTranslateY(v2-vx);
+            }
+            return v2;
+        }
+    }
+    private static interface Takeit {
+        public double take(SketchDocument doc, SketchNode node);
+    }
+    private static HSnapper buildit(final Takeit t1, final Takeit t2) {
+        return new ZHSnapper() {
+            @Override
+            public double getPart(SketchDocument doc, SketchNode node) {
+                return t1.take(doc, node);
+            }
+            @Override
+            double getPoint(SketchDocument doc, SketchNode node) {
+                return t2.take(doc, node);
+            }
+        };
+    }
+
+
+    public abstract static class HSnapper implements Snapper {
+        abstract double getPoint(SketchDocument doc, SketchNode node);
+        public void drawSnap(GFX gfx, double pt) {
+            gfx.setPaint(FlatColor.GREEN);
+            gfx.drawLine(-300, pt, 1000, pt);
+        }
     }
 }
+
