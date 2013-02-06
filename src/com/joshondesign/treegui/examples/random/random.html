@@ -1,23 +1,27 @@
 <html><head>
-<script src='jquery.js'></script>
+    <meta name="viewport" content="width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src='jquery.js'></script>
 <script src='amino.js'></script>
 <script src='controls.js'></script>
 <script src='generated.js'></script>
 <style type='text/css'>
-canvas { border: 1px solid black; }
+    body, html { padding: 0; border: 0; margin: 0; }
+canvas { border: 1px solid black; padding: 0; margin:0; }
 </style>
 </head>
 <body>
-<canvas id='canvas' width='500' height='400'></canvas>
+<canvas id='canvas' width='320' height='480'></canvas>
 <script language='Javascript'>
 var engine = new Amino();
 var root = engine.addCanvas('canvas');
 generated.setup(root);
     root.onPress(doitButton,function() {
-        var min = minVal.getText();
-        var max = maxVal.getText();
-        var val = parseInt(Math.random()*(max-min) + min);
-        result.setText(val);
+        //var min = minVal.getText();
+        //var max = maxVal.getText();
+        //var val = parseInt(Math.random()*(max-min) + min);
+        //result.setText(val);
+        result.setText("foo");
     });
 console.log('running');
 engine.start();
