@@ -7,6 +7,7 @@ import com.joshondesign.treegui.modes.aminojava.Property;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.*;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class HTMLBindingExport extends AminoAction {
     public SketchDocument document;
     public Page page;
     private final boolean useRandomFile;
+    private int imageCounter = 0;
 
     public HTMLBindingExport(SketchDocument document, boolean useRandomFile) {
         this.document = document;
@@ -70,7 +72,7 @@ public class HTMLBindingExport extends AminoAction {
                 treeWriter.indent();
                 for(SketchNode node : layer.children()) {
                     DynamicNode dnode = (DynamicNode) node;
-                    exportNode(treeWriter, dnode, true);
+                    exportNode(treeWriter, dnode, true, dir);
                     if(node.isVisual() && AminoAdapter.shouldAddToScene(node, document.getBindings())) {
                         setupContent.append("root.add(" + node.getId() + ");\n");
                     }
@@ -115,6 +117,9 @@ public class HTMLBindingExport extends AminoAction {
 
     private void copyFile(File infile, File outfile) throws IOException {
         u.streamToFile(new FileInputStream(infile),outfile);
+    }
+    private void copyFile(URL url, File outfile) throws IOException {
+        u.streamToFile(url.openStream(),outfile);
     }
 
     private void doExtensions(StringWriter setupContent, DynamicNode dnode) {
@@ -178,7 +183,7 @@ public class HTMLBindingExport extends AminoAction {
                         "binder.start();\n");
     }
 
-    private void exportNode(PropWriter w, DynamicNode node, boolean includeVar) {
+    private void exportNode(PropWriter w, DynamicNode node, boolean includeVar, File dir) {
         u.p("doing node: " + node);
         String[] visualOnlyProps = new String[]{"x","y","width","height"};
         List<String> resizeOnlyProps = Arrays.asList("width", "height");
@@ -199,18 +204,34 @@ public class HTMLBindingExport extends AminoAction {
             if(key.equals("width") && !canResizeHorizontal(node)) continue;
             if(key.equals("height") && !canResizeVertical(node)) continue;
             if(key.equals("draggable")) continue;
+            if(key.equals("src") && node.getName().equals("Image")) {
+                try {
+                    URL srcURL = new URL(prop.getStringValue());
+                    File dstFile = calcUniqueImageName(dir);
+                    copyFile(srcURL, dstFile);
+                    w.prop(key, dstFile.getName());
+                    continue;
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
             w.prop(key, prop.getRawValue());
         }
 
         for(SketchNode child : node.children()) {
             w.p(".add(");
-            exportNode(w, (DynamicNode) child, false);
+            exportNode(w, (DynamicNode) child, false, dir);
             w.p(")");
         }
         if(includeVar) {
             w.p(";");
         }
         w.outdent();
+    }
+
+    private File calcUniqueImageName(File dir) {
+        imageCounter++;
+        return new File(dir,"_image_"+imageCounter+".png");
     }
 
     private boolean canResizeVertical(DynamicNode node) {

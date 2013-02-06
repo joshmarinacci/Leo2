@@ -12,6 +12,7 @@ import com.joshondesign.treegui.modes.DynamicNodeMode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.FontBuilder;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.Menu;
+import org.joshy.gfx.util.u;
 
 public class AminoJSMode extends DynamicNodeMode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
@@ -91,6 +93,30 @@ public class AminoJSMode extends DynamicNodeMode {
                 g.drawRect(0 + 10, 0 + 10, w - 10 * 2, h - 10 * 2);
             }
         });
+
+        drawMap.put("Image", new DynamicNode.DrawDelegate() {
+            public void draw(GFX g, DynamicNode node) {
+                double w = node.getWidth();
+                double h = node.getHeight();
+
+                String source = node.getProperty("src").getStringValue();
+                if(source != null) {
+                    try {
+                        org.joshy.gfx.draw.Image image = org.joshy.gfx.draw.Image.getImageFromCache(new URL(source));
+                        g.drawImage(image,0,0);
+                    } catch (Exception ex) {
+                        u.p(ex);
+                    }
+                } else {
+                    g.setPaint(FlatColor.GRAY);
+                    g.fillRect(0, 0, w, h);
+                }
+
+                g.setPaint(FlatColor.BLACK);
+                g.drawRect(0, 0, w, h);
+            }
+        });
+
         drawMap.put("Textbox", new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getWidth();
@@ -217,7 +243,20 @@ public class AminoJSMode extends DynamicNodeMode {
 
     @Override
     public void filesDropped(List<File> files, Canvas canvas) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        for(File file : files) {
+            if(file.getName().toLowerCase().endsWith(".png")) {
+                try {
+                    u.p("got an image");
+                    DynamicNode image = (DynamicNode) findSymbol("Image").duplicate(null);
+                    image.getProperty("src").setStringValue(file.toURI().toURL().toExternalForm());
+                    image.setTranslateX(100).setTranslateY(100);
+                    canvas.getEditRoot().add(image);
+                    canvas.redraw();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
     private static DynamicNode parse(Object o, DynamicNode.DrawDelegate del, DynamicNode base) {
