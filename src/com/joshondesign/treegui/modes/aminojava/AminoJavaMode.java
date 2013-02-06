@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojava;
 
 import com.joshondesign.treegui.BindingUtils;
+import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.Metadata;
@@ -9,6 +10,7 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.DynamicNodeMode;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.control.Menu;
 import org.joshy.gfx.node.control.ScrollPane;
+import org.joshy.gfx.util.u;
 
 public class AminoJavaMode extends DynamicNodeMode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
@@ -346,6 +349,15 @@ public class AminoJavaMode extends DynamicNodeMode {
                 .addProperty(popupSelected)
         );
 
+        drawMap.put("Textbox", textboxDelegate);
+        symbols.add(parse(new TextboxProxy(), textboxDelegate, visualBase));
+
+        drawMap.put("Spinner", spinnerDelegate);
+        symbols.add(parse(new SpinnerProxy(), spinnerDelegate, visualBase));
+
+        drawMap.put("Image", Defs.imageDelegate);
+        symbols.add(parse(new Defs.ImageProxy(), Defs.imageDelegate, visualBase));
+
         drawMap.put("Panel", Defs.panelDelegate);
         symbols.add(parse(new Defs.PanelProxy(), Defs.panelDelegate, visualBase));
 
@@ -355,14 +367,9 @@ public class AminoJavaMode extends DynamicNodeMode {
         drawMap.put("Scroll", scrollDelegate);
         symbols.add(parse(new ScrollPaneProxy(), scrollDelegate, visualBase));
 
-        drawMap.put("Spinner", spinnerDelegate);
-        symbols.add(parse(new SpinnerProxy(), spinnerDelegate, visualBase));
-
         drawMap.put("Custom", customDelegate);
         symbols.add(parse(new CustomViewProxy(), customDelegate, visualBase));
 
-        drawMap.put("Textbox", textboxDelegate);
-        symbols.add(parse(new TextboxProxy(), textboxDelegate, visualBase));
 
         drawMap.put("servicebase", servicebaseDelegate);
         DynamicNode serviceBase = parse(new ServiceBase(), servicebaseDelegate, null);
@@ -446,6 +453,24 @@ public class AminoJavaMode extends DynamicNodeMode {
     @Override
     public Map<String, DynamicNode.DrawDelegate> getDrawMap() {
         return drawMap;
+    }
+
+    @Override
+    public void filesDropped(List<File> files, Canvas canvas) {
+        for(File file : files) {
+            if(file.getName().toLowerCase().endsWith(".png")) {
+                try {
+                u.p("got an image");
+                DynamicNode image = (DynamicNode) findSymbol("Image").duplicate(null);
+                image.getProperty("source").setStringValue(file.toURI().toURL().toExternalForm());
+                image.setTranslateX(100).setTranslateY(100);
+                canvas.getEditRoot().add(image);
+                canvas.redraw();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override

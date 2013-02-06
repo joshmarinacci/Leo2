@@ -5,6 +5,7 @@ import com.joshondesign.treegui.PropUtils;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import com.joshondesign.xml.Elem;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -297,6 +298,16 @@ public class AminoParser {
                     Font font = Font.name(Font.DEFAULT.getName()).size((float) size).resolve();
                     Method method = clazz.getMethod("setFont", Font.class);
                     method.invoke(node, font);
+                    continue;
+                }
+
+                //special case for a string to URL
+                if(name.equals("source") && node instanceof ImageView) {
+                    String value = eprop.attr("value");
+                    Method method = clazz.getMethod("setSource", URL.class);
+                    u.p("url = " + value);
+                    method.invoke(node, new URL(value));
+                    continue;
                 }
 
                 if(eprop.attrEquals("type","java.lang.String")) {

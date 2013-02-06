@@ -4,11 +4,11 @@
         <node id='id995558' class='PlainPanel' visual='true' resize='Any' container='true' custom='false' name='PlainPanel'>
             <property name='class' value='PlainPanel' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
             <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
-            <property name='height' value='414.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='height' value='481.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
             <property name='title' value='title' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop=''>            </property>
             <property name='translateX' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
             <property name='translateY' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
-            <property name='width' value='313.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='width' value='322.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
             <children>            </children>
         </node>
         <node id='id734357' class='Label' visual='true' resize='Any' container='false' custom='false' name='Label'>

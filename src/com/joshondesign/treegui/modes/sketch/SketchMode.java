@@ -1,11 +1,14 @@
 package com.joshondesign.treegui.modes.sketch;
 
+import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
@@ -89,5 +92,10 @@ public class SketchMode extends Mode {
     @Override
     public Map<String, DynamicNode.DrawDelegate> getDrawMap() {
         return null;
+    }
+
+    @Override
+    public void filesDropped(List<File> files, Canvas canvas) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

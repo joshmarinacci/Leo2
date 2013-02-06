@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.BindingUtils;
+import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
@@ -10,6 +11,7 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.DynamicNodeMode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -211,6 +213,11 @@ public class AminoJSMode extends DynamicNodeMode {
     @Override
     public Map<String,DynamicNode.DrawDelegate> getDrawMap() {
         return drawMap;
+    }
+
+    @Override
+    public void filesDropped(List<File> files, Canvas canvas) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private static DynamicNode parse(Object o, DynamicNode.DrawDelegate del, DynamicNode base) {

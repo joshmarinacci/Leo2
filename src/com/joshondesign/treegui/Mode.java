@@ -5,6 +5,7 @@ import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public abstract class Mode extends TreeNode {
 
     public abstract void modifyFileMenu(Menu fileMenu, SketchDocument doc);
 
-    protected DynamicNode findSymbol(String name) {
+    public DynamicNode findSymbol(String name) {
         for(SketchNode node : getSymbols().children()) {
             if(node instanceof DynamicNode) {
                 DynamicNode nd = (DynamicNode) node;
@@ -55,4 +56,6 @@ public abstract class Mode extends TreeNode {
     }
 
     public abstract Map<String, DynamicNode.DrawDelegate> getDrawMap();
+
+    public abstract void filesDropped(List<File> files, Canvas canvas);
 }

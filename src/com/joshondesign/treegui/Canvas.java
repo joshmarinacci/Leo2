@@ -6,16 +6,14 @@ import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.tools.SelectionTool;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.AminoAction;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ContextMenu;
 import org.joshy.gfx.node.control.Control;
@@ -137,6 +135,15 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
             }
         });
 
+        EventBus.getSystem().addListener(SystemMenuEvent.FileDrop, new Callback<SystemMenuEvent>() {
+            public void call(SystemMenuEvent systemMenuEvent) throws Exception {
+                u.p("called from an image drop? " + systemMenuEvent);
+                for(File file : systemMenuEvent.getFiles()) {
+                    u.p("file = " + file);
+                }
+                mode.filesDropped(systemMenuEvent.getFiles(),Canvas.this);
+            }
+        });
     }
 
     public void setBoundsRecalcEnabled(boolean boundsRecalcEnabled) {
