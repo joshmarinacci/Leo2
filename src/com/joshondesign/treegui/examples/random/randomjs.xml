@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<page mode='com.joshondesign.modes.aminojs'>
+    <nodes>
+        <node id='id995558' class='PlainPanel' visual='true' resize='Any' container='true' custom='false' name='PlainPanel'>
+            <property name='class' value='PlainPanel' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='height' value='414.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='title' value='title' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='translateX' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='translateY' value='0.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='width' value='313.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <children>            </children>
+        </node>
+        <node id='id734357' class='Label' visual='true' resize='Any' container='false' custom='false' name='Label'>
+            <property name='class' value='Label' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='fontsize' value='30.0' type='double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='height' value='36.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='text' value='Randomonium' type='java.lang.String' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>            </property>
+            <property name='translateX' value='51.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='translateY' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='width' value='224.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <children>            </children>
+        </node>
+        <node id='id773362' class='Label' visual='true' resize='Any' container='false' custom='false' name='Label'>
+            <property name='class' value='Label' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='fontsize' value='12.0' type='double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='height' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='text' value='Minimum ' type='java.lang.String' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>            </property>
+            <property name='translateX' value='67.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='translateY' value='100.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='width' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <children>            </children>
+        </node>
+        <node id='id205249' class='Label' visual='true' resize='Any' container='false' custom='false' name='Label'>
+            <property name='class' value='Label' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='fontsize' value='12.0' type='double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='height' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='text' value='Maximum' type='java.lang.String' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>            </property>
+            <property name='translateX' value='67.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='translateY' value='151.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='width' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <children>            </children>
+        </node>
+        <node id='minVal' class='Textbox' visual='true' resize='HorizontalOnly' container='false' custom='false' name='Textbox'>
+            <property name='class' value='Textbox' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='height' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='text' value='' type='java.lang.String' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>            </property>
+            <property name='translateX' value='174.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='translateY' value='100.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='width' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <children>            </children>
+        </node>
+        <node id='maxVal' class='Textbox' visual='true' resize='HorizontalOnly' container='false' custom='false' name='Textbox'>
+            <property name='class' value='Textbox' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='height' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='text' value='' type='java.lang.String' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>            </property>
+            <property name='translateX' value='174.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='translateY' value='151.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='width' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <children>            </children>
+        </node>
+        <node id='doitButton' class='PushButton' visual='true' resize='None' container='false' custom='false' name='PushButton'>
+            <property name='class' value='PushButton' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='height' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='text' value='DoIt' type='java.lang.String' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>            </property>
+            <property name='translateX' value='110.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='translateY' value='225.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='trigger' value='null' type='com.joshondesign.treegui.modes.aminojs.TriggerProp' exported='true' visible='false' bindable='true' compound='false' list='false' masterprop=''>            </property>
+            <property name='width' value='80.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <children>            </children>
+        </node>
+        <node id='result' class='Label' visual='true' resize='Any' container='false' custom='false' name='Label'>
+            <property name='class' value='Label' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='constraint' enum='true' value='Any' type='com.joshondesign.treegui.docmodel.Resize' exported='true' visible='false' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='fontsize' value='70.0' type='double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop=''>            </property>
+            <property name='height' value='64.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='text' value='0000' type='java.lang.String' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>            </property>
+            <property name='translateX' value='67.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='translateY' value='308.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <property name='width' value='174.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
+            <children>            </children>
+        </node>
+    </nodes>
+    <bindings>    </bindings>
+</page>

@@ -200,6 +200,7 @@ function Label() {
     this.setText = function(str) {
         this.text = str;
         this.layoutDone = false;
+        this.setDirty();
         return this;
     };
     this.doLayout = function(ctx) {
@@ -215,14 +216,13 @@ function Label() {
 //        ctx.fillRect(this.x,this.y,this.w,this.h);
         ctx.fillStyle = "black";
         ctx.fillText(this.text,this.x+5,this.y+this.h-5);
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(this.x,this.y,this.w,this.h);
+        //ctx.strokeStyle = "black";
+        //ctx.lineWidth = 2;
+        //ctx.strokeRect(this.x,this.y,this.w,this.h);
     }
     
     this.setup = function(root) {
         root.onPress(this,function() {
-            console.log("pressed");
         });
         return this;
     }
@@ -441,27 +441,33 @@ function Textbox() {
     this.hasFocus = false;
     var self = this;
     this.setup = function(root) {
+        window.addEventListener('keydown',function(e) {
+            if(!self.hasFocus) return;
+            //delete
+            if(e.keyCode == 46 || e.keyCode == 8) {
+                var t= self.getText();
+                t = t.substring(0,t.length-1);
+                self.setText(t);
+            }
+            
+            //console.log(e);
+        });
+        window.addEventListener('keyup',function(e) {
+        });
+        window.addEventListener('keypress',function(e) {
+            if(!self.hasFocus) return;
+            self.setText(self.getText()+String.fromCharCode(e.charCode));
+            //console.log(e);
+        });
         root.onPress(this,function() {
-            console.log("set to active text");
             if(!self.hasFocus) {
                 self.hasFocus = true;
+                if(window.currentFocusControl) {
+                    window.currentFocusControl.hasFocus = false;
+                    window.currentFocusControl.setDirty();
+                }
+                window.currentFocusControl = self;
                 self.setDirty();
-                window.addEventListener('keydown',function(e) {
-                    //delete
-                    if(e.keyCode == 46 || e.keyCode == 8) {
-                        var t= self.getText();
-                        t = t.substring(0,t.length-1);
-                        self.setText(t);
-                    }
-                    
-                    //console.log(e);
-                });
-                window.addEventListener('keyup',function(e) {
-                });
-                window.addEventListener('keypress',function(e) {
-                    self.setText(self.getText()+String.fromCharCode(e.charCode));
-                    //console.log(e);
-                });
             }
         });
         return this;

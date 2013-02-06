@@ -89,7 +89,7 @@ public class AminoJSMode extends Mode {
                 g.drawRect(0 + 10, 0 + 10, w - 10 * 2, h - 10 * 2);
             }
         });
-        drawMap.put("TextBox", new DynamicNode.DrawDelegate() {
+        drawMap.put("Textbox", new DynamicNode.DrawDelegate() {
             public void draw(GFX g, DynamicNode node) {
                 double w = node.getWidth();
                 double h = node.getHeight();
@@ -136,7 +136,7 @@ public class AminoJSMode extends Mode {
 
         symbols.add(parse(new Slider(), drawMap.get("Slider"), visualBase));
         symbols.add(parse(new Image(), drawMap.get("Image"), visualBase));
-        symbols.add(parse(new Textbox(), drawMap.get("TextBox"), visualBase));
+        symbols.add(parse(new Textbox(), drawMap.get("Textbox"), visualBase));
         symbols.add(parse(new Label(), drawMap.get("Label"), visualBase));
         symbols.add(parse(new ListView(), drawMap.get("ListView"), visualBase));
 
