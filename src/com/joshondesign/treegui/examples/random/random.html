@@ -17,11 +17,11 @@ var engine = new Amino();
 var root = engine.addCanvas('canvas');
 generated.setup(root);
     root.onPress(doitButton,function() {
-        //var min = minVal.getText();
-        //var max = maxVal.getText();
-        //var val = parseInt(Math.random()*(max-min) + min);
-        //result.setText(val);
-        result.setText("foo");
+        var min = minVal.getText();
+        var max = maxVal.getText();
+        var val = parseInt(Math.random()*(max-min) + min);
+        result.setText(val);
+        //result.setText("foo");
     });
 console.log('running');
 engine.start();

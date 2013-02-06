@@ -1,13 +1,13 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.BindingUtils;
-import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
+import com.joshondesign.treegui.modes.DynamicNodeMode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import org.joshy.gfx.draw.FontBuilder;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.Menu;
 
-public class AminoJSMode extends Mode {
+public class AminoJSMode extends DynamicNodeMode {
     public static Map<String, DynamicNode.DrawDelegate> drawMap = new HashMap<String, DynamicNode.DrawDelegate>();
 
     public AminoJSMode() {
