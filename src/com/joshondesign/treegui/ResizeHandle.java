@@ -2,6 +2,7 @@ package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.ResizableRectNode;
 import com.joshondesign.treegui.docmodel.Resize;
+import com.joshondesign.treegui.docmodel.SketchNode;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -26,6 +27,11 @@ public class ResizeHandle extends Handle {
             }
         }
         return false;
+    }
+
+    @Override
+    public SketchNode getNode() {
+        return node;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.joshondesign.treegui;
 
 import com.joshondesign.treegui.docmodel.SketchDocument;
+import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import java.awt.geom.Point2D;
 import org.joshy.gfx.draw.FlatColor;
@@ -28,6 +29,11 @@ public class DynamicResizeHandle extends Handle {
             }
         }
         return false;
+    }
+
+    @Override
+    public SketchNode getNode() {
+        return this.node;
     }
 
     @Override

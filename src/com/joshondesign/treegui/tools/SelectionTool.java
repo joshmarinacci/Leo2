@@ -125,12 +125,43 @@ public class SelectionTool extends CanvasTool {
 
     private void continueDragHandle(MouseEvent mouseEvent, Point2D pt) {
         activeHandle.drag(mouseEvent, pt);
+        currentVSnapper = null;
+        currentHSnapper = null;
+        SketchNode target = activeHandle.getNode();
+        Bounds b = target.getInputBounds();
+        Point2D pt2 = new Point2D.Double(pt.getX()-b.getWidth(), pt.getY()-b.getHeight());
+        boolean vSnapped = false;
+        for(SnappingManager.Snapper snapper : snappingmanager.getVSnappers()) {
+            if(snapper.canSnap(pt2,document,target)) {
+                double tempx = target.getTranslateX();
+                currentVPoint = snapper.snap(pt2,document,target);
+                target.setTranslateX(tempx);
+                target.setWidth(currentVPoint-target.getTranslateX());
+                vSnapped = true;
+                currentVSnapper = snapper;
+                break;
+            }
+        }
+        boolean hSnapped = false;
+        for(SnappingManager.Snapper snapper : snappingmanager.getHSnappers()) {
+            if(snapper.canSnap(pt2,document,target)) {
+                double temp = target.getTranslateY();
+                currentHPoint = snapper.snap(pt2,document,target);
+                target.setTranslateY(temp);
+                target.setHeight(currentHPoint-target.getTranslateY());
+                hSnapped = true;
+                currentHSnapper = snapper;
+                break;
+            }
+        }
         canvas.redraw();
     }
 
     private void endDragHandle(MouseEvent mouseEvent, Point2D pt) {
         activeHandle.endDrag(mouseEvent,pt);
         activeHandle = null;
+        currentVSnapper = null;
+        currentHSnapper = null;
     }
 
     private void addToSelection(SketchNode node) {
