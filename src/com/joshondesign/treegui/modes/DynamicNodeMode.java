@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes;
 
+import com.joshondesign.treegui.BindingUtils;
 import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
@@ -19,6 +20,14 @@ import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.stage.Stage;
 
 public abstract class DynamicNodeMode extends Mode {
+    protected DynamicNode parse(Object o, DynamicNode.DrawDelegate del, DynamicNode base) {
+        DynamicNode nd = BindingUtils.parseAnnotatedPOJO(o, del);
+        if(base != null) {
+            nd.copyPropertiesFrom(base);
+        }
+        return nd;
+    }
+
     public interface Accumulate<T> {
         public T accum(SketchNode node, T value);
     }

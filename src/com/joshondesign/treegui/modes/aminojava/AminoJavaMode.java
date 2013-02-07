@@ -1,6 +1,5 @@
 package com.joshondesign.treegui.modes.aminojava;
 
-import com.joshondesign.treegui.BindingUtils;
 import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.*;
@@ -408,14 +407,6 @@ public class AminoJavaMode extends DynamicNodeMode {
         symbols.add(compoundList);
 
         symbols.add(parse(new ToggleGroupProxy(), servicebaseDelegate, serviceBase));
-    }
-
-    private static DynamicNode parse(Object o, DynamicNode.DrawDelegate del, DynamicNode base) {
-        DynamicNode nd = BindingUtils.parseAnnotatedPOJO(o, del);
-        if(base != null) {
-            nd.copyPropertiesFrom(base);
-        }
-        return nd;
     }
 
     @Override

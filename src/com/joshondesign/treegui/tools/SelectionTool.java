@@ -130,6 +130,7 @@ public class SelectionTool extends CanvasTool {
         SketchNode target = activeHandle.getNode();
         Bounds b = target.getInputBounds();
         Point2D pt2 = new Point2D.Double(pt.getX()-b.getWidth(), pt.getY()-b.getHeight());
+        /*
         boolean vSnapped = false;
         for(SnappingManager.Snapper snapper : snappingmanager.getVSnappers()) {
             if(snapper.canSnap(pt2,document,target)) {
@@ -153,7 +154,7 @@ public class SelectionTool extends CanvasTool {
                 currentHSnapper = snapper;
                 break;
             }
-        }
+        }*/
         canvas.redraw();
     }
 

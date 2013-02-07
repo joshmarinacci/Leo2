@@ -12,6 +12,7 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListModel;
 import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
+import com.joshondesign.treegui.modes.bootstrap.BootstrapMode;
 import com.joshondesign.treegui.modes.sketch.SketchMode;
 import com.joshondesign.treegui.tools.SelectionTool;
 import com.joshondesign.xml.Doc;
@@ -89,6 +90,13 @@ public class Leo2 {
                 }
             });
 
+            Button newBootstrap = (Button) AminoParser.find("newBootstrap", root);
+            newBootstrap.onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    doNewDoc(modes.get(3));
+                }
+            });
+
             //edit self button
             ((Button)AminoParser.find("editselfButton",root)).onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
@@ -154,6 +162,7 @@ public class Leo2 {
         modes.add(new AminoJSMode());
         modes.add(new AminoJavaMode());
         modes.add(new SketchMode());
+        modes.add(new BootstrapMode());
 
         modeMap = new HashMap<String, Mode>();
         for(Mode mode : modes.children()) {
