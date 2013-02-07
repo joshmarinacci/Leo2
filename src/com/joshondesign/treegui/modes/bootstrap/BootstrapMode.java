@@ -42,6 +42,8 @@ public class BootstrapMode extends DynamicNodeMode {
         for(Property prop : pb.getProperties()) {
             u.p("  " + prop.getName() + " " + prop.getType().getName());
         }
+        pb.getProperty("width").setDoubleValue(100);
+        pb.getProperty("height").setDoubleValue(30);
 
     }
 
@@ -64,6 +66,7 @@ public class BootstrapMode extends DynamicNodeMode {
 
     @Override
     public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
+        fileMenu.addItem("Test HTML", "R", new BootstrapHTMLExport(doc,true));
     }
 
     @Override

@@ -31,6 +31,8 @@ public abstract class Defs {
 
     public static class PushButton extends VisualBase {
         @Prop public String text = "pushbutton";
+        @Prop public boolean primary = false;
+        @Prop public boolean enabled = true;
     }
 
     public static final DynamicNode.DrawDelegate PushButtonDelegate = new DynamicNode.DrawDelegate() {

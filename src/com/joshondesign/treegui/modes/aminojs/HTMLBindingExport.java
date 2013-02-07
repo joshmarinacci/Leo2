@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.Binding;
+import com.joshondesign.treegui.StringUtils;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
@@ -96,13 +97,13 @@ public class HTMLBindingExport extends AminoAction {
             subs.put("setup", setupContent.toString());
 
             if(!html.exists()) {
-                applyTemplate( new File(templatedir,"index_template.html"), html, subs);
+                StringUtils.applyTemplate(new File(templatedir, "index_template.html"), html, subs);
             }
             File js = new File(dir,"generated.js");
-            applyTemplate( new File(templatedir, "generated_template.js"), js, subs);
-            copyFile(new File(templatedir, "amino.js"), new File(dir, "amino.js"));
-            copyFile(new File(templatedir, "jquery.js"), new File(dir, "jquery.js"));
-            copyFile(new File(templatedir,"controls.js"), new File(dir,"controls.js"));
+            StringUtils.applyTemplate( new File(templatedir, "generated_template.js"), js, subs);
+            StringUtils.copyFile(new File(templatedir, "amino.js"), new File(dir, "amino.js"));
+            StringUtils.copyFile(new File(templatedir, "jquery.js"), new File(dir, "jquery.js"));
+            StringUtils.copyFile(new File(templatedir,"controls.js"), new File(dir,"controls.js"));
 
 
             File trimfile = new File("/Users/josh/");
@@ -113,13 +114,6 @@ public class HTMLBindingExport extends AminoAction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void copyFile(File infile, File outfile) throws IOException {
-        u.streamToFile(new FileInputStream(infile),outfile);
-    }
-    private void copyFile(URL url, File outfile) throws IOException {
-        u.streamToFile(url.openStream(),outfile);
     }
 
     private void doExtensions(StringWriter setupContent, DynamicNode dnode) {
@@ -208,7 +202,7 @@ public class HTMLBindingExport extends AminoAction {
                 try {
                     URL srcURL = new URL(prop.getStringValue());
                     File dstFile = calcUniqueImageName(dir);
-                    copyFile(srcURL, dstFile);
+                    StringUtils.copyFile(srcURL, dstFile);
                     w.prop(key, dstFile.getName());
                     continue;
                 } catch (IOException e) {
@@ -246,17 +240,6 @@ public class HTMLBindingExport extends AminoAction {
         return false;
     }
 
-    private void applyTemplate(File in, File out, Map<String, String> subs) {
-        try {
-            String str = u.fileToString(new FileInputStream(in));
-            for(Map.Entry<String, String> item : subs.entrySet()) {
-                str = str.replaceAll("\\$\\{" + item.getKey() + "\\}", item.getValue());
-            }
-            u.stringToFile(str,out);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public CharSequence getDisplayName() {
