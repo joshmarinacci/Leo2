@@ -2,12 +2,14 @@ package com.joshondesign.treegui.modes.aminojs;
 
 import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.StringUtils;
+import com.joshondesign.treegui.actions.XMLExport;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -18,9 +20,11 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
+import static org.joshy.gfx.util.u.p;
 
 public class HTMLBindingExport extends AminoAction {
 
+    private static final boolean USE_OMETA = true;
     public SketchDocument document;
     public Page page;
     private final boolean useRandomFile;
@@ -34,6 +38,15 @@ public class HTMLBindingExport extends AminoAction {
 
     @Override
     public void execute() {
+
+        if(USE_OMETA) {
+            try {
+                exportWithOmeta();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         try {
             File dir = new File("/Users/josh/projects/Leo/t2");
             File html = new File(dir, "foo.html");
@@ -116,6 +129,61 @@ public class HTMLBindingExport extends AminoAction {
         }
     }
 
+    private void exportWithOmeta() throws IOException, URISyntaxException, InterruptedException {
+        p("using ometa");
+
+        //export to XML file
+        File xmlFile = new File("foo.xml");
+        toXML(xmlFile);
+        //invoke converter
+        execAndWait("/usr/local/bin/node");
+        //apply template to make final file
+        File genJSFile = new File("/Users/josh/projects/Leo2/foo.html");
+        File dir = new File("/Users/josh/projects/Leo/t2");
+        File html = new File(dir, "foo.html");
+        File templatedir = new File("resources/");
+        Map<String,String> subs = new HashMap<String,String>();
+
+        String str = fileToString(genJSFile);
+        subs.put("tree", str.toString());
+
+        html.delete();
+        if(!html.exists()) {
+            StringUtils.applyTemplate(new File(templatedir, "index_aminolang_template.html"), html, subs);
+            p("wrote out template.html to " + html.getAbsolutePath());
+        }
+        File js = new File(dir,"generated.js");
+        StringUtils.applyTemplate( new File(templatedir, "generated_aminolang_template.js"), js, subs);
+        p("wrote out: " + js.getAbsolutePath());
+        //open browser
+        File trimfile = new File("/Users/josh/");
+        String partialPath = dir.getAbsolutePath().substring((int)trimfile.getAbsolutePath().length());
+        OSUtil.openBrowser("http://localhost/~josh/"+partialPath+"/"+html.getName());
+    }
+
+    private void toXML(File xmlFile) throws FileNotFoundException, URISyntaxException {
+        PrintWriter pw = new PrintWriter(new FileOutputStream(xmlFile));
+        XMLExport.exportToXML(pw,page,document);
+        p("wrote to file" + xmlFile.getAbsolutePath());
+    }
+
+    private String fileToString(File genJSFile) throws IOException {
+        return u.fileToString(new FileInputStream(genJSFile));
+    }
+
+    private void execAndWait(String s) throws InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder(s,"convert_xml_to_js.js");
+        pb.directory(new File("/Users/josh/projects/compilerclass/guitest2/"));
+        try {
+            Process proc = pb.start();
+            proc.waitFor();
+            p("processing");
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+    }
+
     private void doExtensions(StringWriter setupContent, DynamicNode dnode) {
         if(dnode.hasProperty("draggable")) {
             if(dnode.getProperty("draggable").getBooleanValue()) {
@@ -155,8 +223,8 @@ public class HTMLBindingExport extends AminoAction {
 
         if(binding.getSource().getName().equals("ListView")) {
             if(binding.getSourceProperty().isProxy()) {
-                u.p("it's a proxy! " + binding.getSourceProperty().getName());
-                u.p("master = " + binding.getSourceProperty().getMasterProperty());
+                p("it's a proxy! " + binding.getSourceProperty().getName());
+                p("master = " + binding.getSourceProperty().getMasterProperty());
                 String n = binding.getTargetProperty().getName();
                 String setterName = "set"+n.substring(0,1).toUpperCase()+n.substring(1);
                 out.println(
@@ -178,7 +246,7 @@ public class HTMLBindingExport extends AminoAction {
     }
 
     private void exportNode(PropWriter w, DynamicNode node, boolean includeVar, File dir) {
-        u.p("doing node: " + node);
+        p("doing node: " + node);
         String[] visualOnlyProps = new String[]{"x","y","width","height"};
         List<String> resizeOnlyProps = Arrays.asList("width", "height");
 
@@ -190,7 +258,7 @@ public class HTMLBindingExport extends AminoAction {
         w.indent();
         for(Property prop : node.getProperties()) {
             if(!AminoAdapter.shouldExportProperty(node,prop)) continue;
-            u.p("writing: " + prop.getName() + " " + prop.getRawValue() + " exported = " + prop.isExported());
+            p("writing: " + prop.getName() + " " + prop.getRawValue() + " exported = " + prop.isExported());
             String key = prop.getName();
             if(key.equals("translateX")) key = "x";
             if(key.equals("translateY")) key = "y";
