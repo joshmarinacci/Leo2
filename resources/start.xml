@@ -46,7 +46,7 @@
                     <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='id' value='arandomid' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
-                    <property name='right' value='293.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='right' value='288.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='selected' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='text' value='New Java Doc' type='java.lang.CharSequence' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='translateX' value='15.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
@@ -88,7 +88,7 @@
                     <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='id' value='newsketchButton' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
-                    <property name='right' value='293.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='right' value='288.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='selected' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='text' value='New Sketch' type='java.lang.CharSequence' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='translateX' value='15.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
@@ -125,11 +125,11 @@
                     <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
-                    <property name='bottom' value='225.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='bottom' value='223.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='class' value='org.joshy.gfx.node.control.Button' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='resize' value='any' type='java.lang.String' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
-                    <property name='right' value='293.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='right' value='288.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='text' value='New JS Doc' type='java.lang.CharSequence' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='translateX' value='15.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='translateY' value='92.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
@@ -163,8 +163,10 @@
                     <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='bottom' value='183.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='class' value='org.joshy.gfx.node.control.Button' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='height' exportname='prefHeight' value='32.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='right' value='288.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='text' value='New Bootstrap' type='java.lang.CharSequence' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>                    </property>
                     <property name='translateX' value='15.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='translateY' value='130.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
@@ -172,6 +174,24 @@
                     <property name='width' exportname='prefWidth' value='90.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
                     <property name='right' type='java.lang.Double' value='288.0'>                    </property>
                     <property name='bottom' type='java.lang.Double' value='183.0'>                    </property>
+                    <children>                    </children>
+                </node>
+                <node id='newAminoLang' class='org.joshy.gfx.node.control.Button' visual='true' resize='Any' container='false' custom='false' name='PushButton'>
+                    <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='anchorRight' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='anchorTop' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='bottom' value='143.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='class' value='org.joshy.gfx.node.control.Button' type='java.lang.String' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='height' exportname='prefHeight' value='30.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='right' value='268.0' type='java.lang.Double' exported='false' visible='false' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='text' value='New AminoLang' type='java.lang.CharSequence' exported='true' visible='true' bindable='true' compound='false' list='false' masterprop=''>                    </property>
+                    <property name='translateX' value='15.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='translateY' value='172.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='trigger' value='null' type='com.joshondesign.treegui.modes.aminojs.TriggerProp' exported='false' visible='false' bindable='true' compound='false' list='false' masterprop=''>                    </property>
+                    <property name='width' exportname='prefWidth' value='110.0' type='java.lang.Double' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>                    </property>
+                    <property name='right' type='java.lang.Double' value='268.0'>                    </property>
+                    <property name='bottom' type='java.lang.Double' value='143.0'>                    </property>
                     <children>                    </children>
                 </node>
             </children>

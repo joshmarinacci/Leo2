@@ -12,6 +12,7 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.model.TreeNodeListModel;
 import com.joshondesign.treegui.modes.aminojava.*;
 import com.joshondesign.treegui.modes.aminojs.AminoJSMode;
+import com.joshondesign.treegui.modes.aminolang.AminoLangMode;
 import com.joshondesign.treegui.modes.bootstrap.BootstrapMode;
 import com.joshondesign.treegui.modes.sketch.SketchMode;
 import com.joshondesign.treegui.tools.SelectionTool;
@@ -97,7 +98,14 @@ public class Leo2 {
                 }
             });
 
-            //edit self button
+            Button newAminoLang = (Button) AminoParser.find("newAminoLang", root);
+            newAminoLang.onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    doNewDoc(modes.get(4));
+                }
+            });
+
+            //a self button
             ((Button)AminoParser.find("editselfButton",root)).onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     doNewDoc(modes.get(1), new File("resources/main.xml"));
@@ -163,6 +171,7 @@ public class Leo2 {
         modes.add(new AminoJavaMode());
         modes.add(new SketchMode());
         modes.add(new BootstrapMode());
+        modes.add(new AminoLangMode());
 
         modeMap = new HashMap<String, Mode>();
         for(Mode mode : modes.children()) {

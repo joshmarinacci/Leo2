@@ -30,6 +30,9 @@ public class XMLImport {
     }
     public static Page processPage(Elem root, SketchDocument doc) throws XPathExpressionException, ClassNotFoundException {
         Page page = new Page();
+        root.getDoc().dump();
+        u.p(root.attr("mode"));
+        System.out.println("mode = " + root.attr("mode"));
         Mode mode = Leo2.modeMap.get(root.attr("mode"));
         doc.setModeId(mode.getId());
 
