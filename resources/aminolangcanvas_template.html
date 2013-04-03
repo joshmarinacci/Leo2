@@ -1,5 +1,6 @@
 <html>
 <head>
+    <script src='../aminolang/tests/jquery.js'></script>
     <script src='../aminolang/src/jscanvas/init.js'></script>
     <script src='../aminolang/build/jscanvas/out.js'></script>
     <script src='../aminolang/src/jscanvas/handcoded7.js'></script>
@@ -16,13 +17,14 @@
         console.log(s);
     }
 
-    var sceneRaw = ${tree}
-    ;
-    console.log(sceneRaw);
-    var root = new SceneParser().parse(sceneRaw);
-    console.log(root);
+    $.getJSON("scene.json",undefined, function(sceneRaw) {
+        console.log(sceneRaw);
+        var root = new SceneParser().parse(sceneRaw);
+        console.log(root);
+        stage.setRoot(root);
+    });
 
-    stage.setRoot(root);
+    //stage.setRoot(core.createRect());
     });
 </script>
 </body>

@@ -9,7 +9,6 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.DynamicNodeMode;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
-import com.joshondesign.treegui.modes.aminojava.Property;
 import static com.joshondesign.treegui.modes.aminolang.Defs.*;
 import java.io.File;
 import java.util.HashMap;
@@ -31,9 +30,11 @@ public class AminoLangMode extends DynamicNodeMode {
 
         drawMap.put("VisualBase", VisualBaseDelegate);
         DynamicNode visualBase = parse(new Defs.VisualBase(), VisualBaseDelegate, null);
+        /*
         for(Property prop : visualBase.getProperties()) {
-            //u.p("  " + prop.getName() + " " + prop.getType().getName());
+            u.p("  " + prop.getName() + " " + prop.getType().getName() + " " + prop.isVisible() + " blah");
         }
+        */
         visualBase.getProperty("width").setExportName("w");
         visualBase.getProperty("height").setExportName("h");
         visualBase.getProperty("translateX").setExportName("tx");

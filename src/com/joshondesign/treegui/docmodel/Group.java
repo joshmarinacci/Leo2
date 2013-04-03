@@ -37,4 +37,21 @@ public class Group extends SketchNode {
     public boolean isContainer() {
         return true;
     }
+
+    public void normalize() {
+        double x = Double.MAX_VALUE;
+        double y = Double.MAX_VALUE;
+
+        for(SketchNode node : children()) {
+            x = Math.min(x,node.getTranslateX());
+            y = Math.min(y,node.getTranslateY());
+        }
+
+        setTranslateX(x);
+        setTranslateY(y);
+        for(SketchNode node : children()) {
+            node.setTranslateX(node.getTranslateX()-x);
+            node.setTranslateY(node.getTranslateY()-y);
+        }
+    }
 }

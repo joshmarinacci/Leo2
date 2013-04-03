@@ -1,16 +1,14 @@
 package com.joshondesign.treegui.modes.aminolang;
 
 import com.joshondesign.treegui.StringUtils;
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
-import com.joshondesign.treegui.docmodel.SketchDocument;
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import org.joshy.gfx.event.AminoAction;
+import org.joshy.gfx.util.u;
 
 public class AminoLangJSONExport extends AminoAction {
     private final SketchDocument doc;
@@ -29,10 +27,12 @@ public class AminoLangJSONExport extends AminoAction {
 
         Map<String,String> subs = new HashMap<String,String>();
         String tree = exportTree();
-        subs.put("tree",tree);
+        //subs.put("tree",tree);
 
         StringUtils.applyTemplate(new File(templatedir, "aminolangcanvas_template.html"),
                 new File(outdir,"test.html"), subs);
+        File jsonOut = new File(outdir,"scene.json");
+        u.stringToFile(tree,jsonOut);
         /*
         StringUtils.copyFile(new File(templatedir, "bootstrap.min.css"),
                 new File(outdir, "bootstrap.min.css"));
@@ -46,22 +46,44 @@ public class AminoLangJSONExport extends AminoAction {
 
     private String exportTree() {
         Page page = doc.get(0);
-        StringBuffer sb = new StringBuffer();
-        sb.append("{ type:'Group', children:[\n");
+        JSONPrinter json = new JSONPrinter();
+        json.open().set("type","Group")
+                .openArray("children");
         for(Layer layer : page.children()) {
             for(SketchNode node : layer.children()) {
-                DynamicNode dnode = (DynamicNode) node;
-                sb.append(exportNode(dnode));
-                sb.append(",\n");
+                if(node instanceof Group) {
+                    exportGroupNode((Group)node,json);
+                } else {
+                    exportNode((DynamicNode)node,json);
+                }
             }
         }
-        sb.append("]}\n");
-        return sb.toString();
+        json.closeArray().close();
+        return json.toStringBuffer().toString();
     }
 
-    private StringBuffer exportNode(DynamicNode dnode) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("{ type:'"+dnode.getName()+"', \n");
+    private void exportGroupNode(Group group, JSONPrinter json) {
+        json.open()
+                .set("type","Group")
+                .set("id",group.getId())
+                .set("tx",group.getTranslateX())
+                .set("ty",group.getTranslateY());
+        /*
+        sb.append("children:[\n");
+        for(SketchNode node : group.children()) {
+            if(node instanceof Group) {
+                sb.append(exportGroupNode((Group)node));
+            } else {
+                sb.append(exportNode((DynamicNode)node));
+            }
+        }
+        */
+        json.close();
+    }
+    private void exportNode(DynamicNode dnode, JSONPrinter json) {
+        json.open()
+                .set("type",dnode.getName())
+                .set("id",dnode.getId());
         for(Property prop : dnode.getProperties()) {
             if("class".equals(prop.getName())) continue;
             String name = prop.getName();
@@ -69,12 +91,20 @@ public class AminoLangJSONExport extends AminoAction {
                 name = prop.getExportName();
             }
             if(prop.getType().isAssignableFrom(String.class)) {
-                sb.append("  "+name+":'"+prop.getRawValue()+"',\n");
-            } else {
-                sb.append("  "+name+":"+prop.getRawValue()+",\n");
+                json.set(name, prop.getRawValue().toString());
+                continue;
             }
+
+            if(prop.getType().isAssignableFrom(Boolean.TYPE)) {
+                json.set(name, prop.getBooleanValue());
+                continue;
+            }
+            if(prop.getType().isAssignableFrom(Double.TYPE)) {
+                json.set(name, prop.getDoubleValue());
+                continue;
+            }
+            json.set(name, (Double) prop.getRawValue());
         }
-        sb.append("}\n");
-        return sb;
+        json.close();
     }
 }

@@ -15,6 +15,8 @@ public class StringUtils {
                 str = str.replaceAll("\\$\\{" + item.getKey() + "\\}", item.getValue());
             }
             u.stringToFile(str,out);
+            u.p("writing");
+            u.p(out.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }

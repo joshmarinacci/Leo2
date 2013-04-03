@@ -196,6 +196,7 @@ public class SelectionTool extends CanvasTool {
                 document.findParent(node).remove(node);
                 group.add(node);
             }
+            group.normalize();
             canvas.getEditRoot().add(group);
             document.getSelection().clear();
             document.getSelection().add(group);
