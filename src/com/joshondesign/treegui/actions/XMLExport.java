@@ -1,10 +1,7 @@
 package com.joshondesign.treegui.actions;
 
 import com.joshondesign.treegui.Binding;
-import com.joshondesign.treegui.docmodel.Layer;
-import com.joshondesign.treegui.docmodel.Page;
-import com.joshondesign.treegui.docmodel.SketchDocument;
-import com.joshondesign.treegui.docmodel.SketchNode;
+import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import com.joshondesign.xml.XMLWriter;
@@ -22,18 +19,12 @@ public class XMLExport {
         xml.attr("mode",document.getModeId());
         // render non-visual nodes first
 
-        xml.start("nodes");
+        xml.start("layers");
         //render visual nodes next
         for(Layer layer : page.children()) {
-            for(SketchNode node : layer.children()) {
-                if(node instanceof DynamicNode) {
-                    if(node.isVisual()) {
-                        visualNodeToXML(xml, (DynamicNode) node, 200, 200, false);
-                    } else {
-                        nonvisualNodeToXML(node, xml);
-                    }
-                }
-            }
+            xml.start("layer");
+            exportChildren(xml, layer.children(), 200, 200);
+            xml.end();
         }
         xml.end();
 
@@ -101,6 +92,35 @@ public class XMLExport {
         }
     }
 
+    private static void groupNodeToXML(XMLWriter xml, Group node) {
+        xml.start("group")
+            .attr("id",node.getId())
+                .attr("translateX",""+node.getTranslateX())
+                .attr("translateY",""+node.getTranslateY());
+        exportChildren(xml, node.children(), 200, 200);
+        xml.end();
+    }
+
+    private static void exportChildren(XMLWriter xml, Iterable<SketchNode> children, double width, double height) {
+        xml.start("children");
+        for(SketchNode node : children) {
+            if(node instanceof DynamicNode) {
+                DynamicNode nd2 = (DynamicNode) node;
+                if(nd2.isVisual()) {
+                    visualNodeToXML(xml, nd2, width, height, true);
+                } else {
+                    nonvisualNodeToXML(nd2, xml);
+                }
+            } else {
+                u.p("not a dynamic node. what do we do?");
+                if(node instanceof Group) {
+                    groupNodeToXML(xml, (Group)node);
+                }
+            }
+        }
+        xml.end();
+    }
+
     private static void visualNodeToXML(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
         xml.start("node")
                 .attr("id", node.getId())
@@ -152,20 +172,9 @@ public class XMLExport {
                     .end();
         }
 
-        xml.start("children");
-        if(node.getSize() > 0) {
-            for(SketchNode nd : node.children()) {
-                DynamicNode nd2 = (DynamicNode) nd;
-                if(nd2.isVisual()) {
-                    visualNodeToXML(xml, nd2,
-                            node.getProperty("width").getDoubleValue(),
-                            node.getProperty("height").getDoubleValue(), true);
-                } else {
-                    nonvisualNodeToXML(nd2, xml);
-                }
-            }
-        }
-        xml.end();
+        exportChildren(xml, node.children(),
+                node.getProperty("width").getDoubleValue(),
+                node.getProperty("height").getDoubleValue());
         xml.end();
     }
 

@@ -30,7 +30,7 @@ public class XMLImport {
     }
     public static Page processPage(Elem root, SketchDocument doc) throws XPathExpressionException, ClassNotFoundException {
         Page page = new Page();
-        root.getDoc().dump();
+        //root.getDoc().dump();
         u.p(root.attr("mode"));
         System.out.println("mode = " + root.attr("mode"));
         Mode mode = Leo2.modeMap.get(root.attr("mode"));
@@ -40,9 +40,16 @@ public class XMLImport {
         page.add(layer);
 
         Map<String, SketchNode> ids = new HashMap<String, SketchNode>();
-        for(Elem vis : root.xpath("nodes/node")) {
-            DynamicNode node = processNode(vis,ids, mode.getDrawMap());
-            layer.add(node);
+        for(Elem vis : root.xpath("layers/layer/children/*")) {
+            if(vis.name().equals("node")) {
+                DynamicNode node = processNode(vis,ids, mode.getDrawMap());
+                layer.add(node);
+            }
+            if(vis.name().equals("group")) {
+                u.p("we've got a group to process");
+                SketchNode group = processGroup(vis, ids, mode.getDrawMap());
+                layer.add(group);
+            }
         }
         //bind them together
         doc.getBindings().clear();
@@ -52,6 +59,7 @@ public class XMLImport {
         }
         return page;
     }
+
 
     private static Binding processBinding(Elem elem, Map<String, SketchNode> ids) {
         u.p("restoring: " + elem.attr("sourceprop") + " => " + elem.attr("targetprop"));
@@ -79,7 +87,19 @@ public class XMLImport {
         return binding;
     }
 
+    private static SketchNode processGroup(Elem xml, Map<String, SketchNode> ids, Map<String, DynamicNode.DrawDelegate> drawMap) throws XPathExpressionException, ClassNotFoundException {
+        u.p("procssing group");
+        Group node = new Group();
+        node.setId(xml.attr("id"));
+        node.setTranslateX(Double.parseDouble(xml.attr("translateX")));
+        node.setTranslateY(Double.parseDouble(xml.attr("translateY")));
+        for(Elem echild : xml.xpath("children/node")) {
+            node.add(processNode(echild, ids, drawMap));
+        }
+        return node;
+    }
     private static DynamicNode processNode(Elem xml, Map<String, SketchNode> ids, Map<String, DynamicNode.DrawDelegate> drawMap) throws XPathExpressionException, ClassNotFoundException {
+        u.p("processing xml element: '" + xml.name()+"'");
         DynamicNode node = new DynamicNode();
         node.setName(xml.attr("name"));
         node.addProperty(new Property("class", String.class, xml.attr("class")));
