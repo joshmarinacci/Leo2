@@ -77,16 +77,6 @@ public class AminoLangJSONExport extends AminoAction {
             }
         }
         json.closeArray();
-        /*
-        sb.append("children:[\n");
-        for(SketchNode node : group.children()) {
-            if(node instanceof Group) {
-                sb.append(exportGroupNode((Group)node));
-            } else {
-                sb.append(exportNode((DynamicNode)node));
-            }
-        }
-        */
         json.close();
     }
     private void exportNode(DynamicNode dnode, JSONPrinter json) {
