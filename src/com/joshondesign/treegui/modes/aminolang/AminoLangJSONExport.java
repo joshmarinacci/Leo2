@@ -7,6 +7,7 @@ import com.joshondesign.treegui.modes.aminojava.Property;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.util.u;
 
@@ -100,6 +101,12 @@ public class AminoLangJSONExport extends AminoAction {
             }
             if(prop.getType().isAssignableFrom(Double.TYPE)) {
                 json.set(name, prop.getDoubleValue());
+                continue;
+            }
+            if(prop.getType().isAssignableFrom(FlatColor.class)) {
+                FlatColor fc = (FlatColor) prop.getColorValue();
+                String color = "#"+Integer.toHexString(fc.getRGBA()).substring(2);
+                json.set(name, color);
                 continue;
             }
             json.set(name, (Double) prop.getRawValue());

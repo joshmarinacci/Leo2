@@ -42,13 +42,28 @@ public class AminoLangMode extends DynamicNodeMode {
 
         drawMap.put("PushButton", PushButtonDelegate);
         symbols.add(parse(new Defs.PushButton(), PushButtonDelegate, visualBase));
-        //u.p("pushbutton = " + findSymbol("PushButton"));
         DynamicNode pb = findSymbol("PushButton");
         pb.getProperty("width").setDoubleValue(100);
         pb.getProperty("height").setDoubleValue(30);
 
+        drawMap.put("ToggleButton", ToggleButtonDelegate);
+        symbols.add(parse(new Defs.ToggleButton(), ToggleButtonDelegate, visualBase));
+        DynamicNode tb = findSymbol("ToggleButton");
+        tb.getProperty("width").setDoubleValue(100);
+        tb.getProperty("height").setDoubleValue(30);
+
+        drawMap.put("Slider", SliderDelegate);
+        symbols.add(parse(new Defs.Slider(), SliderDelegate, visualBase));
+        findSymbol("Slider").getProperty("height").setDoubleValue(25);
+
+        drawMap.put("Label", LabelDelegate);
+        symbols.add(parse(new Defs.Label(), LabelDelegate, visualBase));
+
+
         drawMap.put("Rect",RectDelegate);
         symbols.add(parse(new Defs.Rect(), RectDelegate, visualBase));
+
+
     }
 
     @Override
