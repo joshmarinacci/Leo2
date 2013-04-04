@@ -57,7 +57,7 @@ public class XMLExport {
     private static void nonvisualNodeToXML(SketchNode node, XMLWriter xml) {
         if(!node.isVisual() && node instanceof DynamicNode) {
             DynamicNode nd = (DynamicNode) node;
-            u.p("spitting out " + nd.getName());
+            u.p("non visual node " + nd.getName());
             xml.start("node");
             if(nd.hasProperty("class")) {
                 xml.attr("class",nd.getProperty("class").encode());
@@ -122,6 +122,7 @@ public class XMLExport {
     }
 
     private static void visualNodeToXML(XMLWriter xml, DynamicNode node, double width, double height, boolean parentAnchor) {
+        u.p("visual node " + node.getName());
         xml.start("node")
                 .attr("id", node.getId())
                 .attr("class", node.getProperty("class").encode())

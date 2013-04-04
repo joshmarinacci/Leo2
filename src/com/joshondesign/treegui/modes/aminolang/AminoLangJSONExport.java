@@ -68,6 +68,15 @@ public class AminoLangJSONExport extends AminoAction {
                 .set("id",group.getId())
                 .set("tx",group.getTranslateX())
                 .set("ty",group.getTranslateY());
+        json.openArray("children");
+        for(SketchNode node : group.children()) {
+            if(node instanceof Group) {
+                exportGroupNode((Group)node,json);
+            } else {
+                exportNode((DynamicNode)node,json);
+            }
+        }
+        json.closeArray();
         /*
         sb.append("children:[\n");
         for(SketchNode node : group.children()) {

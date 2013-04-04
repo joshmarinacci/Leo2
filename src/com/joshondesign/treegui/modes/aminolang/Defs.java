@@ -9,7 +9,7 @@ import org.joshy.gfx.draw.GFX;
 
 public abstract class Defs {
 
-    @Metadata
+    @Metadata(visual = true)
     public static class VisualBase {
         @Prop public double translateX = 0;
         @Prop public double translateY = 0;
@@ -29,6 +29,7 @@ public abstract class Defs {
         }
     };
 
+    @Metadata(visual = true)
     public static class PushButton extends VisualBase {
         @Prop public String text = "pushbutton";
         @Prop public boolean enabled = true;
@@ -47,6 +48,7 @@ public abstract class Defs {
         }
     };
 
+    @Metadata(visual = true)
     public static class Rect extends VisualBase {
 
     }
