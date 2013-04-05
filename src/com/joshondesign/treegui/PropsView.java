@@ -163,6 +163,11 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                 final Textbox tb = new Textbox();
                 tb.setText("" + prop.getStringValue());
                 tb.setPrefWidth(100);
+                EventBus.getSystem().addListener(tb, FocusEvent.Gained, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        tb.selectAll();
+                    }
+                });
                 EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
                     public void call(FocusEvent focusEvent) throws Exception {
                         prop.setStringValue(tb.getText());
@@ -192,6 +197,11 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                 final Textbox tb = new Textbox();
                 tb.setText(""+prop.getDoubleValue());
                 tb.setPrefWidth(100);
+                EventBus.getSystem().addListener(tb, FocusEvent.Gained, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        tb.selectAll();
+                    }
+                });
                 EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
                     public void call(FocusEvent focusEvent) throws Exception {
                         prop.setDoubleValue(tb.getText());
@@ -221,6 +231,11 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                 final Textbox tb = new Textbox();
                 tb.setText(""+prop.getIntegerValue());
                 tb.setPrefWidth(100);
+                EventBus.getSystem().addListener(tb, FocusEvent.Gained, new Callback<FocusEvent>() {
+                    public void call(FocusEvent focusEvent) throws Exception {
+                        tb.selectAll();
+                    }
+                });
                 EventBus.getSystem().addListener(tb, FocusEvent.Lost, new Callback<FocusEvent>() {
                     public void call(FocusEvent focusEvent) throws Exception {
                         prop.setIntegerValue(tb.getText());
