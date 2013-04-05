@@ -49,6 +49,7 @@ public abstract class DynamicNodeMode extends Mode {
         nodeMenu.addItem("Same Width", SameWidth(doc));
         nodeMenu.addItem("Same Height", SameHeight(doc));
         nodeMenu.addItem("Distribute", DistributeNodes(doc));
+        nodeMenu.addItem("Normalize Group", NormalizeGroup(doc));
 
     }
 
@@ -139,6 +140,24 @@ public abstract class DynamicNodeMode extends Mode {
                 });
             }
         }));
+    }
+
+    protected AminoAction NormalizeGroup(final SketchDocument doc) {
+        return new AminoAction() {
+            @Override
+            public CharSequence getDisplayName() {
+                return "Normalize Group";
+            }
+
+            @Override
+            public void execute() throws Exception {
+                if(doc.getSelection().getSize() != 1) return;
+                SketchNode nd = doc.getSelection().get(0);
+                if(! (nd instanceof Group)) return;
+                Group group = (Group) nd;
+                group.normalize();
+            }
+        };
     }
 
     protected AminoAction AlignCenterH(final SketchDocument doc) {
