@@ -67,6 +67,21 @@ public class SelectionTool extends CanvasTool {
                 if(keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_RIGHT_ARROW) { translateSelection(1,0); }
                 if(keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_UP_ARROW) { translateSelection(0,-1); }
                 if(keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_DOWN_ARROW) { translateSelection(0,1); }
+                if(keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_X) {
+                    if(keyEvent.isSystemShortcut()) {
+                        document.getSelection().cut(document);
+                    }
+                }
+                if(keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_C) {
+                    if(keyEvent.isSystemShortcut()) {
+                        document.getSelection().copy(document);
+                    }
+                }
+                if(keyEvent.getKeyCode() == KeyEvent.KeyCode.KEY_V) {
+                    if(keyEvent.isSystemShortcut()) {
+                        document.getSelection().paste(document, canvas);
+                    }
+                }
             }
         });
         snappingmanager = new SnappingManager();
@@ -214,6 +229,7 @@ public class SelectionTool extends CanvasTool {
             node.setTranslateY(node.getTranslateY()+y);
         }
     }
+
     private void startDragGesture(Point2D pt) {
         if(document.getSelection().getSize() < 1) return;
         startPoint = pt;
