@@ -1,5 +1,6 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.Selection;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
@@ -18,7 +19,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
     private PropFilter filter;
     private Callback<Void> updateCallback;
     private SketchDocument document;
-    private DynamicNode lastObject;
+    private SelectionProxy lastObject;
     private List<Callback> listeners = new ArrayList<Callback>();
 
     public PropsView() {
@@ -43,6 +44,110 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
         debug(false);
     }
 
+    private static class SelectionProxy {
+
+        private final ArrayList<DynamicNode> nodes;
+
+        public SelectionProxy(Selection selection) {
+            nodes = new ArrayList<DynamicNode>();
+            for(SketchNode node : selection.children()) {
+                nodes.add((DynamicNode) node);
+            }
+        }
+
+        public void addListener(PropsView propsView) {
+        }
+
+        public void removeListener(PropsView propsView) {
+        }
+
+        public boolean isSingle() {
+            if(nodes.size() == 1) return true;
+            return false;
+        }
+
+        public String getId() {
+            return nodes.get(0).getId();
+        }
+
+        public void setId(String text) {
+            nodes.get(0).setId(text);
+        }
+
+        public Iterable<PropertyProxy> getSortedProperties() {
+            //create a union of all props
+            Map<String,List<Property>> props = new HashMap<String, List<Property>>();
+            for(DynamicNode node : nodes) {
+                for(Property prop : node.getSortedProperties()) {
+                    if(!props.containsKey(prop.getName())) {
+                        props.put(prop.getName(),new ArrayList<Property>());
+                    }
+                    props.get(prop.getName()).add(prop);
+                }
+            }
+
+            //remove the ones that not every node has
+            List<String> keys = new ArrayList<String>(props.keySet());
+            ListIterator<String> it = keys.listIterator();
+            while(it.hasNext()) {
+                String key = it.next();
+                if(props.get(key).size() != nodes.size()) {
+                    //u.p("we need to drop " + key);
+                    it.remove();
+                }
+            }
+
+            Collections.sort(keys);
+            for(String key : keys) {
+                //u.p("final = " + key);
+            }
+
+            List<PropertyProxy> proxies = new ArrayList<PropertyProxy>();
+            for(String key : keys) {
+                Property proto = props.get(key).get(0);
+                proxies.add(new PropertyProxy(proto,props.get(key)));
+            }
+
+            return proxies;
+        }
+
+        private static class PropertyProxy extends Property {
+            private final Property proto;
+            private final List<Property> props;
+
+            public PropertyProxy(Property proto, List<Property> properties) {
+                super(proto.getName(),proto.getType(),proto.getRawValue());
+                this.proto = proto;
+                this.props = properties;
+            }
+
+            @Override
+            public boolean isVisible() {
+                return proto.isVisible();
+            }
+
+
+            @Override
+            public double getDoubleValue() {
+                return proto.getDoubleValue();
+            }
+
+            @Override
+            public void setDoubleValue(double value) {
+                if(value != proto.getDoubleValue()) {
+                    for(Property prop : props) {
+                        prop.setDoubleValue(value);
+                    }
+                }
+            }
+
+            @Override
+            public void setDoubleValue(String text) {
+                this.setDoubleValue(Double.parseDouble(text));
+            }
+        }
+    }
+
     public void setSelection(final Object object) {
         reset();
         if(object == null) {
@@ -50,8 +155,8 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
             return;
         }
 
-        if(object instanceof DynamicNode) {
-            setSelectionDynamicNode((DynamicNode)object);
+        if(object instanceof SelectionProxy) {
+            setSelectionDynamicNode((SelectionProxy)object);
         } else {
             setSelectionPlainNode(object);
         }
@@ -96,30 +201,35 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
         addControl(new Label("nothing selected"));
     }
 
-    private void setSelectionDynamicNode(final DynamicNode node) {
+    private void setSelectionDynamicNode(final SelectionProxy node) {
         lastObject = node;
         node.addListener(this);
 
         addControl(new Label("id"));
         final Textbox idtb = new Textbox();
-        idtb.setText("" + node.getId());
+        if(node.isSingle()) {
+            idtb.setText("" + node.getId());
+            EventBus.getSystem().addListener(idtb, FocusEvent.Lost, new Callback<FocusEvent>() {
+                public void call(FocusEvent focusEvent) throws Exception {
+                    node.setId(idtb.getText());
+                    if (updateCallback != null) {
+                        updateCallback.call(null);
+                    }
+                }
+            });
+            idtb.onAction(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    node.setId(idtb.getText());
+                    if (updateCallback != null) {
+                        updateCallback.call(null);
+                    }
+                }
+            });
+        } else {
+            idtb.setText("---");
+            idtb.setEnabled(false);
+        }
         idtb.setPrefWidth(100);
-        EventBus.getSystem().addListener(idtb, FocusEvent.Lost, new Callback<FocusEvent>() {
-            public void call(FocusEvent focusEvent) throws Exception {
-                node.setId(idtb.getText());
-                if (updateCallback != null) {
-                    updateCallback.call(null);
-                }
-            }
-        });
-        idtb.onAction(new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                node.setId(idtb.getText());
-                if (updateCallback != null) {
-                    updateCallback.call(null);
-                }
-            }
-        });
         addControl(idtb);
         nextRow();
 
@@ -195,7 +305,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
             }
             if(prop.getType().isAssignableFrom(Double.class) || prop.getType() == Double.TYPE) {
                 final Textbox tb = new Textbox();
-                tb.setText(""+prop.getDoubleValue());
+                tb.setText("" + prop.getDoubleValue());
                 tb.setPrefWidth(100);
                 EventBus.getSystem().addListener(tb, FocusEvent.Gained, new Callback<FocusEvent>() {
                     public void call(FocusEvent focusEvent) throws Exception {
@@ -467,11 +577,13 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
         this.updateCallback = callback;
     }
 
-    public void setDocument(SketchDocument document) {
+    public void setDocument(final SketchDocument document) {
         this.document = document;
         document.getSelection().addListener(new TreeNode.TreeListener<SketchNode>() {
             public void added(SketchNode node) {
-                setSelection(node);
+                //u.p("added to the selection");
+                setSelection(new SelectionProxy(document.getSelection()));
+                //setSelection(node);
                 setDrawingDirty();
             }
 
@@ -481,6 +593,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
             }
 
             public void modified(SketchNode node) {
+                //u.p("modifed node");
                 setSelection(node);
                 setDrawingDirty();
             }
