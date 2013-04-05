@@ -90,8 +90,14 @@ public class AminoLangJSONExport extends AminoAction {
             if(prop.getExportName() != null) {
                 name = prop.getExportName();
             }
-            if(prop.getType().isAssignableFrom(String.class)) {
-                json.set(name, prop.getRawValue().toString());
+
+            if(!prop.isExported()) continue;
+            if(String.class.isAssignableFrom(prop.getType())) {
+                json.set(name, prop.getStringValue());
+                continue;
+            }
+            if(CharSequence.class.isAssignableFrom(prop.getType())) {
+                json.set(name, prop.getStringValue());
                 continue;
             }
 
@@ -107,13 +113,13 @@ public class AminoLangJSONExport extends AminoAction {
                 json.set(name, prop.getIntegerValue());
                 continue;
             }
-            if(prop.getType().isAssignableFrom(FlatColor.class)) {
+            if(FlatColor.class.isAssignableFrom(prop.getType())) {
                 FlatColor fc = (FlatColor) prop.getColorValue();
                 String color = "#"+Integer.toHexString(fc.getRGBA()).substring(2);
                 json.set(name, color);
                 continue;
             }
-            json.set(name, (Double) prop.getRawValue());
+            json.set(name, prop.getRawValue().toString());
         }
         json.close();
     }
