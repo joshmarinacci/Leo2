@@ -1,5 +1,6 @@
 package com.joshondesign.treegui;
 
+import com.joshondesign.treegui.docmodel.Group;
 import com.joshondesign.treegui.docmodel.Selection;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
@@ -581,9 +582,11 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
         this.document = document;
         document.getSelection().addListener(new TreeNode.TreeListener<SketchNode>() {
             public void added(SketchNode node) {
-                //u.p("added to the selection");
-                setSelection(new SelectionProxy(document.getSelection()));
-                //setSelection(node);
+                if(node instanceof Group) {
+                    setSelection(node);
+                } else {
+                    setSelection(new SelectionProxy(document.getSelection()));
+                }
                 setDrawingDirty();
             }
 

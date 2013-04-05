@@ -46,18 +46,21 @@ public class AminoLangJSONExport extends AminoAction {
     }
 
     private String exportTree() {
-        Page page = doc.get(0);
         JSONPrinter json = new JSONPrinter();
-        json.open().set("type","Group")
-                .openArray("children");
-        for(Layer layer : page.children()) {
-            for(SketchNode node : layer.children()) {
-                if(node instanceof Group) {
-                    exportGroupNode((Group)node,json);
-                } else {
-                    exportNode((DynamicNode)node,json);
+        json.open().set("type","Document").openArray("children");
+        for(Page page : doc.children()) {
+            json.open().set("type","Group")
+                    .openArray("children");
+            for(Layer layer : page.children()) {
+                for(SketchNode node : layer.children()) {
+                    if(node instanceof Group) {
+                        exportGroupNode((Group)node,json);
+                    } else {
+                        exportNode((DynamicNode)node,json);
+                    }
                 }
             }
+            json.closeArray().close();
         }
         json.closeArray().close();
         return json.toStringBuffer().toString();
