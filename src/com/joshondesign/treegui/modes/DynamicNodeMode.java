@@ -42,10 +42,10 @@ public abstract class DynamicNodeMode extends Mode {
         nodeMenu.addItem("Align Center Vertical", AlignCenterV(doc));
         nodeMenu.addItem("Align Bottom", AlignBottom(doc));
 
-        nodeMenu.addItem("Lower Node To Bottom", "shift CLOSE_BRACKET", LowerNodeToBottom(doc));
-        nodeMenu.addItem("Lower Node", "CLOSE_BRACKET", LowerNode(doc));
-        nodeMenu.addItem("Raise Node", "OPEN_BRACKET", RaiseNode(doc));
-        nodeMenu.addItem("Raise Node To Top", "shift OPEN_BRACKET", RaiseNodeToTop(doc));
+        nodeMenu.addItem("Lower Node To Bottom", "shift OPEN_BRACKET", LowerNodeToBottom(doc));
+        nodeMenu.addItem("Lower Node", "OPEN_BRACKET", LowerNode(doc));
+        nodeMenu.addItem("Raise Node", "CLOSE_BRACKET", RaiseNode(doc));
+        nodeMenu.addItem("Raise Node To Top", "shift CLOSE_BRACKET", RaiseNodeToTop(doc));
         nodeMenu.addItem("Same Width", SameWidth(doc));
         nodeMenu.addItem("Same Height", SameHeight(doc));
         nodeMenu.addItem("Distribute", DistributeNodes(doc));
