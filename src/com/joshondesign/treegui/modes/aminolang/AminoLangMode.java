@@ -63,6 +63,8 @@ public class AminoLangMode extends DynamicNodeMode {
         drawMap.put("Rect",RectDelegate);
         symbols.add(parse(new Defs.Rect(), RectDelegate, visualBase));
 
+        drawMap.put("ListView",Defs.ListViewDelegate);
+        symbols.add(parse(new Defs.ListView(), ListViewDelegate, visualBase));
 
     }
 

@@ -106,7 +106,7 @@ public abstract class Defs {
         }
     };
 
-    @Metadata(name ="Label", exportClass = "org.joshy.gfx.node.control.Label")
+    @Metadata(name ="Label")
     public static class Label {
         @Prop(bindable = true)
         public CharSequence text = "a label";
@@ -129,4 +129,30 @@ public abstract class Defs {
     };
 
 
+    @Metadata(name = "ListView")
+    public static class ListView {
+        @Prop public double rowheight = 20;
+        @Prop public double columnWidth = 100;
+        //@Prop(visible = false) public ListView.ItemRenderer renderer = null;
+        //@Prop(bindable = true, exported = false) public ListModel model = null;
+        //@Prop  public ListView.Orientation orientation = ListView.Orientation.Vertical;
+        @Prop(bindable = true) public int selectedIndex = 0;
+        @Prop(bindable = true, compound = true, exported = false, master = "model", visible = false)
+        public Object selectedObject = null;
+    }
+
+    public static final DynamicNode.DrawDelegate ListViewDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRect(0, 0, w, h);
+            //lines
+            for (int i = 0; i < 5; i++) {
+                g.drawRect(0, i * 15, w, 15);
+            }
+        }
+    };
 }

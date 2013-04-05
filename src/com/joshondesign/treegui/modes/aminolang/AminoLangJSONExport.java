@@ -103,6 +103,10 @@ public class AminoLangJSONExport extends AminoAction {
                 json.set(name, prop.getDoubleValue());
                 continue;
             }
+            if(prop.getType().isAssignableFrom(Integer.TYPE)) {
+                json.set(name, prop.getIntegerValue());
+                continue;
+            }
             if(prop.getType().isAssignableFrom(FlatColor.class)) {
                 FlatColor fc = (FlatColor) prop.getColorValue();
                 String color = "#"+Integer.toHexString(fc.getRGBA()).substring(2);
