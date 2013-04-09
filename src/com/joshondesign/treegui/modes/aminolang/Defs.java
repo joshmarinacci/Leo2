@@ -1,5 +1,6 @@
 package com.joshondesign.treegui.modes.aminolang;
 
+import com.joshondesign.treegui.docmodel.Resize;
 import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
@@ -158,6 +159,24 @@ public abstract class Defs {
             }
         }
     };
+
+    @Metadata(name = "AnchorPanel", container = true, resize = Resize.Any)
+    public static class AnchorPanel {
+        @Prop(bindable = true, visible = false) public Object self = this;
+    }
+
+    public static final DynamicNode.DrawDelegate AnchorPanelDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getProperty("width").getDoubleValue();
+            double h = node.getProperty("height").getDoubleValue();
+            g.setPaint(FlatColor.GRAY);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRect(0, 0, w, h);
+        }
+    };
+
+
 
     @Metadata(name = "Transition", visual = false)
     public static class Transition {

@@ -65,6 +65,9 @@ public class AminoLangMode extends DynamicNodeMode {
         drawMap.put("ListView",Defs.ListViewDelegate);
         symbols.add(parse(new Defs.ListView(), ListViewDelegate, visualBase));
 
+        drawMap.put("AnchorPanel",Defs.AnchorPanelDelegate);
+        symbols.add(parse(new AnchorPanel(), AnchorPanelDelegate, visualBase));
+
         drawMap.put("Transition",Defs.ServiceBaseDelegate);
         symbols.add(parse(new Transition(), ServiceBaseDelegate, visualBase));
 
