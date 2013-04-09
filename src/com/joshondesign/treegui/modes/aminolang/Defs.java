@@ -163,13 +163,15 @@ public abstract class Defs {
     @Metadata(name = "AnchorPanel", container = true, resize = Resize.Any)
     public static class AnchorPanel {
         @Prop(bindable = true, visible = false) public Object self = this;
+        @Prop public FlatColor fill = FlatColor.GRAY;
     }
 
     public static final DynamicNode.DrawDelegate AnchorPanelDelegate = new DynamicNode.DrawDelegate() {
         public void draw(GFX g, DynamicNode node) {
             double w = node.getProperty("width").getDoubleValue();
             double h = node.getProperty("height").getDoubleValue();
-            g.setPaint(FlatColor.GRAY);
+            FlatColor color = node.getProperty("fill").getColorValue();
+            g.setPaint(color);
             g.fillRect(0, 0, w, h);
             g.setPaint(FlatColor.BLACK);
             g.drawRect(0, 0, w, h);

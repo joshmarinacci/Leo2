@@ -155,6 +155,15 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                     }
                 }
             }
+
+            @Override
+            public void setColorValue(FlatColor value) {
+                if(value != proto.getColorValue()) {
+                    for(Property prop : props) {
+                        prop.setColorValue(value);
+                    }
+                }
+            }
         }
     }
 
