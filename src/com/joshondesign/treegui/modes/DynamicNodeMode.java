@@ -6,6 +6,7 @@ import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.AminoParser;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminolang.DynamicGroup;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;
@@ -153,9 +154,12 @@ public abstract class DynamicNodeMode extends Mode {
             public void execute() throws Exception {
                 if(doc.getSelection().getSize() != 1) return;
                 SketchNode nd = doc.getSelection().get(0);
-                if(! (nd instanceof Group)) return;
-                Group group = (Group) nd;
-                group.normalize();
+                if(nd instanceof DynamicGroup) {
+                    ((DynamicGroup)nd).normalize();
+                }
+                if(nd instanceof Group) {
+                    ((Group)nd).normalize();
+                }
             }
         };
     }

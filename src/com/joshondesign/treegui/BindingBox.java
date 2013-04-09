@@ -78,8 +78,8 @@ public class BindingBox extends GridBox {
                         canvas.startDragPoint = null;
                         canvas.currentDragPoint = null;
                         setDrawingDirty();
-                        Point2D pt = canvas.toEditRootCoords(mouseEvent.getPointInNodeCoords(canvas));
-                        SketchNode node = canvas.findNode(pt);
+                        Point2D pt = mouseEvent.getPointInNodeCoords(canvas);
+                        SketchNode node = canvas.findNodeTop(pt);
                         if(node == null) return;
                         canvas.showTargetPopup(node, mouseEvent);
                     }

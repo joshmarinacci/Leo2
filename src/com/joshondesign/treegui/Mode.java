@@ -58,4 +58,8 @@ public abstract class Mode extends TreeNode {
     public abstract Map<String, DynamicNode.DrawDelegate> getDrawMap();
 
     public abstract void filesDropped(List<File> files, Canvas canvas);
+
+    public SketchNode createEmptyGroup() {
+        return null;
+    }
 }

@@ -59,13 +59,16 @@ public class AminoLangMode extends DynamicNodeMode {
         drawMap.put("Label", LabelDelegate);
         symbols.add(parse(new Defs.Label(), LabelDelegate, visualBase));
 
-
         drawMap.put("Rect",RectDelegate);
         symbols.add(parse(new Defs.Rect(), RectDelegate, visualBase));
 
         drawMap.put("ListView",Defs.ListViewDelegate);
         symbols.add(parse(new Defs.ListView(), ListViewDelegate, visualBase));
 
+        drawMap.put("Transition",Defs.ServiceBaseDelegate);
+        symbols.add(parse(new Transition(), ServiceBaseDelegate, visualBase));
+
+        drawMap.put("DynamicGroup",DynamicGroup.DynamicGroupDelegate);
     }
 
     @Override
@@ -97,5 +100,10 @@ public class AminoLangMode extends DynamicNodeMode {
 
     @Override
     public void filesDropped(List<File> files, Canvas canvas) {
+    }
+
+    @Override
+    public SketchNode createEmptyGroup() {
+        return new DynamicGroup();
     }
 }

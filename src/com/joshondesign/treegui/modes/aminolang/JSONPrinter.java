@@ -10,6 +10,24 @@ package com.joshondesign.treegui.modes.aminolang;
 public class JSONPrinter {
     private final StringBuffer sb;
     private boolean start;
+    private int tabDepth = 0;
+    private String tab() {
+        StringBuffer sb = new StringBuffer();
+        for(int i=0; i<tabDepth; i++) {
+            sb.append("  ");
+        }
+        return sb.toString();
+    }
+    private void doStart() {
+        if(start) {
+            start = false;
+            sb.append(tab()+" ");
+        } else {
+            sb.append(tab()+",");
+        }
+    }
+
+
 
     JSONPrinter() {
         this.sb = new StringBuffer();
@@ -21,34 +39,34 @@ public class JSONPrinter {
     }
 
     public JSONPrinter open() {
+        tabDepth++;
         doStart();
-        sb.append("{");
+        sb.append("{\n");
         start = true;
         return this;
     }
     public JSONPrinter openArray(String key) {
+        tabDepth++;
         doStart();
         start = true;
-        sb.append("\""+key+"\":[");
+        sb.append("\""+key+"\":[\n");
         return this;
     }
     public JSONPrinter closeArray() {
-        sb.append("]");
+        sb.append(tab()+"]\n");
+        tabDepth--;
         return this;
     }
+    public void close() {
+        sb.append(tab()+"}\n");
+        tabDepth--;
+    }
+
 
     public JSONPrinter set(String key, String value) {
         doStart();
         sb.append("\""+key+"\":\""+value+"\"\n");
         return this;
-    }
-
-    private void doStart() {
-        if(start) {
-            start = false;
-        } else {
-            sb.append(",");
-        }
     }
 
     public JSONPrinter set(String key, double value) {
@@ -61,10 +79,6 @@ public class JSONPrinter {
         doStart();
         sb.append("\""+key+"\":"+value+"\n");
         return this;
-    }
-
-    public void close() {
-        sb.append("}");
     }
 
 }

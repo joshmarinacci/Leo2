@@ -3,6 +3,8 @@ package com.joshondesign.treegui.modes.aminolang;
 import com.joshondesign.treegui.model.Metadata;
 import com.joshondesign.treegui.model.Prop;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminojs.ActionProp;
+import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -31,8 +33,9 @@ public abstract class Defs {
 
     @Metadata(visual = true)
     public static class PushButton extends VisualBase {
-        @Prop public String text = "push button";
+        @Prop(visible = true, exported = true) public String text = "push button";
         @Prop public boolean enabled = true;
+        @Prop(visible = false, bindable = true) public ActionProp action;
     }
 
     public static final DynamicNode.DrawDelegate PushButtonDelegate = new DynamicNode.DrawDelegate() {
@@ -153,6 +156,30 @@ public abstract class Defs {
             for (int i = 0; i < 5; i++) {
                 g.drawRect(0, i * 15, w, 15);
             }
+        }
+    };
+
+    @Metadata(name = "Transition", visual = false)
+    public static class Transition {
+
+        @Prop(bindable = true, visible = false)
+        public TriggerProp pushTrigger;
+
+        @Prop(bindable = true, visible = false)
+        public Object pushTarget;
+
+        //@Prop(visible = false, bindable = true) public ActionProp action;
+    }
+
+    public static final DynamicNode.DrawDelegate ServiceBaseDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getWidth();
+            double h = node.getHeight();
+            g.setPaint(FlatColor.YELLOW);
+            g.fillRoundRect(0, 0, w, h, 10, 10);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(0, 0, w, h, 10, 10);
+            g.drawText(node.getName(), Font.DEFAULT, 5, 15);
         }
     };
 }

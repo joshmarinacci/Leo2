@@ -6,6 +6,7 @@ import com.joshondesign.treegui.Mode;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
+import com.joshondesign.treegui.modes.aminolang.DynamicGroup;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -101,6 +102,9 @@ public class XMLImport {
     private static DynamicNode processNode(Elem xml, Map<String, SketchNode> ids, Map<String, DynamicNode.DrawDelegate> drawMap) throws XPathExpressionException, ClassNotFoundException {
         u.p("processing xml element: '" + xml.name()+"'");
         DynamicNode node = new DynamicNode();
+        if(xml.attrEquals("class","com.joshondesign.treegui.modes.aminolang.DynamicGroup")) {
+            node = new DynamicGroup();
+        }
         node.setName(xml.attr("name"));
         node.addProperty(new Property("class", String.class, xml.attr("class")));
         node.setVisual(xml.attrEquals("visual", "true"));

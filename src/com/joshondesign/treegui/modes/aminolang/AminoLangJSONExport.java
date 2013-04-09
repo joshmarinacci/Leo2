@@ -1,10 +1,14 @@
 package com.joshondesign.treegui.modes.aminolang;
 
+import com.joshondesign.treegui.Binding;
 import com.joshondesign.treegui.StringUtils;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
+import com.joshondesign.treegui.modes.aminojs.ActionProp;
+import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
@@ -14,6 +18,7 @@ import org.joshy.gfx.util.u;
 public class AminoLangJSONExport extends AminoAction {
     private final SketchDocument doc;
     private final boolean useRandomFile;
+    private ArrayList<DynamicNode> transitions;
 
     public AminoLangJSONExport(SketchDocument doc, boolean b) {
         this.doc = doc;
@@ -46,8 +51,10 @@ public class AminoLangJSONExport extends AminoAction {
     }
 
     private String exportTree() {
+        transitions = new ArrayList<DynamicNode>();
         JSONPrinter json = new JSONPrinter();
-        json.open().set("type","Document").openArray("children");
+        json.open().set("type","Document");
+        json.openArray("children");
         for(Page page : doc.children()) {
             json.open().set("type","Group")
                     .openArray("children");
@@ -62,7 +69,30 @@ public class AminoLangJSONExport extends AminoAction {
             }
             json.closeArray().close();
         }
-        json.closeArray().close();
+        json.closeArray();
+        json.openArray("bindings");
+
+        for(DynamicNode trans : transitions) {
+            u.p("got a trans");
+            json.open();
+            json.set("type", "Transition");
+            json.set("kind","slideInRight");
+
+            for(Binding binding : doc.getBindings()) {
+                if(binding.getSource() == trans) {
+                    u.p("found the push target " + binding.getTarget().getId());
+                    json.set("pushTarget",binding.getTarget().getId());
+                }
+                if(binding.getTarget() == trans) {
+                    u.p("found the push trigger " + binding.getSource().getId());
+                    json.set("pushTrigger",binding.getSource().getId());
+                }
+            }
+            json.close();
+        }
+
+        json.closeArray();
+        json.close();
         return json.toStringBuffer().toString();
     }
 
@@ -84,6 +114,10 @@ public class AminoLangJSONExport extends AminoAction {
         json.close();
     }
     private void exportNode(DynamicNode dnode, JSONPrinter json) {
+        if(dnode.getName().equals("Transition")) {
+            transitions.add(dnode);
+            return;
+        }
         json.open()
                 .set("type",dnode.getName())
                 .set("id",dnode.getId());
@@ -122,8 +156,27 @@ public class AminoLangJSONExport extends AminoAction {
                 json.set(name, color);
                 continue;
             }
+            if(prop.getType() == ActionProp.class) {
+                continue;
+            }
+            if(prop.getType() == TriggerProp.class) {
+                continue;
+            }
             json.set(name, prop.getRawValue().toString());
         }
+
+        if(dnode.isContainer()) {
+            json.openArray("children");
+            for(SketchNode node : dnode.children()) {
+                if(node instanceof Group) {
+                    exportGroupNode((Group)node,json);
+                } else {
+                    exportNode((DynamicNode)node,json);
+                }
+            }
+            json.closeArray();
+        }
+
         json.close();
     }
 }

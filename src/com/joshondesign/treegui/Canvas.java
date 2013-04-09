@@ -451,6 +451,32 @@ public class Canvas extends Control implements Focusable, ScrollPane.ScrollingAw
         return null;
     }
 
+    public SketchNode findNodeTop(Point2D pt) {
+        u.p("scroll = " + this.scrollX + " " + scrollY);
+        u.p("tb = " + this.totalBounds);
+        return findNodeTop_impl(this.masterRoot, MathUtils.transform(pt,totalBounds.getX(),totalBounds.getY()));
+    }
+
+    private SketchNode findNodeTop_impl(TreeNode<SketchNode> root, Point2D pt) {
+        for(SketchNode n : root.reverseChildren()) {
+            u.p("looking at : " + pt);
+            u.p("n = " + n);
+            if(n instanceof DynamicNode) {
+                u.p("name = " + ((DynamicNode)n).getName() + " " + n.getInputBounds());
+                u.p("tx = " + n.getTranslateX() + " " + n.getTranslateY());
+
+            }
+            if(n.isContainer()) {
+                u.p("going inside container");
+                SketchNode ret = findNodeTop_impl(n,
+                        new Point2D.Double(pt.getX()-n.getTranslateX(), pt.getY()-n.getTranslateY()));
+                if(ret != null) return ret;
+            }
+            if(n.contains(pt)) return n;
+        }
+        return null;
+    }
+
     public SketchNode findNodeSkipping(Point2D pt, SketchNode node) {
         for(SketchNode n : this.editRoot.reverseChildren()) {
             if(n.contains(pt) && n != node) return n;

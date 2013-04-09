@@ -10,6 +10,7 @@ import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.aminojava.DocumentActions;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
+import com.joshondesign.treegui.modes.aminolang.DynamicGroup;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -211,12 +212,18 @@ public class SelectionTool extends CanvasTool {
 
     private void groupSelection() {
         if(document.getSelection().getSize() > 1) {
-            Group group = new Group();
+            SketchNode group = mode.createEmptyGroup();
+            if(group == null) {
+                u.p("WARNING. Mode returned a null group");
+                return;
+            }
             for(SketchNode node : document.getSelection().children()) {
                 document.findParent(node).remove(node);
                 group.add(node);
             }
-            group.normalize();
+            if(group instanceof DynamicGroup) {
+                ((DynamicGroup)group).normalize();
+            }
             canvas.getEditRoot().add(group);
             document.getSelection().clear();
             document.getSelection().add(group);

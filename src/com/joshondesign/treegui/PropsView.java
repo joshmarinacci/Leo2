@@ -146,6 +146,15 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
             public void setDoubleValue(String text) {
                 this.setDoubleValue(Double.parseDouble(text));
             }
+
+            @Override
+            public void setStringValue(String value) {
+                if(value != proto.getStringValue()) {
+                    for(Property prop : props) {
+                        prop.setStringValue(value);
+                    }
+                }
+            }
         }
     }
 
