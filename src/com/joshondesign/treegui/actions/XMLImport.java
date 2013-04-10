@@ -23,40 +23,46 @@ public class XMLImport {
     public static SketchDocument read(File file) throws Exception {
         Doc xml = XMLParser.parse(file);
         SketchDocument doc = new SketchDocument();
-        Page page = processPage(xml.root(), doc);
         doc.clear();
-        doc.add(page);
+        processDocument(xml.root(), doc);
         doc.setFile(file);
         return doc;
     }
-    public static Page processPage(Elem root, SketchDocument doc) throws XPathExpressionException, ClassNotFoundException {
-        Page page = new Page();
-        //root.getDoc().dump();
-        u.p(root.attr("mode"));
-        System.out.println("mode = " + root.attr("mode"));
+
+    public static void processDocument(Elem root, SketchDocument doc) throws XPathExpressionException, ClassNotFoundException {
+        Map<String, SketchNode> ids = new HashMap<String, SketchNode>();
         Mode mode = Leo2.modeMap.get(root.attr("mode"));
         doc.setModeId(mode.getId());
+        for(Elem epage : root.xpath("page")) {
+            Page page = processPage(epage,doc, mode, ids);
+            doc.add(page);
+        }
+        //bind them together
+        doc.getBindings().clear();
+        for(Elem binding : root.xpath("bindings/binding")) {
+            try {
+                Binding b = processBinding(binding, ids);
+                doc.getBindings().add(b);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
+    public static Page processPage(Elem root, SketchDocument doc, Mode mode, Map<String, SketchNode> ids) throws XPathExpressionException, ClassNotFoundException {
+        Page page = new Page();
         Layer layer = new Layer();
         page.add(layer);
 
-        Map<String, SketchNode> ids = new HashMap<String, SketchNode>();
-        for(Elem vis : root.xpath("layers/layer/children/*")) {
+        for(Elem vis : root.xpath("layer/children/*")) {
             if(vis.name().equals("node")) {
                 DynamicNode node = processNode(vis,ids, mode.getDrawMap());
                 layer.add(node);
             }
             if(vis.name().equals("group")) {
-                u.p("we've got a group to process");
                 SketchNode group = processGroup(vis, ids, mode.getDrawMap());
                 layer.add(group);
             }
-        }
-        //bind them together
-        doc.getBindings().clear();
-        for(Elem binding : root.xpath("bindings/binding")) {
-            Binding b = processBinding(binding, ids);
-            doc.getBindings().add(b);
         }
         return page;
     }

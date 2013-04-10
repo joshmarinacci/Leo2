@@ -3,7 +3,6 @@ package com.joshondesign.treegui.modes.aminojava;
 import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.actions.XMLImport;
-import com.joshondesign.treegui.docmodel.Page;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
@@ -38,12 +37,10 @@ public class AminoJavaXMLImport extends JAction {
         File file = new File(fd.getDirectory(),fd.getFile());
         try {
             Doc xml = XMLParser.parse(file);
-            Page page = XMLImport.processPage(xml.root(), doc);
-            doc.clear();
-            doc.add(page);
+            XMLImport.processDocument(xml.root(),doc);
             doc.setFile(file);
-            canvas.setMasterRoot(page.get(0));
-            canvas.setEditRoot(page.get(0));
+            canvas.setMasterRoot(doc.get(0).get(0));
+            canvas.setEditRoot(doc.get(0).get(0));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,13 +52,9 @@ public class AminoJavaXMLImport extends JAction {
     }
 
     public static SketchDocument open(File file, Canvas canvas) throws Exception {
-        Doc xml = XMLParser.parse(file);
-        SketchDocument doc = new SketchDocument();
-        Page page = XMLImport.processPage(xml.root(), doc);
-        doc.clear();
-        doc.add(page);
-        canvas.setMasterRoot(page.get(0));
-        canvas.setEditRoot(page.get(0));
+        SketchDocument doc = XMLImport.read(file);
+        canvas.setMasterRoot(doc.get(0).get(0));
+        canvas.setEditRoot(doc.get(0).get(0));
         return doc;
     }
 

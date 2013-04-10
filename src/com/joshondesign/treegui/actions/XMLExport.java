@@ -12,21 +12,16 @@ import org.joshy.gfx.util.u;
 
 public class XMLExport {
 
-    public static void exportToXML(PrintWriter printWriter, Page page, SketchDocument document) throws URISyntaxException {
+    public static void exportToXML(PrintWriter printWriter, SketchDocument document) throws URISyntaxException {
         XMLWriter xml = new XMLWriter(printWriter, new URI(""));
         xml.header();
-        xml.start("page");
+        xml.start("document");
         xml.attr("mode",document.getModeId());
-        // render non-visual nodes first
 
-        xml.start("layers");
-        //render visual nodes next
-        for(Layer layer : page.children()) {
-            xml.start("layer");
-            exportChildren(xml, layer.children(), 200, 200);
-            xml.end();
+        for(Page page : document.children()) {
+            exportPage(xml,page);
         }
-        xml.end();
+
 
         //bindings
         xml.start("bindings");
@@ -52,6 +47,17 @@ public class XMLExport {
 
         xml.end();
         xml.close();
+    }
+
+    private static void exportPage(XMLWriter xml, Page page) {
+        xml.start("page");
+        //render visual nodes next
+        for(Layer layer : page.children()) {
+            xml.start("layer");
+            exportChildren(xml, layer.children(), 200, 200);
+            xml.end();
+        }
+        xml.end();
     }
 
     private static void nonvisualNodeToXML(SketchNode node, XMLWriter xml) {

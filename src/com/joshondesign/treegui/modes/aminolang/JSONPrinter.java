@@ -38,7 +38,7 @@ public class JSONPrinter {
         return this.sb;
     }
 
-    public JSONPrinter open() {
+    public JSONPrinter openObject() {
         tabDepth++;
         doStart();
         sb.append("{\n");
@@ -48,18 +48,21 @@ public class JSONPrinter {
     public JSONPrinter openArray(String key) {
         tabDepth++;
         doStart();
+        sb.append("\"" + key + "\":[\n");
         start = true;
-        sb.append("\""+key+"\":[\n");
         return this;
     }
     public JSONPrinter closeArray() {
         sb.append(tab()+"]\n");
         tabDepth--;
+        start=false;
         return this;
     }
-    public void close() {
+    public JSONPrinter closeObject() {
         sb.append(tab()+"}\n");
         tabDepth--;
+        start=false;
+        return this;
     }
 
 

@@ -53,11 +53,11 @@ public class AminoLangJSONExport extends AminoAction {
     private String exportTree() {
         transitions = new ArrayList<DynamicNode>();
         JSONPrinter json = new JSONPrinter();
-        json.open().set("type","Document");
+        json.openObject().set("type","Document");
         json.openArray("children");
         for(Page page : doc.children()) {
-            json.open().set("type","Group")
-                    .openArray("children");
+            json.openObject().set("type","Group");
+            json.openArray("children");
             for(Layer layer : page.children()) {
                 for(SketchNode node : layer.children()) {
                     if(node instanceof Group) {
@@ -67,14 +67,14 @@ public class AminoLangJSONExport extends AminoAction {
                     }
                 }
             }
-            json.closeArray().close();
+            json.closeArray();
+            json.closeObject();
         }
         json.closeArray();
         json.openArray("bindings");
 
         for(DynamicNode trans : transitions) {
-            u.p("got a trans");
-            json.open();
+            json.openObject();
             json.set("type", "Transition");
             json.set("kind","slideInRight");
 
@@ -88,16 +88,16 @@ public class AminoLangJSONExport extends AminoAction {
                     json.set("pushTrigger",binding.getSource().getId());
                 }
             }
-            json.close();
+            json.closeObject();
         }
 
         json.closeArray();
-        json.close();
+        json.closeObject();
         return json.toStringBuffer().toString();
     }
 
     private void exportGroupNode(Group group, JSONPrinter json) {
-        json.open()
+        json.openObject()
                 .set("type","Group")
                 .set("id",group.getId())
                 .set("tx",group.getTranslateX())
@@ -111,14 +111,14 @@ public class AminoLangJSONExport extends AminoAction {
             }
         }
         json.closeArray();
-        json.close();
+        json.closeObject();
     }
     private void exportNode(DynamicNode dnode, JSONPrinter json) {
         if(dnode.getName().equals("Transition")) {
             transitions.add(dnode);
             return;
         }
-        json.open()
+        json.openObject()
                 .set("type",dnode.getName())
                 .set("id",dnode.getId());
         for(Property prop : dnode.getProperties()) {
@@ -162,6 +162,11 @@ public class AminoLangJSONExport extends AminoAction {
             if(prop.getType() == TriggerProp.class) {
                 continue;
             }
+            u.p("SHOULDN'T BE HERE. exporting node property " + name);
+            if(prop.getRawValue() == null) {
+                u.p("  it's null. skipping");
+                continue;
+            }
             json.set(name, prop.getRawValue().toString());
         }
 
@@ -177,6 +182,6 @@ public class AminoLangJSONExport extends AminoAction {
             json.closeArray();
         }
 
-        json.close();
+        json.closeObject();
     }
 }

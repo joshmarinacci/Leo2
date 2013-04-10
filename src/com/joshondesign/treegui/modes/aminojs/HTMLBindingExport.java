@@ -163,7 +163,7 @@ public class HTMLBindingExport extends AminoAction {
 
     private void toXML(File xmlFile) throws FileNotFoundException, URISyntaxException {
         PrintWriter pw = new PrintWriter(new FileOutputStream(xmlFile));
-        XMLExport.exportToXML(pw,page,document);
+        XMLExport.exportToXML(pw,document);
         p("wrote to file" + xmlFile.getAbsolutePath());
     }
 

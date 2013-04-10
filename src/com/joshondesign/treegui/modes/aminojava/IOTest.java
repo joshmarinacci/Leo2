@@ -42,7 +42,7 @@ public class IOTest {
         doc.getBindings().add(binding);
 
         File file = File.createTempFile("foo","xml");
-        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
+        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc);
         u.p("exported to : \n" + file.getAbsolutePath());
 
         SketchDocument doc2 = XMLImport.read(file);
@@ -71,7 +71,7 @@ public class IOTest {
 
         File file2 = File.createTempFile("foo","xml");
         u.p("exporting to \n" + file2.getAbsolutePath());
-        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file2)), doc2.get(0), doc2);
+        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file2)), doc2);
         SketchDocument doc3 = XMLImport.read(file2);
         DynamicNode lv3 = (DynamicNode) doc2.get(0).get(0).get(0);
         assertEquals(lv3.getSize(), 0);
@@ -98,7 +98,7 @@ public class IOTest {
         layer.add(panelMaster.duplicate(null));
 
         File file = File.createTempFile("foo","xml");
-        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
+        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc);
         u.p("exported to : " + file.getAbsolutePath());
 
         SketchDocument doc2 = XMLImport.read(file);
@@ -106,7 +106,7 @@ public class IOTest {
 
         File file2 = File.createTempFile("foo","xml");
         u.p("exporting to \n" + file2.getAbsolutePath());
-        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file2)), doc2.get(0), doc2);
+        XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file2)), doc2);
         SketchDocument doc3 = XMLImport.read(file2);
 
 

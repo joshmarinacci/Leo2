@@ -35,7 +35,7 @@ public class AminoJavaXMLExport extends JAction {
             File file = File.createTempFile("foo",".xml");
             //PrintWriter pw = new PrintWriter(new FileOutputStream(file));
             PrintWriter pw = new PrintWriter(System.out);
-            XMLExport.exportToXML(pw, page, document);
+            XMLExport.exportToXML(pw, document);
             loadAndRun(file);
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +99,7 @@ public class AminoJavaXMLExport extends JAction {
             //write to the file
             try {
                 if(file != null) {
-                    XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc.get(0), doc);
+                    XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), doc);
                     u.p("exported to : " + file.getAbsolutePath());
                     doc.setFile(file);
                 }
@@ -131,7 +131,7 @@ public class AminoJavaXMLExport extends JAction {
                 }
                 u.p("saving to the file: " + file.getAbsolutePath());
                 //save the file
-                XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), document.get(0), document);
+                XMLExport.exportToXML(new PrintWriter(new FileOutputStream(file)), document);
                 //now reload it
 
                 Doc xml = XMLParser.parse(file);
