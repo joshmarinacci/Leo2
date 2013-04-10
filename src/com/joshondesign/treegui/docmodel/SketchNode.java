@@ -44,6 +44,15 @@ public abstract class SketchNode extends TreeNode<SketchNode> {
         return translateY;
     }
 
+
+    @Override
+    public TreeNode<SketchNode> markModified(SketchNode child) {
+        if(getParent() != null) {
+            getParent().markModified(child);
+        }
+        return super.markModified(child);
+    }
+
     public SketchNode setTranslateY(double translateY) {
         this.translateY = translateY;
         if(getParent() != null) {
