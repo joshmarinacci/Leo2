@@ -16,6 +16,7 @@ import com.joshondesign.treegui.modes.aminolang.AminoLangMode;
 import com.joshondesign.treegui.modes.bootstrap.BootstrapMode;
 import com.joshondesign.treegui.modes.sketch.SketchMode;
 import com.joshondesign.treegui.tools.SelectionTool;
+import com.joshondesign.treegui.tools.StatusBar;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
 import java.io.File;
@@ -198,9 +199,7 @@ public class Leo2 {
     }
 
     private static void doNewDoc(Mode mode, File docFile) throws Exception {
-        //init doc
-        SketchDocument doc = null;
-        doc = XMLImport.read(docFile);
+        SketchDocument doc = XMLImport.read(docFile);
         doc.setFile(docFile);
         doNewDoc(mode, doc);
     }
@@ -226,6 +225,9 @@ public class Leo2 {
         final Textbox symbolSearch = (Textbox) AminoParser.find("symbolSearch", root);
         final Canvas canvasView = (Canvas) AminoParser.find("canvasView", root);
         final PropsView propsView = (PropsView) AminoParser.find("propsView", root);
+        final StatusBar statusBar = (StatusBar) AminoParser.find("statusBar", root);
+
+
 
 
         if (doc.getFile() != null) {
@@ -266,18 +268,20 @@ public class Leo2 {
         //listen for selection changes
         doc.addListener(new TreeNode.TreeListener<TreeNode>() {
             public void added(TreeNode node) {
+                statusBar.update(doc);
             }
 
             public void removed(TreeNode node) {
+                statusBar.update(doc);
             }
 
             public void modified(TreeNode node) {
                 canvasView.setMasterRoot(doc.getSelectedPage().get(0));
                 canvasView.setEditRoot(doc.getSelectedPage().get(0));
+                statusBar.update(doc);
             }
 
             public void selfModified(TreeNode self) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
         canvasView.setMasterRoot(selectedPage.get(0));

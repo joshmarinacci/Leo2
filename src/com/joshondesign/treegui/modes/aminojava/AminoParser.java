@@ -32,9 +32,10 @@ public class AminoParser {
 
     public static Node parsePage(Elem root) throws Exception {
         Context ctx = new Context();
-
+                         u.p("root = " + root.name());
         Node last = null;
-        for(Elem vis : root.xpath("nodes/node")) {
+        for(Elem vis : root.xpath("page/layer/children/node")) {
+            u.p("doing node: " + vis.name());
             Object obj = processNode(vis, ctx);
             if(obj instanceof Node && vis.attrEquals("visual","true")) {
                 last = (Node) obj;

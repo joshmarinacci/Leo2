@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<page mode='com.joshondesign.modes.aminojava'>
-    <nodes>
+<document mode='com.joshondesign.modes.aminojava'>
+    <page>
+        <layer>
+    <children>
         <node id='id831352' class='com.joshondesign.treegui.AnchorPanel' visual='true' resize='None' container='true' custom='false' name='Panel'>
             <property name='anchorBottom' value='false' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
             <property name='anchorLeft' value='true' type='java.lang.Boolean' exported='true' visible='true' bindable='false' compound='false' list='false' masterprop='null'>            </property>
@@ -196,6 +198,9 @@
                 </node>
             </children>
         </node>
-    </nodes>
+    </children>
+        </layer>
+    </page>
     <bindings>    </bindings>
-</page>
+</document>
+

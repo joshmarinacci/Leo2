@@ -32,6 +32,7 @@ public class XMLImport {
     public static void processDocument(Elem root, SketchDocument doc) throws XPathExpressionException, ClassNotFoundException {
         Map<String, SketchNode> ids = new HashMap<String, SketchNode>();
         Mode mode = Leo2.modeMap.get(root.attr("mode"));
+        u.p("attr = " + root.attr("mode") + mode);
         doc.setModeId(mode.getId());
         for(Elem epage : root.xpath("page")) {
             Page page = processPage(epage,doc, mode, ids);
