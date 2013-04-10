@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.node.control.Menu;
 
 public class AminoLangMode extends DynamicNodeMode {
@@ -94,6 +95,27 @@ public class AminoLangMode extends DynamicNodeMode {
     @Override
     public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
         fileMenu.addItem("Test HTML", "T", new AminoLangJSONExport(doc,true));
+    }
+
+    @Override
+    public void modifyEditMenu(Menu editMenu, final SketchDocument doc) {
+        super.modifyEditMenu(editMenu, doc);
+        editMenu.addItem("Cut", "X", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                doc.getSelection().cut(doc);
+            }
+        });
+        editMenu.addItem("Copy", "C", new AminoAction() {
+            @Override
+            public void execute() throws Exception {
+                doc.getSelection().copy(doc);
+            }
+        });
+        editMenu.addItem("Paste", "V", new AminoAction() {
+            @Override
+            public void execute() throws Exception {  doc.getSelection().paste(doc);  }
+        });
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.joshondesign.treegui.docmodel;
 
-import com.joshondesign.treegui.Canvas;
 import com.joshondesign.treegui.model.TreeNode;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +44,19 @@ public class Selection extends TreeNode<SketchNode> implements TreeNode.TreeList
         }
     }
 
-    public void paste(SketchDocument document, Canvas canvas) {
+    public void paste(SketchDocument document) {
         clear();
+        if(buffer.size() < 1) return;
+        TreeNode parent = buffer.get(0).getParent();
         for(SketchNode node : buffer) {
             SketchNode dup = node.duplicate(null);
-            canvas.getEditRoot().add(dup);
+            dup.setTranslateX(dup.getTranslateX()+10);
+            dup.setTranslateY(dup.getTranslateY()+10);
+            if(parent instanceof Layer) {
+                ((Layer)parent).add(dup);
+            } else {
+                parent.add(dup);
+            }
             add(dup);
         }
 

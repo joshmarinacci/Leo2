@@ -41,6 +41,10 @@ public abstract class Mode extends TreeNode {
         //To change body of created methods use File | Settings | File Templates.
     }
 
+    public void modifyEditMenu(Menu editMenu, SketchDocument doc) {
+
+    }
+
     public abstract void modifyFileMenu(Menu fileMenu, SketchDocument doc);
 
     public DynamicNode findSymbol(String name) {

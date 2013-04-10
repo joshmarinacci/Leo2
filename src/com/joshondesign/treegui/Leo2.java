@@ -299,6 +299,7 @@ public class Leo2 {
         menubar.add(fileMenu);
 
         Menu editMenu = new Menu().setTitle("Edit");
+        mode.modifyEditMenu(editMenu, doc);
         menubar.add(editMenu);
 
         Menu nodeMenu = new Menu().setTitle("Node");
