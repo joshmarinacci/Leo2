@@ -228,6 +228,11 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
         final Textbox idtb = new Textbox();
         if(node.isSingle()) {
             idtb.setText("" + node.getId());
+            EventBus.getSystem().addListener(idtb, FocusEvent.Gained, new Callback<FocusEvent>() {
+                public void call(FocusEvent focusEvent) throws Exception {
+                    idtb.selectAll();
+                }
+            });
             EventBus.getSystem().addListener(idtb, FocusEvent.Lost, new Callback<FocusEvent>() {
                 public void call(FocusEvent focusEvent) throws Exception {
                     node.setId(idtb.getText());

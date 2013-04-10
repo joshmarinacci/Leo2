@@ -75,6 +75,7 @@ public class AminoLangJSONExport extends AminoAction {
 
         for(DynamicNode trans : transitions) {
             json.openObject();
+            json.set("id",trans.getId());
             json.set("type", "Transition");
             json.set("kind","slideInRight");
 
