@@ -15,7 +15,7 @@ import org.joshy.gfx.node.layout.Panel;
  * To change this template use File | Settings | File Templates.
  */
 public class StatusBar extends Panel {
-    private String text = "Page ? of ?";
+    private String text = "Page 1 of 1";
 
     @Override
     protected void drawSelf(GFX g) {
