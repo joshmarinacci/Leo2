@@ -18,6 +18,10 @@ public abstract class Defs {
         @Prop public double translateY = 0;
         @Prop public double width = 100;
         @Prop public double height = 50;
+        @Prop public boolean anchorLeft = true;
+        @Prop public boolean anchorRight = false;
+        @Prop public boolean anchorTop = true;
+        @Prop public boolean anchorBottom = false;
     }
 
     public static final  DynamicNode.DrawDelegate VisualBaseDelegate = new DynamicNode.DrawDelegate() {

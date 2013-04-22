@@ -164,6 +164,20 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                     }
                 }
             }
+
+            @Override
+            public boolean getBooleanValue() {
+                return proto.getBooleanValue();
+            }
+
+            @Override
+            public void setBooleanValue(boolean value) {
+                if(value != proto.getBooleanValue()) {
+                    for(Property prop : props) {
+                        prop.setBooleanValue(value);
+                    }
+                }
+            }
         }
     }
 
