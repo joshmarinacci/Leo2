@@ -441,7 +441,7 @@ public abstract class DynamicNodeMode extends Mode {
 
 
                 final PopupMenuButton<Size> popup = (PopupMenuButton) AminoParser.find("sizeBox", root);
-                Size[] sizes =  new Size[]{ new Size(320,480,Units.Pixels), new Size(1024,768,Units.Pixels)};
+                Size[] sizes =  new Size[]{ new Size(320,480,Units.Pixels), new Size(1024,768,Units.Pixels), new Size(1280,800,Units.Pixels)};
                 popup.setModel(ListView.createModel(sizes));
                 popup.setTextRenderer(new ListView.TextRenderer<Size>() {
                     public String toString(SelectableControl selectableControl, Size size, int i) {
