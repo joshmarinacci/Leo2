@@ -633,8 +633,7 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
             }
 
             public void modified(SketchNode node) {
-                //u.p("modifed node");
-                setSelection(node);
+                setSelection(new SelectionProxy(document.getSelection()));
                 setDrawingDirty();
             }
             public void selfModified(TreeNode self) {
