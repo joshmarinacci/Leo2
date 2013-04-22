@@ -228,6 +228,47 @@ public class SnappingManager {
 
 
 
+        vSnappers.add(new VGridSnapper(20));
+        hSnappers.add(new HGridSnapper(20));
+    }
+
+    static class VGridSnapper extends VSnapper {
+        private final double w;
+        public VGridSnapper(double w) {
+            this.w = w;
+        }
+        public boolean canSnap(Point2D pt, SketchDocument doc, SketchNode node) {
+            if((pt.getX() % w ) < THRESH) return true;
+            return false;
+        }
+
+        public double snap(Point2D pt, SketchDocument doc, SketchNode node) {
+            double out = (int)(pt.getX()/this.w)*this.w;
+            node.setTranslateX(out);
+            return out;
+        }
+
+        @Override
+        double getPoint(SketchDocument doc, SketchNode node) {  return 0; }
+    }
+    static class HGridSnapper extends HSnapper {
+        private final double w;
+        public HGridSnapper(double w) {
+            this.w = w;
+        }
+        public boolean canSnap(Point2D pt, SketchDocument doc, SketchNode node) {
+            if((pt.getY() % w ) < THRESH) return true;
+            return false;
+        }
+
+        public double snap(Point2D pt, SketchDocument doc, SketchNode node) {
+            double out = (int)(pt.getY()/this.w)*this.w;
+            node.setTranslateY(out);
+            return out;
+        }
+
+        @Override
+        double getPoint(SketchDocument doc, SketchNode node) {  return 0; }
     }
 
     abstract static class ZHSnapper extends HSnapper {
