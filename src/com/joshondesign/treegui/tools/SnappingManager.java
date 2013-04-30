@@ -1,6 +1,5 @@
 package com.joshondesign.treegui.tools;
 
-import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.SketchDocument;
 import com.joshondesign.treegui.docmodel.SketchNode;
 import com.joshondesign.treegui.docmodel.Units;
@@ -38,6 +37,7 @@ public class SnappingManager {
         final double DOC_MARGIN = 30;
         final double PARENT_MARGIN = 15;
 
+        /*
         //look for other nodes with similar X positions
         vSnappers.add(new VSnapper() {
             double getPoint(SketchDocument doc, SketchNode node) {
@@ -71,7 +71,9 @@ public class SnappingManager {
                 return 0;
             }
         });
+        */
         //look for other nodes with similar Y positions
+        /*
         hSnappers.add(new HSnapper() {
             double getPoint(SketchDocument doc, SketchNode node) {
                 return 0;
@@ -104,6 +106,7 @@ public class SnappingManager {
                 return 0;
             }
         });
+        */
 
         Takeit takeX1 = new Takeit() {
             public double take(SketchDocument doc, SketchNode node) {
@@ -133,6 +136,7 @@ public class SnappingManager {
         };
 
 
+        /*
         //left doc bounds
         vSnappers.add(builditV(takeX1, new Takeit() {
                     public double take(SketchDocument doc, SketchNode node) {
@@ -226,10 +230,10 @@ public class SnappingManager {
         //bottom doc bounds
         hSnappers.add(builditH(takeY2, docH));
 
+        */
 
-
-        vSnappers.add(new VGridSnapper(20));
-        hSnappers.add(new HGridSnapper(20));
+        vSnappers.add(new VGridSnapper(10));
+        hSnappers.add(new HGridSnapper(10));
     }
 
     static class VGridSnapper extends VSnapper {
