@@ -178,6 +178,20 @@ public class PropsView extends GridBox implements TreeNode.TreeListener {
                     }
                 }
             }
+
+            @Override
+            public Enum getEnumValue() {
+                return proto.getEnumValue();
+            }
+
+            @Override
+            public void setEnumValue(Object value) {
+                if(value != proto.getEnumValue()) {
+                    for(Property prop : props) {
+                        prop.setEnumValue(value);
+                    }
+                }
+            }
         }
     }
 

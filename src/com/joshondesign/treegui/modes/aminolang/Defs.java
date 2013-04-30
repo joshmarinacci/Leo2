@@ -137,29 +137,50 @@ public abstract class Defs {
     };
 
 
+    public enum ListViewLayout {  vert, horiz, horizwrap }
+
     @Metadata(name = "ListView")
     public static class ListView {
-        @Prop public double rowheight = 20;
-        @Prop public double columnWidth = 100;
+        @Prop public double cellHeight = 30;
+        @Prop public double cellWidth  = 30;
         //@Prop(visible = false) public ListView.ItemRenderer renderer = null;
         //@Prop(bindable = true, exported = false) public ListModel model = null;
-        //@Prop  public ListView.Orientation orientation = ListView.Orientation.Vertical;
-        @Prop(bindable = true) public int selectedIndex = 0;
-        @Prop(bindable = true, compound = true, exported = false, master = "model", visible = false)
-        public Object selectedObject = null;
+        @Prop public ListViewLayout layout = ListViewLayout.vert;
+        @Prop public int selectedIndex = 0;
+        //@Prop(bindable = true, compound = true, exported = false, master = "model", visible = false)
+        //public Object selectedObject = null;
     }
 
     public static final DynamicNode.DrawDelegate ListViewDelegate = new DynamicNode.DrawDelegate() {
         public void draw(GFX g, DynamicNode node) {
             double w = node.getProperty("width").getDoubleValue();
             double h = node.getProperty("height").getDoubleValue();
+            double cw = node.getProperty("cellWidth").getDoubleValue();
+            double ch = node.getProperty("cellHeight").getDoubleValue();
+            ListViewLayout layout = (ListViewLayout) node.getProperty("layout").getEnumValue();
+
             g.setPaint(FlatColor.GRAY);
             g.fillRect(0, 0, w, h);
             g.setPaint(FlatColor.BLACK);
             g.drawRect(0, 0, w, h);
-            //lines
-            for (int i = 0; i < 5; i++) {
-                g.drawRect(0, i * 15, w, 15);
+
+            if(layout == ListViewLayout.vert) {
+                for (int i=0; i<h; i += ch) {
+                    g.drawLine(0, i, w, i);
+                }
+            }
+            if(layout == ListViewLayout.horiz) {
+                for (int i=0; i<w; i += cw) {
+                    g.drawLine(i, 0, i, h);
+                }
+            }
+            if(layout == ListViewLayout.horizwrap) {
+                for (int i=0; i<w; i+=cw) {
+                    g.drawLine(i,0,i,h);
+                }
+                for (int i=0; i<h; i += ch) {
+                    g.drawLine(0, i, w, i);
+                }
             }
         }
     };
