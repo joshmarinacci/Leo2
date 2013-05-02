@@ -1,16 +1,15 @@
 package com.joshondesign.treegui.modes.aminolang;
 
 import com.joshondesign.treegui.Binding;
-import com.joshondesign.treegui.StringUtils;
 import com.joshondesign.treegui.docmodel.*;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.util.u;
@@ -20,6 +19,8 @@ public class AminoLangJSONExport extends AminoAction {
     private final boolean useRandomFile;
     private ArrayList<DynamicNode> transitions;
 
+    private File exportFile = null;
+
     public AminoLangJSONExport(SketchDocument doc, boolean b) {
         this.doc = doc;
         this.useRandomFile =  b;
@@ -27,6 +28,21 @@ public class AminoLangJSONExport extends AminoAction {
 
     @Override
     public void execute() throws Exception {
+        if(exportFile == null) {
+
+            FileDialog fd = new FileDialog((Frame)null);
+            fd.setTitle("Choose JSON Export File");
+            fd.setMode(FileDialog.SAVE);
+            fd.setVisible(true);
+            if(fd.getFile() == null) return;
+            exportFile = new File(fd.getDirectory(),fd.getFile());
+            if(!exportFile.getName().toLowerCase().endsWith(".json")) {
+                exportFile = new File(exportFile.getParent(),exportFile.getName()+".json");
+            }
+        }
+
+
+        /*
         File outdir = new File("/Users/josh/projects/temp");
         outdir.mkdir();
         File templatedir = new File("resources/");
@@ -39,6 +55,14 @@ public class AminoLangJSONExport extends AminoAction {
                 new File(outdir,"test.html"), subs);
         File jsonOut = new File(outdir,"scene.json");
         u.stringToFile(tree,jsonOut);
+
+        */
+
+        String tree = exportTree();
+        u.stringToFile(tree, exportFile);
+
+        u.p("exported to file " + exportFile.getAbsolutePath());
+
         /*
         StringUtils.copyFile(new File(templatedir, "bootstrap.min.css"),
                 new File(outdir, "bootstrap.min.css"));
