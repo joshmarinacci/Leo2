@@ -77,6 +77,11 @@ public class JSONPrinter {
         sb.append("\""+key+"\":"+value+"\n");
         return this;
     }
+    public JSONPrinter set(String key, int value) {
+        doStart();
+        sb.append("\""+key+"\":"+value+"\n");
+        return this;
+    }
 
     public JSONPrinter set(String key, boolean value) {
         doStart();
@@ -84,4 +89,9 @@ public class JSONPrinter {
         return this;
     }
 
+    public JSONPrinter appendArray(int width) {
+        doStart();
+        sb.append(width);
+        return this;
+    }
 }
