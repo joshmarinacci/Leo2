@@ -8,9 +8,15 @@ import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.util.u;
 
@@ -58,7 +64,7 @@ public class AminoLangJSONExport extends AminoAction {
 
         */
 
-        String tree = exportTree();
+        String tree = exportTree(exportFile.getParentFile());
         u.stringToFile(tree, exportFile);
 
         u.p("exported to file " + exportFile.getAbsolutePath());
@@ -74,7 +80,7 @@ public class AminoLangJSONExport extends AminoAction {
         */
     }
 
-    private String exportTree() {
+    private String exportTree(File parentFile) {
         transitions = new ArrayList<DynamicNode>();
         JSONPrinter json = new JSONPrinter();
         json.openObject().set("type","Document");
@@ -85,9 +91,9 @@ public class AminoLangJSONExport extends AminoAction {
             for(Layer layer : page.children()) {
                 for(SketchNode node : layer.children()) {
                     if(node instanceof Group) {
-                        exportGroupNode((Group)node,json);
+                        exportGroupNode((Group)node,json, parentFile);
                     } else {
-                        exportNode((DynamicNode)node,json);
+                        exportNode((DynamicNode)node,json, parentFile);
                     }
                 }
             }
@@ -121,7 +127,7 @@ public class AminoLangJSONExport extends AminoAction {
         return json.toStringBuffer().toString();
     }
 
-    private void exportGroupNode(Group group, JSONPrinter json) {
+    private void exportGroupNode(Group group, JSONPrinter json, File parentFile) {
         json.openObject()
                 .set("type","Group")
                 .set("id",group.getId())
@@ -130,15 +136,15 @@ public class AminoLangJSONExport extends AminoAction {
         json.openArray("children");
         for(SketchNode node : group.children()) {
             if(node instanceof Group) {
-                exportGroupNode((Group)node,json);
+                exportGroupNode((Group)node,json, parentFile);
             } else {
-                exportNode((DynamicNode)node,json);
+                exportNode((DynamicNode)node,json, parentFile);
             }
         }
         json.closeArray();
         json.closeObject();
     }
-    private void exportNode(DynamicNode dnode, JSONPrinter json) {
+    private void exportNode(DynamicNode dnode, JSONPrinter json, File parentFile) {
         if(dnode.getName().equals("Transition")) {
             transitions.add(dnode);
             return;
@@ -187,6 +193,14 @@ public class AminoLangJSONExport extends AminoAction {
             if(prop.getType() == TriggerProp.class) {
                 continue;
             }
+
+            if(prop.getType().isAssignableFrom(Defs.IconSymbols.class)) {
+                File file = exportIcon((Defs.IconSymbols)prop.getEnumValue(), parentFile);
+                json.set("url",file.getName());
+                continue;
+            }
+
+
             u.p("SHOULDN'T BE HERE. exporting node property " + name);
             if(prop.getRawValue() == null) {
                 u.p("  it's null. skipping");
@@ -199,14 +213,33 @@ public class AminoLangJSONExport extends AminoAction {
             json.openArray("children");
             for(SketchNode node : dnode.children()) {
                 if(node instanceof Group) {
-                    exportGroupNode((Group)node,json);
+                    exportGroupNode((Group)node,json, parentFile);
                 } else {
-                    exportNode((DynamicNode)node,json);
+                    exportNode((DynamicNode)node,json, parentFile);
                 }
             }
             json.closeArray();
         }
 
         json.closeObject();
+    }
+
+    private File exportIcon(Defs.IconSymbols symbol, File parentFile) {
+        Font font = Font.name("FontAwesome").size(30).resolve();
+        BufferedImage img = new BufferedImage(100,100,BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2 = img.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setFont(font.getAWTFont());
+        g2.setPaint(java.awt.Color.BLACK);
+        g2.drawString(symbol.getChar()+"",0,30);
+        g2.dispose();
+        File file = new File(parentFile,symbol.name()+".png");
+        try {
+            ImageIO.write(img,"png", file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }

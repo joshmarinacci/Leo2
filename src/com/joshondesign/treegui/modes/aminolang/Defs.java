@@ -228,4 +228,51 @@ public abstract class Defs {
             g.drawText(node.getName(), Font.DEFAULT, 5, 15);
         }
     };
+
+
+    @Metadata(name = "TextField", container = false, resize = Resize.Any)
+    public static class TextField {
+        @Prop public String text = "textfield";
+    }
+
+    public static final DynamicNode.DrawDelegate TextFieldDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getWidth();
+            double h = node.getHeight();
+            String t = node.getProperty("text").getStringValue();
+            g.setPaint(FlatColor.WHITE);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawText(t, Font.DEFAULT, 5, 15);
+            g.drawRect(0, 0, w, h);
+        }
+    };
+
+    public enum IconSymbols {  heart('\uf004'), star('\uf005'), camera('\uf030');
+        private final char symbol;
+
+        IconSymbols(char symbol) {
+            this.symbol = symbol;
+        }
+        public char getChar() {
+            return symbol;
+        }
+    }
+
+    @Metadata(name = "ImageView", container = false, resize = Resize.Any)
+    public static class ImageView {
+        @Prop(exported = true) public IconSymbols symbol = IconSymbols.heart;
+    }
+    public static final DynamicNode.DrawDelegate ImageViewDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getWidth();
+            double h = node.getHeight();
+            IconSymbols symbol = (IconSymbols) node.getProperty("symbol").getEnumValue();
+            g.setPaint(FlatColor.BLACK);
+            Font font = Font.name("FontAwesome").size(30).resolve();
+            g.drawText(""+symbol.getChar(),font,0,30);
+            g.setPaint(FlatColor.GRAY);
+            g.drawRect(0,0,w,h);
+        }
+    };
 }

@@ -69,6 +69,9 @@ public class AminoLangMode extends DynamicNodeMode {
         tb.getProperty("width").setDoubleValue(100);
         tb.getProperty("height").setDoubleValue(30);
 
+        drawMap.put("TextField", TextFieldDelegate);
+        symbols.add(parse(new TextField(), TextFieldDelegate, visualBase));
+
         drawMap.put("Slider", SliderDelegate);
         symbols.add(parse(new Defs.Slider(), SliderDelegate, visualBase));
         findSymbol("Slider").getProperty("height").setDoubleValue(25);
@@ -79,6 +82,9 @@ public class AminoLangMode extends DynamicNodeMode {
         drawMap.put("Rect",RectDelegate);
         symbols.add(parse(new Defs.Rect(), RectDelegate, visualBase));
 
+        drawMap.put("ImageView",ImageViewDelegate);
+        symbols.add(parse(new Defs.ImageView(), ImageViewDelegate, visualBase));
+
         drawMap.put("ListView",Defs.ListViewDelegate);
         symbols.add(parse(new Defs.ListView(), ListViewDelegate, visualBase));
 
@@ -87,6 +93,7 @@ public class AminoLangMode extends DynamicNodeMode {
 
         drawMap.put("Transition",Defs.ServiceBaseDelegate);
         symbols.add(parse(new Transition(), ServiceBaseDelegate, visualBase));
+
 
         drawMap.put("DynamicGroup",DynamicGroup.DynamicGroupDelegate);
     }
