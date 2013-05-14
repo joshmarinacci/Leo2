@@ -39,6 +39,7 @@ public abstract class Defs {
     @Metadata(visual = true)
     public static class PushButton extends VisualBase {
         @Prop(visible = true, exported = true) public String text = "push button";
+        @Prop public double fontSize = 20.0;
         @Prop public boolean enabled = true;
         @Prop(visible = false, bindable = true) public ActionProp action;
         @Prop public IconSymbols icon = IconSymbols.None;
@@ -67,7 +68,15 @@ public abstract class Defs {
                 }
             }
 
-            Font.drawCentered(g, t, Font.DEFAULT, xoff,0,w-xoff,h,false);
+            double size = 20;
+            if(node.hasProperty("fontSize")) {
+                size = node.getProperty("fontSize").getDoubleValue();
+            }
+            Font font = Font.name(Font.DEFAULT.getName()).size((float) size).resolve();
+            //double y = font.getAscender() + font.getDescender();
+            //g.drawText(t,font,5,y);
+
+            Font.drawCentered(g, t, font, xoff,0,w-xoff-10,h,false);
             g.drawRect(0, 0, w, h);
         }
     };
@@ -135,7 +144,7 @@ public abstract class Defs {
         @Prop(bindable = true)
         public CharSequence text = "a label";
         @Prop  public FlatColor color = FlatColor.BLACK;
-        @Prop  public double fontSize = 12.5;
+        @Prop  public double fontSize = 20.0;
     }
 
     public static final DynamicNode.DrawDelegate LabelDelegate = new DynamicNode.DrawDelegate() {

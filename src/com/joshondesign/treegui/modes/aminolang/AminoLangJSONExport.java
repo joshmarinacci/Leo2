@@ -194,8 +194,10 @@ public class AminoLangJSONExport extends AminoAction {
                 continue;
             }
 
-            if(prop.getType().isAssignableFrom(Defs.IconSymbols.class)) {
-                File file = exportIcon((Defs.IconSymbols)prop.getEnumValue(), parentFile);
+            if(Defs.IconSymbols.class.isAssignableFrom(prop.getType())) {
+                Defs.IconSymbols icon = (Defs.IconSymbols) prop.getEnumValue();
+                if(icon == Defs.IconSymbols.None) continue;
+                File file = exportIcon(icon, parentFile);
                 json.set("url",file.getName());
                 continue;
             }
@@ -207,6 +209,20 @@ public class AminoLangJSONExport extends AminoAction {
                 continue;
             }
             json.set(name, prop.getRawValue().toString());
+        }
+
+        //assume they are all controls
+        if(dnode.getParent() instanceof DynamicNode) {
+            DynamicNode parent = (DynamicNode) dnode.getParent();
+            if("AnchorPanel".equals(parent.getName())) {
+                double pw = parent.getWidth();
+                double ph = parent.getHeight();
+                double cw = dnode.getWidth();
+                double ch = dnode.getHeight();
+                double cx = dnode.getTranslateX();
+                double cy = dnode.getTranslateY();
+                json.set("left",cx).set("top",cy).set("right",pw-cx-cw).set("bottom",ph-cy-ch);
+            }
         }
 
         if(dnode.isContainer()) {
