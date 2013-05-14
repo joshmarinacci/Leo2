@@ -41,6 +41,7 @@ public abstract class Defs {
         @Prop(visible = true, exported = true) public String text = "push button";
         @Prop public boolean enabled = true;
         @Prop(visible = false, bindable = true) public ActionProp action;
+        @Prop public IconSymbols icon = IconSymbols.None;
     }
 
     public static final DynamicNode.DrawDelegate PushButtonDelegate = new DynamicNode.DrawDelegate() {
@@ -50,8 +51,23 @@ public abstract class Defs {
             String t = node.getProperty("text").getStringValue();
             g.setPaint(FlatColor.GRAY);
             g.fillRect(0, 0, w, h);
+
             g.setPaint(FlatColor.BLACK);
-            g.drawText(t, Font.DEFAULT, 5, 15);
+
+            double xoff = 0;
+            if(node.hasProperty("icon")) {
+                IconSymbols symbol = (IconSymbols) node
+                        .getProperty("icon").getEnumValue();
+                if(symbol != IconSymbols.None) {
+                    Font font = Font.name("FontAwesome").size(30).resolve();
+                    xoff += 10;
+                    Font.drawCenteredVertically(g, symbol.getChar()+"",font,xoff,0,w,h, false);
+                    xoff += font.getWidth(symbol.getChar()+"");
+                    xoff += 10;
+                }
+            }
+
+            Font.drawCentered(g, t, Font.DEFAULT, xoff,0,w-xoff,h,false);
             g.drawRect(0, 0, w, h);
         }
     };
@@ -248,7 +264,7 @@ public abstract class Defs {
         }
     };
 
-    public enum IconSymbols {  heart('\uf004'), star('\uf005'), camera('\uf030');
+    public enum IconSymbols {  None('\0'), Heart('\uf004'), Star('\uf005'), Camera('\uf030');
         private final char symbol;
 
         IconSymbols(char symbol) {
@@ -261,7 +277,7 @@ public abstract class Defs {
 
     @Metadata(name = "ImageView", container = false, resize = Resize.Any)
     public static class ImageView {
-        @Prop(exported = true) public IconSymbols symbol = IconSymbols.heart;
+        @Prop(exported = true) public IconSymbols symbol = IconSymbols.Heart;
     }
     public static final DynamicNode.DrawDelegate ImageViewDelegate = new DynamicNode.DrawDelegate() {
         public void draw(GFX g, DynamicNode node) {
@@ -272,7 +288,7 @@ public abstract class Defs {
             Font font = Font.name("FontAwesome").size(30).resolve();
             g.drawText(""+symbol.getChar(),font,0,30);
             g.setPaint(FlatColor.GRAY);
-            g.drawRect(0,0,w,h);
+            g.drawRect(0, 0, w, h);
         }
     };
 }
