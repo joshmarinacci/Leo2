@@ -1,6 +1,7 @@
 package com.joshondesign.treegui.modes.aminolang;
 
 import com.joshondesign.treegui.Canvas;
+import com.joshondesign.treegui.StringUtils;
 import com.joshondesign.treegui.actions.JAction;
 import com.joshondesign.treegui.docmodel.Layer;
 import com.joshondesign.treegui.docmodel.Page;
@@ -10,13 +11,20 @@ import com.joshondesign.treegui.model.TreeNode;
 import com.joshondesign.treegui.modes.DynamicNodeMode;
 import com.joshondesign.treegui.modes.aminojava.AminoParser;
 import com.joshondesign.treegui.modes.aminojava.DynamicNode;
-import static com.joshondesign.treegui.modes.aminolang.Defs.*;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.XMLParser;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.AminoAction;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.Menu;
+import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.control.FileDialog;
+import org.joshy.gfx.util.u;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,14 +32,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.AminoAction;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.control.FileDialog;
-import org.joshy.gfx.util.u;
+
+import static com.joshondesign.treegui.modes.aminolang.Defs.*;
+import static org.joshy.gfx.util.u.p;
 
 public class AminoLangMode extends DynamicNodeMode {
 
@@ -70,7 +73,7 @@ public class AminoLangMode extends DynamicNodeMode {
         tb.getProperty("height").setDoubleValue(30);
 
         drawMap.put("TextField", TextFieldDelegate);
-        symbols.add(parse(new TextField(), TextFieldDelegate, visualBase));
+        symbols.add(parse(new Defs.TextField(), TextFieldDelegate, visualBase));
 
         drawMap.put("Slider", SliderDelegate);
         symbols.add(parse(new Defs.Slider(), SliderDelegate, visualBase));
@@ -119,6 +122,9 @@ public class AminoLangMode extends DynamicNodeMode {
     public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
         fileMenu.addItem("Test HTML", "T", new AminoLangJSONExport(doc,true));
         fileMenu.addItem("Export Font", new FontExportAction());
+        fileMenu.addItem("Test in Browser", new BrowserExportAction());
+        fileMenu.addItem("Test on Desktop", new DesktopExportAction(doc));
+        fileMenu.addItem("Test on Device",  new DeviceExportAction());
     }
 
     @Override
@@ -221,7 +227,6 @@ public class AminoLangMode extends DynamicNodeMode {
         });
         fd.onSucceeded(new Callback<FileDialog>() {
             public void call(FileDialog fileDialog) throws Exception {
-                u.p("exporting to " + fileDialog.getSelectedFile().getAbsolutePath());
                 exportFont("OpenSans", fileDialog.getSelectedFile());
             }
         });
@@ -300,5 +305,98 @@ public class AminoLangMode extends DynamicNodeMode {
             e.printStackTrace();
         }
 
+    }
+
+
+    private class BrowserExportAction extends AminoAction {
+
+        @Override
+        public void execute() throws Exception {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+    }
+    private class DesktopExportAction extends AminoAction {
+        private final AminoLangJSONExport delegate;
+
+        private DesktopExportAction(SketchDocument doc) {
+            delegate = new AminoLangJSONExport(doc,false);
+        }
+
+        @Override
+        public void execute() throws Exception {
+            File dir = StringUtils.createTempDir();
+            u.p("dir = ");
+            u.p(dir);
+
+
+            //copy amino.js
+            File srcdir = new File("/Users/josh/projects/aminolang/src/node");
+            StringUtils.copyFileToDir(new File(srcdir,"amino.js"), dir);
+            StringUtils.copyFileToDir(new File(srcdir,"out.js"), dir);
+
+            //copy aminonode
+            File binfile = new File("/Users/josh/projects/aminolang/build/Release/amino.node");
+            StringUtils.copyFileToDir(binfile, dir);
+
+
+            File srcdir2 = new File("/Users/josh/projects/aminolang/tests/");
+            StringUtils.copyFileToDir(new File(srcdir2,"test1.json"), dir);
+            StringUtils.copyFileToDir(new File(srcdir2,"test1.png"), dir);
+
+            //create the json file
+            String str = delegate.exportTree(dir);
+            File testjson = new File(dir,"test.json");
+            u.stringToFile(str, testjson);
+
+            //create js file
+            StringBuffer sb = new StringBuffer();
+            sb.append("var fs = require('fs');\n");
+            sb.append("var amino = require('./amino.js');\n");
+            sb.append("var core = amino.getCore();\n" +
+                    "core.setDevice(\"mac\");\n");
+            sb.append("var stage = core.createStage();\n");
+            sb.append("var filedata = fs.readFileSync('"+testjson.getAbsolutePath()+"');\n" +
+                    "var jsonfile = JSON.parse(filedata);\n" +
+                    "var root = new amino.SceneParser().parse(core,jsonfile);\n" +
+                    "stage.setRoot(root);\n");
+            sb.append("setTimeout(function(){core.start();},1000);");
+            File testapp = new File(dir,"test.js");
+            u.stringToFile(sb.toString(), testapp);
+
+
+            execAndWait("/usr/local/bin/node", testapp.getAbsolutePath());
+        }
+
+        private Process proc;
+        private void execAndWait(final String bin, final String arg) throws InterruptedException {
+            if(proc != null) {
+                proc.destroy();
+                proc = null;
+            }
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    ProcessBuilder pb = new ProcessBuilder(bin,arg);
+                    try {
+                        proc = pb.start();
+                        p("running javascript");
+                        proc.waitFor();
+                        p("processing");
+                    } catch (IOException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+            });
+            thread.start();
+        }
+
+    }
+    private class DeviceExportAction extends AminoAction {
+
+        @Override
+        public void execute() throws Exception {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
     }
 }

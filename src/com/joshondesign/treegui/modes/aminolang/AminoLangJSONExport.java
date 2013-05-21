@@ -6,19 +6,17 @@ import com.joshondesign.treegui.modes.aminojava.DynamicNode;
 import com.joshondesign.treegui.modes.aminojava.Property;
 import com.joshondesign.treegui.modes.aminojs.ActionProp;
 import com.joshondesign.treegui.modes.aminojs.TriggerProp;
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.AminoAction;
 import org.joshy.gfx.util.u;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class AminoLangJSONExport extends AminoAction {
     private final SketchDocument doc;
@@ -80,7 +78,7 @@ public class AminoLangJSONExport extends AminoAction {
         */
     }
 
-    private String exportTree(File parentFile) {
+    public String exportTree(File parentFile) {
         transitions = new ArrayList<DynamicNode>();
         JSONPrinter json = new JSONPrinter();
         json.openObject().set("type","Document");
