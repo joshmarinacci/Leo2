@@ -20,6 +20,7 @@ import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.control.Menu;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.control.FileDialog;
 import org.joshy.gfx.util.u;
 
@@ -123,7 +124,7 @@ public class AminoLangMode extends DynamicNodeMode {
     public void modifyFileMenu(Menu fileMenu, SketchDocument doc) {
         fileMenu.addItem("Test HTML", "T", new AminoLangJSONExport(doc,true));
         fileMenu.addItem("Export Font", new FontExportAction());
-        fileMenu.addItem("Test in Browser", new BrowserExportAction());
+        fileMenu.addItem("Test in Browser", new BrowserExportAction(doc));
         fileMenu.addItem("Test on Desktop", new DesktopExportAction(doc));
         fileMenu.addItem("Test on Device",  new DeviceExportAction());
     }
@@ -310,10 +311,62 @@ public class AminoLangMode extends DynamicNodeMode {
 
 
     private class BrowserExportAction extends AminoAction {
-
+        private final AminoLangJSONExport delegate;
+        private BrowserExportAction(SketchDocument doc) {
+            delegate = new AminoLangJSONExport(doc,false);
+        }
         @Override
         public void execute() throws Exception {
-            //To change body of implemented methods use File | Settings | File Templates.
+            File dir = StringUtils.createTempDir();
+            u.p("dir = ");
+            u.p(dir);
+
+            //copy js files
+            File srcdir = new File("/Users/josh/projects/aminolang/src/jscanvas");
+            StringUtils.copyFileToDir(new File(srcdir,"init.js"), dir);
+            StringUtils.copyFileToDir(new File(srcdir,"handcoded7.js"), dir);
+            StringUtils.copyFileToDir(new File(srcdir,"monkeypatch.js"), dir);
+            File src2 = new File("/Users/josh/projects/aminolang/build/jscanvas");
+            StringUtils.copyFileToDir(new File(src2,"out.js"),dir);
+            File src3 = new File("/Users/josh/projects/aminolang/tests/");
+            StringUtils.copyFileToDir(new File(src3,"jquery.js"),dir);
+
+            //create the json file
+            String str = delegate.exportTree(dir);
+            File testjson = new File(dir,"test.json");
+            u.stringToFile(str, testjson);
+
+            //create js file
+            StringBuffer sb = new StringBuffer();
+            sb.append("<html>\n" +
+                    "<head>\n" +
+                    "<script src='init.js'></script>\n" +
+                    "<script src='out.js'></script>\n" +
+                    "<script src='handcoded7.js'></script>\n" +
+                    "<script src='monkeypatch.js'></script>\n" +
+                    "<script src='jquery.js'></script>\n" +
+                    "<style type=\"text/css\">\n" +
+                    "canvas { border: 1px solid black; }\n" +
+                    "</style>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    "<canvas id='mycanvas' width='600' height='300'></canvas>\n" +
+                    "<script language=\"JavaScript\">\n" +
+                    "Corex.start(function(core) {\n" +
+                    "    var stage = core.createStage('mycanvas');\n" +
+
+                    "$.getJSON('test.json',undefined, function(sceneRaw) {\n"+
+                    "  var root = new SceneParser().parse(sceneRaw);"+
+                    "  stage.setRoot(root);\n"
+                    +"});\n"
+                    +"});\n"
+                    +"</script></body></html>"
+                    );
+            File testapp = new File(dir,"test.html");
+            u.stringToFile(sb.toString(), testapp);
+
+            OSUtil.openBrowser(testapp.toURI().toASCIIString());
+
         }
     }
     private class DesktopExportAction extends AminoAction {
