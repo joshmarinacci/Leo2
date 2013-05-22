@@ -29,6 +29,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -364,11 +365,11 @@ public class AminoLangMode extends DynamicNodeMode {
             u.stringToFile(sb.toString(), testapp);
 
 
-            execAndWait("/usr/local/bin/node", testapp.getAbsolutePath());
+            execAndWait("/usr/local/bin/node", dir, testapp.getAbsolutePath());
         }
 
         private Process proc;
-        private void execAndWait(final String bin, final String arg) throws InterruptedException {
+        private void execAndWait(final String bin, final File wd, final String arg) throws InterruptedException {
             if(proc != null) {
                 proc.destroy();
                 proc = null;
@@ -376,11 +377,13 @@ public class AminoLangMode extends DynamicNodeMode {
             Thread thread = new Thread(new Runnable() {
                 public void run() {
                     ProcessBuilder pb = new ProcessBuilder(bin,arg);
+                    pb.directory(wd);
                     try {
                         proc = pb.start();
+                        dumpInThread(proc.getErrorStream());
+                        dumpInThread(proc.getInputStream());
                         p("running javascript");
                         proc.waitFor();
-                        p("processing");
                     } catch (IOException e) {
                         e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                     } catch (InterruptedException e) {
@@ -389,6 +392,23 @@ public class AminoLangMode extends DynamicNodeMode {
                 }
             });
             thread.start();
+        }
+
+        private void dumpInThread(final InputStream in) {
+            new Thread(new Runnable() {
+                public void run() {
+                    byte[] buffer = new byte[1024];
+                    try {
+                        int len = in.read(buffer);
+                        while(len != -1) {
+                            System.out.write(buffer,0,len);
+                            len = in.read(buffer);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+            }).start();
         }
 
     }
