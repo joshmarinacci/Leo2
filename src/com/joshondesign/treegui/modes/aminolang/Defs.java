@@ -273,6 +273,26 @@ public abstract class Defs {
         }
     };
 
+    @Metadata(name = "TextArea", container = false, resize = Resize.Any)
+    public static class TextArea {
+        @Prop public String text = "textarea";
+    }
+
+    public static final DynamicNode.DrawDelegate TextAreaDelegate = new DynamicNode.DrawDelegate() {
+        public void draw(GFX g, DynamicNode node) {
+            double w = node.getWidth();
+            double h = node.getHeight();
+            String t = node.getProperty("text").getStringValue();
+            g.setPaint(FlatColor.WHITE);
+            g.fillRect(0, 0, w, h);
+            g.setPaint(FlatColor.BLACK);
+            g.drawText(t, Font.DEFAULT, 5, 15);
+            g.drawRect(0, 0, w, h);
+        }
+    };
+
+
+
     public enum IconSymbols {  None('\0'), Heart('\uf004'), Star('\uf005'), Camera('\uf030');
         private final char symbol;
 

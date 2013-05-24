@@ -77,6 +77,9 @@ public class AminoLangMode extends DynamicNodeMode {
         drawMap.put("TextField", TextFieldDelegate);
         symbols.add(parse(new Defs.TextField(), TextFieldDelegate, visualBase));
 
+        drawMap.put("TextArea", TextAreaDelegate);
+        symbols.add(parse(new Defs.TextArea(), TextAreaDelegate, visualBase));
+
         drawMap.put("Slider", SliderDelegate);
         symbols.add(parse(new Defs.Slider(), SliderDelegate, visualBase));
         findSymbol("Slider").getProperty("height").setDoubleValue(25);
